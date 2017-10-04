@@ -8,6 +8,6 @@ It will be rebuilt by ours. We have 4 member:
  + Trần Thiện Hòa
  + Hoàng Công Quốc
  
-# Devolop on
+# Develop on
 C++, Directx,...
 
