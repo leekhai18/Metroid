@@ -4,7 +4,7 @@ Metroid is a science fiction action-adventure video game series created by Ninte
 # Metroid game
 It will be rebuilt by ours. We have 4 member:
  + Lê Tuấn Khải
- + Nguyễn Văn Sang
+ + Châu Văn Sang
  + Trần Thiện Hòa
  + Hoàng Công Quốc
  
