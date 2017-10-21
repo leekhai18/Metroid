@@ -15,6 +15,8 @@
 // Safely call onResetDevice
 #define SAFE_ON_RESET_DEVICE(ptr)   { if(ptr) { ptr->onResetDevice(); } }
 
+#define TRANSCOLOR  SETCOLOR_ARGB(0,255,0,255)  // transparent color (magenta)
+
 // Window
 const char CLASS_NAME[] = "Metroid";
 const char GAME_TITLE[] = "Metroid";
