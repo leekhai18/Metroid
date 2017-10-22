@@ -117,6 +117,8 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="Animation.h" />
+    <ClInclude Include="BaseObject.h" />
     <ClInclude Include="Constants.h" />
     <ClInclude Include="GameError.h" />
     <ClInclude Include="GameManager.h" />
@@ -124,15 +126,19 @@
     <ClInclude Include="Input.h" />
     <ClInclude Include="Metroid.h" />
     <ClInclude Include="resource.h" />
+    <ClInclude Include="Samus.h" />
     <ClInclude Include="Sprite.h" />
     <ClInclude Include="SpriteManager.h" />
     <ClInclude Include="TextureManager.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Animation.cpp" />
+    <ClCompile Include="BaseObject.cpp" />
     <ClCompile Include="GameManager.cpp" />
     <ClCompile Include="Graphics.cpp" />
     <ClCompile Include="Input.cpp" />
     <ClCompile Include="Metroid.cpp" />
+    <ClCompile Include="Samus.cpp" />
     <ClCompile Include="Sprite.cpp" />
     <ClCompile Include="SpriteManager.cpp" />
     <ClCompile Include="TextureManager.cpp" />

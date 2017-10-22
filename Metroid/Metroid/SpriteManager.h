@@ -13,14 +13,16 @@ using namespace std;
 class SpriteManager
 {
 private:
+	static SpriteManager* instance;
 	//list of sprites data
 	SpriteData* spritesData;
 	//filename to read
 	const char* filename;
 public:
+	static SpriteManager* getInstance();
 	bool initialize(const char* filename);
 	void releaseAll();
 	const SpriteData* getSpritesData();
-	SpriteManager();
-	~SpriteManager();
+	SpriteManager(void);
+	~SpriteManager(void);
 };

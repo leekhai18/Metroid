@@ -16,6 +16,9 @@
     <Filter Include="Framework">
       <UniqueIdentifier>{ca7357d5-4f3d-4a60-b7c8-756c591b6b6b}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Objects">
+      <UniqueIdentifier>{a2606627-782c-4fdf-a3ed-b62f9b602dde}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Constants.h">
@@ -48,6 +51,15 @@
     <ClInclude Include="TextureManager.h">
       <Filter>Framework</Filter>
     </ClInclude>
+    <ClInclude Include="Samus.h">
+      <Filter>Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="Animation.h">
+      <Filter>Framework</Filter>
+    </ClInclude>
+    <ClInclude Include="BaseObject.h">
+      <Filter>Objects</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="GameManager.cpp">
@@ -73,6 +85,15 @@
     </ClCompile>
     <ClCompile Include="WinMain.cpp">
       <Filter>Framework</Filter>
+    </ClCompile>
+    <ClCompile Include="Samus.cpp">
+      <Filter>Objects</Filter>
+    </ClCompile>
+    <ClCompile Include="Animation.cpp">
+      <Filter>Framework</Filter>
+    </ClCompile>
+    <ClCompile Include="BaseObject.cpp">
+      <Filter>Objects</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

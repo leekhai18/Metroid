@@ -29,6 +29,9 @@ public:
 	//           Get functions            //
 	////////////////////////////////////////
 
+	// Get Sprite Manager
+	virtual SpriteManager *getSpriteManger() { return spriteManager; }
+
 	// Return reference to SpriteData structure.
 	const virtual SpriteData& getSpriteInfo() { return spriteData; }
 
@@ -40,6 +43,9 @@ public:
 
 	// Return Y position.
 	virtual float getY() { return spriteData.y; }
+
+	// Get position
+	virtual GVector2 getPosition() { return GVector2(getX(), getY()); }
 
 	// Return scale factor.
 	virtual float getScale() { return spriteData.scale; }
@@ -92,6 +98,13 @@ public:
 
 	// Set Y location.
 	virtual void setY(float newY) { spriteData.y = newY; }
+
+	// Set Position
+	virtual void setPosition(GVector2 position) 
+	{
+		setX(position.x);
+		setY(position.y);
+	}
 
 	// Set scale.
 	virtual void setScale(float s) { spriteData.scale = s; }
@@ -163,7 +176,6 @@ public:
 	virtual void draw(SpriteData sd, COLOR_ARGB color = GraphicsNS::WHITE); // draw with SpriteData using color as filter
 
 																			// Update the animation. frameTime is used to regulate the speed.
-	virtual void update(float frameTime);
-
+	virtual void update(float dt);
 };
 

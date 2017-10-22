@@ -102,11 +102,11 @@ void Sprite::draw(SpriteData sd, COLOR_ARGB color)
 // typically called once per frame
 // frameTime is used to regulate the speed of movement and animation
 //=============================================================================
-void Sprite::update(float frameTime)
+void Sprite::update(float dt)
 {
 	if (endFrame - startFrame > 0)          // if animated sprite
 	{
-		animTimer += frameTime;             // total elapsed time
+		animTimer += dt;             // total elapsed time
 		if (animTimer > frameDelay)
 		{
 			animTimer -= frameDelay;
@@ -144,8 +144,4 @@ void Sprite::setCurrentFrame(int c)
 //=============================================================================
 inline void Sprite::setRect()
 {
-	//spriteData.rect = spriteManager->getSpritesData()[MOVE_RIGHT[currentFrame]].rect;
-	//spriteData.width = spriteManager->getSpritesData()[MOVE_RIGHT[currentFrame]].width;
-	//spriteData.height = spriteManager->getSpritesData()[MOVE_RIGHT[currentFrame]].height;
-	//spriteData.angle = spriteManager->getSpritesData()[MOVE_RIGHT[currentFrame]].angle;
 }

@@ -68,7 +68,7 @@ public:
 	// These functions MUST be written in any class that inherits from GameManager
 
 	// Update Game items.
-	virtual void update() = 0;
+	virtual void update(float dt) = 0;
 
 	// Perform AI calculations.
 	virtual void ai() = 0;

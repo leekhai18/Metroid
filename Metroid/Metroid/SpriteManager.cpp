@@ -1,8 +1,17 @@
 #include "SpriteManager.h"
 
+SpriteManager* SpriteManager::instance = nullptr;
+
 const SpriteData* SpriteManager::getSpritesData()
 {
 	return this->spritesData;
+}
+SpriteManager * SpriteManager::getInstance()
+{
+	if (instance == nullptr)
+		instance = new SpriteManager();
+
+	return instance;
 }
 bool SpriteManager::initialize(const char* filename)
 {
@@ -24,25 +33,15 @@ bool SpriteManager::initialize(const char* filename)
 			{
 				SpriteData spriteData;
 				const Value& frame = value[i]["frame"];
-				const Value& isRotated = value[i]["rotated"];
 				//get spriteData in json
 
 
 
 				//get is rotated in jSon, default if true sprite is rotated by  90
-				if (isRotated.GetBool())
-				{
-					//restore image
-					spriteData.angle = -90;
-					spriteData.width = frame["h"].GetInt();
-					spriteData.height = frame["w"].GetInt();
-				}
-				else
-				{
-					spriteData.width = frame["w"].GetInt();
-					spriteData.height = frame["h"].GetInt();
-					spriteData.angle = 0;
-				}
+				spriteData.width = frame["w"].GetInt();
+				spriteData.height = frame["h"].GetInt();
+				spriteData.angle = 0;
+				
 				RECT rect;
 				rect.left = frame["x"].GetInt();
 				rect.top = frame["y"].GetInt();
@@ -63,11 +62,11 @@ void SpriteManager::releaseAll()
 {
 	delete[] spritesData;
 }
-SpriteManager::SpriteManager()
+SpriteManager::SpriteManager(void)
 {
 }
 
 
-SpriteManager::~SpriteManager()
+SpriteManager::~SpriteManager(void)
 {
 }

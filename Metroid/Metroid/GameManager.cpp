@@ -13,6 +13,7 @@ GameManager::GameManager()
 	paused = false;             // game is not paused
 	graphics = NULL;
 	initialized = false;
+	fps = FRAME_RATE;
 }
 
 //=============================================================================
@@ -73,6 +74,8 @@ void GameManager::initialize(HWND hw)
 	QueryPerformanceCounter(&timeStart);        // get starting time
 
 	initialized = true;
+
+	fps = FRAME_RATE;
 }
 
 //=============================================================================
@@ -83,8 +86,9 @@ void GameManager::renderGame()
 	//start rendering
 	if (SUCCEEDED(graphics->beginScene()))
 	{
+		graphics->spriteBegin();
 		render();           // call render() in derived object
-
+		graphics->spriteEnd();
 							//stop rendering
 		graphics->endScene();
 	}
@@ -155,18 +159,17 @@ void GameManager::run(HWND hwnd)
 		timeEndPeriod(1);           // End 1mS timer resolution
 		return;
 	}
-
-	if (frameTime > 0.0)
-		fps = (fps*0.99f) + (0.01f / frameTime);  // average fps
 	if (frameTime > MAX_FRAME_TIME) // if frame rate is very slow
 		frameTime = MAX_FRAME_TIME; // limit maximum frameTime
+	if (frameTime > 0.0)
+		fps = (fps * 0.99f) + (0.01f / frameTime);  // average fps
 	timeStart = timeEnd;
 
 	// update(), ai(), and collisions() are pure virtual functions.
 	// These functions must be provided in the class that inherits from Game.
 	if (!paused)                    // if not paused
 	{
-		update();                   // update all game items
+		update(frameTime);                   // update all game items
 		ai();                       // artificial intelligence
 		collisions();               // handle collisions
 	}
@@ -205,6 +208,7 @@ void GameManager::deleteAll()
 {
 	releaseAll();               // call onLostDevice() for every graphics item
 	SAFE_DELETE(graphics);
-	SAFE_DELETE(input);
+	input = nullptr;
+	delete input;
 	initialized = false;
 }
