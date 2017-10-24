@@ -1,5 +1,6 @@
 #pragma once
 #include "Sprite.h"
+#include "IndexManager.h"
 
 class BaseObject
 {

@@ -542,159 +542,100 @@
 	},
 	{
 		"frame": {"x":82,"y":143,"w":31,"h":32}
-	}],
+	}]
 
-"TextureInfo": [
-	// -------------------------------------------------//      
-	// -------------------  ENEMIES --------------------//
-	// -------------------  ZOOMERS
+, "TextureInfo": 
+[
 		{"zoomerRed": [0,1]},
-		{"zoomerBrown": [48,49]},
-		{"zoomerRed": [50,51]},
+		{"zoomerYellow": [48,49]},
+		{"zoomerBrown": [50,51]},
 		{"zoomerBlue": [8,9]},
-	// ------------------- ZEBS
+
 		{"zebYellow": [2,3]},
 		{"zebBrown": [4,5]},
 		{"zebRed": [6,7]},
 		{"zebBlue": [37,38]},
-	// -------------------  SKREES
+
 		{"skreeYellow": [10,11,12]},
 		{"skreeBrown": [13,14,15]},
 		{"skreeRed": [16,17,18]},
 		{"skreeBlue": [19,20,21]},
 		{"skreeDeathEffect": [22]},
-	// -------------------  RIOS
+
 		{"rioYellow": [23,24]},
 		{"rioBrown": [25,26]},
 		{"rioRed": [27,28]},
 		{"rioBlue": [29,30]},
-	// -------------------  RIPPERS
+
 		{"ripperYellow": [31]},
 		{"ripperBrown": [32]},
 		{"ripperRed": [33]},
 		{"ripperBlue": [34]},
-	// -------------------  MELLOW
+
 		{"mellow": [35,36]},
-	// -------------------  WAVERS
+
 		{"waverBrown": [39,40,41]},
 		{"waverRed": [42,43,44]},
 		{"waverBlue": [45,46,47]},
 	
-	 // ----------------------------------------------//     
-	// -------------------  ITEMS --------------------//
-	// -------------------  GUARDIANS
+
 		{"guardianBlue": [104,103,52]},
 		{"guardianOrange": [102,101,100]},
 		{"guardianPurple": [97,98,99]},
-	// -------------------  MISSILE ROCKET
+
+		
 		{"missileRocket": [53,54,55,56]},
-	// -------------------  ENERGY TANK
 		{"energyTank": [57,58,59,60]},
-	// -------------------  MARU MARI
 		{"maruMari": [61,62,63,64]},
-	// -------------------  BOMB
 		{"bomb": [65,66,67,68]},
-	// -------------------  LONG BEAM
 		{"longBeam": [69,70,71,72]},
-	// -------------------  ICE BEAM
 		{"iceBeam": [73,74,75,76]},
-	// -------------------  HIGH JUMP
 		{"highJump": [83,77,78,79]},
-	// -------------------  VARIA
 		{"varia": [80,81,82,94]},
-	// -------------------  WAVE BEAM
 		{"waveBeam": [84,85,86,87]},
-	// -------------------  SCREM ATTACK
 		{"scremAttack": [88,89,90,91]},
 	
-	// -----------------------------------------------//      
-	// -------------------  BONUSES ------------------//
-	// -------------------  EN
+
 		{"en": [92,93]},
-	// -------------------  ROCKET
 		{"rocket": [95,96]}, 
 	
-	// -----------------------------------------------//      
-	// -------------------  SAMUS YELLOW -------------//
-	// -------------------  START
+
 		{"samusYellowStart": [105,106,107,108]},
-	// -------------------  TURN RIGHT
 		{"samusYellowTurnRight": [109]},
-	// -------------------  TURN UP
 		{"samusYellowTurnUp": [110]},
-	// -------------------  RUNNING RIGHT
 		{"samusYellowRunningRight": [111,112,113]},
-	// -------------------  JUMP RIGHT
 		{"samusYellowJumpRight": [114]},
-	// -------------------  JUMPING RIGHT
 		{"samusYellowJumpingRight": [115,116,117,118]},
-	// -------------------  ROLLING RIGHT
 		{"samusYellowRollingRight": [119,120,121,122]},   
-	// -------------------  HITTING AND RUNNING RIGHT
 		{"samusYellowHittingAndRunningRight": [124,125,126]},
-	// -------------------  HITTING AND JUMP RIGHT
 		{"samusYellowHittingAndJumpRight": [127]},
-	// -------------------  HITTING AND RUNNING UP
 		{"samusYellowHittingAndRunningUp": [129,130,131]},
-	// -------------------  HITTING AND JUMP UP
 		{"samusYellowHittingAndJumpUp": [132]},
-	// -------------------  BULLET NORMAL
 		{"samusYellowBulletNormal": [163]},
-	// -------------------  BULLET NORMAL COLLIDING
 		{"samusYellowBulletNormalColliding": [164]},
-	// -------------------  BULLET ICE
 		{"samusYellowBulletIce": [165]},
-	// -------------------  BULLET ICE COLLIDING
 		{"samusYellowBulletIceColliding": [166]},
-	// -------------------  BOMB EARLY
-		{"samusYellowBombEarly": [167]},
-	// -------------------  BOMB MID
-		{"samusYellowBombMid": [168]},
-	// -------------------  BOMB LATE
-		{"samusYellowBombLate": [169]},
-	// -------------------  EXPLOSION
+		{"samusYellowBombEffect": [167,168,169]},
 		{"samusYellowExplosion": [170,171]},
 	
 	
-	// -----------------------------------------------//   
-	// -------------------  SAMUS PINK ---------------//
-	// -------------------  START
+
 		{"samusPinkStart": [134,135,136,137]},
-	// -------------------  TURN RIGHT
 		{"samusPinkTurnRight": [138]},
-	// -------------------  TURN UP
 		{"samusPinkTurnUp": [139]},
-	// -------------------  RUNNING RIGHT
 		{"samusPinkRunningRight": [140,141,142]},
-	// -------------------  JUMP RIGHT
 		{"samusPinkJumpRight": [143]},
-	// -------------------  JUMPING RIGHT
 		{"samusPinkJumpingRight": [144,145,146,147]},
-	// -------------------  ROLLING RIGHT
 		{"samusPinkRollingRight": [148,149,150,151]},   
-	// -------------------  HITTING AND RUNNING RIGHT
 		{"samusPinkHittingAndRunningRight": [153,154,155]},
-	// -------------------  HITTING AND JUMP RIGHT
 		{"samusPinkHittingAndJumpRight": [156]},
-	// -------------------  HITTING AND RUNNING UP
 		{"samusPinkHittingAndRunningUp": [158,159,160]},
-	// -------------------  HITTING AND JUMP UP
 		{"samusPinkHittingAndJumpUp": [161]},
-	// -------------------  BULLET NORMAL
 		{"samusPinkBulletNormal": [172]},
-	// -------------------  BULLET NORMAL COLLIDING
 		{"samusPinkBulletNormalColliding": [173]},
-	// -------------------  BULLET ICE
 		{"samusPinkBulletIce": [174]},
-	// -------------------  BULLET ICE COLLIDING
 		{"samusPinkBulletIceColliding": [175]},
-	// -------------------  BOMB EARLY
-		{"samusPinkBombEarly": [176]},
-	// -------------------  BOMB MID
-		{"samusPinkBombMid": [177]},
-	// -------------------  BOMB LATE
-		{"samusPinkBombLate": [178]},
-	// -------------------  EXPLOSION
+		{"samusPinkBombEffect": [176,177,178]},
 		{"samusPinkExplosion": [179,180]}
 	]
 }

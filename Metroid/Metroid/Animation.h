@@ -8,7 +8,6 @@ private:
 	int totalFrames;
 	int currentFrame;
 	int startFrame;
-	int endFrame;
 	bool canAnimate;
 	float timerAnim;
 	float frameDelay;

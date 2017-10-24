@@ -123,6 +123,7 @@
     <ClInclude Include="GameError.h" />
     <ClInclude Include="GameManager.h" />
     <ClInclude Include="Graphics.h" />
+    <ClInclude Include="IndexManager.h" />
     <ClInclude Include="Input.h" />
     <ClInclude Include="Metroid.h" />
     <ClInclude Include="resource.h" />
@@ -136,6 +137,7 @@
     <ClCompile Include="BaseObject.cpp" />
     <ClCompile Include="GameManager.cpp" />
     <ClCompile Include="Graphics.cpp" />
+    <ClCompile Include="IndexManager.cpp" />
     <ClCompile Include="Input.cpp" />
     <ClCompile Include="Metroid.cpp" />
     <ClCompile Include="Samus.cpp" />

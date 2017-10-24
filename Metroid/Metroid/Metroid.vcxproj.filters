@@ -60,6 +60,9 @@
     <ClInclude Include="BaseObject.h">
       <Filter>Objects</Filter>
     </ClInclude>
+    <ClInclude Include="IndexManager.h">
+      <Filter>Framework</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="GameManager.cpp">
@@ -94,6 +97,9 @@
     </ClCompile>
     <ClCompile Include="BaseObject.cpp">
       <Filter>Objects</Filter>
+    </ClCompile>
+    <ClCompile Include="IndexManager.cpp">
+      <Filter>Framework</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

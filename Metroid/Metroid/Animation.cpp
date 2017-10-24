@@ -8,7 +8,6 @@ Animation::Animation(Sprite *sprite, const int* list, int totalFrames, float tim
 	this->totalFrames = totalFrames;
 	this->currentFrame = -1;
 	this->startFrame = 0;
-	this->endFrame = totalFrames;
 	this->isloop = loop;
 	this->frameDelay = timeAnim;
 	this->timerAnim = 0;
@@ -22,7 +21,6 @@ Animation::Animation(Sprite *sprite, const int * list, int totalFrames, float ti
 	this->totalFrames = totalFrames;
 	this->currentFrame = -1;
 	this->startFrame = 0;
-	this->endFrame = totalFrames;
 	this->frameDelay = timeAnim;
 	this->timerAnim = 0;
 	this->canAnimate = false;
@@ -45,12 +43,12 @@ void Animation::nextFrame()
 
 void Animation::setValueOfCurrentFrame(int index)
 {
-	if (index == currentFrame || totalFrames == 0)
+	if (totalFrames == 0)
 		return;
 
 	currentFrame = index;
 
-	if (currentFrame > endFrame)
+	if (currentFrame > totalFrames - 1)
 		currentFrame = startFrame;
 
 	// setRect

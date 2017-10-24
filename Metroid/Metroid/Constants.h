@@ -44,18 +44,8 @@ const UCHAR ENTER_KEY = VK_RETURN;       // Enter key
 
 
 // Source
-const char SOURCE_IMAGE[] = "Resoures\\SpriteSheets\\Metroid.png";//character of game
-const char SOURCE_JSON[] = "json\\Metroid.json"; //json file of metroid sprite
-
-// Ramus
-namespace SAMUS_BEHAVIOUR
-{
-	const int front = 0;					//front
-	const int jump = 2;						//jump
-	const int running[] = { 7, 8, 9 };		//running
-	const int rolling[] = { 3,4,5,6 };		//rolling
-	const int ending = 1;					//ending
-}
+const char SOURCE_IMAGE[] = "Resoures\\SpriteSheets\\MetroidTexture.png";//character of game
+const char SOURCE_JSON[] = "json\\MetroidTexture.json"; //json file of metroid sprite
 
 // Element ID
 enum eID {

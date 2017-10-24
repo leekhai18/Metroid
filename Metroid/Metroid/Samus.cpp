@@ -14,8 +14,8 @@ Samus::Samus(TextureManager* textureM,Graphics* graphics, Input* input) : BaseOb
 	this->setRect();
 
 	currentAnimation = nullptr;
-	runningAnimation = new Animation(this->sprite, SAMUS_BEHAVIOUR::running, 3, 0.2f);
-	rollingAnimation = new Animation(this->sprite, SAMUS_BEHAVIOUR::rolling, 4, 0.2f);
+	runningAnimation = new Animation(this->sprite, IndexManager::getInstance()->samusYellowRunningRight , NUM_FRAMES_SAMUS_RUNNING, 0.1f);
+	rollingAnimation = new Animation(this->sprite, IndexManager::getInstance()->samusYellowRollingRight, NUM_FRAMES_SAMUS_ROLLING, 0.1f);
 }
 
 Samus::Samus()
@@ -33,7 +33,7 @@ void Samus::setRect()
 {
 	switch (this->status)
 	{
-		case eStatus::NORMAL:
+/*		case eStatus::NORMAL:
 		{
 			this->sprite->setSpriteDataRect(SpriteManager::getInstance()->getSpritesData()[SAMUS_BEHAVIOUR::front].rect);
 			break;
@@ -42,10 +42,10 @@ void Samus::setRect()
 		{
 			this->sprite->setSpriteDataRect(SpriteManager::getInstance()->getSpritesData()[SAMUS_BEHAVIOUR::ending].rect);
 			break;
-		}		
+		}	*/	
 		case eStatus::JUMPING:
 		{
-			this->sprite->setSpriteDataRect(SpriteManager::getInstance()->getSpritesData()[SAMUS_BEHAVIOUR::jump].rect);
+			this->sprite->setSpriteDataRect(SpriteManager::getInstance()->getSpritesData()[IndexManager::getInstance()->samusYellowJumpRight[0]].rect);
 			break;
 		}		
 		default:
