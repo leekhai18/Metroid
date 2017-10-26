@@ -6,7 +6,8 @@ BaseObject::BaseObject(eID id)
 {
 	this->id = id;
 	this->sprite = nullptr;
-	this->setStatus(eStatus::NORMAL);
+	this->status = eStatus::START;
+	this->direction = eDirection::right;
 }
 
 BaseObject::BaseObject()
@@ -39,6 +40,25 @@ void BaseObject::setStatus(eStatus status)
 bool BaseObject::isInStatus(eStatus status)
 {
 	if (this->getStatus() == status)
+		return true;
+
+	return false;
+}
+
+eDirection BaseObject::getDirection()
+{
+	return this->direction;
+}
+
+void BaseObject::setDirection(eDirection direct)
+{
+	if (this->direction != direct)
+		this->direction = direct;
+}
+
+bool BaseObject::isInDirection(eDirection direct)
+{
+	if (this->direction == direct)
 		return true;
 
 	return false;

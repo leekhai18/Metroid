@@ -51,17 +51,17 @@ public:
 	const int skreeBrown[3] = { 13,14,15 };
 	const int skreeRed[3] = { 16,17,18 };
 	const int skreeBlue[3] = { 19,20,21 };
-	const int skreeDeathEffect[1] = { 22 };
+	const int skreeDeathEffect = 22;
 
 	const int rioYellow[2] = { 23,24 };
 	const int rioBrown[2] = { 25,26 };
 	const int rioRed[2] = { 27,28 };
 	const int rioBlue[2] = { 29,30 };
 
-	const int ripperYellow[1] = { 31 };
-	const int ripperBrown[1] = { 32 };
-	const int ripperRed[1] = { 33 };
-	const int ripperBlue[1] = { 34 };
+	const int ripperYellow = 31;
+	const int ripperBrown = 32;
+	const int ripperRed = 33;
+	const int ripperBlue = 34;
 
 	const int mellow[2] = { 35,36 };
 
@@ -92,40 +92,40 @@ public:
 
 
 	const int samusYellowStart[4] = { 105,106,107,108 };
-	const int samusYellowTurnRight[1] = { 109 };
-	const int samusYellowTurnUp[1] = { 110 };
+	const int samusYellowTurnRight = 109;
+	const int samusYellowTurnUp = 110;
 	const int samusYellowRunningRight[3] = { 111,112,113 };
-	const int samusYellowJumpRight[1] = { 114 };
+	const int samusYellowJumpRight = 114;
 	const int samusYellowJumpingRight[4] = { 115,116,117,118 };
 	const int samusYellowRollingRight[4] = { 119,120,121,122 };
 	const int samusYellowHittingAndRunningRight[3] = { 124,125,126 };
-	const int samusYellowHittingAndJumpRight[1] = { 127 };
+	const int samusYellowHittingAndJumpRight = 127;
 	const int samusYellowHittingAndRunningUp[3] = { 129,130,131 };
-	const int samusYellowHittingAndJumpUp[1] = { 132 };
-	const int samusYellowBulletNormal[1] = { 163 };
-	const int samusYellowBulletNormalColliding[1] = { 164 };
-	const int samusYellowBulletIce[1] = { 165 };
-	const int samusYellowBulletIceColliding[1] = { 166 };
+	const int samusYellowHittingAndJumpUp = 132;
+	const int samusYellowBulletNormal = 163;
+	const int samusYellowBulletNormalColliding = 164;
+	const int samusYellowBulletIce = 165;
+	const int samusYellowBulletIceColliding = 166;
 	const int samusYellowBombEffect[3] = { 167,168,169 };
 	const int samusYellowExplosion[2] = { 170,171 };
 
 
 
 	const int samusPinkStart[4] = { 134,135,136,137 };
-	const int samusPinkTurnRight[1] = { 138 };
-	const int samusPinkTurnUp[1] = { 139 };
+	const int samusPinkTurnRight = 138;
+	const int samusPinkTurnUp = 139;
 	const int samusPinkRunningRight[3] = { 140,141,142 };
-	const int samusPinkJumpRight[1] = { 143 };
+	const int samusPinkJumpRight = 143;
 	const int samusPinkJumpingRight[4] = { 144,145,146,147 };
 	const int samusPinkRollingRight[4] = { 148,149,150,151 };
 	const int samusPinkHittingAndRunningRight[3] = { 153,154,155 };
-	const int samusPinkHittingAndJumpRight[1] = { 156 };
+	const int samusPinkHittingAndJumpRight = 156;
 	const int samusPinkHittingAndRunningUp[3] = { 158,159,160 };
-	const int samusPinkHittingAndJumpUp[1] = { 161 };
-	const int samusPinkBulletNormal[1] = { 172 };
-	const int samusPinkBulletNormalColliding[1] = { 173 };
-	const int samusPinkBulletIce[1] = { 174 };
-	const int samusPinkBulletIceColliding[1] = { 175 };
+	const int samusPinkHittingAndJumpUp = 161;
+	const int samusPinkBulletNormal = 172;
+	const int samusPinkBulletNormalColliding = 173;
+	const int samusPinkBulletIce = 174;
+	const int samusPinkBulletIceColliding = 175;
 	const int samusPinkBombEffect[3] = { 176,177,178 };
 	const int samusPinkExplosion[2] = { 179,180 };
 };

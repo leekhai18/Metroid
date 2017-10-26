@@ -40,7 +40,7 @@ const float GRAVITY = 6.67428e-11f;             // gravitational constant
 const UCHAR ESC_KEY = VK_ESCAPE;       // escape key
 const UCHAR ALT_KEY = VK_MENU;         // Alt key
 const UCHAR ENTER_KEY = VK_RETURN;       // Enter key
-#define X_KEY 0x58
+#define VK_X 0x58
 
 
 // Source
@@ -54,11 +54,18 @@ enum eID {
 
 // Element's status
 enum eStatus {
-	NORMAL = 0,
+	START = 0,
 	JUMPING = 1,
 	RUNNING = 2,
 	ROLLING = 3,
 	ENDING = 4,
+	STANDING = 5,
+};
+
+// direction
+enum eDirection {
+	left = -1,
+	right = 1,
 };
 
 typedef D3DXVECTOR3 GVector3;

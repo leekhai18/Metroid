@@ -1,21 +1,23 @@
 #include "Samus.h"
+#include "SamusStateManager.h"
 
 Samus::Samus(TextureManager* textureM,Graphics* graphics, Input* input) : BaseObject(eID::SAMUS)
 {
 	this->input = input;
 	this->sprite = new Sprite();
-
 	if (! this->sprite->initialize(graphics, textureM, SpriteManager::getInstance()))
 	{
 		throw GameError(GameErrorNS::FATAL_ERROR, "Can not init sprite character");
 	}
 
-	this->sprite->setPosition(GVector2(GAME_WIDTH / 2, GAME_HEIGHT / 2));
+	this->sprite->setPosition(GVector2(0, 0));
 	this->setRect();
 
-	currentAnimation = nullptr;
-	runningAnimation = new Animation(this->sprite, IndexManager::getInstance()->samusYellowRunningRight , NUM_FRAMES_SAMUS_RUNNING, 0.1f);
-	rollingAnimation = new Animation(this->sprite, IndexManager::getInstance()->samusYellowRollingRight, NUM_FRAMES_SAMUS_ROLLING, 0.1f);
+	startingAnimation = new Animation(this->sprite, IndexManager::getInstance()->samusYellowStart, NUM_FRAMES_SAMUS_START, 1, false);
+	runningAnimation = new Animation(this->sprite, IndexManager::getInstance()->samusYellowRunningRight , NUM_FRAMES_SAMUS_RUNNING, 0.17f);
+	rollingAnimation = new Animation(this->sprite, IndexManager::getInstance()->samusYellowRollingRight, NUM_FRAMES_SAMUS_ROLLING, 0.2f);
+
+	SamusStateManager::getInstance()->init(this, input);
 }
 
 Samus::Samus()
@@ -31,26 +33,7 @@ Samus::~Samus()
 
 void Samus::setRect()
 {
-	switch (this->status)
-	{
-/*		case eStatus::NORMAL:
-		{
-			this->sprite->setSpriteDataRect(SpriteManager::getInstance()->getSpritesData()[SAMUS_BEHAVIOUR::front].rect);
-			break;
-		}
-		case eStatus::ENDING:
-		{
-			this->sprite->setSpriteDataRect(SpriteManager::getInstance()->getSpritesData()[SAMUS_BEHAVIOUR::ending].rect);
-			break;
-		}	*/	
-		case eStatus::JUMPING:
-		{
-			this->sprite->setSpriteDataRect(SpriteManager::getInstance()->getSpritesData()[IndexManager::getInstance()->samusYellowJumpRight[0]].rect);
-			break;
-		}		
-		default:
-			break;
-	}
+	this->sprite->setSpriteDataRect(SpriteManager::getInstance()->getSpritesData()[IndexManager::getInstance()->samusYellowStart[3]].rect);
 }
 
 void Samus::draw()
@@ -58,63 +41,57 @@ void Samus::draw()
 	this->sprite->draw();
 }
 
+void Samus::handleInput(float dt)
+{
+	updateDirection();
+
+	SamusStateManager::getInstance()->getCurrentState()->handleInput(dt);
+}
+
 
 void Samus::update(float dt)
 {
-	if (input->wasKeyPressed(VK_RIGHT))
-	{
-		this->setStatus(eStatus::RUNNING);
-
-		if (currentAnimation != nullptr)
-			currentAnimation->stop();
-
-		this->sprite->flipHorizontal(false);
-		currentAnimation = runningAnimation;
-		currentAnimation->start();
-	}
-	if (input->wasKeyPressed(VK_LEFT))
-	{
-		this->setStatus(eStatus::RUNNING);
-
-		if (currentAnimation != nullptr)
-			currentAnimation->stop();
-
-		this->sprite->flipHorizontal(true);
-		currentAnimation = runningAnimation;
-		currentAnimation->start();
-	}
-	if (input->wasKeyPressed(X_KEY))
-	{
-		this->setStatus(eStatus::JUMPING);
-		if (currentAnimation != nullptr)
-			currentAnimation->stop();
-
-		this->setRect();
-	}
-	if (input->wasKeyPressed(VK_DOWN))
-	{
-		this->setStatus(eStatus::ROLLING);
-
-		if (currentAnimation != nullptr)
-			currentAnimation->stop();
-
-		currentAnimation = rollingAnimation;
-		currentAnimation->start();
-	}
-
-	if (currentAnimation != nullptr)
-	{
-		currentAnimation->update(dt);
-	}
+	SamusStateManager::getInstance()->getCurrentState()->update(dt);
 }
 
 void Samus::release()
 {
 	input = nullptr;
 	sprite = nullptr;
-	currentAnimation = nullptr;
 	runningAnimation = nullptr;
 	rollingAnimation = nullptr;
+	startingAnimation = nullptr;
 
-	delete input, sprite, currentAnimation, runningAnimation, rollingAnimation;
+	delete input, sprite, runningAnimation, rollingAnimation, startingAnimation;
+}
+
+void Samus::updateDirection()
+{
+	if (input->isKeyDown(VK_RIGHT))
+	{
+		this->setDirection(eDirection::right);
+	}
+
+	if (input->isKeyDown(VK_LEFT))
+	{
+		this->setDirection(eDirection::left);
+	}
+}
+
+void Samus::running(float dt)
+{
+
+}
+
+void Samus::turnUp()
+{
+}
+
+void Samus::jump()
+{
+}
+
+Animation * Samus::getStartingAnim()
+{
+	return this->startingAnimation;
 }

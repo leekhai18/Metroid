@@ -12,11 +12,11 @@ private:
 	float timerAnim;
 	float frameDelay;
 	bool isloop;
+	bool isCompleted;
 	Sprite *sprite;
 public:
 	Animation(Sprite *sprite, const int* list, int totalFrames, float timeAnim, bool loop);
 	Animation(Sprite *sprite, const int* list, int totalFrames, float timeAnim);
-	Animation();
 	~Animation();
 
 	void nextFrame();
@@ -25,5 +25,6 @@ public:
 	void update(float dt);
 	void start();
 	void stop();
+	bool isFinished();
 };
 

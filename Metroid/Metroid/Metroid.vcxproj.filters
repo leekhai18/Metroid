@@ -63,6 +63,15 @@
     <ClInclude Include="IndexManager.h">
       <Filter>Framework</Filter>
     </ClInclude>
+    <ClInclude Include="BaseState.h">
+      <Filter>Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="SamusStateStart.h">
+      <Filter>Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="SamusStateManager.h">
+      <Filter>Objects</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="GameManager.cpp">
@@ -100,6 +109,15 @@
     </ClCompile>
     <ClCompile Include="IndexManager.cpp">
       <Filter>Framework</Filter>
+    </ClCompile>
+    <ClCompile Include="BaseState.cpp">
+      <Filter>Objects</Filter>
+    </ClCompile>
+    <ClCompile Include="SamusStateStart.cpp">
+      <Filter>Objects</Filter>
+    </ClCompile>
+    <ClCompile Include="SamusStateManager.cpp">
+      <Filter>Objects</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

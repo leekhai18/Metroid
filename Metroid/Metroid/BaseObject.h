@@ -8,12 +8,14 @@ protected:
 	Sprite* sprite;
 	eID id;
 	eStatus status;
+	eDirection direction;
 
 public:
 	BaseObject(eID id);
 	BaseObject();
 	~BaseObject();
 
+	virtual void handleInput(float dt) = 0;
 	virtual void update(float dt) = 0;
 	virtual void draw() = 0;
 	virtual void release() = 0;
@@ -22,6 +24,10 @@ public:
 	eStatus getStatus();
 	virtual void setStatus(eStatus status);
 	virtual bool isInStatus(eStatus status);
+
+	eDirection getDirection();
+	virtual void setDirection(eDirection direct);
+	virtual bool isInDirection(eDirection direct);
 
 	virtual GVector2 getPosition();
 	virtual float getPositionX();
