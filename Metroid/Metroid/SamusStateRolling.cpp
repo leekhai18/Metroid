@@ -24,7 +24,7 @@ void SamusStateRolling::handleInput(float dt)
 {
 	if (input->isKeyDown(VK_LEFT) || input->isKeyDown(VK_RIGHT))
 	{
-		this->samus->running(dt);
+		this->samus->updateHorizontal(dt);
 	}
 
 	if (input->isKeyDown(VK_UP) || input->isKeyDown(VK_X))

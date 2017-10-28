@@ -8,7 +8,9 @@
 #include "Animation.h"
 #include "BaseObject.h"
 
-#define SAMUS_VERLOCITY 100
+#define SAMUS_VERLOCITY_X 100
+#define SAMUS_VERLOCITY_Y 100
+#define MAX_HEIGHT_CAN_JUMP (GAME_HEIGHT * 0.5)
 
 
 
@@ -23,6 +25,9 @@ private:
 				*jumpingAnimation,
 				*startingAnimation;
 
+	bool isFalling;
+	float totalHeightWasJumped;
+
 public:
 	Samus(TextureManager* textureM, Graphics* graphics, Input* input);
 	Samus();
@@ -34,14 +39,17 @@ public:
 	void release();
 
 	void updateDirection();
-	void running(float dt);
-	void turnUp();
-	void jump();
+	void updateHorizontal(float dt);
+	void updateVertical(float dt);
+	
+	bool isFaling();
+	void setFall(bool isFall);
 
 	Animation* getStartingAnim();
 	Animation* getRunningNormalAnim();
 	Animation* getRunningUpAnim();
 	Animation* getRunningShootAnim();
 	Animation* getRollingAnim();
+	Animation* getJumpingAnim();
 };
 

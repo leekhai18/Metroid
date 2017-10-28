@@ -79,7 +79,13 @@
       <Filter>Objects</Filter>
     </ClInclude>
     <ClInclude Include="SamusStateRolling.h">
-      <Filter>Header Files</Filter>
+      <Filter>Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="SamusStateJumping.h">
+      <Filter>Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="SamusStateFalling.h">
+      <Filter>Objects</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -134,8 +140,14 @@
     <ClCompile Include="SamusStateStanding.cpp">
       <Filter>Objects</Filter>
     </ClCompile>
+    <ClCompile Include="SamusStateJumping.cpp">
+      <Filter>Objects</Filter>
+    </ClCompile>
     <ClCompile Include="SamusStateRolling.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Objects</Filter>
+    </ClCompile>
+    <ClCompile Include="SamusStateFalling.cpp">
+      <Filter>Objects</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

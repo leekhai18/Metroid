@@ -21,7 +21,5 @@ public:
 
 	void onStart();
 	void onExit();
-
-	void handleLR(float dt);
 };
 

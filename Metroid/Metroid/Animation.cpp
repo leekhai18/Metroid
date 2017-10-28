@@ -13,6 +13,10 @@ Animation::Animation(Sprite *sprite, const int* list, int totalFrames, float tim
 	this->frameDelay = timeAnim;
 	this->timerAnim = 0;
 	this->canAnimate = false;
+	
+	// set width, height
+	this->sprite->setSpriteWidth(SpriteManager::getInstance()->getSpritesData()[this->listFrames[0]].width);
+	this->sprite->setSpriteHeigth(SpriteManager::getInstance()->getSpritesData()[this->listFrames[0]].height);
 }
 
 Animation::Animation(Sprite *sprite, const int * list, int totalFrames, float timeAnim)
@@ -27,6 +31,10 @@ Animation::Animation(Sprite *sprite, const int * list, int totalFrames, float ti
 	this->canAnimate = false;
 	this->isCompleted = false;
 	this->isloop = true;
+
+	// set width, height
+	this->sprite->setSpriteWidth(SpriteManager::getInstance()->getSpritesData()[this->listFrames[0]].width);
+	this->sprite->setSpriteHeigth(SpriteManager::getInstance()->getSpritesData()[this->listFrames[0]].height);
 }
 
 

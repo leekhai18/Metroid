@@ -3,8 +3,8 @@
 Sprite::Sprite()
 {
 	initialized = false;            // set true when successfully initialized
-	spriteData.width = 2;
-	spriteData.height = 2;
+	spriteData.width = 0;
+	spriteData.height = 0;
 	spriteData.x = 0.0;
 	spriteData.y = 0.0;
 	spriteData.scale = 1.0;
@@ -51,7 +51,6 @@ bool Sprite::initialize(Graphics *g, TextureManager *textureM, SpriteManager *sp
 		spriteManager = spriteM;
 
 		spriteData.texture = textureManager->getTexture();
-		setRect();
 	}
 	catch (...) { return false; }
 	initialized = true;                                // successfully initialized
@@ -121,7 +120,6 @@ void Sprite::update(float dt)
 					animComplete = true;    // animation complete
 				}
 			}
-			setRect();                      // set spriteData.rect
 		}
 	}
 }
@@ -135,13 +133,5 @@ void Sprite::setCurrentFrame(int c)
 	{
 		currentFrame = c;
 		animComplete = false;
-		setRect();                          // set spriteData.rect
 	}
-}
-
-//=============================================================================
-//  Set spriteData.rect to draw currentFrame
-//=============================================================================
-inline void Sprite::setRect()
-{
 }

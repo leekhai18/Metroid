@@ -61,6 +61,7 @@ enum eStatus {
 	ROLLING = 3,
 	ENDING = 4,
 	STANDING = 5,
+	FALLING = 6,
 };
 
 // direction

@@ -3,6 +3,8 @@
 #include "SamusStateRunning.h"
 #include "SamusStateStanding.h"
 #include "SamusStateRolling.h"
+#include "SamusStateJumping.h"
+#include "SamusStateFalling.h"
 
 class SamusStateManager
 {
@@ -13,6 +15,9 @@ private:
 	SamusStateRunning* stateRunning;
 	SamusStateStanding* stateStanding;
 	SamusStateRolling* stateRolling;
+	SamusStateJumping* stateJumping;
+	SamusStateFalling* stateFalling;
+
 	BaseState* currentState;
 
 public:

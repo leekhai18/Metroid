@@ -276,21 +276,11 @@ void Graphics::drawSprite(const SpriteData &spriteData, COLOR_ARGB color)
 		D3DXToRadian((float)(spriteData.angle)),  // rotation angle
 		&translate);            // X,Y location
 
-								// Tell the sprite about the matrix
-								//D3DXMATRIX matrixTranform,objFinal;
 
-
-								////D3DXMatrix
-								//D3DXMatrixIdentity(&objFinal);
-								//D3DXMatrixMultiply(&objFinal, &objFinal, &matrix);
-
-
-								//device3d->SetTransform(D3DTS_WORLD, &objFinal);
 	sprite->SetTransform(&matrix);
 
 	// Draw the sprite
-	sprite->Draw(spriteData.texture, &spriteData.rect, NULL, NULL, color);
-
+	sprite->Draw(spriteData.texture, &spriteData.rect,&center, NULL, color);
 }
 
 //=============================================================================

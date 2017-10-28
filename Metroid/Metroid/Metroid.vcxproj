@@ -129,6 +129,8 @@
     <ClInclude Include="Metroid.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="Samus.h" />
+    <ClInclude Include="SamusStateFalling.h" />
+    <ClInclude Include="SamusStateJumping.h" />
     <ClInclude Include="SamusStateManager.h" />
     <ClInclude Include="SamusStateRolling.h" />
     <ClInclude Include="SamusStateRunning.h" />
@@ -148,6 +150,8 @@
     <ClCompile Include="Input.cpp" />
     <ClCompile Include="Metroid.cpp" />
     <ClCompile Include="Samus.cpp" />
+    <ClCompile Include="SamusStateFalling.cpp" />
+    <ClCompile Include="SamusStateJumping.cpp" />
     <ClCompile Include="SamusStateManager.cpp" />
     <ClCompile Include="SamusStateRolling.cpp" />
     <ClCompile Include="SamusStateRunning.cpp" />

@@ -17,7 +17,11 @@ SamusStateStanding::~SamusStateStanding()
 
 void SamusStateStanding::init()
 {
-	this->samus->getSprite()->setSpriteDataRect(SpriteManager::getInstance()->getSpritesData()[IndexManager::getInstance()->samusYellowTurnRight].rect);
+	// Set Data for sprite
+	const SpriteData data = SpriteManager::getInstance()->getSpritesData()[IndexManager::getInstance()->samusYellowTurnRight];
+	this->samus->getSprite()->setSpriteDataRect(data.rect);
+	this->samus->getSprite()->setSpriteWidth(data.width);
+	this->samus->getSprite()->setSpriteHeigth(data.height);
 }
 
 void SamusStateStanding::handleInput(float dt)
@@ -37,7 +41,12 @@ void SamusStateStanding::handleInput(float dt)
 	if (input->isKeyDown(VK_UP))
 	{
 		isPressed = true;
-		this->samus->getSprite()->setSpriteDataRect(SpriteManager::getInstance()->getSpritesData()[IndexManager::getInstance()->samusYellowTurnUp].rect);
+
+		// Set Data for sprite
+		const SpriteData data = SpriteManager::getInstance()->getSpritesData()[IndexManager::getInstance()->samusYellowTurnUp];
+		this->samus->getSprite()->setSpriteDataRect(data.rect);
+		this->samus->getSprite()->setSpriteWidth(data.width);
+		this->samus->getSprite()->setSpriteHeigth(data.height);
 	}
 
 	if (isPressed && input->isKeyUp(VK_UP))

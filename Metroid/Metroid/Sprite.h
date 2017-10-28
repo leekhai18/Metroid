@@ -35,6 +35,9 @@ public:
 	// Return reference to SpriteData structure.
 	const virtual SpriteData& getSpriteInfo() { return spriteData; }
 
+	// Get Width
+	
+
 	// Return visible parameter.
 	virtual bool  getVisible() { return visible; }
 
@@ -129,8 +132,11 @@ public:
 	// Set current frame of animation.
 	virtual void setCurrentFrame(int c);
 
-	// Set spriteData.rect to draw currentFrame
-	virtual void setRect();
+	// set spriteData.width
+	virtual void setSpriteWidth(int width) { spriteData.width = width; }
+
+	// set spriteData.height
+	virtual void setSpriteHeigth(int heigth) { spriteData.height = heigth; }
 
 	// Set spriteData.rect to r.
 	virtual void setSpriteDataRect(RECT r) { spriteData.rect = r; }
