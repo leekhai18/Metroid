@@ -130,6 +130,9 @@
     <ClInclude Include="resource.h" />
     <ClInclude Include="Samus.h" />
     <ClInclude Include="SamusStateManager.h" />
+    <ClInclude Include="SamusStateRolling.h" />
+    <ClInclude Include="SamusStateRunning.h" />
+    <ClInclude Include="SamusStateStanding.h" />
     <ClInclude Include="SamusStateStart.h" />
     <ClInclude Include="Sprite.h" />
     <ClInclude Include="SpriteManager.h" />
@@ -146,6 +149,9 @@
     <ClCompile Include="Metroid.cpp" />
     <ClCompile Include="Samus.cpp" />
     <ClCompile Include="SamusStateManager.cpp" />
+    <ClCompile Include="SamusStateRolling.cpp" />
+    <ClCompile Include="SamusStateRunning.cpp" />
+    <ClCompile Include="SamusStateStanding.cpp" />
     <ClCompile Include="SamusStateStart.cpp" />
     <ClCompile Include="Sprite.cpp" />
     <ClCompile Include="SpriteManager.cpp" />

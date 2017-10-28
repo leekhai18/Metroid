@@ -100,7 +100,7 @@ public:
 	const int samusYellowRollingRight[4] = { 119,120,121,122 };
 	const int samusYellowHittingAndRunningRight[3] = { 124,125,126 };
 	const int samusYellowHittingAndJumpRight = 127;
-	const int samusYellowHittingAndRunningUp[3] = { 129,130,131 };
+	const int samusYellowRunningUpRight[3] = { 129,130,131 };
 	const int samusYellowHittingAndJumpUp = 132;
 	const int samusYellowBulletNormal = 163;
 	const int samusYellowBulletNormalColliding = 164;

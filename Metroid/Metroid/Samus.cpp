@@ -11,11 +11,12 @@ Samus::Samus(TextureManager* textureM,Graphics* graphics, Input* input) : BaseOb
 	}
 
 	this->sprite->setPosition(GVector2(0, 0));
-	this->setRect();
 
 	startingAnimation = new Animation(this->sprite, IndexManager::getInstance()->samusYellowStart, NUM_FRAMES_SAMUS_START, 1, false);
-	runningAnimation = new Animation(this->sprite, IndexManager::getInstance()->samusYellowRunningRight , NUM_FRAMES_SAMUS_RUNNING, 0.17f);
-	rollingAnimation = new Animation(this->sprite, IndexManager::getInstance()->samusYellowRollingRight, NUM_FRAMES_SAMUS_ROLLING, 0.2f);
+	runningNormalAnimation = new Animation(this->sprite, IndexManager::getInstance()->samusYellowRunningRight , NUM_FRAMES_SAMUS_RUNNING, 0.07f);
+	runningUpAnimation = new Animation(this->sprite, IndexManager::getInstance()->samusYellowRunningUpRight, NUM_FRAMES_SAMUS_RUNNING, 0.07f);
+	runningShootAnimation = new Animation(this->sprite, IndexManager::getInstance()->samusYellowHittingAndRunningRight, NUM_FRAMES_SAMUS_RUNNING, 0.07f);
+	rollingAnimation = new Animation(this->sprite, IndexManager::getInstance()->samusYellowRollingRight, NUM_FRAMES_SAMUS_ROLLING, 0.07f);
 
 	SamusStateManager::getInstance()->init(this, input);
 }
@@ -30,12 +31,6 @@ Samus::~Samus()
 	this->release();
 }
 
-
-void Samus::setRect()
-{
-	this->sprite->setSpriteDataRect(SpriteManager::getInstance()->getSpritesData()[IndexManager::getInstance()->samusYellowStart[3]].rect);
-}
-
 void Samus::draw()
 {
 	this->sprite->draw();
@@ -43,14 +38,13 @@ void Samus::draw()
 
 void Samus::handleInput(float dt)
 {
-	updateDirection();
-
 	SamusStateManager::getInstance()->getCurrentState()->handleInput(dt);
 }
 
 
 void Samus::update(float dt)
 {
+	updateDirection();
 	SamusStateManager::getInstance()->getCurrentState()->update(dt);
 }
 
@@ -58,11 +52,13 @@ void Samus::release()
 {
 	input = nullptr;
 	sprite = nullptr;
-	runningAnimation = nullptr;
+	runningNormalAnimation = nullptr;
+	runningUpAnimation = nullptr;
+	runningShootAnimation = nullptr;
 	rollingAnimation = nullptr;
 	startingAnimation = nullptr;
 
-	delete input, sprite, runningAnimation, rollingAnimation, startingAnimation;
+	delete input, sprite, runningNormalAnimation, runningUpAnimation, runningShootAnimation, rollingAnimation, startingAnimation;
 }
 
 void Samus::updateDirection()
@@ -80,7 +76,7 @@ void Samus::updateDirection()
 
 void Samus::running(float dt)
 {
-
+	this->setPosition(this->getPositionX() + SAMUS_VERLOCITY*dt*getDirection(), this->getPositionY());
 }
 
 void Samus::turnUp()
@@ -94,4 +90,24 @@ void Samus::jump()
 Animation * Samus::getStartingAnim()
 {
 	return this->startingAnimation;
+}
+
+Animation * Samus::getRunningNormalAnim()
+{
+	return this->runningNormalAnimation;
+}
+
+Animation * Samus::getRunningUpAnim()
+{
+	return runningUpAnimation;
+}
+
+Animation * Samus::getRunningShootAnim()
+{
+	return runningShootAnimation;
+}
+
+Animation * Samus::getRollingAnim()
+{
+	return this->rollingAnimation;
 }

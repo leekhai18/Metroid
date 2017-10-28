@@ -48,6 +48,8 @@ public:
 	// Returns true if the specified VIRTUAL KEY is down, otherwise false.
 	bool isKeyDown(UCHAR vkey) const;
 
+	bool isKeyUp(UCHAR vkey) const;
+
 	// Return true if the specified VIRTUAL KEY has been pressed in the most recent frame.
 	// Key presses are erased at the end of each frame.
 	bool wasKeyPressed(UCHAR vkey) const;

@@ -16,7 +16,9 @@ class Samus: public BaseObject
 {
 private:
 	Input* input;
-	Animation	*runningAnimation,
+	Animation	*runningNormalAnimation,
+				*runningUpAnimation,
+				*runningShootAnimation,
 				*rollingAnimation,
 				*jumpingAnimation,
 				*startingAnimation;
@@ -26,7 +28,6 @@ public:
 	Samus();
 	~Samus();
 
-	void setRect();
 	void draw();
 	void handleInput(float dt);
 	void update(float dt);
@@ -38,5 +39,9 @@ public:
 	void jump();
 
 	Animation* getStartingAnim();
+	Animation* getRunningNormalAnim();
+	Animation* getRunningUpAnim();
+	Animation* getRunningShootAnim();
+	Animation* getRollingAnim();
 };
 

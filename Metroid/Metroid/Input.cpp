@@ -93,8 +93,13 @@ bool Input::isKeyDown(UCHAR vkey) const
 {
 	if (vkey < InputNS::KEYS_ARRAY_LEN)
 		return keysDown[vkey];
-	else
-		return false;
+	
+	return false;
+}
+
+bool Input::isKeyUp(UCHAR vkey) const
+{
+	return !isKeyDown(vkey);
 }
 
 //=============================================================================

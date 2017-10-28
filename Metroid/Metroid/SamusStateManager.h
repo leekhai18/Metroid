@@ -1,5 +1,8 @@
 #pragma once
 #include "SamusStateStart.h"
+#include "SamusStateRunning.h"
+#include "SamusStateStanding.h"
+#include "SamusStateRolling.h"
 
 class SamusStateManager
 {
@@ -7,6 +10,9 @@ private:
 	static SamusStateManager* instance;
 
 	SamusStateStart* stateStart;
+	SamusStateRunning* stateRunning;
+	SamusStateStanding* stateStanding;
+	SamusStateRolling* stateRolling;
 	BaseState* currentState;
 
 public:

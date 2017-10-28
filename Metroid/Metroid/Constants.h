@@ -41,6 +41,7 @@ const UCHAR ESC_KEY = VK_ESCAPE;       // escape key
 const UCHAR ALT_KEY = VK_MENU;         // Alt key
 const UCHAR ENTER_KEY = VK_RETURN;       // Enter key
 #define VK_X 0x58
+#define VK_Z 0x5A
 
 
 // Source
