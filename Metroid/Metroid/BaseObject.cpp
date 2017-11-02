@@ -64,55 +64,72 @@ bool BaseObject::isInDirection(eDirection direct)
 	return false;
 }
 
-GVector2 BaseObject::getPosition()
+VECTOR2 BaseObject::getPosition()
 {
 	return this->sprite->getPosition();
 }
 
-float BaseObject::getPositionX()
-{
-	return this->sprite->getX();
-}
-
-float BaseObject::getPositionY()
-{
-	return this->sprite->getY();
-}
-
-void BaseObject::setPosition(GVector2 position)
+void BaseObject::setPosition(VECTOR2 position)
 {
 	this->sprite->setPosition(position);
 }
 
 void BaseObject::setPosition(float x, float y)
 {
-	this->sprite->setPosition(GVector2(x, y));
+	this->sprite->setPosition(VECTOR2(x, y));
 }
+
 
 void BaseObject::setPositionX(float x)
 {
-	this->sprite->setX(x);
+	this->sprite->setPositionX(x);
 }
 
 void BaseObject::setPositionY(float y)
 {
-	this->sprite->setY(y);
+	this->sprite->setPositionX(y);
 }
 
-void BaseObject::setScale(float scale)
+VECTOR2 BaseObject::getScale()
+{
+	return this->sprite->getScale();
+}
+
+void BaseObject::setScale(VECTOR2 scale)
 {
 	this->sprite->setScale(scale);
 }
 
-float BaseObject::getRotate()
+void BaseObject::setScaleX(float scaleX)
 {
-	return this->sprite->getRadians();
+	this->sprite->setScaleX(scaleX);
 }
 
-void BaseObject::setRotate(float degree)
+void BaseObject::setScaleY(float scaleY)
 {
-	this->sprite->setRadians(degree);
+	this->sprite->setScaleY(scaleY);
 }
+
+VECTOR2 BaseObject::getOrigin()
+{
+	return this->sprite->getOrigin();
+}
+
+void BaseObject::setOrigin(VECTOR2 origin)
+{
+	this->sprite->setOrigin(origin);
+}
+
+float BaseObject::getRotate()
+{
+	return this->sprite->getRotate();
+}
+
+void BaseObject::setRotate(float rotate)
+{
+	this->sprite->setRotate(rotate);
+}
+
 
 Sprite * BaseObject::getSprite()
 {

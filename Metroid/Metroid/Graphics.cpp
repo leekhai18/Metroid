@@ -235,52 +235,40 @@ void Graphics::drawSprite(const SpriteData &spriteData, COLOR_ARGB color)
 	if (spriteData.texture == NULL)      // if no texture
 		return;
 
-	// Find center of sprite
-	D3DXVECTOR2 spriteCenter = D3DXVECTOR2((float)((spriteData.width / 2)*spriteData.scale),
-		(float)((spriteData.height / 2)*spriteData.scale));
+	D3DXMATRIX matFinal;
+	D3DXMATRIX matTransformed;
+	D3DXMATRIX matOld;
 
-	D3DXVECTOR3 center = D3DXVECTOR3(spriteCenter.x, spriteCenter.y, 0);
+	VECTOR3 center = VECTOR3(spriteData.width * spriteData.origin.x, spriteData.height * spriteData.origin.y, 0);
 
-	//center.z = 0;
-	// Screen position of the sprite
-	D3DXVECTOR2 translate = D3DXVECTOR2((float)spriteData.x, (float)spriteData.y);
-	// Scaling X,Y
-	D3DXVECTOR2 scaling(spriteData.scale, spriteData.scale);
-	if (spriteData.flipHorizontal)  // if flip horizontal
-	{
-		scaling.x *= -1;            // negative X scale to flip
-									// Get center of flipped image.
-		spriteCenter.x -= (float)(spriteData.width*spriteData.scale);
-		// Flip occurs around left edge, translate right to put
-		// Flipped image in same location as original.
-		translate.x += (float)(spriteData.width*spriteData.scale);
-	}
-	if (spriteData.flipVertical)    // if flip vertical
-	{
-		scaling.y *= -1;            // negative Y scale to flip
-									// Get center of flipped image
-		spriteCenter.y -= (float)(spriteData.height*spriteData.scale);
-		// Flip occurs around top edge, translate down to put
-		// Flipped image in same location as original.
-		translate.y += (float)(spriteData.height*spriteData.scale);
-	}
-	// Create a matrix to rotate, scale and position our sprite
-	D3DXMATRIX matrix;
+	sprite->GetTransform(&matOld);
 
 	D3DXMatrixTransformation2D(
-		&matrix,                // the matrix
-		NULL,                   // keep origin at top left when scaling
-		0.0f,                   // no scaling rotation
-		&scaling,               // scale amount
-		&spriteCenter,          // rotation center
-		D3DXToRadian((float)(spriteData.angle)),  // rotation angle
-		&translate);            // X,Y location
+		&matTransformed,
+		&spriteData.position,
+		0.0f,
+		&spriteData.scale,
+		&spriteData.position,
+		D3DXToRadian(spriteData.rotate),
+		0
+	);
 
+	matFinal = matTransformed * matOld;
 
-	sprite->SetTransform(&matrix);
+	//set matrix transformed
+	sprite->SetTransform(&matFinal);	
 
+	// BEGIN
+	sprite->Begin(D3DXSPRITE_ALPHABLEND | D3DXSPRITE_DONOTSAVESTATE);
+	
 	// Draw the sprite
-	sprite->Draw(spriteData.texture, &spriteData.rect,&center, NULL, color);
+	sprite->Draw(spriteData.texture, &spriteData.rect, &center, &VECTOR3(spriteData.position.x, spriteData.position.y, 0), color);
+
+	// Magic... TO use only this sprite or you can know as to refesh to old
+	sprite->SetTransform(&matOld);
+
+	// END
+	sprite->End();
 }
 
 //=============================================================================

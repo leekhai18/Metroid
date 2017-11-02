@@ -11,6 +11,9 @@
 #define LP_3DDEVICE LPDIRECT3DDEVICE9
 #define LP_3D       LPDIRECT3D9
 #define VECTOR2     D3DXVECTOR2
+#define VECTOR3		D3DXVECTOR3
+#define VECTOR2ZERO VECTOR2(0.0f, 0.0f)
+#define VECTOR2ONE  VECTOR2(1.0f, 1.0f)
 #define LP_LINE		LPD3DXLINE
 
 // Color defines
@@ -55,10 +58,10 @@ struct SpriteData
 {
 	int         width;      // width of sprite in pixels
 	int         height;     // height of sprite in pixels
-	float       x;          // screen location (top left corner of sprite)
-	float       y;
-	float       scale;      // <1 smaller, >1 bigger
-	float       angle;      // rotation angle in radians
+	VECTOR2		position;
+	VECTOR2		scale;
+	VECTOR2		origin;
+	float		rotate;
 	RECT        rect;       // used to select an image from a larger texture
 	LP_TEXTURE  texture;    // pointer to texture
 	bool        flipHorizontal; // true to flip sprite horizontally (mirror)
@@ -216,7 +219,7 @@ public:
 	//=============================================================================
 	void spriteBegin()
 	{
-		sprite->Begin(D3DXSPRITE_ALPHABLEND);
+		sprite->Begin(D3DXSPRITE_ALPHABLEND | D3DXSPRITE_DONOTSAVESTATE);
 	}
 
 	//=============================================================================

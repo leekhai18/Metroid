@@ -17,11 +17,26 @@ SamusStateStanding::~SamusStateStanding()
 
 void SamusStateStanding::init()
 {
+	if (input->isKeyDown(VK_UP))
+	{
+		isPressed = true;
+
+		// Set Data for sprite
+		const SpriteData *data = &(SpriteManager::getInstance()->getSpritesData()[IndexManager::getInstance()->samusYellowTurnUp]);
+		this->samus->getSprite()->setSpriteDataRect(data->rect);
+		this->samus->getSprite()->setSpriteWidth(data->width);
+		this->samus->getSprite()->setSpriteHeigth(data->height);
+		this->samus->setOrigin(VECTOR2(0, 1.0f));
+
+		return;
+	}
+
 	// Set Data for sprite
-	const SpriteData data = SpriteManager::getInstance()->getSpritesData()[IndexManager::getInstance()->samusYellowTurnRight];
-	this->samus->getSprite()->setSpriteDataRect(data.rect);
-	this->samus->getSprite()->setSpriteWidth(data.width);
-	this->samus->getSprite()->setSpriteHeigth(data.height);
+	const SpriteData *data = &(SpriteManager::getInstance()->getSpritesData()[IndexManager::getInstance()->samusYellowTurnRight]);
+	this->samus->getSprite()->setSpriteDataRect(data->rect);
+	this->samus->getSprite()->setSpriteWidth(data->width);
+	this->samus->getSprite()->setSpriteHeigth(data->height);
+	this->samus->setOrigin(VECTOR2(0, 1.0f));
 }
 
 void SamusStateStanding::handleInput(float dt)
@@ -43,15 +58,23 @@ void SamusStateStanding::handleInput(float dt)
 		isPressed = true;
 
 		// Set Data for sprite
-		const SpriteData data = SpriteManager::getInstance()->getSpritesData()[IndexManager::getInstance()->samusYellowTurnUp];
-		this->samus->getSprite()->setSpriteDataRect(data.rect);
-		this->samus->getSprite()->setSpriteWidth(data.width);
-		this->samus->getSprite()->setSpriteHeigth(data.height);
+		const SpriteData *data = &(SpriteManager::getInstance()->getSpritesData()[IndexManager::getInstance()->samusYellowTurnUp]);
+		this->samus->getSprite()->setSpriteDataRect(data->rect);
+		this->samus->getSprite()->setSpriteWidth(data->width);
+		this->samus->getSprite()->setSpriteHeigth(data->height);
+		this->samus->setOrigin(VECTOR2(0, 1.0f));
 	}
 
 	if (isPressed && input->isKeyUp(VK_UP))
 	{
-		this->init();
+		isPressed = false;
+		
+		// Set Data for sprite
+		const SpriteData *data = &(SpriteManager::getInstance()->getSpritesData()[IndexManager::getInstance()->samusYellowTurnRight]);
+		this->samus->getSprite()->setSpriteDataRect(data->rect);
+		this->samus->getSprite()->setSpriteWidth(data->width);
+		this->samus->getSprite()->setSpriteHeigth(data->height);
+		this->samus->setOrigin(VECTOR2(0, 1.0f));
 	}
 
 	if (input->isKeyDown(VK_DOWN))

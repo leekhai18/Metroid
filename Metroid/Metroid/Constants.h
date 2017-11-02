@@ -69,8 +69,3 @@ enum eDirection {
 	left = -1,
 	right = 1,
 };
-
-typedef D3DXVECTOR3 GVector3;
-typedef D3DXVECTOR2 GVector2;
-#define VECTOR2ZERO GVector2(0.0f, 0.0f)
-#define VECTOR2ONE  GVector2(1.0f, 1.0f)

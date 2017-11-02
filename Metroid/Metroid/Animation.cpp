@@ -1,7 +1,7 @@
 #include "Animation.h"
 
 
-Animation::Animation(Sprite *sprite, const int* list, int totalFrames, float timeAnim, bool loop)
+Animation::Animation(Sprite *sprite, VECTOR2 origin, const int* list, int totalFrames, float timeAnim, bool loop)
 {
 	this->sprite = sprite;
 	this->listFrames = list;
@@ -13,13 +13,10 @@ Animation::Animation(Sprite *sprite, const int* list, int totalFrames, float tim
 	this->frameDelay = timeAnim;
 	this->timerAnim = 0;
 	this->canAnimate = false;
-	
-	// set width, height
-	this->sprite->setSpriteWidth(SpriteManager::getInstance()->getSpritesData()[this->listFrames[0]].width);
-	this->sprite->setSpriteHeigth(SpriteManager::getInstance()->getSpritesData()[this->listFrames[0]].height);
+	this->origin = origin;
 }
 
-Animation::Animation(Sprite *sprite, const int * list, int totalFrames, float timeAnim)
+Animation::Animation(Sprite *sprite, VECTOR2 origin, const int * list, int totalFrames, float timeAnim)
 {
 	this->sprite = sprite;
 	this->listFrames = list;
@@ -31,10 +28,7 @@ Animation::Animation(Sprite *sprite, const int * list, int totalFrames, float ti
 	this->canAnimate = false;
 	this->isCompleted = false;
 	this->isloop = true;
-
-	// set width, height
-	this->sprite->setSpriteWidth(SpriteManager::getInstance()->getSpritesData()[this->listFrames[0]].width);
-	this->sprite->setSpriteHeigth(SpriteManager::getInstance()->getSpritesData()[this->listFrames[0]].height);
+	this->origin = origin;
 }
 
 
@@ -58,8 +52,12 @@ void Animation::setValueOfCurrentFrame(int index)
 	if (currentFrame > totalFrames - 1)
 		currentFrame = startFrame;
 
-	// setRect
-	this->sprite->setSpriteDataRect(SpriteManager::getInstance()->getSpritesData()[this->listFrames[currentFrame]].rect);
+	// Get data of sprite
+	const SpriteData *data = &(SpriteManager::getInstance()->getSpritesData()[this->listFrames[currentFrame]]);
+	this->sprite->setSpriteDataRect(data->rect);
+	this->sprite->setSpriteWidth(data->width);
+	this->sprite->setSpriteHeigth(data->height);
+	this->sprite->setOrigin(this->origin);
 
 	if (!isloop && currentFrame == totalFrames - 1)
 	{

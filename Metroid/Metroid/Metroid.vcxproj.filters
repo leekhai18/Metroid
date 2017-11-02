@@ -84,9 +84,6 @@
     <ClInclude Include="SamusStateJumping.h">
       <Filter>Objects</Filter>
     </ClInclude>
-    <ClInclude Include="SamusStateFalling.h">
-      <Filter>Objects</Filter>
-    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="GameManager.cpp">
@@ -144,9 +141,6 @@
       <Filter>Objects</Filter>
     </ClCompile>
     <ClCompile Include="SamusStateRolling.cpp">
-      <Filter>Objects</Filter>
-    </ClCompile>
-    <ClCompile Include="SamusStateFalling.cpp">
       <Filter>Objects</Filter>
     </ClCompile>
   </ItemGroup>

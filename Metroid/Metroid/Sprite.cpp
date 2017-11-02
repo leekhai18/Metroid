@@ -2,13 +2,12 @@
 
 Sprite::Sprite()
 {
-	initialized = false;            // set true when successfully initialized
 	spriteData.width = 0;
 	spriteData.height = 0;
-	spriteData.x = 0.0;
-	spriteData.y = 0.0;
-	spriteData.scale = 1.0;
-	spriteData.angle = 0.0;
+	spriteData.position = VECTOR2ZERO;
+	spriteData.origin = VECTOR2ZERO;
+	spriteData.scale = VECTOR2ONE;
+	spriteData.rotate = 0.0;
 	spriteData.rect.left = 0;       // used to select one frame from multi-frame image
 	spriteData.rect.top = 0;
 	spriteData.rect.right = spriteData.width;
@@ -18,14 +17,6 @@ Sprite::Sprite()
 	spriteData.flipVertical = false;
 	textureManager = NULL;
 	spriteManager = NULL;
-	startFrame = 0;
-	endFrame = 0;
-	currentFrame = 0;
-	frameDelay = 1.0;               // default to 1 second per frame of animation
-	animTimer = 0.0;
-	visible = true;                 // the image is visible
-	loop = true;                    // loop frames
-	animComplete = false;
 	graphics = NULL;                // link to graphics system
 	colorFilter = GraphicsNS::WHITE; // WHITE for no change
 }
@@ -53,7 +44,6 @@ bool Sprite::initialize(Graphics *g, TextureManager *textureM, SpriteManager *sp
 		spriteData.texture = textureManager->getTexture();
 	}
 	catch (...) { return false; }
-	initialized = true;                                // successfully initialized
 	return true;
 }
 
@@ -67,7 +57,7 @@ bool Sprite::initialize(Graphics *g, TextureManager *textureM, SpriteManager *sp
 void Sprite::draw(COLOR_ARGB color)
 {
 
-	if (!visible || graphics == NULL)
+	if (graphics == NULL)
 		return;
 	// get fresh texture incase onReset() was called
 	spriteData.texture = textureManager->getTexture();
@@ -85,7 +75,7 @@ void Sprite::draw(COLOR_ARGB color)
 //=============================================================================
 void Sprite::draw(SpriteData sd, COLOR_ARGB color)
 {
-	if (!visible || graphics == NULL)
+	if (graphics == NULL)
 		return;
 	sd.rect = spriteData.rect;                  // use this Images rect to select texture
 	sd.texture = textureManager->getTexture();  // get fresh texture incase onReset() was called
@@ -103,35 +93,4 @@ void Sprite::draw(SpriteData sd, COLOR_ARGB color)
 //=============================================================================
 void Sprite::update(float dt)
 {
-	if (endFrame - startFrame > 0)          // if animated sprite
-	{
-		animTimer += dt;             // total elapsed time
-		if (animTimer > frameDelay)
-		{
-			animTimer -= frameDelay;
-			currentFrame++;
-			if (currentFrame < startFrame || currentFrame > endFrame)
-			{
-				if (loop == true)            // if looping animation
-					currentFrame = startFrame;
-				else                        // not looping animation
-				{
-					currentFrame = endFrame;
-					animComplete = true;    // animation complete
-				}
-			}
-		}
-	}
-}
-
-//=============================================================================
-// Set the current frame of the image
-//=============================================================================
-void Sprite::setCurrentFrame(int c)
-{
-	if (c >= 0)
-	{
-		currentFrame = c;
-		animComplete = false;
-	}
 }

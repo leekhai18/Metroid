@@ -29,19 +29,22 @@ public:
 	virtual void setDirection(eDirection direct);
 	virtual bool isInDirection(eDirection direct);
 
-	virtual GVector2 getPosition();
-	virtual float getPositionX();
-	virtual float getPositionY();
-
-	virtual void setPosition(GVector2 position);
+	virtual VECTOR2 getPosition();
+	virtual void setPosition(VECTOR2 position);
 	virtual void setPosition(float x, float y);
 	virtual void setPositionX(float x);
 	virtual void setPositionY(float y);
 
-	virtual void setScale(float scale);
+	virtual VECTOR2 getScale();
+	virtual void setScale(VECTOR2 scale);
+	virtual void setScaleX(float scaleX);
+	virtual void setScaleY(float scaleY);
+
+	virtual VECTOR2 getOrigin();
+	virtual void setOrigin(VECTOR2 origin);
 
 	virtual float getRotate();
-	virtual void setRotate(float degree);
+	virtual void setRotate(float rotate);
 
 	Sprite* getSprite();
 

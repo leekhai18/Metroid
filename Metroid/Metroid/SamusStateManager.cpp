@@ -24,7 +24,6 @@ SamusStateManager::~SamusStateManager()
 	stateStanding = nullptr;
 	stateRolling = nullptr;
 	stateJumping = nullptr;
-	stateFalling = nullptr;
 	currentState = nullptr;
 
 	delete stateStart;
@@ -32,7 +31,6 @@ SamusStateManager::~SamusStateManager()
 	delete stateRunning;
 	delete stateStanding;
 	delete stateJumping;
-	delete stateFalling;
 	delete currentState;
 }
 
@@ -43,7 +41,6 @@ void SamusStateManager::init(Samus * samus, Input * input)
 	stateStanding = new SamusStateStanding(samus, input);
 	stateRolling = new SamusStateRolling(samus, input);
 	stateJumping = new SamusStateJumping(samus, input);
-	stateFalling = new SamusStateFalling(samus, input);
 
 	currentState = stateStart;
 }
@@ -83,11 +80,6 @@ void SamusStateManager::changeStateTo(eStatus eStatus)
 	case eStatus::JUMPING:
 	{
 		currentState = stateJumping;
-		break;
-	}
-	case eStatus::FALLING:
-	{
-		currentState = stateFalling;
 		break;
 	}
 	default:

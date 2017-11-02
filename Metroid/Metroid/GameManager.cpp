@@ -86,10 +86,10 @@ void GameManager::renderGame()
 	//start rendering
 	if (SUCCEEDED(graphics->beginScene()))
 	{
-		graphics->spriteBegin();
-		render();           // call render() in derived object
-		graphics->spriteEnd();
-							//stop rendering
+		// call render() in derived object
+		render();          
+		
+		//stop rendering
 		graphics->endScene();
 	}
 	handleLostGraphicsDevice();

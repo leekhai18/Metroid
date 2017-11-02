@@ -36,7 +36,7 @@ bool SpriteManager::initialize(const char* filename)
 			//get spriteData in json
 			spriteData.width = frame["w"].GetInt();
 			spriteData.height = frame["h"].GetInt();
-			spriteData.angle = 0;
+			spriteData.rotate = 0;
 
 			RECT rect;
 			rect.left = frame["x"].GetInt();

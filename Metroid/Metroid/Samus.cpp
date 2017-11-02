@@ -10,18 +10,19 @@ Samus::Samus(TextureManager* textureM,Graphics* graphics, Input* input) : BaseOb
 		throw GameError(GameErrorNS::FATAL_ERROR, "Can not init sprite character");
 	}
 
-	this->sprite->setPosition(GVector2(0, GAME_HEIGHT*0.8));
-
-	startingAnimation = new Animation(this->sprite, IndexManager::getInstance()->samusYellowStart, NUM_FRAMES_SAMUS_START, 1, false);
-	runningNormalAnimation = new Animation(this->sprite, IndexManager::getInstance()->samusYellowRunningRight, NUM_FRAMES_SAMUS_RUNNING, 0.07f);
-	runningUpAnimation = new Animation(this->sprite, IndexManager::getInstance()->samusYellowRunningUpRight, NUM_FRAMES_SAMUS_RUNNING, 0.07f);
-	runningShootAnimation = new Animation(this->sprite, IndexManager::getInstance()->samusYellowHittingAndRunningRight, NUM_FRAMES_SAMUS_RUNNING, 0.07f);
-	rollingAnimation = new Animation(this->sprite, IndexManager::getInstance()->samusYellowRollingRight, NUM_FRAMES_SAMUS_ROLLING, 0.07f);
-	jumpingAnimation = new Animation(this->sprite, IndexManager::getInstance()->samusYellowJumpingRight, NUM_FRAMES_SAMUS_JUMPING, 0.07f);
+	runningNormalAnimation = new Animation(this->sprite, VECTOR2(0, 1.0f), IndexManager::getInstance()->samusYellowRunningRight, NUM_FRAMES_SAMUS_RUNNING, 0.07f);
+	runningUpAnimation = new Animation(this->sprite, VECTOR2(0, 1.0f), IndexManager::getInstance()->samusYellowRunningUpRight, NUM_FRAMES_SAMUS_RUNNING, 0.07f);
+	runningShootAnimation = new Animation(this->sprite, VECTOR2(0, 1.0f), IndexManager::getInstance()->samusYellowHittingAndRunningRight, NUM_FRAMES_SAMUS_RUNNING, 0.07f);
+	rollingAnimation = new Animation(this->sprite, VECTOR2(0, 1.0f), IndexManager::getInstance()->samusYellowRollingRight, NUM_FRAMES_SAMUS_ROLLING, 0.07f);
+	jumpingAnimation = new Animation(this->sprite, VECTOR2(0.5f, 0.5f), IndexManager::getInstance()->samusYellowJumpingRight, NUM_FRAMES_SAMUS_JUMPING, 0.04f);
+	startingAnimation = new Animation(this->sprite, VECTOR2(0, 1.0f), IndexManager::getInstance()->samusYellowStart, NUM_FRAMES_SAMUS_START, 1, false);
 
 	SamusStateManager::getInstance()->init(this, input);
 	this->isFalling = false;
 	this->totalHeightWasJumped = false;
+
+	//this->setPosition(GVector2(this->sprite->getWidth() * 0.5f, GAME_HEIGHT - this->sprite->getHeight() * 0.5f));
+	this->setPosition(VECTOR2(100, GAME_HEIGHT*0.8));
 }
 
 Samus::Samus()
@@ -41,13 +42,13 @@ void Samus::draw()
 
 void Samus::handleInput(float dt)
 {
-	SamusStateManager::getInstance()->getCurrentState()->handleInput(dt);
+	handleDirection();
 }
 
 
 void Samus::update(float dt)
 {
-	updateDirection();
+	this->handleInput(dt);
 	SamusStateManager::getInstance()->getCurrentState()->update(dt);
 }
 
@@ -65,29 +66,39 @@ void Samus::release()
 	delete input, sprite, runningNormalAnimation, runningUpAnimation, runningShootAnimation, rollingAnimation, startingAnimation, jumpingAnimation;
 }
 
-void Samus::updateDirection()
+void Samus::handleDirection()
 {
 	if (input->isKeyDown(VK_RIGHT))
 	{
-		this->setDirection(eDirection::right);
+		if (this->isInDirection(eDirection::left))
+		{
+			this->setScaleX(1);
+			this->setPositionX(this->getPosition().x - this->getSprite()->getWidth());
+			this->setDirection(eDirection::right);
+		}
 	}
 
 	if (input->isKeyDown(VK_LEFT))
 	{
-		this->setDirection(eDirection::left);
+		if (this->isInDirection(eDirection::right))
+		{
+			this->setScaleX(-1);
+			this->setPositionX(this->getPosition().x + this->getSprite()->getWidth());
+			this->setDirection(eDirection::left);
+		}
 	}
 }
 
 void Samus::updateHorizontal(float dt)
 {
-	this->setPosition(this->getPositionX() + SAMUS_VERLOCITY_X*dt*getDirection(), this->getPositionY());
+	this->setPosition(this->getPosition().x + SAMUS_VERLOCITY_X*dt*getDirection(), this->getPosition().y);
 }
 
 void Samus::updateVertical(float dt)
 {
 	if (this->isFalling)
 	{
-		this->setPosition(this->getPositionX(), this->getPositionY() + SAMUS_VERLOCITY_Y*dt);
+		this->setPosition(this->getPosition().x, this->getPosition().y + SAMUS_VERLOCITY_Y*dt);
 	}
 	else
 	{
@@ -95,7 +106,7 @@ void Samus::updateVertical(float dt)
 		totalHeightWasJumped += hps;
 
 		if (totalHeightWasJumped <= MAX_HEIGHT_CAN_JUMP)
-			this->setPosition(this->getPositionX(), this->getPositionY() + SAMUS_VERLOCITY_Y*dt*(-1));
+			this->setPosition(this->getPosition().x, this->getPosition().y + SAMUS_VERLOCITY_Y*dt*(-1));
 		else
 			this->setFall(true);
 	}
@@ -140,3 +151,4 @@ Animation * Samus::getJumpingAnim()
 {
 	return this->jumpingAnimation;
 }
+
