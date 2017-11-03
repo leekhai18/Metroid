@@ -42,7 +42,7 @@ void Samus::draw()
 
 void Samus::handleInput(float dt)
 {
-	handleDirection();
+	SamusStateManager::getInstance()->getCurrentState()->handleInput(dt);
 }
 
 
@@ -64,29 +64,6 @@ void Samus::release()
 	jumpingAnimation = nullptr;
 
 	delete input, sprite, runningNormalAnimation, runningUpAnimation, runningShootAnimation, rollingAnimation, startingAnimation, jumpingAnimation;
-}
-
-void Samus::handleDirection()
-{
-	if (input->isKeyDown(VK_RIGHT))
-	{
-		if (this->isInDirection(eDirection::left))
-		{
-			this->setScaleX(1);
-			this->setPositionX(this->getPosition().x - this->getSprite()->getWidth());
-			this->setDirection(eDirection::right);
-		}
-	}
-
-	if (input->isKeyDown(VK_LEFT))
-	{
-		if (this->isInDirection(eDirection::right))
-		{
-			this->setScaleX(-1);
-			this->setPositionX(this->getPosition().x + this->getSprite()->getWidth());
-			this->setDirection(eDirection::left);
-		}
-	}
 }
 
 void Samus::updateHorizontal(float dt)

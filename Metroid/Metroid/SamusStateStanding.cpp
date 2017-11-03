@@ -91,7 +91,6 @@ void SamusStateStanding::handleInput(float dt)
 
 void SamusStateStanding::update(float dt)
 {
-	this->handleInput(dt);
 }
 
 void SamusStateStanding::onStart()

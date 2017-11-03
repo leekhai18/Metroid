@@ -38,7 +38,6 @@ public:
 	void update(float dt);
 	void release();
 
-	void handleDirection();
 	void updateHorizontal(float dt);
 	void updateVertical(float dt);
 	

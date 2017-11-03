@@ -22,33 +22,31 @@ void SamusStateStart::init()
 
 void SamusStateStart::handleInput(float dt)
 {
-	if (input->isKeyDown(VK_RIGHT) || input->isKeyDown(VK_LEFT))
+	if (animation->isFinished())
 	{
-		this->samus->setStatus(eStatus::RUNNING);
-		SamusStateManager::getInstance()->changeStateTo(eStatus::RUNNING);
-	}
+		if (input->isKeyDown(VK_RIGHT) || input->isKeyDown(VK_LEFT))
+		{
+			this->samus->setStatus(eStatus::RUNNING);
+			SamusStateManager::getInstance()->changeStateTo(eStatus::RUNNING);
+		}
 
-	if (input->isKeyDown(VK_UP) || input->isKeyDown(VK_Z))
-	{
-		this->samus->setStatus(eStatus::STANDING);
-		SamusStateManager::getInstance()->changeStateTo(eStatus::STANDING);
-	}
+		if (input->isKeyDown(VK_UP) || input->isKeyDown(VK_Z))
+		{
+			this->samus->setStatus(eStatus::STANDING);
+			SamusStateManager::getInstance()->changeStateTo(eStatus::STANDING);
+		}
 
-	if (input->isKeyDown(VK_X))
-	{
-		this->samus->setStatus(eStatus::JUMPING);
-		SamusStateManager::getInstance()->changeStateTo(eStatus::JUMPING);
+		if (input->isKeyDown(VK_X))
+		{
+			this->samus->setStatus(eStatus::JUMPING);
+			SamusStateManager::getInstance()->changeStateTo(eStatus::JUMPING);
+		}
 	}
 }
 
 void SamusStateStart::update(float dt)
 {
 	animation->update(dt);
-
-	if (animation->isFinished())
-	{
-		handleInput(dt);
-	}
 }
 
 void SamusStateStart::onStart()
