@@ -84,6 +84,15 @@
     <ClInclude Include="SamusStateJumping.h">
       <Filter>Objects</Filter>
     </ClInclude>
+    <ClInclude Include="Skree.h">
+      <Filter>Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="SkreeEffectDeathPart.h">
+      <Filter>Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="SkreeEffectDeath.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="GameManager.cpp">
@@ -142,6 +151,15 @@
     </ClCompile>
     <ClCompile Include="SamusStateRolling.cpp">
       <Filter>Objects</Filter>
+    </ClCompile>
+    <ClCompile Include="Skree.cpp">
+      <Filter>Objects</Filter>
+    </ClCompile>
+    <ClCompile Include="SkreeEffectDeathPart.cpp">
+      <Filter>Objects</Filter>
+    </ClCompile>
+    <ClCompile Include="SkreeEffectDeath.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

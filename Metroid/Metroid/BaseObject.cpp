@@ -13,6 +13,8 @@ BaseObject::BaseObject(eID id)
 BaseObject::BaseObject()
 {
 	this->sprite = nullptr;
+	this->status = eStatus::START;
+	this->direction = eDirection::right;
 }
 
 

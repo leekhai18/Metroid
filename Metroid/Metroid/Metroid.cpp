@@ -12,6 +12,8 @@ Metroid::~Metroid()
 	delete samus;
 	textureManager->onLostDevice();
 	spriteManger->releaseAll();
+
+	delete skree;
 }
 
 void Metroid::initialize(HWND hwnd) 
@@ -27,11 +29,15 @@ void Metroid::initialize(HWND hwnd)
 	}
 
 	samus = new Samus(textureManager, graphics, input);
+	skree = new Skree(textureManager, graphics);
 }
 
 void Metroid::update(float dt)
 {
 	samus->update(dt);
+	
+	skree->setTarget(VECTOR2(samus->getPosition().x + samus->getSprite()->getWidth()*0.5f, samus->getPosition().y));
+	skree->update(dt);
 }
 
 void Metroid::ai()
@@ -47,6 +53,7 @@ void Metroid::collisions()
 void Metroid::render()
 {
 	samus->draw();
+	skree->draw();
 }
 
 void Metroid::releaseAll()

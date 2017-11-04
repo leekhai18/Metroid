@@ -7,7 +7,7 @@ Samus::Samus(TextureManager* textureM,Graphics* graphics, Input* input) : BaseOb
 	this->sprite = new Sprite();
 	if (! this->sprite->initialize(graphics, textureM, SpriteManager::getInstance()))
 	{
-		throw GameError(GameErrorNS::FATAL_ERROR, "Can not init sprite character");
+		throw GameError(GameErrorNS::FATAL_ERROR, "Can not init sprite Samus");
 	}
 
 	runningNormalAnimation = new Animation(this->sprite, VECTOR2(0, 1.0f), IndexManager::getInstance()->samusYellowRunningRight, NUM_FRAMES_SAMUS_RUNNING, 0.07f);
@@ -21,7 +21,6 @@ Samus::Samus(TextureManager* textureM,Graphics* graphics, Input* input) : BaseOb
 	this->isFalling = false;
 	this->totalHeightWasJumped = false;
 
-	//this->setPosition(GVector2(this->sprite->getWidth() * 0.5f, GAME_HEIGHT - this->sprite->getHeight() * 0.5f));
 	this->setPosition(VECTOR2(100, GAME_HEIGHT*0.8));
 }
 
@@ -79,7 +78,7 @@ void Samus::updateVertical(float dt)
 	}
 	else
 	{
-		float hps = SAMUS_VERLOCITY_Y*dt*(-1);
+		float hps = SAMUS_VERLOCITY_Y*dt;
 		totalHeightWasJumped += hps;
 
 		if (totalHeightWasJumped <= MAX_HEIGHT_CAN_JUMP)

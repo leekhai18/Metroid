@@ -135,6 +135,9 @@
     <ClInclude Include="SamusStateRunning.h" />
     <ClInclude Include="SamusStateStanding.h" />
     <ClInclude Include="SamusStateStart.h" />
+    <ClInclude Include="Skree.h" />
+    <ClInclude Include="SkreeEffectDeath.h" />
+    <ClInclude Include="SkreeEffectDeathPart.h" />
     <ClInclude Include="Sprite.h" />
     <ClInclude Include="SpriteManager.h" />
     <ClInclude Include="TextureManager.h" />
@@ -155,6 +158,9 @@
     <ClCompile Include="SamusStateRunning.cpp" />
     <ClCompile Include="SamusStateStanding.cpp" />
     <ClCompile Include="SamusStateStart.cpp" />
+    <ClCompile Include="Skree.cpp" />
+    <ClCompile Include="SkreeEffectDeath.cpp" />
+    <ClCompile Include="SkreeEffectDeathPart.cpp" />
     <ClCompile Include="Sprite.cpp" />
     <ClCompile Include="SpriteManager.cpp" />
     <ClCompile Include="TextureManager.cpp" />
