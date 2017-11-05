@@ -36,7 +36,7 @@ void Metroid::update(float dt)
 {
 	samus->update(dt);
 	
-	skree->setTarget(VECTOR2(samus->getPosition().x + samus->getSprite()->getWidth()*0.5f, samus->getPosition().y));
+	skree->setTarget(VECTOR2(samus->getPosition().x + samus->getSprite()->getWidth()*0.5f, GAME_HEIGHT*0.8f));
 	skree->update(dt);
 }
 

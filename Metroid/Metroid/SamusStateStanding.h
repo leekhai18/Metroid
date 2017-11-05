@@ -4,7 +4,7 @@
 class SamusStateStanding : public BaseState
 {
 private:
-	bool isPressed;
+	bool isUp;
 
 public:
 	SamusStateStanding(); 
@@ -17,5 +17,7 @@ public:
 
 	void onStart();
 	void onExit();
+
+	void fire();
 };
 

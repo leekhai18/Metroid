@@ -7,6 +7,7 @@
 #include "GameError.h"
 #include "Animation.h"
 #include "BaseObject.h"
+#include "Bullet.h"
 
 #define SAMUS_VERLOCITY_X 100
 #define SAMUS_VERLOCITY_Y 100
@@ -18,6 +19,7 @@ class Samus: public BaseObject
 {
 private:
 	Input* input;
+
 	Animation	*runningNormalAnimation,
 				*runningUpAnimation,
 				*runningShootAnimation,
@@ -27,6 +29,8 @@ private:
 
 	bool isFalling;
 	float totalHeightWasJumped;
+
+	Bullet* bullet;
 
 public:
 	Samus(TextureManager* textureM, Graphics* graphics, Input* input);
@@ -50,5 +54,7 @@ public:
 	Animation* getRunningShootAnim();
 	Animation* getRollingAnim();
 	Animation* getJumpingAnim();
+
+	Bullet* getBullet() { return this->bullet; }
 };
 

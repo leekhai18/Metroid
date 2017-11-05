@@ -19,9 +19,11 @@ Samus::Samus(TextureManager* textureM,Graphics* graphics, Input* input) : BaseOb
 
 	SamusStateManager::getInstance()->init(this, input);
 	this->isFalling = false;
-	this->totalHeightWasJumped = false;
+	this->totalHeightWasJumped = 0;
 
 	this->setPosition(VECTOR2(100, GAME_HEIGHT*0.8));
+
+	this->bullet = new Bullet(textureM, graphics);
 }
 
 Samus::Samus()
@@ -37,6 +39,9 @@ Samus::~Samus()
 void Samus::draw()
 {
 	this->sprite->draw();
+
+	if (this->bullet->isInStatus(eStatus::RUNNING))
+		this->bullet->draw();
 }
 
 void Samus::handleInput(float dt)
@@ -49,6 +54,9 @@ void Samus::update(float dt)
 {
 	this->handleInput(dt);
 	SamusStateManager::getInstance()->getCurrentState()->update(dt);
+
+	if (this->bullet->isInStatus(eStatus::RUNNING))
+		this->bullet->update(dt);
 }
 
 void Samus::release()
@@ -95,7 +103,13 @@ bool Samus::isFaling()
 
 void Samus::setFall(bool isFall)
 {
-	this->isFalling = isFall;
+	if (this->isFalling != isFall)
+	{
+		this->isFalling = isFall;
+		
+		if (this->isFalling == false)
+			this->totalHeightWasJumped = 0;
+	}
 }
 
 Animation * Samus::getStartingAnim()

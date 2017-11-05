@@ -91,6 +91,9 @@
       <Filter>Objects</Filter>
     </ClInclude>
     <ClInclude Include="SkreeEffectDeath.h">
+      <Filter>Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="Bullet.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -159,6 +162,9 @@
       <Filter>Objects</Filter>
     </ClCompile>
     <ClCompile Include="SkreeEffectDeath.cpp">
+      <Filter>Objects</Filter>
+    </ClCompile>
+    <ClCompile Include="Bullet.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

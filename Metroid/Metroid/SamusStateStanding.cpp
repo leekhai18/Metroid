@@ -8,7 +8,7 @@ SamusStateStanding::SamusStateStanding()
 
 SamusStateStanding::SamusStateStanding(Samus * samus, Input * input) : BaseState(samus, input)
 {
-	isPressed = false;
+	isUp = false;
 }
 
 SamusStateStanding::~SamusStateStanding()
@@ -19,7 +19,7 @@ void SamusStateStanding::init()
 {
 	if (input->isKeyDown(VK_UP))
 	{
-		isPressed = true;
+		isUp = true;
 
 		// Set Data for sprite
 		const SpriteData *data = &(SpriteManager::getInstance()->getSpritesData()[IndexManager::getInstance()->samusYellowTurnUp]);
@@ -55,7 +55,7 @@ void SamusStateStanding::handleInput(float dt)
 
 	if (input->isKeyDown(VK_UP))
 	{
-		isPressed = true;
+		isUp = true;
 
 		// Set Data for sprite
 		const SpriteData *data = &(SpriteManager::getInstance()->getSpritesData()[IndexManager::getInstance()->samusYellowTurnUp]);
@@ -65,9 +65,9 @@ void SamusStateStanding::handleInput(float dt)
 		this->samus->setOrigin(VECTOR2(0, 1.0f));
 	}
 
-	if (isPressed && input->isKeyUp(VK_UP))
+	if (isUp && input->isKeyUp(VK_UP))
 	{
-		isPressed = false;
+		isUp = false;
 		
 		// Set Data for sprite
 		const SpriteData *data = &(SpriteManager::getInstance()->getSpritesData()[IndexManager::getInstance()->samusYellowTurnRight]);
@@ -85,7 +85,37 @@ void SamusStateStanding::handleInput(float dt)
 
 	if (input->isKeyDown(VK_Z))
 	{
-		//Shoot
+		// Set up sprite Shooting
+		if (isUp)
+		{
+			// Set Data for sprite
+			const SpriteData *data = &(SpriteManager::getInstance()->getSpritesData()[IndexManager::getInstance()->samusYellowHittingUp]);
+			this->samus->getSprite()->setSpriteDataRect(data->rect);
+			this->samus->getSprite()->setSpriteWidth(data->width);
+			this->samus->getSprite()->setSpriteHeigth(data->height);
+			this->samus->setOrigin(VECTOR2(0, 1.0f));
+		}
+		else
+		{
+			// Set Data for sprite
+			const SpriteData *data = &(SpriteManager::getInstance()->getSpritesData()[IndexManager::getInstance()->samusYellowHittingRight]);
+			this->samus->getSprite()->setSpriteDataRect(data->rect);
+			this->samus->getSprite()->setSpriteWidth(data->width);
+			this->samus->getSprite()->setSpriteHeigth(data->height);
+			this->samus->setOrigin(VECTOR2(0, 1.0f));
+		}
+
+		//this->fire();
+	}
+
+	if (input->isKeyUp(VK_Z) && !isUp)
+	{
+		// Set Data for sprite
+		const SpriteData *data = &(SpriteManager::getInstance()->getSpritesData()[IndexManager::getInstance()->samusYellowTurnRight]);
+		this->samus->getSprite()->setSpriteDataRect(data->rect);
+		this->samus->getSprite()->setSpriteWidth(data->width);
+		this->samus->getSprite()->setSpriteHeigth(data->height);
+		this->samus->setOrigin(VECTOR2(0, 1.0f));
 	}
 }
 
@@ -99,4 +129,35 @@ void SamusStateStanding::onStart()
 
 void SamusStateStanding::onExit()
 {
+}
+
+void SamusStateStanding::fire()
+{
+	VECTOR2 stP;
+	VECTOR2 tar;
+
+	if (isUp)
+	{
+		if (this->samus->isInDirection(eDirection::right))
+			stP = VECTOR2(this->samus->getPosition().x + this->samus->getSprite()->getWidth()*0.7f, this->samus->getPosition().y - this->samus->getSprite()->getHeight()*0.7f);
+		else if (this->samus->isInDirection(eDirection::left))
+			stP = VECTOR2(this->samus->getPosition().x - this->samus->getSprite()->getWidth()*0.7f, this->samus->getPosition().y - this->samus->getSprite()->getHeight()*0.7f);
+
+		tar = VECTOR2(stP.x, stP.y - 100);
+	}
+	else
+	{
+		if (this->samus->isInDirection(eDirection::right))
+		{
+
+			tar = VECTOR2(stP.x + 100, stP.y);
+		}
+
+		else if (this->samus->isInDirection(eDirection::left))
+		{
+			tar = VECTOR2(stP.x - 100, stP.y);
+		}
+	}
+
+	this->samus->getBullet()->init(stP, tar);
 }
