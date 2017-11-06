@@ -19,19 +19,19 @@ SamusStateManager::SamusStateManager()
 
 SamusStateManager::~SamusStateManager()
 {
-	stateRunning = nullptr;
-	stateStart = nullptr;
-	stateStanding = nullptr;
-	stateRolling = nullptr;
-	stateJumping = nullptr;
-	currentState = nullptr;
-
 	delete stateStart;
 	delete stateRolling;
 	delete stateRunning;
 	delete stateStanding;
 	delete stateJumping;
 	delete currentState;
+
+	stateRunning = nullptr;
+	stateStart = nullptr;
+	stateStanding = nullptr;
+	stateRolling = nullptr;
+	stateJumping = nullptr;
+	currentState = nullptr;
 }
 
 void SamusStateManager::init(Samus * samus, Input * input)

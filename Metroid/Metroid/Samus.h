@@ -22,7 +22,7 @@ private:
 
 	Animation	*runningNormalAnimation,
 				*runningUpAnimation,
-				*runningShootAnimation,
+				*runningHittingRightAnimation,
 				*rollingAnimation,
 				*jumpingAnimation,
 				*startingAnimation;
@@ -51,7 +51,7 @@ public:
 	Animation* getStartingAnim();
 	Animation* getRunningNormalAnim();
 	Animation* getRunningUpAnim();
-	Animation* getRunningShootAnim();
+	Animation* getRunningHittingRightAnim();
 	Animation* getRollingAnim();
 	Animation* getJumpingAnim();
 

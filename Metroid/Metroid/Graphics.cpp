@@ -235,7 +235,6 @@ void Graphics::drawSprite(const SpriteData &spriteData, COLOR_ARGB color)
 	if (spriteData.texture == NULL)      // if no texture
 		return;
 
-	D3DXMATRIX matFinal;
 	D3DXMATRIX matTransformed;
 	D3DXMATRIX matOld;
 
@@ -253,10 +252,8 @@ void Graphics::drawSprite(const SpriteData &spriteData, COLOR_ARGB color)
 		0
 	);
 
-	matFinal = matTransformed * matOld;
-
 	//set matrix transformed
-	sprite->SetTransform(&matFinal);	
+	sprite->SetTransform(&matTransformed);	
 
 	// BEGIN
 	sprite->Begin(D3DXSPRITE_ALPHABLEND | D3DXSPRITE_DONOTSAVESTATE);

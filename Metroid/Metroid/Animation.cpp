@@ -34,7 +34,6 @@ Animation::Animation(Sprite *sprite, VECTOR2 origin, const int * list, int total
 
 Animation::~Animation()
 {
-	delete this->sprite;
 }
 
 void Animation::nextFrame()

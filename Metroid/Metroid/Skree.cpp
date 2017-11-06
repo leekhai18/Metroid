@@ -29,8 +29,8 @@ Skree::Skree()
 
 Skree::~Skree()
 {
-	this->effectDeath = nullptr;
 	delete this->effectDeath;
+	this->effectDeath = nullptr;
 }
 
 void Skree::update(float dt)
@@ -83,11 +83,11 @@ void Skree::draw()
 
 void Skree::release()
 {
-	this->sprite = nullptr;
-	this->animationRotate = nullptr;
-
 	delete this->sprite;
 	delete this->animationRotate;
+
+	this->sprite = nullptr;
+	this->animationRotate = nullptr;
 }
 
 VECTOR2 Skree::getTarget()

@@ -12,10 +12,7 @@ SkreeEffectDeathPart::SkreeEffectDeathPart(TextureManager * textureM, Graphics *
 	}
 
 	// Set Data for sprite
-	const SpriteData *data = &(SpriteManager::getInstance()->getSpritesData()[IndexManager::getInstance()->skreeDeathEffect]);
-	this->sprite->setSpriteDataRect(data->rect);
-	this->sprite->setSpriteWidth(data->width);
-	this->sprite->setSpriteHeigth(data->height);
+	this->sprite->setData(IndexManager::getInstance()->skreeDeathEffect);
 	this->setOrigin(VECTOR2(0.5f, 0.5f));
 
 	t = 0;
@@ -57,7 +54,7 @@ void SkreeEffectDeathPart::draw()
 
 void SkreeEffectDeathPart::release()
 {
-	this->sprite = nullptr;
 	delete this->sprite;
+	this->sprite = nullptr;
 }
 

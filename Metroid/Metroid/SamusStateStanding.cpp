@@ -22,20 +22,14 @@ void SamusStateStanding::init()
 		isUp = true;
 
 		// Set Data for sprite
-		const SpriteData *data = &(SpriteManager::getInstance()->getSpritesData()[IndexManager::getInstance()->samusYellowTurnUp]);
-		this->samus->getSprite()->setSpriteDataRect(data->rect);
-		this->samus->getSprite()->setSpriteWidth(data->width);
-		this->samus->getSprite()->setSpriteHeigth(data->height);
+		this->samus->getSprite()->setData(IndexManager::getInstance()->samusYellowTurnUp);
 		this->samus->setOrigin(VECTOR2(0, 1.0f));
 
 		return;
 	}
 
 	// Set Data for sprite
-	const SpriteData *data = &(SpriteManager::getInstance()->getSpritesData()[IndexManager::getInstance()->samusYellowTurnRight]);
-	this->samus->getSprite()->setSpriteDataRect(data->rect);
-	this->samus->getSprite()->setSpriteWidth(data->width);
-	this->samus->getSprite()->setSpriteHeigth(data->height);
+	this->samus->getSprite()->setData(IndexManager::getInstance()->samusYellowTurnRight);
 	this->samus->setOrigin(VECTOR2(0, 1.0f));
 }
 
@@ -58,10 +52,7 @@ void SamusStateStanding::handleInput(float dt)
 		isUp = true;
 
 		// Set Data for sprite
-		const SpriteData *data = &(SpriteManager::getInstance()->getSpritesData()[IndexManager::getInstance()->samusYellowTurnUp]);
-		this->samus->getSprite()->setSpriteDataRect(data->rect);
-		this->samus->getSprite()->setSpriteWidth(data->width);
-		this->samus->getSprite()->setSpriteHeigth(data->height);
+		this->samus->getSprite()->setData(IndexManager::getInstance()->samusYellowTurnUp);
 		this->samus->setOrigin(VECTOR2(0, 1.0f));
 	}
 
@@ -70,10 +61,7 @@ void SamusStateStanding::handleInput(float dt)
 		isUp = false;
 		
 		// Set Data for sprite
-		const SpriteData *data = &(SpriteManager::getInstance()->getSpritesData()[IndexManager::getInstance()->samusYellowTurnRight]);
-		this->samus->getSprite()->setSpriteDataRect(data->rect);
-		this->samus->getSprite()->setSpriteWidth(data->width);
-		this->samus->getSprite()->setSpriteHeigth(data->height);
+		this->samus->getSprite()->setData(IndexManager::getInstance()->samusYellowTurnRight);
 		this->samus->setOrigin(VECTOR2(0, 1.0f));
 	}
 
@@ -89,32 +77,23 @@ void SamusStateStanding::handleInput(float dt)
 		if (isUp)
 		{
 			// Set Data for sprite
-			const SpriteData *data = &(SpriteManager::getInstance()->getSpritesData()[IndexManager::getInstance()->samusYellowHittingUp]);
-			this->samus->getSprite()->setSpriteDataRect(data->rect);
-			this->samus->getSprite()->setSpriteWidth(data->width);
-			this->samus->getSprite()->setSpriteHeigth(data->height);
+			this->samus->getSprite()->setData(IndexManager::getInstance()->samusYellowHittingUp);
 			this->samus->setOrigin(VECTOR2(0, 1.0f));
 		}
 		else
 		{
 			// Set Data for sprite
-			const SpriteData *data = &(SpriteManager::getInstance()->getSpritesData()[IndexManager::getInstance()->samusYellowHittingRight]);
-			this->samus->getSprite()->setSpriteDataRect(data->rect);
-			this->samus->getSprite()->setSpriteWidth(data->width);
-			this->samus->getSprite()->setSpriteHeigth(data->height);
+			this->samus->getSprite()->setData(IndexManager::getInstance()->samusYellowHittingRight);
 			this->samus->setOrigin(VECTOR2(0, 1.0f));
 		}
 
 		//this->fire();
 	}
 
-	if (input->isKeyUp(VK_Z) && !isUp)
+	if (input->isKeyUp(VK_Z) && !isUp && input->isKeyUp(VK_X))
 	{
 		// Set Data for sprite
-		const SpriteData *data = &(SpriteManager::getInstance()->getSpritesData()[IndexManager::getInstance()->samusYellowTurnRight]);
-		this->samus->getSprite()->setSpriteDataRect(data->rect);
-		this->samus->getSprite()->setSpriteWidth(data->width);
-		this->samus->getSprite()->setSpriteHeigth(data->height);
+		this->samus->getSprite()->setData(IndexManager::getInstance()->samusYellowTurnRight);
 		this->samus->setOrigin(VECTOR2(0, 1.0f));
 	}
 }

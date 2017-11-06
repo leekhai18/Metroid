@@ -1,6 +1,8 @@
 #pragma once
 // Class used to manage Index Sprites in Texture
 
+#define MAX_INDEX 180
+
 // Define NUM_FRAMES
 #define NUM_FRAMES_ZOOMER 2
 #define NUM_FRAMES_ZEB 2

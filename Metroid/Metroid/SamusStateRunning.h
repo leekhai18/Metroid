@@ -7,7 +7,7 @@ class SamusStateRunning : public BaseState
 private:
 	Animation	*runningUp,
 				*runningNormal,
-				*runningShoot;
+				*runningHittingRight;
 
 public:
 	SamusStateRunning();

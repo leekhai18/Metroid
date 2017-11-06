@@ -25,12 +25,8 @@ void SamusStateJumping::init()
 	}
 
 	// Set Data for sprite
-	const SpriteData *data = &(SpriteManager::getInstance()->getSpritesData()[IndexManager::getInstance()->samusYellowJumpRight]);
-	this->samus->getSprite()->setSpriteDataRect(data->rect);
-	this->samus->getSprite()->setSpriteWidth(data->width);
-	this->samus->getSprite()->setSpriteHeigth(data->height);
+	this->samus->getSprite()->setData(IndexManager::getInstance()->samusYellowJumpRight);
 	this->samus->setOrigin(VECTOR2(0, 1.0f));
-
 }
 
 void SamusStateJumping::handleInput(float dt)
@@ -107,30 +103,28 @@ void SamusStateJumping::handleInput(float dt)
 		if (input->isKeyDown(VK_Z) && input->isKeyUp(VK_UP))
 		{
 			// Set Data for sprite
-			const SpriteData *data = &(SpriteManager::getInstance()->getSpritesData()[IndexManager::getInstance()->samusYellowHittingAndJumpRight]);
-			this->samus->getSprite()->setSpriteDataRect(data->rect);
-			this->samus->getSprite()->setSpriteWidth(data->width);
-			this->samus->getSprite()->setSpriteHeigth(data->height);
+			this->samus->getSprite()->setData(IndexManager::getInstance()->samusYellowHittingAndJumpRight);
 			this->samus->setOrigin(VECTOR2(0, 1.0f));
 		}
 
 		if (input->isKeyDown(VK_UP) && input->isKeyUp(VK_Z))
 		{
 			// Set Data for sprite
-			const SpriteData *data = &(SpriteManager::getInstance()->getSpritesData()[IndexManager::getInstance()->samusYellowJumpUp]);
-			this->samus->getSprite()->setSpriteDataRect(data->rect);
-			this->samus->getSprite()->setSpriteWidth(data->width);
-			this->samus->getSprite()->setSpriteHeigth(data->height);
+			this->samus->getSprite()->setData(IndexManager::getInstance()->samusYellowJumpUp);
 			this->samus->setOrigin(VECTOR2(0, 1.0f));
 		}
 
 		if (input->isKeyDown(VK_Z) && input->isKeyDown(VK_UP))
 		{
 			// Set Data for sprite
-			const SpriteData *data = &(SpriteManager::getInstance()->getSpritesData()[IndexManager::getInstance()->samusYellowHittingJumpUp]);
-			this->samus->getSprite()->setSpriteDataRect(data->rect);
-			this->samus->getSprite()->setSpriteWidth(data->width);
-			this->samus->getSprite()->setSpriteHeigth(data->height);
+			this->samus->getSprite()->setData(IndexManager::getInstance()->samusYellowHittingJumpUp);
+			this->samus->setOrigin(VECTOR2(0, 1.0f));
+		}
+
+		if (input->isKeyUp(VK_Z) && input->isKeyUp(VK_UP))
+		{
+			// Set Data for sprite
+			this->samus->getSprite()->setData(IndexManager::getInstance()->samusYellowJumpRight);
 			this->samus->setOrigin(VECTOR2(0, 1.0f));
 		}
 	}

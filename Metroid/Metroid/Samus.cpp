@@ -12,7 +12,7 @@ Samus::Samus(TextureManager* textureM,Graphics* graphics, Input* input) : BaseOb
 
 	runningNormalAnimation = new Animation(this->sprite, VECTOR2(0, 1.0f), IndexManager::getInstance()->samusYellowRunningRight, NUM_FRAMES_SAMUS_RUNNING, 0.07f);
 	runningUpAnimation = new Animation(this->sprite, VECTOR2(0, 1.0f), IndexManager::getInstance()->samusYellowRunningUpRight, NUM_FRAMES_SAMUS_RUNNING, 0.07f);
-	runningShootAnimation = new Animation(this->sprite, VECTOR2(0, 1.0f), IndexManager::getInstance()->samusYellowHittingAndRunningRight, NUM_FRAMES_SAMUS_RUNNING, 0.07f);
+	runningHittingRightAnimation = new Animation(this->sprite, VECTOR2(0, 1.0f), IndexManager::getInstance()->samusYellowHittingAndRunningRight, NUM_FRAMES_SAMUS_RUNNING, 0.07f);
 	rollingAnimation = new Animation(this->sprite, VECTOR2(0, 1.0f), IndexManager::getInstance()->samusYellowRollingRight, NUM_FRAMES_SAMUS_ROLLING, 0.07f);
 	jumpingAnimation = new Animation(this->sprite, VECTOR2(0.5f, 0.5f), IndexManager::getInstance()->samusYellowJumpingRight, NUM_FRAMES_SAMUS_JUMPING, 0.04f);
 	startingAnimation = new Animation(this->sprite, VECTOR2(0, 1.0f), IndexManager::getInstance()->samusYellowStart, NUM_FRAMES_SAMUS_START, 1, false);
@@ -61,16 +61,15 @@ void Samus::update(float dt)
 
 void Samus::release()
 {
-	input = nullptr;
+	delete sprite, runningNormalAnimation, runningUpAnimation, runningHittingRightAnimation, rollingAnimation, startingAnimation, jumpingAnimation;
+
 	sprite = nullptr;
 	runningNormalAnimation = nullptr;
 	runningUpAnimation = nullptr;
-	runningShootAnimation = nullptr;
+	runningHittingRightAnimation = nullptr;
 	rollingAnimation = nullptr;
 	startingAnimation = nullptr;
 	jumpingAnimation = nullptr;
-
-	delete input, sprite, runningNormalAnimation, runningUpAnimation, runningShootAnimation, rollingAnimation, startingAnimation, jumpingAnimation;
 }
 
 void Samus::updateHorizontal(float dt)
@@ -127,9 +126,9 @@ Animation * Samus::getRunningUpAnim()
 	return runningUpAnimation;
 }
 
-Animation * Samus::getRunningShootAnim()
+Animation * Samus::getRunningHittingRightAnim()
 {
-	return runningShootAnimation;
+	return runningHittingRightAnimation;
 }
 
 Animation * Samus::getRollingAnim()

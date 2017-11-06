@@ -16,12 +16,4 @@ BaseState::BaseState(Samus * samus, Input* input)
 
 BaseState::~BaseState()
 {
-	this->samus = nullptr;
-	delete this->samus;
-
-	this->input = nullptr;
-	delete this->input;
-
-	this->animation = nullptr;
-	delete this->animation;
 }

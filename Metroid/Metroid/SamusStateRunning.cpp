@@ -13,18 +13,13 @@ SamusStateRunning::SamusStateRunning(Samus * samus, Input * input) : BaseState(s
 
 SamusStateRunning::~SamusStateRunning()
 {
-	runningNormal = nullptr;
-	runningShoot = nullptr;
-	runningUp = nullptr;
-
-	delete runningNormal, runningShoot, runningUp;
 }
 
 void SamusStateRunning::init()
 {
 	runningNormal = samus->getRunningNormalAnim();
 	runningUp = samus->getRunningUpAnim();
-	runningShoot = samus->getRunningShootAnim();
+	runningHittingRight = samus->getRunningHittingRightAnim();
 
 	this->animation = runningNormal;
 }
@@ -73,17 +68,20 @@ void SamusStateRunning::handleInput(float dt)
 		this->animation->start();
 	}
 
-	if (input->isKeyDown(VK_Z))
+	if (input->isKeyDown(VK_Z) && input->isKeyUp(VK_UP))
 	{
 		this->animation->stop();
 
-		this->animation = runningShoot;
+		this->animation = runningHittingRight;
 		this->animation->start();
 	}
 
 	if (input->isKeyDown(VK_UP) && input->isKeyDown(VK_Z))
 	{
 		this->animation->stop();
+
+		this->samus->getSprite()->setData(IndexManager::getInstance()->samusYellowHittingUp);
+		this->samus->setOrigin(VECTOR2(0, 1.0f));
 
 		this->animation = runningUp;
 		this->animation->start();

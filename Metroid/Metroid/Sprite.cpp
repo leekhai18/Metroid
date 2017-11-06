@@ -1,4 +1,5 @@
 #include "Sprite.h"
+#include "IndexManager.h"
 
 Sprite::Sprite()
 {
@@ -24,6 +25,19 @@ Sprite::Sprite()
 
 Sprite::~Sprite()
 {
+}
+
+void Sprite::setData(int index)
+{
+	if (index <= MAX_INDEX)
+	{
+		// Set Data for sprite
+		const SpriteData *data = &(SpriteManager::getInstance()->getSpritesData()[index]);
+
+		this->setSpriteDataRect(data->rect);
+		this->setSpriteWidth(data->width);
+		this->setSpriteHeigth(data->height);
+	}
 }
 //= == == == == == == == == == == == == == == == == == == == == == == == == == == == == == == == == == == == == == ==
 // Initialize the Image.

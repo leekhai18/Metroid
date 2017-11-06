@@ -94,7 +94,7 @@
       <Filter>Objects</Filter>
     </ClInclude>
     <ClInclude Include="Bullet.h">
-      <Filter>Header Files</Filter>
+      <Filter>Objects</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -165,7 +165,7 @@
       <Filter>Objects</Filter>
     </ClCompile>
     <ClCompile Include="Bullet.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Objects</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -60,6 +60,10 @@ public:
 	//           Set functions            //
 	////////////////////////////////////////
 
+	// Set data for sprite
+	virtual void setData(int index);
+
+
 	// Set position
 	virtual void setPositionX(float newX) 
 	{
@@ -98,7 +102,13 @@ public:
 	}
 
 	// Set origin
-	virtual void setOrigin(VECTOR2 origin) { spriteData.origin = origin; }
+	virtual void setOrigin(VECTOR2 origin) 
+	{
+		if (this->spriteData.origin == origin)
+			return;
+
+		spriteData.origin = origin; 
+	}
 
 	virtual void setRotate(float rotate) 
 	{ 
