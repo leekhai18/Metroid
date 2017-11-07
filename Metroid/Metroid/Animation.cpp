@@ -6,7 +6,7 @@ Animation::Animation(Sprite *sprite, VECTOR2 origin, const int* list, int totalF
 	this->sprite = sprite;
 	this->listFrames = list;
 	this->totalFrames = totalFrames;
-	this->currentFrame = -1;
+	this->currentFrame = 0;
 	this->startFrame = 0;
 	this->isloop = loop;
 	this->isCompleted = false;
@@ -14,6 +14,10 @@ Animation::Animation(Sprite *sprite, VECTOR2 origin, const int* list, int totalF
 	this->timerAnim = 0;
 	this->canAnimate = false;
 	this->origin = origin;
+
+	// Get data of sprite
+	this->sprite->setData(this->listFrames[0]);
+	this->sprite->setOrigin(this->origin);
 }
 
 Animation::Animation(Sprite *sprite, VECTOR2 origin, const int * list, int totalFrames, float timeFrameDelay)
@@ -21,7 +25,7 @@ Animation::Animation(Sprite *sprite, VECTOR2 origin, const int * list, int total
 	this->sprite = sprite;
 	this->listFrames = list;
 	this->totalFrames = totalFrames;
-	this->currentFrame = -1;
+	this->currentFrame = 0;
 	this->startFrame = 0;
 	this->frameDelay = timeFrameDelay;
 	this->timerAnim = 0;
@@ -29,6 +33,10 @@ Animation::Animation(Sprite *sprite, VECTOR2 origin, const int * list, int total
 	this->isCompleted = false;
 	this->isloop = true;
 	this->origin = origin;
+
+	// Get data of sprite
+	this->sprite->setData(this->listFrames[0]);
+	this->sprite->setOrigin(this->origin);
 }
 
 
@@ -52,10 +60,7 @@ void Animation::setValueOfCurrentFrame(int index)
 		currentFrame = startFrame;
 
 	// Get data of sprite
-	const SpriteData *data = &(SpriteManager::getInstance()->getSpritesData()[this->listFrames[currentFrame]]);
-	this->sprite->setSpriteDataRect(data->rect);
-	this->sprite->setSpriteWidth(data->width);
-	this->sprite->setSpriteHeigth(data->height);
+	this->sprite->setData(this->listFrames[currentFrame]);
 	this->sprite->setOrigin(this->origin);
 
 	if (!isloop && currentFrame == totalFrames - 1)

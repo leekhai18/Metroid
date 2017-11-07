@@ -96,6 +96,12 @@
     <ClInclude Include="Bullet.h">
       <Filter>Objects</Filter>
     </ClInclude>
+    <ClInclude Include="ElementPool.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ObjectPool.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="GameManager.cpp">
@@ -166,6 +172,12 @@
     </ClCompile>
     <ClCompile Include="Bullet.cpp">
       <Filter>Objects</Filter>
+    </ClCompile>
+    <ClCompile Include="ElementPool.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ObjectPool.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

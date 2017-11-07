@@ -87,7 +87,7 @@ void SamusStateStanding::handleInput(float dt)
 			this->samus->setOrigin(VECTOR2(0, 1.0f));
 		}
 
-		//this->fire();
+		this->fire();
 	}
 
 	if (input->isKeyUp(VK_Z) && !isUp && input->isKeyUp(VK_X))
@@ -118,9 +118,9 @@ void SamusStateStanding::fire()
 	if (isUp)
 	{
 		if (this->samus->isInDirection(eDirection::right))
-			stP = VECTOR2(this->samus->getPosition().x + this->samus->getSprite()->getWidth()*0.7f, this->samus->getPosition().y - this->samus->getSprite()->getHeight()*0.7f);
+			stP = VECTOR2(this->samus->getPosition().x + this->samus->getSprite()->getWidth()*0.65f, this->samus->getPosition().y - this->samus->getSprite()->getHeight()*0.9f);
 		else if (this->samus->isInDirection(eDirection::left))
-			stP = VECTOR2(this->samus->getPosition().x - this->samus->getSprite()->getWidth()*0.7f, this->samus->getPosition().y - this->samus->getSprite()->getHeight()*0.7f);
+			stP = VECTOR2(this->samus->getPosition().x - this->samus->getSprite()->getWidth()*0.65f, this->samus->getPosition().y - this->samus->getSprite()->getHeight()*0.9f);
 
 		tar = VECTOR2(stP.x, stP.y - 100);
 	}
@@ -128,12 +128,13 @@ void SamusStateStanding::fire()
 	{
 		if (this->samus->isInDirection(eDirection::right))
 		{
-
+			stP = VECTOR2(this->samus->getPosition().x + this->samus->getSprite()->getWidth()*0.8f, this->samus->getPosition().y - this->samus->getSprite()->getHeight()*0.7f);
 			tar = VECTOR2(stP.x + 100, stP.y);
 		}
 
 		else if (this->samus->isInDirection(eDirection::left))
 		{
+			stP = VECTOR2(this->samus->getPosition().x - this->samus->getSprite()->getWidth()*0.8f, this->samus->getPosition().y - this->samus->getSprite()->getHeight()*0.7f);
 			tar = VECTOR2(stP.x - 100, stP.y);
 		}
 	}

@@ -35,7 +35,7 @@ void SamusStateRunning::handleInput(float dt)
 		if (this->samus->isInDirection(eDirection::left))
 		{
 			this->samus->setScaleX(1);
-			this->samus->setPositionX(this->samus->getPosition().x - this->samus->getSprite()->getWidth());
+			this->samus->setPositionX(this->samus->getPosition().x - this->samus->getSprite()->getWidth()*0.5f);
 			this->samus->setDirection(eDirection::right);
 		}
 	}
@@ -49,7 +49,7 @@ void SamusStateRunning::handleInput(float dt)
 		if (this->samus->isInDirection(eDirection::right))
 		{
 			this->samus->setScaleX(-1);
-			this->samus->setPositionX(this->samus->getPosition().x + this->samus->getSprite()->getWidth());
+			this->samus->setPositionX(this->samus->getPosition().x + this->samus->getSprite()->getWidth()*0.5f);
 			this->samus->setDirection(eDirection::left);
 		}
 	}
@@ -81,7 +81,7 @@ void SamusStateRunning::handleInput(float dt)
 		this->animation->stop();
 
 		this->samus->getSprite()->setData(IndexManager::getInstance()->samusYellowHittingUp);
-		this->samus->setOrigin(VECTOR2(0, 1.0f));
+		this->samus->setOrigin(VECTOR2(0.5f, 1.0f));
 
 		this->animation = runningUp;
 		this->animation->start();

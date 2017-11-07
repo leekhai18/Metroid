@@ -18,6 +18,7 @@ SamusStateRolling::~SamusStateRolling()
 void SamusStateRolling::init()
 {
 	this->animation = samus->getRollingAnim();
+	this->samus->setPosition(this->samus->getPosition().x + 10, this->samus->getPosition().y - 15);
 }
 
 void SamusStateRolling::handleInput(float dt)
