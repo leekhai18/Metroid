@@ -28,9 +28,6 @@ void SamusStateRunning::handleInput(float dt)
 {
 	if (input->isKeyDown(VK_RIGHT) && input->isKeyUp(VK_LEFT))
 	{
-		// Handle horizontal
-		this->samus->updateHorizontal(dt);
-
 		// Handle direction
 		if (this->samus->isInDirection(eDirection::left))
 		{
@@ -38,13 +35,13 @@ void SamusStateRunning::handleInput(float dt)
 			this->samus->setPositionX(this->samus->getPosition().x - this->samus->getSprite()->getWidth()*0.5f);
 			this->samus->setDirection(eDirection::right);
 		}
+
+		// Handle horizontal
+		this->samus->updateHorizontal(dt);
 	}
 
 	if (input->isKeyDown(VK_LEFT) && input->isKeyUp(VK_RIGHT))
 	{
-		// Handle horizontal
-		this->samus->updateHorizontal(dt);
-
 		// Handle direction
 		if (this->samus->isInDirection(eDirection::right))
 		{
@@ -52,6 +49,9 @@ void SamusStateRunning::handleInput(float dt)
 			this->samus->setPositionX(this->samus->getPosition().x + this->samus->getSprite()->getWidth()*0.5f);
 			this->samus->setDirection(eDirection::left);
 		}
+
+		// Handle horizontal
+		this->samus->updateHorizontal(dt);
 	}
 
 	// Handle horizontal

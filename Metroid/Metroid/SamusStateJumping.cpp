@@ -26,16 +26,13 @@ void SamusStateJumping::init()
 
 	// Set Data for sprite
 	this->samus->getSprite()->setData(IndexManager::getInstance()->samusYellowJumpRight);
-	this->samus->setOrigin(VECTOR2(0, 1.0f));
+	this->samus->setOrigin(VECTOR2(0.5f, 1.0f));
 }
 
 void SamusStateJumping::handleInput(float dt)
 {
 	if (input->isKeyDown(VK_RIGHT) && input->isKeyUp(VK_LEFT))
 	{
-		// Handle horizontal
-		this->samus->updateHorizontal(dt);
-
 		// Handle direction
 		if (this->samus->isInDirection(eDirection::left))
 		{
@@ -46,13 +43,13 @@ void SamusStateJumping::handleInput(float dt)
 
 			this->samus->setDirection(eDirection::right);
 		}
+
+		// Handle horizontal
+		this->samus->updateHorizontal(dt);
 	}
 
 	if (input->isKeyDown(VK_LEFT) && input->isKeyUp(VK_RIGHT))
 	{
-		// Handle horizontal
-		this->samus->updateHorizontal(dt);
-
 		// Handle direction
 		if (this->samus->isInDirection(eDirection::right))
 		{
@@ -63,6 +60,9 @@ void SamusStateJumping::handleInput(float dt)
 
 			this->samus->setDirection(eDirection::left);
 		}
+
+		// Handle horizontal
+		this->samus->updateHorizontal(dt);
 	}
 
 	// Handle horizontal

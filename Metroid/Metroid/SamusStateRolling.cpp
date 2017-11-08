@@ -25,28 +25,28 @@ void SamusStateRolling::handleInput(float dt)
 {
 	if (input->isKeyDown(VK_RIGHT) && input->isKeyUp(VK_LEFT))
 	{
-		// Handle horizontal
-		this->samus->updateHorizontal(dt);
-
 		// Handle direction
 		if (this->samus->isInDirection(eDirection::left))
 		{
 			this->samus->setScaleX(1);
 			this->samus->setDirection(eDirection::right);
 		}
+
+		// Handle horizontal
+		this->samus->updateHorizontal(dt);
 	}
 
 	if (input->isKeyDown(VK_LEFT) && input->isKeyUp(VK_RIGHT))
 	{
-		// Handle horizontal
-		this->samus->updateHorizontal(dt);
-
 		// Handle direction
 		if (this->samus->isInDirection(eDirection::right))
 		{
 			this->samus->setScaleX(-1);
 			this->samus->setDirection(eDirection::left);
 		}
+
+		// Handle horizontal
+		this->samus->updateHorizontal(dt);
 	}
 
 	// Handle horizontal

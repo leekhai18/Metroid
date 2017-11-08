@@ -11,7 +11,7 @@
 #include "BulletPool.h"
 
 
-#define SAMUS_VERLOCITY_X 100
+#define SAMUS_VERLOCITY_X 0
 #define SAMUS_VERLOCITY_Y 100
 #define MAX_HEIGHT_CAN_JUMP (GAME_HEIGHT * 0.5)
 #define TIME_SHOOTING 0.1f
