@@ -32,7 +32,6 @@ void SamusStateRolling::handleInput(float dt)
 		if (this->samus->isInDirection(eDirection::left))
 		{
 			this->samus->setScaleX(1);
-			this->samus->setPositionX(this->samus->getPosition().x - this->samus->getSprite()->getWidth());
 			this->samus->setDirection(eDirection::right);
 		}
 	}
@@ -46,7 +45,6 @@ void SamusStateRolling::handleInput(float dt)
 		if (this->samus->isInDirection(eDirection::right))
 		{
 			this->samus->setScaleX(-1);
-			this->samus->setPositionX(this->samus->getPosition().x + this->samus->getSprite()->getWidth());
 			this->samus->setDirection(eDirection::left);
 		}
 	}

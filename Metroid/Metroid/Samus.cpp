@@ -23,7 +23,8 @@ Samus::Samus(TextureManager* textureM,Graphics* graphics, Input* input) : BaseOb
 
 	this->setPosition(VECTOR2(100, GAME_HEIGHT*0.8));
 
-	this->bullet = new Bullet(textureM, graphics);
+	this->timerShoot = 0;
+	bulletPool = new BulletPool(textureM, graphics, 20);
 }
 
 Samus::Samus()
@@ -40,8 +41,8 @@ void Samus::draw()
 {
 	this->sprite->draw();
 
-	if (this->bullet->isInStatus(eStatus::RUNNING))
-		this->bullet->draw();
+	for (unsigned i = 0; i < this->bulletPool->getListUsing().size(); i++)
+		this->bulletPool->getListUsing().at(i)->draw();
 }
 
 void Samus::handleInput(float dt)
@@ -55,21 +56,22 @@ void Samus::update(float dt)
 	this->handleInput(dt);
 	SamusStateManager::getInstance()->getCurrentState()->update(dt);
 
-	if (this->bullet->isInStatus(eStatus::RUNNING))
-		this->bullet->update(dt);
+
+	this->timerShoot += dt;
+	for (unsigned i = 0; i < this->bulletPool->getListUsing().size(); i++)
+		this->bulletPool->getListUsing().at(i)->update(dt);
 }
 
 void Samus::release()
 {
-	delete sprite, runningNormalAnimation, runningUpAnimation, runningHittingRightAnimation, rollingAnimation, startingAnimation, jumpingAnimation;
-
-	sprite = nullptr;
-	runningNormalAnimation = nullptr;
-	runningUpAnimation = nullptr;
-	runningHittingRightAnimation = nullptr;
-	rollingAnimation = nullptr;
-	startingAnimation = nullptr;
-	jumpingAnimation = nullptr;
+	delete sprite;
+	delete runningNormalAnimation;
+	delete runningUpAnimation;
+	delete runningHittingRightAnimation;
+	delete rollingAnimation;
+	delete startingAnimation;
+	delete jumpingAnimation;
+	delete bulletPool;
 }
 
 void Samus::updateHorizontal(float dt)
@@ -140,4 +142,3 @@ Animation * Samus::getJumpingAnim()
 {
 	return this->jumpingAnimation;
 }
-

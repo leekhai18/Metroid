@@ -1,5 +1,6 @@
 #include "SamusStateStanding.h"
 #include "SamusStateManager.h"
+#include "BulletPool.h"
 
 
 SamusStateStanding::SamusStateStanding()
@@ -87,7 +88,11 @@ void SamusStateStanding::handleInput(float dt)
 			this->samus->setOrigin(VECTOR2(0, 1.0f));
 		}
 
-		this->fire();
+		if (this->samus->timerShoot > TIME_SHOOTING)
+		{
+			this->fire();
+			this->samus->timerShoot = 0;
+		}
 	}
 
 	if (input->isKeyUp(VK_Z) && !isUp && input->isKeyUp(VK_X))
@@ -139,5 +144,5 @@ void SamusStateStanding::fire()
 		}
 	}
 
-	this->samus->getBullet()->init(stP, tar);
+	BulletPool::getInstance()->getBullet()->init(stP, tar);
 }

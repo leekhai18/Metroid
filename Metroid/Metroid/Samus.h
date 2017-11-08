@@ -8,11 +8,13 @@
 #include "Animation.h"
 #include "BaseObject.h"
 #include "Bullet.h"
+#include "BulletPool.h"
+
 
 #define SAMUS_VERLOCITY_X 100
 #define SAMUS_VERLOCITY_Y 100
 #define MAX_HEIGHT_CAN_JUMP (GAME_HEIGHT * 0.5)
-
+#define TIME_SHOOTING 0.1f
 
 
 class Samus: public BaseObject
@@ -30,9 +32,11 @@ private:
 	bool isFalling;
 	float totalHeightWasJumped;
 
-	Bullet* bullet;
+	BulletPool *bulletPool;
 
 public:
+	float timerShoot;
+
 	Samus(TextureManager* textureM, Graphics* graphics, Input* input);
 	Samus();
 	~Samus();
@@ -55,6 +59,6 @@ public:
 	Animation* getRollingAnim();
 	Animation* getJumpingAnim();
 
-	Bullet* getBullet() { return this->bullet; }
+	std::vector<Bullet*> getListBulletUsing();
 };
 

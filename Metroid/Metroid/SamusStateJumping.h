@@ -3,6 +3,9 @@
 
 class SamusStateJumping : public BaseState
 {
+private:
+	bool isUp;
+
 public:
 	SamusStateJumping();
 	SamusStateJumping(Samus* samus, Input* input);
@@ -14,5 +17,7 @@ public:
 
 	void onStart();
 	void onExit();
+
+	void fire();
 };
 

@@ -18,6 +18,9 @@ SkreeEffectDeath::SkreeEffectDeath()
 
 SkreeEffectDeath::~SkreeEffectDeath()
 {
+	for (int i = 0; i < NUM_PART; i++)
+		delete list[i];
+
 	delete[] list;
 }
 

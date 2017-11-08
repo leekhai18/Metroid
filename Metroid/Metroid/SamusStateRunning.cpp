@@ -74,6 +74,13 @@ void SamusStateRunning::handleInput(float dt)
 
 		this->animation = runningHittingRight;
 		this->animation->start();
+
+		this->isUp = false;
+		if (this->samus->timerShoot > TIME_SHOOTING)
+		{
+			this->fire();
+			this->samus->timerShoot = 0;
+		}
 	}
 
 	if (input->isKeyDown(VK_UP) && input->isKeyDown(VK_Z))
@@ -85,6 +92,13 @@ void SamusStateRunning::handleInput(float dt)
 
 		this->animation = runningUp;
 		this->animation->start();
+
+		this->isUp = true;
+		if (this->samus->timerShoot > TIME_SHOOTING)
+		{
+			this->fire();
+			this->samus->timerShoot = 0;
+		}
 	}
 
 	if (input->isKeyUp(VK_UP) && input->isKeyUp(VK_Z) && (input->isKeyDown(VK_LEFT) || input->isKeyDown(VK_RIGHT)))
@@ -123,4 +137,36 @@ void SamusStateRunning::onStart()
 void SamusStateRunning::onExit()
 {
 	this->animation->stop();
+}
+
+void SamusStateRunning::fire()
+{
+	VECTOR2 stP;
+	VECTOR2 tar;
+
+	if (isUp)
+	{
+		if (this->samus->isInDirection(eDirection::right))
+			stP = VECTOR2(this->samus->getPosition().x + this->samus->getSprite()->getWidth()*0.3f, this->samus->getPosition().y - this->samus->getSprite()->getHeight()*0.8f);
+		else if (this->samus->isInDirection(eDirection::left))
+			stP = VECTOR2(this->samus->getPosition().x - this->samus->getSprite()->getWidth()*0.3f, this->samus->getPosition().y - this->samus->getSprite()->getHeight()*0.8f);
+
+		tar = VECTOR2(stP.x, stP.y - 100);
+	}
+	else
+	{
+		if (this->samus->isInDirection(eDirection::right))
+		{
+			stP = VECTOR2(this->samus->getPosition().x + this->samus->getSprite()->getWidth()*0.4f, this->samus->getPosition().y - this->samus->getSprite()->getHeight()*0.7f);
+			tar = VECTOR2(stP.x + 100, stP.y);
+		}
+
+		else if (this->samus->isInDirection(eDirection::left))
+		{
+			stP = VECTOR2(this->samus->getPosition().x - this->samus->getSprite()->getWidth()*0.4f, this->samus->getPosition().y - this->samus->getSprite()->getHeight()*0.7f);
+			tar = VECTOR2(stP.x - 100, stP.y);
+		}
+	}
+
+	BulletPool::getInstance()->getBullet()->init(stP, tar);
 }

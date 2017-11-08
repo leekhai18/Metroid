@@ -9,6 +9,8 @@ private:
 				*runningNormal,
 				*runningHittingRight;
 
+	bool isUp;
+
 public:
 	SamusStateRunning();
 	SamusStateRunning(Samus* samus, Input* input);
@@ -21,5 +23,7 @@ public:
 
 	void onStart();
 	void onExit();
+
+	void fire();
 };
 

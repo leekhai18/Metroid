@@ -96,10 +96,7 @@
     <ClInclude Include="Bullet.h">
       <Filter>Objects</Filter>
     </ClInclude>
-    <ClInclude Include="ElementPool.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="ObjectPool.h">
+    <ClInclude Include="BulletPool.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -173,10 +170,7 @@
     <ClCompile Include="Bullet.cpp">
       <Filter>Objects</Filter>
     </ClCompile>
-    <ClCompile Include="ElementPool.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="ObjectPool.cpp">
+    <ClCompile Include="BulletPool.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

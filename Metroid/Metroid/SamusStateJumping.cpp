@@ -105,19 +105,33 @@ void SamusStateJumping::handleInput(float dt)
 			// Set Data for sprite
 			this->samus->getSprite()->setData(IndexManager::getInstance()->samusYellowHittingAndJumpRight);
 			this->samus->setOrigin(VECTOR2(0, 1.0f));
-		}
 
-		if (input->isKeyDown(VK_UP) && input->isKeyUp(VK_Z))
-		{
-			// Set Data for sprite
-			this->samus->getSprite()->setData(IndexManager::getInstance()->samusYellowJumpUp);
-			this->samus->setOrigin(VECTOR2(0, 1.0f));
+			this->isUp = false;
+			if (this->samus->timerShoot > TIME_SHOOTING)
+			{
+				this->fire();
+				this->samus->timerShoot = 0;
+			}
 		}
 
 		if (input->isKeyDown(VK_Z) && input->isKeyDown(VK_UP))
 		{
 			// Set Data for sprite
 			this->samus->getSprite()->setData(IndexManager::getInstance()->samusYellowHittingJumpUp);
+			this->samus->setOrigin(VECTOR2(0, 1.0f));
+
+			this->isUp = true;
+			if (this->samus->timerShoot > TIME_SHOOTING)
+			{
+				this->fire();
+				this->samus->timerShoot = 0;
+			}
+		}
+
+		if (input->isKeyDown(VK_UP) && input->isKeyUp(VK_Z))
+		{
+			// Set Data for sprite
+			this->samus->getSprite()->setData(IndexManager::getInstance()->samusYellowJumpUp);
 			this->samus->setOrigin(VECTOR2(0, 1.0f));
 		}
 
@@ -152,3 +166,37 @@ void SamusStateJumping::onExit()
 		this->animation = nullptr;
 	}
 }
+
+void SamusStateJumping::fire()
+{
+	VECTOR2 stP;
+	VECTOR2 tar;
+
+	if (isUp)
+	{
+		if (this->samus->isInDirection(eDirection::right))
+			stP = VECTOR2(this->samus->getPosition().x + this->samus->getSprite()->getWidth()*0.7f, this->samus->getPosition().y - this->samus->getSprite()->getHeight()*0.9f);
+		else if (this->samus->isInDirection(eDirection::left))
+			stP = VECTOR2(this->samus->getPosition().x - this->samus->getSprite()->getWidth()*0.7f, this->samus->getPosition().y - this->samus->getSprite()->getHeight()*0.9f);
+
+		tar = VECTOR2(stP.x, stP.y - 100);
+	}
+	else
+	{
+		if (this->samus->isInDirection(eDirection::right))
+		{
+			stP = VECTOR2(this->samus->getPosition().x + this->samus->getSprite()->getWidth()*0.8f, this->samus->getPosition().y - this->samus->getSprite()->getHeight()*0.7f);
+			tar = VECTOR2(stP.x + 100, stP.y);
+		}
+
+		else if (this->samus->isInDirection(eDirection::left))
+		{
+			stP = VECTOR2(this->samus->getPosition().x - this->samus->getSprite()->getWidth()*0.8f, this->samus->getPosition().y - this->samus->getSprite()->getHeight()*0.7f);
+			tar = VECTOR2(stP.x - 100, stP.y);
+		}
+	}
+
+	BulletPool::getInstance()->getBullet()->init(stP, tar);
+}
+
+

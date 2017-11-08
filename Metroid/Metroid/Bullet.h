@@ -20,5 +20,8 @@ public:
 	void draw();
 
 	void init(VECTOR2 stPosition, VECTOR2 target);
+
+	// Use object pool
+	void returnPool();
 };
 

@@ -9,10 +9,10 @@ Metroid::Metroid()
 
 Metroid::~Metroid()
 {
-	delete samus;
 	textureManager->onLostDevice();
 	spriteManger->releaseAll();
 
+	delete samus;
 	delete skree;
 }
 

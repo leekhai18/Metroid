@@ -30,7 +30,6 @@ Skree::Skree()
 Skree::~Skree()
 {
 	delete this->effectDeath;
-	this->effectDeath = nullptr;
 }
 
 void Skree::update(float dt)
