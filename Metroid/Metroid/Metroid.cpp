@@ -14,6 +14,7 @@ Metroid::~Metroid()
 
 	delete samus;
 	delete skree;
+	delete zeb;
 }
 
 void Metroid::initialize(HWND hwnd) 
@@ -30,6 +31,8 @@ void Metroid::initialize(HWND hwnd)
 
 	samus = new Samus(textureManager, graphics, input);
 	skree = new Skree(textureManager, graphics);
+	zeb = new Zeb(textureManager, graphics);
+	waver = new Waver(textureManager, graphics);
 }
 
 void Metroid::update(float dt)
@@ -38,6 +41,12 @@ void Metroid::update(float dt)
 	
 	skree->setTarget(VECTOR2(samus->getPosition().x + samus->getSprite()->getWidth()*0.5f, GAME_HEIGHT*0.8f));
 	skree->update(dt);
+
+	if (zeb->isInStatus(eStatus::START))
+		zeb->init(samus->getPosition());
+	zeb->update(dt);
+	
+	waver->update(dt);
 }
 
 void Metroid::ai()
@@ -54,6 +63,8 @@ void Metroid::render()
 {
 	samus->draw();
 	skree->draw();
+	zeb->draw();
+	waver->draw();
 }
 
 void Metroid::releaseAll()

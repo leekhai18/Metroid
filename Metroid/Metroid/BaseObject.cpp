@@ -89,7 +89,7 @@ void BaseObject::setPositionX(float x)
 
 void BaseObject::setPositionY(float y)
 {
-	this->sprite->setPositionX(y);
+	this->sprite->setPositionY(y);
 }
 
 VECTOR2 BaseObject::getScale()

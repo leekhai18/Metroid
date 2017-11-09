@@ -52,6 +52,8 @@ const char SOURCE_JSON[] = "json\\MetroidTexture.json"; //json file of metroid s
 enum eID {
 	SAMUS = 0,
 	SKREE = 1,
+	ZEB = 2,
+	WAVER = 3,
 };
 
 // Element's status

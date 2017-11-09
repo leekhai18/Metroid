@@ -2,6 +2,8 @@
 #include "GameManager.h"
 #include "Samus.h"
 #include "Skree.h"
+#include "Zeb.h"
+#include "Waver.h"
 
 class Metroid : public GameManager
 {
@@ -12,6 +14,8 @@ private:
 
 	// Enemy
 	Skree *skree;
+	Zeb *zeb;
+	Waver *waver;
 
 public:
 	Metroid();

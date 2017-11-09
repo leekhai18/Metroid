@@ -97,7 +97,13 @@
       <Filter>Objects</Filter>
     </ClInclude>
     <ClInclude Include="BulletPool.h">
-      <Filter>Header Files</Filter>
+      <Filter>Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="Zeb.h">
+      <Filter>Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="Waver.h">
+      <Filter>Objects</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -171,7 +177,13 @@
       <Filter>Objects</Filter>
     </ClCompile>
     <ClCompile Include="BulletPool.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Objects</Filter>
+    </ClCompile>
+    <ClCompile Include="Zeb.cpp">
+      <Filter>Objects</Filter>
+    </ClCompile>
+    <ClCompile Include="Waver.cpp">
+      <Filter>Objects</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
