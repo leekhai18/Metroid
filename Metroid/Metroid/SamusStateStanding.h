@@ -6,6 +6,8 @@ class SamusStateStanding : public BaseState
 private:
 	bool isUp;
 
+	float timerToRunning;
+
 public:
 	SamusStateStanding(); 
 	SamusStateStanding(Samus* samus, Input* input);

@@ -17,10 +17,10 @@ SamusStateJumping::~SamusStateJumping()
 
 void SamusStateJumping::init()
 {
-	if ( input->isKeyDown(VK_LEFT) || input->isKeyDown(VK_RIGHT) )
+	if (input->isKeyDown(VK_LEFT) || input->isKeyDown(VK_RIGHT))
 	{
 		this->animation = samus->getJumpingAnim();
-		this->samus->setPosition(this->samus->getPosition().x + 10, this->samus->getPosition().y - 15);
+		this->samus->setPositionY(this->samus->getPosition().y - SAMUS_HEIGHT*0.5f);
 		return;
 	}
 
@@ -31,6 +31,8 @@ void SamusStateJumping::init()
 
 void SamusStateJumping::handleInput(float dt)
 {
+
+#pragma region Horizontal
 	if (input->isKeyDown(VK_RIGHT) && input->isKeyUp(VK_LEFT))
 	{
 		// Handle direction
@@ -70,7 +72,9 @@ void SamusStateJumping::handleInput(float dt)
 	{
 		this->samus->updateHorizontal(dt);
 	}
+#pragma endregion
 
+#pragma region Vertical
 	// Handle vertical
 	if (this->samus->isFaling() == false)
 	{
@@ -92,11 +96,25 @@ void SamusStateJumping::handleInput(float dt)
 		// check if samus is on ground => you would set changetoState(Standing) by collision
 		if (this->samus->getPosition().y >= GAME_HEIGHT*0.8) // just test
 		{
+			// must fix because of origin sprite change
+			if (animation != nullptr)
+			{
+				if (this->samus->isInDirection(eDirection::left))
+					this->samus->setPositionX(this->samus->getPosition().x + SAMUS_WIDTH_RL_HALF);
+				else if (this->samus->isInDirection(eDirection::right))
+					this->samus->setPositionX(this->samus->getPosition().x - SAMUS_WIDTH_RL_HALF);
+			}
+		
+
 			this->samus->setFall(false);
 			this->samus->setStatus(eStatus::STANDING);
 			SamusStateManager::getInstance()->changeStateTo(eStatus::STANDING);
 		}
 	}
+#pragma endregion
+
+
+#pragma region Shooting
 
 	if (this->animation == nullptr)
 	{
@@ -135,13 +153,15 @@ void SamusStateJumping::handleInput(float dt)
 			this->samus->setOrigin(VECTOR2(0, 1.0f));
 		}
 
-		if (input->isKeyUp(VK_Z) && input->isKeyUp(VK_UP))
+		if (input->isKeyUp(VK_Z) && input->isKeyUp(VK_UP) && this->samus->isInStatus(eStatus::JUMPING))
 		{
 			// Set Data for sprite
 			this->samus->getSprite()->setData(IndexManager::getInstance()->samusYellowJumpRight);
 			this->samus->setOrigin(VECTOR2(0, 1.0f));
 		}
 	}
+#pragma endregion
+
 }
 
 void SamusStateJumping::update(float dt)

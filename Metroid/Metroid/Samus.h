@@ -10,7 +10,9 @@
 #include "Bullet.h"
 #include "BulletPool.h"
 
-
+#define SAMUS_WIDTH_UP_HALF 7
+#define SAMUS_WIDTH_RL_HALF 10
+#define SAMUS_HEIGHT 30
 #define SAMUS_VERLOCITY_X 100
 #define SAMUS_VERLOCITY_Y 100
 #define MAX_HEIGHT_CAN_JUMP (GAME_HEIGHT * 0.5)

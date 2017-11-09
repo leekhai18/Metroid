@@ -26,39 +26,53 @@ void SamusStateRunning::init()
 
 void SamusStateRunning::handleInput(float dt)
 {
-	if (input->isKeyDown(VK_RIGHT) && input->isKeyUp(VK_LEFT))
-	{
-		// Handle direction
-		if (this->samus->isInDirection(eDirection::left))
-		{
-			this->samus->setScaleX(1);
-			this->samus->setPositionX(this->samus->getPosition().x - this->samus->getSprite()->getWidth()*0.5f);
-			this->samus->setDirection(eDirection::right);
-		}
-
-		// Handle horizontal
-		this->samus->updateHorizontal(dt);
-	}
-
+#pragma region Horizontal
 	if (input->isKeyDown(VK_LEFT) && input->isKeyUp(VK_RIGHT))
 	{
-		// Handle direction
 		if (this->samus->isInDirection(eDirection::right))
 		{
 			this->samus->setScaleX(-1);
-			this->samus->setPositionX(this->samus->getPosition().x + this->samus->getSprite()->getWidth()*0.5f);
 			this->samus->setDirection(eDirection::left);
 		}
 
-		// Handle horizontal
 		this->samus->updateHorizontal(dt);
 	}
 
-	// Handle horizontal
-	if (input->isKeyDown(VK_LEFT) && input->isKeyDown(VK_RIGHT))
+	if (input->isKeyUp(VK_LEFT) && input->isKeyDown(VK_RIGHT))
 	{
+		if (this->samus->isInDirection(eDirection::left))
+		{
+			this->samus->setScaleX(1);
+			this->samus->setDirection(eDirection::right);
+		}
+
 		this->samus->updateHorizontal(dt);
 	}
+
+	if ((input->isKeyUp(VK_RIGHT) && input->isKeyUp(VK_LEFT)) || (input->isKeyDown(VK_LEFT) && input->isKeyDown(VK_RIGHT)))
+	{
+		// must fix because of origin sprite change
+		if (this->samus->isInDirection(eDirection::left))
+		{
+			if (isUp)
+				this->samus->setPositionX(this->samus->getPosition().x + SAMUS_WIDTH_UP_HALF);
+			else
+				this->samus->setPositionX(this->samus->getPosition().x + SAMUS_WIDTH_RL_HALF);
+		}
+		else if (this->samus->isInDirection(eDirection::right))
+		{
+			if (isUp)
+				this->samus->setPositionX(this->samus->getPosition().x - SAMUS_WIDTH_UP_HALF);
+			else
+				this->samus->setPositionX(this->samus->getPosition().x - SAMUS_WIDTH_RL_HALF);
+		}
+
+		this->samus->setStatus(eStatus::STANDING);
+		SamusStateManager::getInstance()->changeStateTo(eStatus::STANDING);
+	}
+#pragma endregion
+
+
 
 	if (input->isKeyDown(VK_UP))
 	{
@@ -107,12 +121,6 @@ void SamusStateRunning::handleInput(float dt)
 
 		this->animation = runningNormal;
 		this->animation->start();
-	}
-
-	if (input->isKeyUp(VK_RIGHT) && input->isKeyUp(VK_LEFT))
-	{
-		this->samus->setStatus(eStatus::STANDING);
-		SamusStateManager::getInstance()->changeStateTo(eStatus::STANDING);
 	}
 
 	if (input->isKeyDown(VK_X))

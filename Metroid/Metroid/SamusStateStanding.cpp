@@ -2,6 +2,7 @@
 #include "SamusStateManager.h"
 #include "BulletPool.h"
 
+#define TIME_TO_RUNNING 0.1f
 
 SamusStateStanding::SamusStateStanding()
 {
@@ -32,14 +33,65 @@ void SamusStateStanding::init()
 	// Set Data for sprite
 	this->samus->getSprite()->setData(IndexManager::getInstance()->samusYellowTurnRight);
 	this->samus->setOrigin(VECTOR2(0, 1.0f));
+
+	timerToRunning = 0;
 }
 
 void SamusStateStanding::handleInput(float dt)
 {
-	if (input->isKeyDown(VK_LEFT) || input->isKeyDown(VK_RIGHT))
+	if (input->isKeyUp(VK_LEFT) && input->isKeyUp(VK_RIGHT))
+		timerToRunning = 0;
+
+	if (input->isKeyDown(VK_LEFT) && input->isKeyUp(VK_RIGHT))
 	{
-		this->samus->setStatus(eStatus::RUNNING);
-		SamusStateManager::getInstance()->changeStateTo(eStatus::RUNNING);
+		timerToRunning += dt;
+		if (timerToRunning > TIME_TO_RUNNING)
+		{
+			// must fix because of origin sprite change
+			if (isUp)
+				this->samus->setPositionX(this->samus->getPosition().x - SAMUS_WIDTH_UP_HALF);
+			else
+				this->samus->setPositionX(this->samus->getPosition().x - SAMUS_WIDTH_RL_HALF);
+
+			this->samus->setStatus(eStatus::RUNNING);
+			SamusStateManager::getInstance()->changeStateTo(eStatus::RUNNING);
+			timerToRunning = 0;
+		}
+
+		if (this->samus->isInDirection(eDirection::right))
+		{
+			this->samus->setScaleX(-1);
+			this->samus->setPositionX(this->samus->getPosition().x + this->samus->getSprite()->getWidth());
+			this->samus->setDirection(eDirection::left);
+		}
+
+		this->samus->updateHorizontal(dt);
+	}
+
+	if (input->isKeyDown(VK_RIGHT) && input->isKeyUp(VK_LEFT))
+	{
+		timerToRunning += dt;
+		if (timerToRunning > TIME_TO_RUNNING)
+		{
+			// must fix because of origin sprite change
+			if (isUp)
+				this->samus->setPositionX(this->samus->getPosition().x + SAMUS_WIDTH_UP_HALF);
+			else
+				this->samus->setPositionX(this->samus->getPosition().x + SAMUS_WIDTH_RL_HALF);
+
+			this->samus->setStatus(eStatus::RUNNING);
+			SamusStateManager::getInstance()->changeStateTo(eStatus::RUNNING);
+			timerToRunning = 0;
+		}
+
+		if (this->samus->isInDirection(eDirection::left))
+		{
+			this->samus->setScaleX(1);
+			this->samus->setPositionX(this->samus->getPosition().x - this->samus->getSprite()->getWidth());
+			this->samus->setDirection(eDirection::right);
+		}
+
+		this->samus->updateHorizontal(dt);
 	}
 
 	if (input->isKeyDown(VK_X))
@@ -93,13 +145,6 @@ void SamusStateStanding::handleInput(float dt)
 			this->fire();
 			this->samus->timerShoot = 0;
 		}
-	}
-
-	if (input->isKeyUp(VK_Z) && !isUp && input->isKeyUp(VK_X))
-	{
-		// Set Data for sprite
-		this->samus->getSprite()->setData(IndexManager::getInstance()->samusYellowTurnRight);
-		this->samus->setOrigin(VECTOR2(0, 1.0f));
 	}
 }
 
