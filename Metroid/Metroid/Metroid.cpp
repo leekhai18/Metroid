@@ -15,6 +15,8 @@ Metroid::~Metroid()
 	delete samus;
 	delete skree;
 	delete zeb;
+	delete rio;
+	delete zommer;
 }
 
 void Metroid::initialize(HWND hwnd) 
@@ -33,6 +35,8 @@ void Metroid::initialize(HWND hwnd)
 	skree = new Skree(textureManager, graphics);
 	zeb = new Zeb(textureManager, graphics);
 	waver = new Waver(textureManager, graphics);
+	zommer = new Zommer(textureManager, graphics);
+	rio = new Rio(textureManager, graphics);
 }
 
 void Metroid::update(float dt)
@@ -47,6 +51,11 @@ void Metroid::update(float dt)
 	zeb->update(dt);
 	
 	waver->update(dt);
+
+	zommer->update(dt);
+	
+	rio->setTarget(VECTOR2(samus->getPosition().x, samus->getPosition().y));
+	rio->update(dt);
 }
 
 void Metroid::ai()
@@ -65,6 +74,8 @@ void Metroid::render()
 	skree->draw();
 	zeb->draw();
 	waver->draw();
+	zommer->draw();
+	rio->draw();
 }
 
 void Metroid::releaseAll()

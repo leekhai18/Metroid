@@ -105,6 +105,12 @@
     <ClInclude Include="Waver.h">
       <Filter>Objects</Filter>
     </ClInclude>
+    <ClInclude Include="Rio.h">
+      <Filter>Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="Zommer.h">
+      <Filter>Objects</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="GameManager.cpp">
@@ -183,6 +189,12 @@
       <Filter>Objects</Filter>
     </ClCompile>
     <ClCompile Include="Waver.cpp">
+      <Filter>Objects</Filter>
+    </ClCompile>
+    <ClCompile Include="Rio.cpp">
+      <Filter>Objects</Filter>
+    </ClCompile>
+    <ClCompile Include="Zommer.cpp">
       <Filter>Objects</Filter>
     </ClCompile>
   </ItemGroup>

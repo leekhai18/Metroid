@@ -54,6 +54,8 @@ enum eID {
 	SKREE = 1,
 	ZEB = 2,
 	WAVER = 3,
+	ZOMMER = 4,
+	RIO = 5,
 };
 
 // Element's status

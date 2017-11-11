@@ -4,6 +4,8 @@
 #include "Skree.h"
 #include "Zeb.h"
 #include "Waver.h"
+#include "Rio.h"
+#include "Zommer.h"
 
 class Metroid : public GameManager
 {
@@ -16,6 +18,8 @@ private:
 	Skree *skree;
 	Zeb *zeb;
 	Waver *waver;
+	Rio *rio;
+	Zommer *zommer;
 
 public:
 	Metroid();
