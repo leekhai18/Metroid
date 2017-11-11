@@ -20,6 +20,8 @@ void SamusStateRunning::init()
 	runningNormal = samus->getRunningNormalAnim();
 	runningUp = samus->getRunningUpAnim();
 	runningHittingRight = samus->getRunningHittingRightAnim();
+	
+	this->samus->setOrigin(VECTOR2(0.5f, 1));
 
 	this->animation = runningNormal;
 }

@@ -21,6 +21,7 @@ void SamusStateJumping::init()
 	{
 		this->animation = samus->getJumpingAnim();
 		this->samus->setPositionY(this->samus->getPosition().y - SAMUS_HEIGHT*0.5f);
+		this->samus->setOrigin(VECTOR2(0.5f, 1.0f));
 		return;
 	}
 
