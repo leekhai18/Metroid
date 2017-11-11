@@ -5,7 +5,7 @@
 
 #define TIME_FRAME_DELAY 0.15f
 #define TIME_FRAME_DELAY 0.15f
-#define RATE_BEZIER 0.4f
+#define RATE_BEZIER 0.3f
 #define X_OVER_HEAD 200
 #define Y_OVER_TARGET 2
 #define RATE_AREA_ACTIVE 0.15f
@@ -14,7 +14,7 @@ class Rio: public BaseObject
 {
 private:
 	Animation *animation;
-	
+
 	VECTOR2 startPosition;
 	VECTOR2 target;
 	VECTOR2 P1;// P1 in Bézier curve
@@ -28,6 +28,8 @@ private:
 	float t;
 	float t1;
 	int flag = 0;
+	
+	bool statusRollTarget;
 public:
 	Rio(TextureManager* textureM, Graphics* graphics);
 	Rio();
@@ -38,6 +40,7 @@ public:
 	void release();
 
 	VECTOR2 getTarget();
-	void setTarget(VECTOR2 target);
+	bool getStatusRollTarget();
+	void setTarget(VECTOR2 target, bool statusTarget);
 };
 

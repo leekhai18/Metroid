@@ -54,7 +54,7 @@ void Metroid::update(float dt)
 
 	zommer->update(dt);
 	
-	rio->setTarget(VECTOR2(samus->getPosition().x, samus->getPosition().y));
+	rio->setTarget(VECTOR2(samus->getPosition().x, samus->getPosition().y), samus->isInStatus(eStatus::ROLLING));
 	rio->update(dt);
 }
 
