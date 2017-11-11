@@ -39,6 +39,13 @@ void SamusStateStanding::init()
 
 void SamusStateStanding::handleInput(float dt)
 {
+	if (input->isKeyDown(VK_DOWN))
+	{
+		this->samus->setStatus(eStatus::ROLLING);
+		SamusStateManager::getInstance()->changeStateTo(eStatus::ROLLING);
+		return;
+	}
+
 	if (input->isKeyUp(VK_LEFT) && input->isKeyUp(VK_RIGHT))
 		timerToRunning = 0;
 
@@ -56,6 +63,7 @@ void SamusStateStanding::handleInput(float dt)
 			this->samus->setStatus(eStatus::RUNNING);
 			SamusStateManager::getInstance()->changeStateTo(eStatus::RUNNING);
 			timerToRunning = 0;
+			return;
 		}
 
 		if (this->samus->isInDirection(eDirection::right))
@@ -82,6 +90,7 @@ void SamusStateStanding::handleInput(float dt)
 			this->samus->setStatus(eStatus::RUNNING);
 			SamusStateManager::getInstance()->changeStateTo(eStatus::RUNNING);
 			timerToRunning = 0;
+			return;
 		}
 
 		if (this->samus->isInDirection(eDirection::left))
@@ -98,6 +107,7 @@ void SamusStateStanding::handleInput(float dt)
 	{
 		this->samus->setStatus(eStatus::JUMPING);
 		SamusStateManager::getInstance()->changeStateTo(eStatus::JUMPING);
+		return;
 	}
 
 	if (input->isKeyDown(VK_UP))
@@ -116,12 +126,6 @@ void SamusStateStanding::handleInput(float dt)
 		// Set Data for sprite
 		this->samus->getSprite()->setData(IndexManager::getInstance()->samusYellowTurnRight);
 		this->samus->setOrigin(VECTOR2(0, 1.0f));
-	}
-
-	if (input->isKeyDown(VK_DOWN))
-	{
-		this->samus->setStatus(eStatus::ROLLING);
-		SamusStateManager::getInstance()->changeStateTo(eStatus::ROLLING);
 	}
 
 	if (input->isKeyDown(VK_Z))

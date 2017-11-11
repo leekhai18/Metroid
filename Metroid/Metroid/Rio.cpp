@@ -8,7 +8,10 @@ Rio::Rio(TextureManager * textureM, Graphics * graphics) : BaseObject(eID::RIO)
 	{
 		throw GameError(GameErrorNS::FATAL_ERROR, "Can not init sprite Rio");
 	}
-	animation = new Animation(this->sprite, VECTOR2(0.5f, 0.5f), IndexManager::getInstance()->rioBlue, NUM_FRAMES_RIO, TIME_FRAME_DELAY);
+
+	this->sprite->setOrigin(VECTOR2(0.5f, 0.5f));
+
+	animation = new Animation(this->sprite, IndexManager::getInstance()->rioBlue, NUM_FRAMES_RIO, TIME_FRAME_DELAY);
 	animation->start();
 
 	this->startPosition = VECTOR2(200, 100);

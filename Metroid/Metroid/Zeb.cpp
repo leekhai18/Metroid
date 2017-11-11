@@ -16,7 +16,9 @@ Zeb::Zeb(TextureManager * textureM, Graphics * graphics) : BaseObject(eID::ZEB)
 		throw GameError(GameErrorNS::FATAL_ERROR, "Can not init sprite Zeb");
 	}
 
-	this->anim = new Animation(this->sprite, VECTOR2(0.5f, 0.5f), IndexManager::getInstance()->zebYellow, NUM_FRAMES_ZEB, 0.2f);
+	this->sprite->setOrigin(VECTOR2(0.5f, 0.5f));
+
+	this->anim = new Animation(this->sprite, IndexManager::getInstance()->zebYellow, NUM_FRAMES_ZEB, 0.2f);
 	this->anim->start();
 
 	this->setPosition(VECTOR2(GAME_WIDTH + this->sprite->getWidth()*0.5f, GAME_HEIGHT + this->sprite->getHeight()*0.5f));

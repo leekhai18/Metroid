@@ -8,6 +8,7 @@ SamusStateStart::SamusStateStart()
 
 SamusStateStart::SamusStateStart(Samus * samus, Input* input) : BaseState(samus, input)
 {
+	this->samus->setOrigin(VECTOR2(0, 1.0f));
 	animation = samus->getStartingAnim();
 	animation->start();
 }
@@ -28,18 +29,21 @@ void SamusStateStart::handleInput(float dt)
 		{
 			this->samus->setStatus(eStatus::RUNNING);
 			SamusStateManager::getInstance()->changeStateTo(eStatus::RUNNING);
+			return;
 		}
 
 		if (input->isKeyDown(VK_UP) || input->isKeyDown(VK_Z))
 		{
 			this->samus->setStatus(eStatus::STANDING);
 			SamusStateManager::getInstance()->changeStateTo(eStatus::STANDING);
+			return;
 		}
 
 		if (input->isKeyDown(VK_X))
 		{
 			this->samus->setStatus(eStatus::JUMPING);
 			SamusStateManager::getInstance()->changeStateTo(eStatus::JUMPING);
+			return;
 		}
 	}
 }

@@ -8,8 +8,10 @@ Skree::Skree(TextureManager * textureM, Graphics * graphics) : BaseObject(eID::S
 	{
 		throw GameError(GameErrorNS::FATAL_ERROR, "Can not init sprite Skree");
 	}
+	
+	this->sprite->setOrigin(VECTOR2(0.5f, 0.5f));
 
-	animationRotate = new Animation(this->sprite, VECTOR2(0.5f, 0.5f), IndexManager::getInstance()->skreeYellow, NUM_FRAMES_SKREE, TIME_FRAME_DELAY);
+	animationRotate = new Animation(this->sprite, IndexManager::getInstance()->skreeYellow, NUM_FRAMES_SKREE, TIME_FRAME_DELAY);
 	animationRotate->start();
 
 	effectDeath = new SkreeEffectDeath(textureM, graphics);

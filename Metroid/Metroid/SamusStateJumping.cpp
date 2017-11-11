@@ -21,13 +21,13 @@ void SamusStateJumping::init()
 	{
 		this->animation = samus->getJumpingAnim();
 		this->samus->setPositionY(this->samus->getPosition().y - SAMUS_HEIGHT*0.5f);
-		this->samus->setOrigin(VECTOR2(0.5f, 1.0f));
+		this->samus->setOrigin(VECTOR2(0.5f, 0.5f));
 		return;
 	}
 
 	// Set Data for sprite
 	this->samus->getSprite()->setData(IndexManager::getInstance()->samusYellowJumpRight);
-	this->samus->setOrigin(VECTOR2(0.5f, 1.0f));
+	this->samus->setOrigin(VECTOR2(0, 1.0f));
 }
 
 void SamusStateJumping::handleInput(float dt)
