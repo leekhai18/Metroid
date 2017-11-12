@@ -6,10 +6,13 @@
 #include "Waver.h"
 #include "Rio.h"
 #include "Zommer.h"
+#include "Text.h"
 
 class Metroid : public GameManager
 {
 private:
+	static Metroid* instance;
+
 	Samus *samus;
 	TextureManager *textureManager;
 	SpriteManager *spriteManger;
@@ -21,10 +24,13 @@ private:
 	Rio *rio;
 	Zommer *zommer;
 
+	Text* fpsText;
+
 public:
 	Metroid();
 	~Metroid();
 
+	static Metroid* getInstance();
 
 	void initialize(HWND hwnd);
 	void update(float dt);      // must override pure virtual from Game

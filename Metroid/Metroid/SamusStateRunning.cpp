@@ -20,6 +20,8 @@ void SamusStateRunning::init()
 	runningNormal = samus->getRunningNormalAnim();
 	runningUp = samus->getRunningUpAnim();
 	runningHittingRight = samus->getRunningHittingRightAnim();
+	
+	this->samus->setOrigin(VECTOR2(0.5f, 1));
 
 	this->animation = runningNormal;
 }
@@ -69,10 +71,18 @@ void SamusStateRunning::handleInput(float dt)
 
 		this->samus->setStatus(eStatus::STANDING);
 		SamusStateManager::getInstance()->changeStateTo(eStatus::STANDING);
+		return;
 	}
 #pragma endregion
 
+	if (input->isKeyDown(VK_X))
+	{
+		this->animation->stop();
 
+		this->samus->setStatus(eStatus::JUMPING);
+		SamusStateManager::getInstance()->changeStateTo(eStatus::JUMPING);
+		return;
+	}
 
 	if (input->isKeyDown(VK_UP))
 	{
@@ -102,7 +112,6 @@ void SamusStateRunning::handleInput(float dt)
 		this->animation->stop();
 
 		this->samus->getSprite()->setData(IndexManager::getInstance()->samusYellowHittingUp);
-		this->samus->setOrigin(VECTOR2(0.5f, 1.0f));
 
 		this->animation = runningUp;
 		this->animation->start();
@@ -121,14 +130,6 @@ void SamusStateRunning::handleInput(float dt)
 
 		this->animation = runningNormal;
 		this->animation->start();
-	}
-
-	if (input->isKeyDown(VK_X))
-	{
-		this->animation->stop();
-
-		this->samus->setStatus(eStatus::JUMPING);
-		SamusStateManager::getInstance()->changeStateTo(eStatus::JUMPING);
 	}
 }
 

@@ -162,7 +162,7 @@ void GameManager::run(HWND hwnd)
 	if (frameTime > MAX_FRAME_TIME) // if frame rate is very slow
 		frameTime = MAX_FRAME_TIME; // limit maximum frameTime
 	if (frameTime > 0.0)
-		fps = (fps * 0.99f) + (0.01f / frameTime);  // average fps
+		fps = (fps * 0.9f) + (0.1f / frameTime);  // average fps
 	timeStart = timeEnd;
 
 	// update(), ai(), and collisions() are pure virtual functions.

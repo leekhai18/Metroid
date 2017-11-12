@@ -14,11 +14,10 @@ private:
 	bool isloop;
 	bool isCompleted;
 	Sprite *sprite;
-	VECTOR2 origin;
 
 public:
-	Animation(Sprite *sprite, VECTOR2 origin, const int* list, int totalFrames, float timeFrameDelay, bool loop);
-	Animation(Sprite *sprite, VECTOR2 origin, const int* list, int totalFrames, float timeFrameDelay);
+	Animation(Sprite *sprite, const int* list, int totalFrames, float timeFrameDelay, bool loop);
+	Animation(Sprite *sprite, const int* list, int totalFrames, float timeFrameDelay);
 	~Animation();
 
 	void nextFrame();

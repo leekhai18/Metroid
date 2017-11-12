@@ -1,7 +1,7 @@
 #include "Animation.h"
 
 
-Animation::Animation(Sprite *sprite, VECTOR2 origin, const int* list, int totalFrames, float timeFrameDelay, bool loop)
+Animation::Animation(Sprite *sprite, const int* list, int totalFrames, float timeFrameDelay, bool loop)
 {
 	this->sprite = sprite;
 	this->listFrames = list;
@@ -13,14 +13,12 @@ Animation::Animation(Sprite *sprite, VECTOR2 origin, const int* list, int totalF
 	this->frameDelay = timeFrameDelay;
 	this->timerAnim = 0;
 	this->canAnimate = false;
-	this->origin = origin;
 
 	// Get data of sprite
 	this->sprite->setData(this->listFrames[0]);
-	this->sprite->setOrigin(this->origin);
 }
 
-Animation::Animation(Sprite *sprite, VECTOR2 origin, const int * list, int totalFrames, float timeFrameDelay)
+Animation::Animation(Sprite *sprite, const int * list, int totalFrames, float timeFrameDelay)
 {
 	this->sprite = sprite;
 	this->listFrames = list;
@@ -32,11 +30,9 @@ Animation::Animation(Sprite *sprite, VECTOR2 origin, const int * list, int total
 	this->canAnimate = false;
 	this->isCompleted = false;
 	this->isloop = true;
-	this->origin = origin;
 
 	// Get data of sprite
 	this->sprite->setData(this->listFrames[0]);
-	this->sprite->setOrigin(this->origin);
 }
 
 
@@ -61,7 +57,6 @@ void Animation::setValueOfCurrentFrame(int index)
 
 	// Get data of sprite
 	this->sprite->setData(this->listFrames[currentFrame]);
-	this->sprite->setOrigin(this->origin);
 
 	if (!isloop && currentFrame == totalFrames - 1)
 	{

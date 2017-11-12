@@ -111,6 +111,9 @@
     <ClInclude Include="Zommer.h">
       <Filter>Objects</Filter>
     </ClInclude>
+    <ClInclude Include="Text.h">
+      <Filter>Framework</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="GameManager.cpp">
@@ -196,6 +199,9 @@
     </ClCompile>
     <ClCompile Include="Zommer.cpp">
       <Filter>Objects</Filter>
+    </ClCompile>
+    <ClCompile Include="Text.cpp">
+      <Filter>Framework</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

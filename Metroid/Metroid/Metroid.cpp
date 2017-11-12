@@ -19,6 +19,15 @@ Metroid::~Metroid()
 	delete zommer;
 }
 
+Metroid* Metroid::instance = nullptr;
+Metroid * Metroid::getInstance()
+{
+	if (instance == nullptr)
+		instance = new Metroid();
+
+	return instance;
+}
+
 void Metroid::initialize(HWND hwnd) 
 {
 	GameManager::initialize(hwnd);
@@ -37,6 +46,9 @@ void Metroid::initialize(HWND hwnd)
 	waver = new Waver(textureManager, graphics);
 	zommer = new Zommer(textureManager, graphics);
 	rio = new Rio(textureManager, graphics);
+
+	fpsText = new Text("FPS: 0", eFont::body, 8, VECTOR2(GAME_WIDTH - 70, 5), GraphicsNS::WHITE, false, true);
+	fpsText->initialize(graphics);
 }
 
 void Metroid::update(float dt)
@@ -76,6 +88,9 @@ void Metroid::render()
 	waver->draw();
 	zommer->draw();
 	rio->draw();
+
+	fpsText->setText("FPS: " + std::to_string((int)this->fps));
+	fpsText->draw();
 }
 
 void Metroid::releaseAll()

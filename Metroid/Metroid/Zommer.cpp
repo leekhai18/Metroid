@@ -9,7 +9,10 @@ Zommer::Zommer(TextureManager * textureM, Graphics * graphics) : BaseObject(eID:
 		throw GameError(GameErrorNS::FATAL_ERROR, "Can not init sprite Zommer");
 	}
 	this->setPosition(VECTOR2(0, 200));
-	animation = new Animation(this->sprite, VECTOR2(0.5f, 0.5f), IndexManager::getInstance()->zoomerRed, NUM_FRAMES_ZOOMER, TIME_FRAME_DELAY);
+
+	this->sprite->setOrigin(VECTOR2(0.5f, 0.5f));
+
+	animation = new Animation(this->sprite, IndexManager::getInstance()->zoomerRed, NUM_FRAMES_ZOOMER, TIME_FRAME_DELAY);
 	animation->start();
 
 	
