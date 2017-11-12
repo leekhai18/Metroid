@@ -1,10 +1,11 @@
 #include "Metroid.h"
-
+#include "Sound.h"
 
 Metroid::Metroid()
 {
 	this->spriteManger = SpriteManager::getInstance();
 	this->textureManager = new TextureManager();
+	instance = this;
 }
 
 Metroid::~Metroid()
@@ -17,6 +18,10 @@ Metroid::~Metroid()
 	delete zeb;
 	delete rio;
 	delete zommer;
+	delete fpsText;
+
+	Sound::getInstance()->stop("man1");
+	Sound::getInstance()->cleanUp();
 }
 
 Metroid* Metroid::instance = nullptr;
@@ -49,6 +54,9 @@ void Metroid::initialize(HWND hwnd)
 
 	fpsText = new Text("FPS: 0", eFont::body, 8, VECTOR2(GAME_WIDTH - 70, 5), GraphicsNS::WHITE, false, true);
 	fpsText->initialize(graphics);
+
+	Sound::getInstance()->loadSound("Resources/Sounds/man1.wav", "man1");
+	Sound::getInstance()->play("man1", true, 0);
 }
 
 void Metroid::update(float dt)
@@ -101,4 +109,10 @@ void Metroid::releaseAll()
 void Metroid::resetAll()
 {
 	GameManager::resetAll();
+}
+
+
+HWND Metroid::getCurrentHWND()
+{
+	return this->hwnd;
 }

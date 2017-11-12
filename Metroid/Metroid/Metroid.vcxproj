@@ -130,6 +130,7 @@
     <ClInclude Include="Bullet.h" />
     <ClInclude Include="Constants.h" />
     <ClInclude Include="GameError.h" />
+    <ClInclude Include="GameLog.h" />
     <ClInclude Include="GameManager.h" />
     <ClInclude Include="Graphics.h" />
     <ClInclude Include="IndexManager.h" />
@@ -148,6 +149,7 @@
     <ClInclude Include="Skree.h" />
     <ClInclude Include="SkreeEffectDeath.h" />
     <ClInclude Include="SkreeEffectDeathPart.h" />
+    <ClInclude Include="Sound.h" />
     <ClInclude Include="Sprite.h" />
     <ClInclude Include="SpriteManager.h" />
     <ClInclude Include="Text.h" />
@@ -161,6 +163,7 @@
     <ClCompile Include="BaseObject.cpp" />
     <ClCompile Include="BaseState.cpp" />
     <ClCompile Include="Bullet.cpp" />
+    <ClCompile Include="GameLog.cpp" />
     <ClCompile Include="GameManager.cpp" />
     <ClCompile Include="Graphics.cpp" />
     <ClCompile Include="IndexManager.cpp" />
@@ -178,6 +181,7 @@
     <ClCompile Include="Skree.cpp" />
     <ClCompile Include="SkreeEffectDeath.cpp" />
     <ClCompile Include="SkreeEffectDeathPart.cpp" />
+    <ClCompile Include="Sound.cpp" />
     <ClCompile Include="Sprite.cpp" />
     <ClCompile Include="SpriteManager.cpp" />
     <ClCompile Include="Text.cpp" />

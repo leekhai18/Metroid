@@ -114,6 +114,12 @@
     <ClInclude Include="Text.h">
       <Filter>Framework</Filter>
     </ClInclude>
+    <ClInclude Include="Sound.h">
+      <Filter>Framework</Filter>
+    </ClInclude>
+    <ClInclude Include="GameLog.h">
+      <Filter>Framework</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="GameManager.cpp">
@@ -201,6 +207,12 @@
       <Filter>Objects</Filter>
     </ClCompile>
     <ClCompile Include="Text.cpp">
+      <Filter>Framework</Filter>
+    </ClCompile>
+    <ClCompile Include="Sound.cpp">
+      <Filter>Framework</Filter>
+    </ClCompile>
+    <ClCompile Include="GameLog.cpp">
       <Filter>Framework</Filter>
     </ClCompile>
   </ItemGroup>

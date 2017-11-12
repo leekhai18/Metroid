@@ -39,5 +39,7 @@ public:
 	void render();      // "
 	void releaseAll();
 	void resetAll();
+
+	HWND getCurrentHWND();
 };
 

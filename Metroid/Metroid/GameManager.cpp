@@ -55,11 +55,11 @@ LRESULT GameManager::messageHandler(HWND hwnd, UINT msg, WPARAM wParam, LPARAM l
 // Initializes the game
 // throws GameError on error
 //=============================================================================
-void GameManager::initialize(HWND hw)
+void GameManager::initialize(HWND hwnd)
 {
-	hwnd = hw;                                  // save window handle
+	this->hwnd = hwnd;                                  // save window handle
 
-												// initialize graphics
+	// initialize graphics
 	graphics = new Graphics();
 	// throws GameError
 	graphics->initialize(hwnd, GAME_WIDTH, GAME_HEIGHT, FULLSCREEN);
