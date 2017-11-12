@@ -4,11 +4,6 @@
 
 
 #define TIME_FRAME_DELAY 0.15f
-<<<<<<< HEAD
-#define TIME_FRAME_DELAY 0.15f
-#define RATE_BEZIER 0.3f
-=======
->>>>>>> b76ff3a84bc969e58177867ecf2f2e8e7830dad1
 #define X_OVER_HEAD 200
 #define Y_OVER_TARGET 2
 #define RATE_AREA_ACTIVE 0.15f
