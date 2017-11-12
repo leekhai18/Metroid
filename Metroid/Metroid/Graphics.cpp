@@ -1,4 +1,5 @@
 #include "Graphics.h"
+#include "Metroid.h"
 //=============================================================================
 // Constructor
 //=============================================================================
@@ -173,6 +174,46 @@ HRESULT Graphics::loadTexture(const char *filename, COLOR_ARGB transcolor,
 		throw(GameError(GameErrorNS::FATAL_ERROR, "Error in Graphics::loadTexture"));
 	}
 	return result;
+}
+
+ID3DXFont * Graphics::loadDirectXFont(std::string fontName, int fontHeight, bool isItalic)
+{
+	ID3DXFont* font = nullptr;
+
+	D3DXCreateFont(
+		device3d,		
+		fontHeight,									
+		0,												
+		FW_NORMAL,									
+		1,												
+		isItalic,										
+		DEFAULT_CHARSET,
+		OUT_DEFAULT_PRECIS,
+		ANTIALIASED_QUALITY,
+		FF_DONTCARE,
+		fontName.c_str(),										
+		&font										
+	);
+
+	return font;
+}
+
+void Graphics::drawText(ID3DXFont* font, std::string text, VECTOR2 position, DWORD format, D3DCOLOR color)
+{
+	RECT rect;
+	SetRect(&rect, (int) position.x, (int) position.y, (int) position.x, (int) position.y);
+
+	font->DrawText(NULL,        //pSprite
+
+		text.c_str(),  //pString
+
+		-1,          //Count
+
+		&rect,  //pRect
+
+		format, //Format single line
+
+		color); //Color
 }
 
 void Graphics::drawLine(const VECTOR2* vertices, int count, COLOR_ARGB color)

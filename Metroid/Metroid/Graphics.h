@@ -116,6 +116,10 @@ public:
 	//       texture points to texture
 	HRESULT loadTexture(const char * filename, COLOR_ARGB transcolor, UINT &width, UINT &height, LP_TEXTURE &texture);
 
+	ID3DXFont* Graphics::loadDirectXFont(std::string fontName, int fontHeight, bool isItalic);
+
+	void drawText(ID3DXFont* font, std::string text, VECTOR2 position, DWORD format, D3DCOLOR color);
+
 	// Display the offscreen backbuffer to the screen.
 	HRESULT showBackbuffer();
 

@@ -150,6 +150,7 @@
     <ClInclude Include="SkreeEffectDeathPart.h" />
     <ClInclude Include="Sprite.h" />
     <ClInclude Include="SpriteManager.h" />
+    <ClInclude Include="Text.h" />
     <ClInclude Include="TextureManager.h" />
     <ClInclude Include="Waver.h" />
     <ClInclude Include="Zeb.h" />
@@ -179,6 +180,7 @@
     <ClCompile Include="SkreeEffectDeathPart.cpp" />
     <ClCompile Include="Sprite.cpp" />
     <ClCompile Include="SpriteManager.cpp" />
+    <ClCompile Include="Text.cpp" />
     <ClCompile Include="TextureManager.cpp" />
     <ClCompile Include="Waver.cpp" />
     <ClCompile Include="WinMain.cpp" />

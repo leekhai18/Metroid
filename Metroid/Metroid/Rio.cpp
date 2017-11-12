@@ -1,4 +1,5 @@
 #include "Rio.h"
+#define RATE_BEZIER 0.4f
 
 
 Rio::Rio(TextureManager * textureM, Graphics * graphics) : BaseObject(eID::RIO)
@@ -51,7 +52,7 @@ void Rio::update(float dt)
 				if (t < 1) 
 				{
 					t += dt * RATE_BEZIER;
-					this->P2 = VECTOR2((this->P1.x + this->P3.x) / 2, target.y*1.6);
+					this->P2 = VECTOR2((this->P1.x + this->P3.x) / 2, target.y*1.6f);
 					this->setPosition((1 - t)*(1 - t)*P1 + 2 * (1 - t)*t*P2 + t*t*P3);
 					if (P3.x < target.x && target.x < P5.x && this->getPosition().x > P3.x-1) {
 						flag = 1;
@@ -63,7 +64,7 @@ void Rio::update(float dt)
 				{	
 					if (t1 < 1) {
 						t1 += dt * RATE_BEZIER;
-						this->P2 = VECTOR2((this->P3.x + this->P1.x) / 2, target.y*1.6);
+						this->P2 = VECTOR2((this->P3.x + this->P1.x) / 2, target.y*1.6f);
 						this->setPosition((1 - t1)*(1 - t1)*P3 + 2 * (1 - t1)*t1*P2 + t1*t1*P1);
 					}
 					else {
@@ -77,7 +78,7 @@ void Rio::update(float dt)
 				if (t < 1)
 				{
 					t += dt * RATE_BEZIER;
-					this->P4 = VECTOR2((this->P3.x + this->P5.x) / 2, target.y*1.6);
+					this->P4 = VECTOR2((this->P3.x + this->P5.x) / 2, target.y*1.6f);
 					this->setPosition((1 - t)*(1 - t)*P3 + 2 * (1 - t)*t*P2 + t*t*P5);
 					t1 = 0;
 				}
@@ -85,7 +86,7 @@ void Rio::update(float dt)
 				{
 					if (t1 < 1) {
 						t1 += dt * RATE_BEZIER;
-						this->P2 = VECTOR2((this->P3.x + this->P5.x) / 2, target.y*1.6);
+						this->P2 = VECTOR2((this->P3.x + this->P5.x) / 2, target.y*1.6f);
 						this->setPosition((1 - t1)*(1 - t1)*P5 + 2 * (1 - t1)*t1*P2 + t1*t1*P3);
 						if (P1.x < target.x && target.x < P3.x && this->getPosition().x < P3.x + 1) {
 							flag = 0;
