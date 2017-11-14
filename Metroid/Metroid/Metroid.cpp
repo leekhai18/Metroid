@@ -19,9 +19,6 @@ Metroid::~Metroid()
 	delete rio;
 	delete zommer;
 	delete fpsText;
-
-	Sound::getInstance()->stop("man1");
-	Sound::getInstance()->cleanUp();
 }
 
 Metroid* Metroid::instance = nullptr;
@@ -54,9 +51,6 @@ void Metroid::initialize(HWND hwnd)
 
 	fpsText = new Text("FPS: 0", eFont::body, 8, VECTOR2(GAME_WIDTH - 70, 5), GraphicsNS::WHITE, false, true);
 	fpsText->initialize(graphics);
-
-	Sound::getInstance()->loadSound("Resources/Sounds/nes_metroid_brinstar.wav", "nes_metroid_brinstar");
-	Sound::getInstance()->play("nes_metroid_brinstar", true, 0);
 }
 
 void Metroid::update(float dt)
