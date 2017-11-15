@@ -9,6 +9,7 @@
 #include "BaseObject.h"
 #include "Bullet.h"
 #include "BulletPool.h"
+#include "Camera.h"
 
 #define SAMUS_WIDTH_UP_HALF 7
 #define SAMUS_WIDTH_RL_HALF 10
@@ -30,6 +31,8 @@ private:
 				*rollingAnimation,
 				*jumpingAnimation,
 				*startingAnimation;
+
+	Camera* camera;
 
 	bool isFalling;
 	float totalHeightWasJumped;
@@ -61,6 +64,6 @@ public:
 	Animation* getRollingAnim();
 	Animation* getJumpingAnim();
 
-	std::vector<Bullet*> getListBulletUsing();
+	void setCamera(Camera* cam);
 };
 

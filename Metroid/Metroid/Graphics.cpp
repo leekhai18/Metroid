@@ -290,7 +290,7 @@ void Graphics::drawSprite(const SpriteData &spriteData, COLOR_ARGB color)
 		&spriteData.scale,
 		&spriteData.position,
 		D3DXToRadian(spriteData.rotate),
-		0
+		&spriteData.transformCamera
 	);
 
 	//set matrix transformed

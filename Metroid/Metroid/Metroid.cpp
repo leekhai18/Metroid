@@ -42,10 +42,16 @@ void Metroid::initialize(HWND hwnd)
 		throw GameError(GameErrorNS::FATAL_ERROR, "Can not load image");
 	}
 
+	camera = new Camera(GAME_WIDTH, GAME_HEIGHT);
+	camera->setPosition(GAME_WIDTH*0.5f, GAME_HEIGHT*0.5f); // modifi follow map
+
 	samus = new Samus(textureManager, graphics, input);
+	samus->setCamera(this->camera);
+
 	skree = new Skree(textureManager, graphics);
 	zeb = new Zeb(textureManager, graphics);
 	waver = new Waver(textureManager, graphics);
+	waver->setCamera(this->camera);
 	zommer = new Zommer(textureManager, graphics);
 	rio = new Rio(textureManager, graphics);
 
@@ -70,6 +76,8 @@ void Metroid::update(float dt)
 	
 	rio->setTarget(VECTOR2(samus->getPosition().x, samus->getPosition().y), samus->isInStatus(eStatus::ROLLING));
 	rio->update(dt);
+
+	camera->setPosition(samus->getPosition());
 }
 
 void Metroid::ai()

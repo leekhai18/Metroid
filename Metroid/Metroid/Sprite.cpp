@@ -16,6 +16,7 @@ Sprite::Sprite()
 	spriteData.texture = NULL;      // the sprite texture (picture)
 	spriteData.flipHorizontal = false;
 	spriteData.flipVertical = false;
+	spriteData.transformCamera = VECTOR2ZERO;
 	textureManager = NULL;
 	spriteManager = NULL;
 	graphics = NULL;                // link to graphics system

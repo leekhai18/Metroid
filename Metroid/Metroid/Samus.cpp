@@ -39,6 +39,9 @@ Samus::~Samus()
 
 void Samus::draw()
 {
+	if (this->camera)
+		this->sprite->setTransformCamera(VECTOR2(GAME_WIDTH*0.5f - camera->getPosition().x, GAME_HEIGHT*0.8f - camera->getPosition().y));
+
 	this->sprite->draw();
 
 	for (unsigned i = 0; i < this->bulletPool->getListUsing().size(); i++)
@@ -141,4 +144,9 @@ Animation * Samus::getRollingAnim()
 Animation * Samus::getJumpingAnim()
 {
 	return this->jumpingAnimation;
+}
+
+void Samus::setCamera(Camera * cam)
+{
+	this->camera = cam;
 }

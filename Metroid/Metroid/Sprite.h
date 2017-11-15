@@ -53,7 +53,8 @@ public:
 	// Return colorFilter.
 	virtual COLOR_ARGB getColorFilter() { return colorFilter; }
 
-
+	// Return transformCamera
+	virtual VECTOR2 getTransformCamera() { return spriteData.transformCamera; }
 
 
 	////////////////////////////////////////
@@ -62,7 +63,6 @@ public:
 
 	// Set data for sprite
 	virtual void setData(int index);
-
 
 	// Set position
 	virtual void setPositionX(float newX) 
@@ -141,6 +141,10 @@ public:
 
 	// Set color filter. (use WHITE for no change)
 	virtual void setColorFilter(COLOR_ARGB color) { colorFilter = color; }
+
+	// set transformCamera
+	virtual void setTransformCamera(VECTOR2 trans) { spriteData.transformCamera = trans; }
+
 
 	// Set TextureManager
 	virtual void setTextureManager(TextureManager *textureM)

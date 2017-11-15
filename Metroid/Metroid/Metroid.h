@@ -7,15 +7,19 @@
 #include "Rio.h"
 #include "Zommer.h"
 #include "Text.h"
+#include "Camera.h"
 
 class Metroid : public GameManager
 {
 private:
 	static Metroid* instance;
 
-	Samus *samus;
 	TextureManager *textureManager;
 	SpriteManager *spriteManger;
+
+	Samus *samus;
+
+	Camera *camera;
 
 	// Enemy
 	Skree *skree;

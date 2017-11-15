@@ -120,6 +120,9 @@
     <ClInclude Include="GameLog.h">
       <Filter>Framework</Filter>
     </ClInclude>
+    <ClInclude Include="Camera.h">
+      <Filter>Framework</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="GameManager.cpp">
@@ -213,6 +216,9 @@
       <Filter>Framework</Filter>
     </ClCompile>
     <ClCompile Include="GameLog.cpp">
+      <Filter>Framework</Filter>
+    </ClCompile>
+    <ClCompile Include="Camera.cpp">
       <Filter>Framework</Filter>
     </ClCompile>
   </ItemGroup>

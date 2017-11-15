@@ -128,6 +128,7 @@
     <ClInclude Include="BaseObject.h" />
     <ClInclude Include="BaseState.h" />
     <ClInclude Include="Bullet.h" />
+    <ClInclude Include="Camera.h" />
     <ClInclude Include="Constants.h" />
     <ClInclude Include="GameError.h" />
     <ClInclude Include="GameLog.h" />
@@ -163,6 +164,7 @@
     <ClCompile Include="BaseObject.cpp" />
     <ClCompile Include="BaseState.cpp" />
     <ClCompile Include="Bullet.cpp" />
+    <ClCompile Include="Camera.cpp" />
     <ClCompile Include="GameLog.cpp" />
     <ClCompile Include="GameManager.cpp" />
     <ClCompile Include="Graphics.cpp" />
