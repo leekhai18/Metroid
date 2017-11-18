@@ -38,9 +38,6 @@ void Waver::update(float dt)
 
 void Waver::draw()
 {
-	if (this->camera)
-		this->sprite->setTransformCamera(VECTOR2(GAME_WIDTH*0.5f - camera->getPosition().x, GAME_HEIGHT*0.8f - camera->getPosition().y));
-
 	this->sprite->draw();
 }
 
