@@ -2,7 +2,7 @@
 #include "SamusStateManager.h"
 #include "BulletPool.h"
 
-#define TIME_TO_RUNNING 0.07f
+#define TIME_TO_RUNNING 0.05f
 
 SamusStateStanding::SamusStateStanding()
 {
