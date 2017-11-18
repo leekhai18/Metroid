@@ -123,6 +123,12 @@
     <ClInclude Include="Camera.h">
       <Filter>Framework</Filter>
     </ClInclude>
+    <ClInclude Include="MapInfo.h">
+      <Filter>Framework</Filter>
+    </ClInclude>
+    <ClInclude Include="Map.h">
+      <Filter>Framework</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="GameManager.cpp">
@@ -133,9 +139,6 @@
     </ClCompile>
     <ClCompile Include="Input.cpp">
       <Filter>Framework</Filter>
-    </ClCompile>
-    <ClCompile Include="Metroid.cpp">
-      <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Sprite.cpp">
       <Filter>Framework</Filter>
@@ -220,6 +223,15 @@
     </ClCompile>
     <ClCompile Include="Camera.cpp">
       <Filter>Framework</Filter>
+    </ClCompile>
+    <ClCompile Include="Map.cpp">
+      <Filter>Framework</Filter>
+    </ClCompile>
+    <ClCompile Include="MapInfo.cpp">
+      <Filter>Framework</Filter>
+    </ClCompile>
+    <ClCompile Include="Metroid.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

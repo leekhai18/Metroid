@@ -31,15 +31,13 @@ TextureManager::~TextureManager()
 // Loads the texture file from disk.
 // Post: returns true if successful, false if failed
 //=============================================================================
-bool TextureManager::initialize(Graphics *g, const char *f, int _width, int _height)
+bool TextureManager::initialize(Graphics *g, const char *f)
 {
 	try {
-		width = _width;
-		height = _height;
 		graphics = g;                       // the graphics object
 		file = f;                           // the texture file
 
-		hr = graphics->loadTexture(file, TRANSCOLOR, width, height, texture);
+		hr = graphics->loadTexture(file, TRANSCOLOR, this->width, this->height, texture);
 		if (FAILED(hr))
 		{
 			SAFE_RELEASE(texture);

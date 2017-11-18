@@ -40,7 +40,7 @@ Samus::~Samus()
 void Samus::draw()
 {
 	if (this->camera)
-		this->sprite->setTransformCamera(VECTOR2(GAME_WIDTH*0.5f - camera->getPosition().x, GAME_HEIGHT*0.8f - camera->getPosition().y));
+		this->sprite->setTransformCamera(VECTOR2(GAME_WIDTH*0.5f - camera->getPosition().x, GAME_HEIGHT*0.5f - camera->getPosition().y));
 
 	this->sprite->draw();
 

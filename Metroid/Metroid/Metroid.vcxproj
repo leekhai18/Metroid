@@ -136,6 +136,8 @@
     <ClInclude Include="Graphics.h" />
     <ClInclude Include="IndexManager.h" />
     <ClInclude Include="Input.h" />
+    <ClInclude Include="Map.h" />
+    <ClInclude Include="MapInfo.h" />
     <ClInclude Include="Metroid.h" />
     <ClInclude Include="BulletPool.h" />
     <ClInclude Include="resource.h" />
@@ -170,6 +172,8 @@
     <ClCompile Include="Graphics.cpp" />
     <ClCompile Include="IndexManager.cpp" />
     <ClCompile Include="Input.cpp" />
+    <ClCompile Include="Map.cpp" />
+    <ClCompile Include="MapInfo.cpp" />
     <ClCompile Include="Metroid.cpp" />
     <ClCompile Include="BulletPool.cpp" />
     <ClCompile Include="Rio.cpp" />

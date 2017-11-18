@@ -5,6 +5,12 @@ Metroid::Metroid()
 {
 	this->spriteManger = SpriteManager::getInstance();
 	this->textureManager = new TextureManager();
+
+	// new map component
+	this->tileset = new TextureManager();
+	this->mapInfo = new MapInfo();
+	this->mapBrinstar = new Map();
+
 	instance = this;
 }
 
@@ -12,6 +18,10 @@ Metroid::~Metroid()
 {
 	textureManager->onLostDevice();
 	spriteManger->releaseAll();
+
+	tileset->onLostDevice();
+	delete mapInfo;
+	delete mapBrinstar;
 
 	delete samus;
 	delete skree;
@@ -32,26 +42,45 @@ Metroid * Metroid::getInstance()
 
 void Metroid::initialize(HWND hwnd) 
 {
-	GameManager::initialize(hwnd);
+	GameManager::initialize(hwnd); // graphics was init inside
+
 	if (!spriteManger->initialize(SOURCE_JSON))
 	{
 		throw GameError(GameErrorNS::FATAL_ERROR, "Can not  load json");
 	}
-	if (!textureManager->initialize(graphics, SOURCE_IMAGE, 0, 0))
+
+	if (!textureManager->initialize(graphics, SOURCE_IMAGE))
 	{
-		throw GameError(GameErrorNS::FATAL_ERROR, "Can not load image");
+		throw GameError(GameErrorNS::FATAL_ERROR, "Can not load spite sheet");
 	}
 
-	//camera = new Camera(GAME_WIDTH, GAME_HEIGHT);
-	//camera->setPosition(GAME_WIDTH*0.5f, GAME_HEIGHT*0.5f); // modifi follow map
+	if (!tileset->initialize(graphics, TILESET_IMAGE))
+	{
+		throw GameError(GameErrorNS::FATAL_ERROR, "Can not load tileset");
+	}
+
+	if (!mapInfo->initialize(MAP_BRINSTAR_JSON))
+	{
+		throw GameError(GameErrorNS::FATAL_ERROR, "Can not load map info");
+	}
+
+	if (!mapBrinstar->initialize(graphics, tileset, mapInfo))
+	{
+		throw GameError(GameErrorNS::FATAL_ERROR, "Can not initalize map brinstar");
+	}
+
+	camera = new Camera(GAME_WIDTH, GAME_HEIGHT);
+	camera->setPosition(VECTOR2(640, 3232));
+
+	mapBrinstar->setCamera(camera);
 
 	samus = new Samus(textureManager, graphics, input);
-	//samus->setCamera(this->camera);
+	samus->setCamera(this->camera);
+	samus->setPosition(VECTOR2(640, 3240));
 
 	skree = new Skree(textureManager, graphics);
 	zeb = new Zeb(textureManager, graphics);
 	waver = new Waver(textureManager, graphics);
-	//waver->setCamera(this->camera);
 	zommer = new Zommer(textureManager, graphics);
 	rio = new Rio(textureManager, graphics);
 
@@ -77,7 +106,7 @@ void Metroid::update(float dt)
 	rio->setTarget(VECTOR2(samus->getPosition().x, samus->getPosition().y), samus->isInStatus(eStatus::ROLLING));
 	rio->update(dt);
 
-	//camera->setPosition(samus->getPosition());
+	camera->setPosition(samus->getPosition());
 }
 
 void Metroid::ai()
@@ -92,6 +121,7 @@ void Metroid::collisions()
 
 void Metroid::render()
 {
+	mapBrinstar->draw();
 	samus->draw();
 	skree->draw();
 	zeb->draw();

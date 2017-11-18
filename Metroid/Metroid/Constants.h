@@ -22,8 +22,8 @@
 const char CLASS_NAME[] = "Metroid";	
 const char GAME_TITLE[] = "Metroid";
 const bool FULLSCREEN = false;              // windowed or fullscreen
-const UINT GAME_WIDTH = 640;               // width of game in pixels
-const UINT GAME_HEIGHT = 480;               // height of game in pixels
+const UINT GAME_WIDTH = 256;               // width of game in pixels
+const UINT GAME_HEIGHT = 240;               // height of game in pixels
 
 // Game Manger
 const double PI = 3.14159265;
@@ -47,6 +47,8 @@ const UCHAR ENTER_KEY = VK_RETURN;       // Enter key
 // Source
 const char SOURCE_IMAGE[] = "Resources\\SpriteSheets\\MetroidTexture.png";//character of game
 const char SOURCE_JSON[] = "json\\MetroidTexture.json"; //json file of metroid sprite
+const char MAP_BRINSTAR_JSON[] = "json\\MapBrinstar.json"; //json file of map brinstar
+const char TILESET_IMAGE[] = "Resources\\Tileset\\Tileset.png"; //tileset of map brinstar
 
 // Element ID
 enum eID {

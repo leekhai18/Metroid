@@ -8,6 +8,7 @@
 #include "Zommer.h"
 #include "Text.h"
 #include "Camera.h"
+#include "Map.h"
 
 class Metroid : public GameManager
 {
@@ -17,6 +18,11 @@ private:
 	TextureManager *textureManager;
 	SpriteManager *spriteManger;
 
+	TextureManager *tileset;
+	MapInfo *mapInfo;
+	Map *mapBrinstar;
+
+	// Player
 	Samus *samus;
 
 	Camera *camera;
