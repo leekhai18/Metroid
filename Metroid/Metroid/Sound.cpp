@@ -112,7 +112,7 @@ bool Sound :: loadSound(char* fileName, std:: string name)
 		return true;
 
 	FILE* filePtr;
-	unsigned int count;
+	size_t count;
 	WaveHeaderStruct waveHeaderStruct;
 	IDirectSoundBuffer* tempBuffer;
 	DSBUFFERDESC bufferDesc;
