@@ -14,6 +14,8 @@ public:
 	~SamusStateStanding();
 
 	void init();
+	void setBoundCollision();
+
 	void handleInput(float dt);
 	void update(float dt);
 

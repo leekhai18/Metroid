@@ -1,8 +1,6 @@
 #include "Graphics.h"
 #include "Metroid.h"
-//=============================================================================
-// Constructor
-//=============================================================================
+
 Graphics::Graphics()
 {
 	direct3d = NULL;
@@ -11,12 +9,10 @@ Graphics::Graphics()
 	fullscreen = false;
 	width = GAME_WIDTH;    // width & height are replaced in initialize()
 	height = GAME_HEIGHT;
-	backColor = GraphicsNS::BACK_COLOR;
+	backColor = GraphicsNS::BLACK;
 }
 
-//=============================================================================
-// Destructor
-//=============================================================================
+
 Graphics::~Graphics()
 {
 	releaseAll();
@@ -24,9 +20,7 @@ Graphics::~Graphics()
 
 
 
-//=============================================================================
-// Release all
-//=============================================================================
+
 void Graphics::releaseAll()
 {
 	SAFE_RELEASE(sprite);
@@ -34,10 +28,7 @@ void Graphics::releaseAll()
 	SAFE_RELEASE(direct3d);
 }
 
-//=============================================================================
-// Initialize DirectX graphics
-// throws GameError on error
-//=============================================================================
+
 void Graphics::initialize(HWND hw, int w, int h, bool full)
 {
 	hwnd = hw;
@@ -91,9 +82,6 @@ void Graphics::initialize(HWND hw, int w, int h, bool full)
 
 }
 
-//=============================================================================
-// Initialize D3D presentation parameters
-//=============================================================================
 void Graphics::initD3Dpp()
 {
 	try {
@@ -120,15 +108,7 @@ void Graphics::initD3Dpp()
 
 
 
-//=============================================================================
-// Load the texture into default D3D memory (normal texture use)
-// For internal engine use only. Use the TextureManager class to load game textures.
-// Pre: filename is name of texture file.
-//      transcolor is transparent color
-// Post: width and height = size of texture
-//       texture points to texture
-// Returns HRESULT
-//=============================================================================
+
 HRESULT Graphics::loadTexture(const char *filename, COLOR_ARGB transcolor,
 	UINT &width, UINT &height, LP_TEXTURE &texture)
 {
@@ -216,16 +196,7 @@ void Graphics::drawText(ID3DXFont* font, std::string text, VECTOR2 position, DWO
 		color); //Color
 }
 
-void Graphics::drawLine(const VECTOR2* vertices, int count, COLOR_ARGB color)
-{
-	// default to fail, replace on success
-	result = E_FAIL;
-	//D3DXCreateLine
 
-}
-//=============================================================================
-// Display the backbuffer
-//=============================================================================
 HRESULT Graphics::showBackbuffer()
 {
 	result = E_FAIL;    // default to fail, replace on success
@@ -258,19 +229,14 @@ bool Graphics::isAdapterCompatible()
 	}
 	return false;
 }
+
+
 void Graphics::clear(COLOR_ARGB c)
 {
 	device3d->Clear(0, NULL, D3DCLEAR_TARGET, c, 1.0F, 0);
 }
-//=============================================================================
-// Draw the sprite described in SpriteData structure
-// Color is optional, it is applied like a filter, WHITE is default (no change)
-// Pre : sprite->Begin() is called
-// Post: sprite->End() is called
-// spriteData.rect defines the portion of spriteData.texture to draw
-//   spriteData.rect.right must be right edge + 1
-//   spriteData.rect.bottom must be bottom edge + 1
-//=============================================================================
+
+
 void Graphics::drawSprite(const SpriteData &spriteData, COLOR_ARGB color)
 {
 	if (spriteData.texture == NULL)      // if no texture
@@ -279,39 +245,57 @@ void Graphics::drawSprite(const SpriteData &spriteData, COLOR_ARGB color)
 	D3DXMATRIX matTransformed;
 	D3DXMATRIX matOld;
 
+	//calculate scale position
 	VECTOR3 center = VECTOR3(spriteData.width * spriteData.origin.x, spriteData.height * spriteData.origin.y, 0);
+
+	VECTOR2 position(spriteData.position.x, spriteData.position.y);
+	VECTOR2 scale(spriteData.scale.x, 1.0f);
+
+	//calculate position when scale
+	if (spriteData.flipHorizontal == true)
+	{
+		scale.x = spriteData.scale.x*-1;
+		if (spriteData.origin.x == 0.5f)
+		{
+			position.x = spriteData.position.x;
+		}
+		if (spriteData.origin.x == 0)
+		{
+			position.x = spriteData.position.x + spriteData.width;
+		}
+		if (spriteData.origin.x == 1.0f)
+		{
+			position.x = spriteData.position.x - spriteData.width;
+		}
+		if (spriteData.origin.x != 0.5&&spriteData.origin.x != 0 && spriteData.origin.x != 1.0f)
+		{
+			position.x = spriteData.position.x + (spriteData.width - spriteData.origin.x*spriteData.width);
+		}
+	}
 
 	sprite->GetTransform(&matOld);
 
 	D3DXMatrixTransformation2D(
 		&matTransformed,
-		&spriteData.position,
+		&position,
 		0.0f,
-		&spriteData.scale,
-		&spriteData.position,
+		&scale,
+		&position,
 		D3DXToRadian(spriteData.rotate),
 		&spriteData.transformCamera
 	);
 
 	//set matrix transformed
-	sprite->SetTransform(&matTransformed);	
+	sprite->SetTransform(&matTransformed);
 
-	// BEGIN
-	sprite->Begin(D3DXSPRITE_ALPHABLEND | D3DXSPRITE_DONOTSAVESTATE);
-	
 	// Draw the sprite
-	sprite->Draw(spriteData.texture, &spriteData.rect, &center, &VECTOR3(spriteData.position.x, spriteData.position.y, 0), color);
+	sprite->Draw(spriteData.texture, &spriteData.rect, &center, &VECTOR3(position.x, position.y, 0), color);
 
 	// Magic... TO use only this sprite or you can know as to refesh to old
 	sprite->SetTransform(&matOld);
-
-	// END
-	sprite->End();
 }
 
-//=============================================================================
-// Test for lost device
-//=============================================================================
+
 HRESULT Graphics::getDeviceState()
 {
 	result = E_FAIL;    // default to fail, replace on success
@@ -321,9 +305,7 @@ HRESULT Graphics::getDeviceState()
 	return result;
 }
 
-//=============================================================================
-// Reset the graphics device
-//=============================================================================
+
 HRESULT Graphics::reset()
 {
 	result = E_FAIL;    // default to fail, replace on success
@@ -335,65 +317,3 @@ HRESULT Graphics::reset()
 	return result;
 }
 
-//=============================================================================
-// Toggle window or fullscreen mode
-// Pre: All user created D3DPOOL_DEFAULT surfaces are freed.
-// Post: All user surfaces are recreated.
-//=============================================================================
-void Graphics::changeDisplayMode(GraphicsNS::DISPLAY_MODE mode)
-{
-	try {
-		switch (mode)
-		{
-		case GraphicsNS::FULLSCREEN:
-			if (fullscreen)      // if already in fullscreen mode
-				return;
-			fullscreen = true; break;
-		case GraphicsNS::WINDOW:
-			if (fullscreen == false) // if already in window mode
-				return;
-			fullscreen = false; break;
-		default:        // default to toggle window/fullscreen
-			fullscreen = !fullscreen;
-		}
-		reset();
-		if (fullscreen)  // fullscreen
-		{
-			SetWindowLong(hwnd, GWL_STYLE, WS_EX_TOPMOST | WS_VISIBLE | WS_POPUP);
-		}
-		else            // windowed
-		{
-			SetWindowLong(hwnd, GWL_STYLE, WS_OVERLAPPEDWINDOW);
-			SetWindowPos(hwnd, HWND_TOP, 0, 0, GAME_WIDTH, GAME_HEIGHT,
-				SWP_FRAMECHANGED | SWP_NOMOVE | SWP_NOSIZE | SWP_SHOWWINDOW);
-
-			// Adjust window size so client area is GAME_WIDTH x GAME_HEIGHT
-			RECT clientRect;
-			GetClientRect(hwnd, &clientRect);   // get size of client area of window
-			MoveWindow(hwnd,
-				0,                                           // Left
-				0,                                           // Top
-				GAME_WIDTH + (GAME_WIDTH - clientRect.right),    // Right
-				GAME_HEIGHT + (GAME_HEIGHT - clientRect.bottom), // Bottom
-				TRUE);                                       // Repaint the window
-		}
-
-	}
-	catch (...)
-	{
-		// An error occured, try windowed mode 
-		SetWindowLong(hwnd, GWL_STYLE, WS_OVERLAPPEDWINDOW);
-		SetWindowPos(hwnd, HWND_TOP, 0, 0, GAME_WIDTH, GAME_HEIGHT,
-			SWP_FRAMECHANGED | SWP_NOMOVE | SWP_NOSIZE | SWP_SHOWWINDOW);
-
-		// Adjust window size so client area is GAME_WIDTH x GAME_HEIGHT
-		RECT clientRect;
-		GetClientRect(hwnd, &clientRect);   // get size of client area of window
-		MoveWindow(hwnd,
-			0,                                           // Left
-			0,                                           // Top
-			GAME_WIDTH + (GAME_WIDTH - clientRect.right),    // Right
-			GAME_HEIGHT + (GAME_HEIGHT - clientRect.bottom), // Bottom
-			TRUE);                                       // Repaint the window
-	}
-}

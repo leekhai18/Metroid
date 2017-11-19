@@ -50,14 +50,32 @@ const char SOURCE_JSON[] = "json\\MetroidTexture.json"; //json file of metroid s
 const char MAP_BRINSTAR_JSON[] = "json\\MapBrinstar.json"; //json file of map brinstar
 const char TILESET_IMAGE[] = "Resources\\Tileset\\Tileset.png"; //tileset of map brinstar
 
+//Rectangle of metroid
+struct MetroidRect
+{
+	float top, left, right, bottom;
+};
+
 // Element ID
 enum eID {
 	SAMUS = 0,
 	SKREE = 1,
 	ZEB = 2,
 	WAVER = 3,
-	ZOMMER = 4,
-	RIO = 5,
+	WALL = 4,
+	PORT = 5,
+	FIRE = 6,
+	ZOMMER = 7,
+	RIO = 8,
+};
+// collision direction
+enum CollideDirection
+{
+	TOP,
+	LEFT,
+	RIGHT,
+	BOTTOM,
+	NONE
 };
 
 // Element's status
@@ -69,7 +87,8 @@ enum eStatus {
 	ENDING = 4,
 	STANDING = 5,
 	FALLING = 6,
-	FOLLOW =7,
+	FOLLOW = 7,
+	HITTING = 8,
 };
 
 // direction

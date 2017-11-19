@@ -10,6 +10,7 @@ Samus::Samus(TextureManager* textureM,Graphics* graphics, Input* input) : BaseOb
 		throw GameError(GameErrorNS::FATAL_ERROR, "Can not init sprite Samus");
 	}
 
+	this->setPosition(VECTOR2(640, 3240));
 	runningNormalAnimation = new Animation(this->sprite, IndexManager::getInstance()->samusYellowRunningRight, NUM_FRAMES_SAMUS_RUNNING, 0.07f);
 	runningUpAnimation = new Animation(this->sprite, IndexManager::getInstance()->samusYellowRunningUpRight, NUM_FRAMES_SAMUS_RUNNING, 0.07f);
 	runningHittingRightAnimation = new Animation(this->sprite, IndexManager::getInstance()->samusYellowHittingAndRunningRight, NUM_FRAMES_SAMUS_RUNNING, 0.07f);
@@ -18,10 +19,14 @@ Samus::Samus(TextureManager* textureM,Graphics* graphics, Input* input) : BaseOb
 	startingAnimation = new Animation(this->sprite, IndexManager::getInstance()->samusYellowStart, NUM_FRAMES_SAMUS_START, 1, false);
 
 	SamusStateManager::getInstance()->init(this, input);
-	this->isFalling = false;
-	this->totalHeightWasJumped = 0;
 
-	this->setPosition(VECTOR2(100, GAME_HEIGHT*0.8));
+	this->isFalling = false;
+	this->acrobat = false;
+	this->moveHorizontal = true;
+	this->totalHeightWasJumped = 0;
+	this->moveLeft = true;
+	this->moveRight = true;
+	this->jump = true;
 
 	this->timerShoot = 0;
 	bulletPool = new BulletPool(textureM, graphics, 20);
@@ -40,12 +45,18 @@ Samus::~Samus()
 void Samus::draw()
 {
 	if (this->camera)
+	{
 		this->sprite->setTransformCamera(VECTOR2(GAME_WIDTH*0.5f - camera->getPosition().x, GAME_HEIGHT*0.5f - camera->getPosition().y));
+
+		for (unsigned i = 0; i < this->bulletPool->getListUsing().size(); i++)
+		{
+			this->bulletPool->getListUsing().at(i)->getSprite()->setTransformCamera(VECTOR2(GAME_WIDTH*0.5f - camera->getPosition().x, GAME_HEIGHT*0.5f - camera->getPosition().y));
+			this->bulletPool->getListUsing().at(i)->draw();
+		}
+	}
 
 	this->sprite->draw();
 
-	for (unsigned i = 0; i < this->bulletPool->getListUsing().size(); i++)
-		this->bulletPool->getListUsing().at(i)->draw();
 }
 
 void Samus::handleInput(float dt)
@@ -53,10 +64,14 @@ void Samus::handleInput(float dt)
 	SamusStateManager::getInstance()->getCurrentState()->handleInput(dt);
 }
 
+void Samus::onCollision(BaseObject * object, float dt)
+{
+	SamusStateManager::getInstance()->getCurrentState()->onCollision(object, dt);
+}
 
 void Samus::update(float dt)
 {
-	this->handleInput(dt);
+	
 	SamusStateManager::getInstance()->getCurrentState()->update(dt);
 
 
@@ -79,30 +94,52 @@ void Samus::release()
 
 void Samus::updateHorizontal(float dt)
 {
-	this->setPosition(this->getPosition().x + SAMUS_VERLOCITY_X*dt*getDirection(), this->getPosition().y);
+	this->setPosition(this->getPosition().x + velocity.x*dt, this->getPosition().y);
 }
 
 void Samus::updateVertical(float dt)
 {
-	if (this->isFalling)
-	{
-		this->setPosition(this->getPosition().x, this->getPosition().y + SAMUS_VERLOCITY_Y*dt);
-	}
-	else
-	{
-		float hps = SAMUS_VERLOCITY_Y*dt;
-		totalHeightWasJumped += hps;
-
-		if (totalHeightWasJumped <= MAX_HEIGHT_CAN_JUMP)
-			this->setPosition(this->getPosition().x, this->getPosition().y + SAMUS_VERLOCITY_Y*dt*(-1));
-		else
-			this->setFall(true);
-	}
+	this->setPosition(this->getPosition().x, this->getPosition().y + velocity.y*dt);
 }
 
 bool Samus::isFaling()
 {
 	return this->isFalling;
+}
+
+bool Samus::isAcrobat()
+{
+	return acrobat;
+}
+
+bool Samus::canMoveLeft()
+{
+	return this->moveLeft;
+}
+
+bool Samus::canMoveRight()
+{
+	return this->moveRight;
+}
+
+bool Samus::isJump()
+{
+	return this->jump;
+}
+
+void Samus::setJump(bool jump)
+{
+	this->jump = jump;
+}
+
+void Samus::setCanMoveLeft(bool moveLeft)
+{
+	this->moveLeft = moveLeft;
+}
+
+void Samus::setCanMoveRight(bool moveRight)
+{
+	this->moveRight = moveRight;
 }
 
 void Samus::setFall(bool isFall)
@@ -114,6 +151,11 @@ void Samus::setFall(bool isFall)
 		if (this->isFalling == false)
 			this->totalHeightWasJumped = 0;
 	}
+}
+
+void Samus::setAcrobat(bool acrobat)
+{
+	this->acrobat = acrobat;
 }
 
 Animation * Samus::getStartingAnim()
@@ -150,3 +192,4 @@ void Samus::setCamera(Camera * cam)
 {
 	this->camera = cam;
 }
+

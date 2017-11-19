@@ -44,8 +44,8 @@ public:
 
 	void initialize(HWND hwnd);
 	void update(float dt);      // must override pure virtual from Game
-	void ai();          // "
-	void collisions();  // "
+	void handleInput(float dt);
+	void collisions(float dt);  // "
 	void render();      // "
 	void releaseAll();
 	void resetAll();

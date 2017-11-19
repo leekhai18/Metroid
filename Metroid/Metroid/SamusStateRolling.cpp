@@ -18,19 +18,11 @@ SamusStateRolling::~SamusStateRolling()
 void SamusStateRolling::init()
 {
 	this->animation = samus->getRollingAnim();
-	this->samus->setPosition(this->samus->getPosition().x + SAMUS_WIDTH_RL_HALF, this->samus->getPosition().y - SAMUS_HEIGHT*0.5f);
-	this->samus->setOrigin(VECTOR2(0.5f, 0.5f));
+	this->samus->setPosition(this->samus->getPosition().x + 10, this->samus->getPosition().y - 15);
 }
 
 void SamusStateRolling::handleInput(float dt)
 {
-	if (input->isKeyDown(VK_UP) || input->isKeyDown(VK_X))
-	{
-		this->samus->setStatus(eStatus::STANDING);
-		SamusStateManager::getInstance()->changeStateTo(eStatus::STANDING);
-		return;
-	}
-
 	if (input->isKeyDown(VK_RIGHT) && input->isKeyUp(VK_LEFT))
 	{
 		// Handle direction
@@ -61,6 +53,12 @@ void SamusStateRolling::handleInput(float dt)
 	if (input->isKeyDown(VK_LEFT) && input->isKeyDown(VK_RIGHT))
 	{
 		this->samus->updateHorizontal(dt);
+	}
+
+	if (input->isKeyDown(VK_UP) || input->isKeyDown(VK_X))
+	{
+		this->samus->setStatus(eStatus::STANDING);
+		SamusStateManager::getInstance()->changeStateTo(eStatus::STANDING);
 	}
 }
 

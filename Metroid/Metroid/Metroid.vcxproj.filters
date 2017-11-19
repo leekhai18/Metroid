@@ -51,9 +51,6 @@
     <ClInclude Include="TextureManager.h">
       <Filter>Framework</Filter>
     </ClInclude>
-    <ClInclude Include="Samus.h">
-      <Filter>Objects</Filter>
-    </ClInclude>
     <ClInclude Include="Animation.h">
       <Filter>Framework</Filter>
     </ClInclude>
@@ -64,24 +61,6 @@
       <Filter>Framework</Filter>
     </ClInclude>
     <ClInclude Include="BaseState.h">
-      <Filter>Objects</Filter>
-    </ClInclude>
-    <ClInclude Include="SamusStateStart.h">
-      <Filter>Objects</Filter>
-    </ClInclude>
-    <ClInclude Include="SamusStateManager.h">
-      <Filter>Objects</Filter>
-    </ClInclude>
-    <ClInclude Include="SamusStateRunning.h">
-      <Filter>Objects</Filter>
-    </ClInclude>
-    <ClInclude Include="SamusStateStanding.h">
-      <Filter>Objects</Filter>
-    </ClInclude>
-    <ClInclude Include="SamusStateRolling.h">
-      <Filter>Objects</Filter>
-    </ClInclude>
-    <ClInclude Include="SamusStateJumping.h">
       <Filter>Objects</Filter>
     </ClInclude>
     <ClInclude Include="Skree.h">
@@ -129,6 +108,33 @@
     <ClInclude Include="Map.h">
       <Filter>Framework</Filter>
     </ClInclude>
+    <ClInclude Include="Samus.h">
+      <Filter>Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="SamusStateJumping.h">
+      <Filter>Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="SamusStateManager.h">
+      <Filter>Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="SamusStateRolling.h">
+      <Filter>Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="SamusStateRunning.h">
+      <Filter>Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="SamusStateStanding.h">
+      <Filter>Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="SamusStateStart.h">
+      <Filter>Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="Collision.h">
+      <Filter>Framework</Filter>
+    </ClInclude>
+    <ClInclude Include="ObjectManager.h">
+      <Filter>Objects</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="GameManager.cpp">
@@ -152,9 +158,6 @@
     <ClCompile Include="WinMain.cpp">
       <Filter>Framework</Filter>
     </ClCompile>
-    <ClCompile Include="Samus.cpp">
-      <Filter>Objects</Filter>
-    </ClCompile>
     <ClCompile Include="Animation.cpp">
       <Filter>Framework</Filter>
     </ClCompile>
@@ -165,24 +168,6 @@
       <Filter>Framework</Filter>
     </ClCompile>
     <ClCompile Include="BaseState.cpp">
-      <Filter>Objects</Filter>
-    </ClCompile>
-    <ClCompile Include="SamusStateStart.cpp">
-      <Filter>Objects</Filter>
-    </ClCompile>
-    <ClCompile Include="SamusStateManager.cpp">
-      <Filter>Objects</Filter>
-    </ClCompile>
-    <ClCompile Include="SamusStateRunning.cpp">
-      <Filter>Objects</Filter>
-    </ClCompile>
-    <ClCompile Include="SamusStateStanding.cpp">
-      <Filter>Objects</Filter>
-    </ClCompile>
-    <ClCompile Include="SamusStateJumping.cpp">
-      <Filter>Objects</Filter>
-    </ClCompile>
-    <ClCompile Include="SamusStateRolling.cpp">
       <Filter>Objects</Filter>
     </ClCompile>
     <ClCompile Include="Skree.cpp">
@@ -232,6 +217,33 @@
     </ClCompile>
     <ClCompile Include="Metroid.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Samus.cpp">
+      <Filter>Objects</Filter>
+    </ClCompile>
+    <ClCompile Include="SamusStateJumping.cpp">
+      <Filter>Objects</Filter>
+    </ClCompile>
+    <ClCompile Include="SamusStateManager.cpp">
+      <Filter>Objects</Filter>
+    </ClCompile>
+    <ClCompile Include="SamusStateRolling.cpp">
+      <Filter>Objects</Filter>
+    </ClCompile>
+    <ClCompile Include="SamusStateRunning.cpp">
+      <Filter>Objects</Filter>
+    </ClCompile>
+    <ClCompile Include="SamusStateStanding.cpp">
+      <Filter>Objects</Filter>
+    </ClCompile>
+    <ClCompile Include="SamusStateStart.cpp">
+      <Filter>Objects</Filter>
+    </ClCompile>
+    <ClCompile Include="Collision.cpp">
+      <Filter>Framework</Filter>
+    </ClCompile>
+    <ClCompile Include="ObjectManager.cpp">
+      <Filter>Objects</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

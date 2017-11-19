@@ -6,7 +6,7 @@
 class GameManager
 {
 protected:
-	// common GameManager properties
+
 	Graphics *graphics;         // pointer to Graphics
 	Input   *input;             // pointer to Input
 	HWND    hwnd;               // window handle
@@ -14,7 +14,7 @@ protected:
 	LARGE_INTEGER timeStart;    // Performance Counter start value
 	LARGE_INTEGER timeEnd;      // Performance Counter end value
 	LARGE_INTEGER timerFreq;    // Performance Counter frequency
-	float   frameTime;          // time required for last frame
+	float   deltaTime;          // time required for last frame
 	float   fps;                // frames per second
 	DWORD   sleepTime;          // number of milli-seconds to sleep between frames
 	bool    paused;             // true if GameManager is paused
@@ -52,9 +52,6 @@ public:
 	// Handle lost graphics device
 	virtual void handleLostGraphicsDevice();
 
-	// Set display mode (fullscreen, window or toggle)
-	void setDisplayMode(GraphicsNS::DISPLAY_MODE mode = GraphicsNS::TOGGLE);
-
 	// Return pointer to Graphics.
 	Graphics* getGraphics() { return graphics; }
 
@@ -70,11 +67,10 @@ public:
 	// Update Game items.
 	virtual void update(float dt) = 0;
 
-	// Perform AI calculations.
-	virtual void ai() = 0;
+	virtual void handleInput(float dt) = 0;
 
 	// Check for collisions.
-	virtual void collisions() = 0;
+	virtual void collisions(float dt) = 0;
 
 	// Render graphics.
 	// Call graphics->spriteBegin();

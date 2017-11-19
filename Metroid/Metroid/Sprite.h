@@ -11,7 +11,6 @@ protected:
 									// spriteData contains the data required to draw the image by Graphics::drawSprite()
 	SpriteManager *spriteManager;
 	SpriteData spriteData;  // SpriteData is defined in "graphics.h"
-	COLOR_ARGB colorFilter; // applied as a color filter (use WHITE for no change
 	HRESULT hr;             // standard return type
 public:
 	Sprite();
@@ -50,12 +49,12 @@ public:
 	// Return RECT structure of Image.
 	virtual RECT  getSpriteDataRect() { return spriteData.rect; }
 
-	// Return colorFilter.
-	virtual COLOR_ARGB getColorFilter() { return colorFilter; }
-
 	// Return transformCamera
 	virtual VECTOR2 getTransformCamera() { return spriteData.transformCamera; }
 
+	// Return flip
+	virtual bool getFlipX() { return spriteData.flipHorizontal; }
+	virtual bool getFlipY() { return spriteData.flipVertical; }
 
 	////////////////////////////////////////
 	//           Set functions            //
@@ -139,9 +138,6 @@ public:
 	// Set spriteData.rect to r.
 	virtual void setSpriteDataRect(RECT r) { spriteData.rect = r; }
 
-	// Set color filter. (use WHITE for no change)
-	virtual void setColorFilter(COLOR_ARGB color) { colorFilter = color; }
-
 	// set transformCamera
 	virtual void setTransformCamera(VECTOR2 trans) { spriteData.transformCamera = trans; }
 
@@ -151,6 +147,11 @@ public:
 	{
 		textureManager = textureM;
 	}
+
+	// Set Flip
+	virtual void setFlipX(bool flipX) { spriteData.flipHorizontal = flipX; }
+	virtual void setFlipY(bool flipY) { spriteData.flipVertical = flipY; }
+
 
 	////////////////////////////////////////
 	//         Other functions            //
@@ -164,20 +165,10 @@ public:
 	//      *textureM = pointer to TextureManager object
 	virtual bool initialize(Graphics *g, TextureManager *textureM, SpriteManager* spriteM);
 
-	// Flip image horizontally (mirror)
-	virtual void flipHorizontal(bool flip) { spriteData.flipHorizontal = flip; }
-
-	// Flip image vertically
-	virtual void flipVertical(bool flip) { spriteData.flipVertical = flip; }
-
 	// Draw Image using color as filter. Default color is WHITE.
 	virtual void draw(COLOR_ARGB color = GraphicsNS::WHITE);
 
-	// Draw this image using the specified SpriteData.
-	//   The current SpriteData.rect is used to select the texture.
-	virtual void draw(SpriteData sd, COLOR_ARGB color = GraphicsNS::WHITE); // draw with SpriteData using color as filter
-
-																			// Update the animation. frameTime is used to regulate the speed.
+	// Update the animation. frameTime is used to regulate the speed.
 	virtual void update(float dt);
 };
 

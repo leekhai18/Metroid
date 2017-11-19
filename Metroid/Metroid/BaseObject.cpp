@@ -22,6 +22,14 @@ BaseObject::~BaseObject()
 {
 }
 
+void BaseObject::update(float dt)
+{
+}
+
+void BaseObject::draw()
+{
+}
+
 eID BaseObject::getId()
 {
 	return this->id;
@@ -138,8 +146,37 @@ Sprite * BaseObject::getSprite()
 	return this->sprite;
 }
 
-
-float BaseObject::checkCollision(BaseObject * object, float dt)
+void BaseObject::onCollision(BaseObject * object, float dt)
 {
-	return 0.0f;
+
+}
+
+void BaseObject::setBoundCollision(MetroidRect rect)
+{
+	this->boundCollision = rect;
+}
+
+MetroidRect BaseObject::getBoundCollision()
+{
+	return boundCollision;
+}
+
+VECTOR2 BaseObject::getVelocity()
+{
+	return velocity;
+}
+
+void BaseObject::setVelocityX(float x)
+{
+	velocity.x = x;
+}
+
+void BaseObject::setVelocityY(float y)
+{
+	velocity.y = y;
+}
+
+void BaseObject::setVelocity(VECTOR2 velocity)
+{
+	this->velocity = velocity;
 }

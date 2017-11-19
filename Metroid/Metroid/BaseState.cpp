@@ -17,3 +17,15 @@ BaseState::BaseState(Samus * samus, Input* input)
 BaseState::~BaseState()
 {
 }
+
+void BaseState::setBoundCollision()
+{
+}
+
+void BaseState::onCollision(BaseObject * obj, float dt)
+{
+}
+
+void BaseState::onCollisionBullet(BaseObject * obj, float dt)
+{
+}

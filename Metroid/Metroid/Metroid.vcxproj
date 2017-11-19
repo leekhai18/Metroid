@@ -129,6 +129,7 @@
     <ClInclude Include="BaseState.h" />
     <ClInclude Include="Bullet.h" />
     <ClInclude Include="Camera.h" />
+    <ClInclude Include="Collision.h" />
     <ClInclude Include="Constants.h" />
     <ClInclude Include="GameError.h" />
     <ClInclude Include="GameLog.h" />
@@ -140,6 +141,7 @@
     <ClInclude Include="MapInfo.h" />
     <ClInclude Include="Metroid.h" />
     <ClInclude Include="BulletPool.h" />
+    <ClInclude Include="ObjectManager.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="Rio.h" />
     <ClInclude Include="Samus.h" />
@@ -167,6 +169,7 @@
     <ClCompile Include="BaseState.cpp" />
     <ClCompile Include="Bullet.cpp" />
     <ClCompile Include="Camera.cpp" />
+    <ClCompile Include="Collision.cpp" />
     <ClCompile Include="GameLog.cpp" />
     <ClCompile Include="GameManager.cpp" />
     <ClCompile Include="Graphics.cpp" />
@@ -176,6 +179,7 @@
     <ClCompile Include="MapInfo.cpp" />
     <ClCompile Include="Metroid.cpp" />
     <ClCompile Include="BulletPool.cpp" />
+    <ClCompile Include="ObjectManager.cpp" />
     <ClCompile Include="Rio.cpp" />
     <ClCompile Include="Samus.cpp" />
     <ClCompile Include="SamusStateJumping.cpp" />

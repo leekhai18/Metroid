@@ -11,19 +11,23 @@
 #include "BulletPool.h"
 #include "Camera.h"
 
-#define SAMUS_WIDTH_UP_HALF 7
-#define SAMUS_WIDTH_RL_HALF 10
 #define SAMUS_HEIGHT 30
 #define SAMUS_VERLOCITY_X 100
 #define SAMUS_VERLOCITY_Y 100
-#define MAX_HEIGHT_CAN_JUMP (GAME_HEIGHT * 0.5)
+#define MIN_JUMP  32.0f
+#define MAX_JUMP 80.0f
 #define TIME_SHOOTING 0.1f
-
+#define MAX_WIDTH 14
+#define MAX_HEIHT 32
+#define WIDTH_RUN 20
+#define HEIGHT_RUN 32
 
 class Samus: public BaseObject
 {
 private:
 	Input* input;
+
+	Camera* camera;
 
 	Animation	*runningNormalAnimation,
 				*runningUpAnimation,
@@ -32,9 +36,13 @@ private:
 				*jumpingAnimation,
 				*startingAnimation;
 
-	Camera* camera;
-
 	bool isFalling;
+	bool acrobat;
+	bool moveRight;
+	bool moveLeft;
+	bool jump;
+	bool moveHorizontal;
+	bool moveVertical;
 	float totalHeightWasJumped;
 
 	BulletPool *bulletPool;
@@ -55,7 +63,19 @@ public:
 	void updateVertical(float dt);
 	
 	bool isFaling();
+	bool isAcrobat();
+	bool canMoveLeft();
+	bool canMoveRight();
+	bool isJump();
+
+	void setJump(bool jump);
+	void setCanMoveLeft(bool moveLeft);
+	void setCanMoveRight(bool moveRight);
 	void setFall(bool isFall);
+	void setAcrobat(bool acrobat);
+
+
+	void onCollision(BaseObject* object, float dt);
 
 	Animation* getStartingAnim();
 	Animation* getRunningNormalAnim();

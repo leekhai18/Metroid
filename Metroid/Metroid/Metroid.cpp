@@ -1,5 +1,7 @@
 #include "Metroid.h"
 #include "Sound.h"
+#include "ObjectManager.h"
+#include "Collision.h"
 
 Metroid::Metroid()
 {
@@ -29,6 +31,9 @@ Metroid::~Metroid()
 	delete rio;
 	delete zommer;
 	delete fpsText;
+
+	ObjectManager::getInstance()->release();
+	Collision::getInstance()->release();
 }
 
 Metroid* Metroid::instance = nullptr;
@@ -109,18 +114,26 @@ void Metroid::update(float dt)
 	camera->setPosition(samus->getPosition());
 }
 
-void Metroid::ai()
+void Metroid::handleInput(float dt)
 {
-
+	samus->handleInput(dt);
 }
 
-void Metroid::collisions()
+void Metroid::collisions(float dt)
 {
-
+	samus->handleInput(dt);
+	ObjectManager::getInstance()->onCheckCollision(samus, dt);
+	//for (size_t i = 0; i < length; i++)
+	//{
+	//	ObjectManager::getInstance()->onCheckCollision(i, dt);
+	//}
 }
 
 void Metroid::render()
 {
+	// BEGIN
+	this->getGraphics()->spriteBegin();
+
 	mapBrinstar->draw();
 	samus->draw();
 	skree->draw();
@@ -128,6 +141,9 @@ void Metroid::render()
 	waver->draw();
 	zommer->draw();
 	rio->draw();
+
+	// END
+	this->getGraphics()->spriteEnd();
 
 	fpsText->setText("FPS: " + std::to_string((int)this->fps));
 	fpsText->draw();
