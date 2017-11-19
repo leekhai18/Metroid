@@ -10,7 +10,7 @@ Samus::Samus(TextureManager* textureM,Graphics* graphics, Input* input) : BaseOb
 		throw GameError(GameErrorNS::FATAL_ERROR, "Can not init sprite Samus");
 	}
 
-	this->setPosition(VECTOR2(640, 3240));
+	this->setPosition(VECTOR2(640, 3312));
 	runningNormalAnimation = new Animation(this->sprite, IndexManager::getInstance()->samusYellowRunningRight, NUM_FRAMES_SAMUS_RUNNING, 0.07f);
 	runningUpAnimation = new Animation(this->sprite, IndexManager::getInstance()->samusYellowRunningUpRight, NUM_FRAMES_SAMUS_RUNNING, 0.07f);
 	runningHittingRightAnimation = new Animation(this->sprite, IndexManager::getInstance()->samusYellowHittingAndRunningRight, NUM_FRAMES_SAMUS_RUNNING, 0.07f);
@@ -62,6 +62,12 @@ void Samus::draw()
 void Samus::handleInput(float dt)
 {
 	SamusStateManager::getInstance()->getCurrentState()->handleInput(dt);
+
+	if (this->camera->canFollowHorizon())
+	{
+		if ((input->isKeyUp(VK_LEFT) && input->isKeyUp(VK_RIGHT)) || (input->isKeyDown(VK_LEFT) && input->isKeyDown(VK_RIGHT)))
+			this->camera->setVelocity(VECTOR2(this->getVelocity().x, 0));
+	}
 }
 
 void Samus::onCollision(BaseObject * object, float dt)
@@ -71,9 +77,19 @@ void Samus::onCollision(BaseObject * object, float dt)
 
 void Samus::update(float dt)
 {
-	
-	SamusStateManager::getInstance()->getCurrentState()->update(dt);
+	if (this->camera->canFollowHorizon())
+	{
+		if ((this->getPosition().x > this->camera->getActiveArea().right) || (this->getPosition().x < this->camera->getActiveArea().left))
+			this->camera->setVelocity(VECTOR2(this->getVelocity().x, 0));
+	}
+	else
+	{
+		if ((this->getPosition().y > this->camera->getActiveArea().top) || (this->getPosition().y < this->camera->getActiveArea().bottom))
+			this->camera->setVelocity(VECTOR2(0, this->getVelocity().y));
+	}
 
+
+	SamusStateManager::getInstance()->getCurrentState()->update(dt);
 
 	this->timerShoot += dt;
 	for (unsigned i = 0; i < this->bulletPool->getListUsing().size(); i++)

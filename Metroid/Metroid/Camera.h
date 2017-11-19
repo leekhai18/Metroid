@@ -11,6 +11,9 @@ private:
 
 	D3DXVECTOR3     position;
 
+	D3DXVECTOR2		velocity;
+
+	bool			canFollowHorizontal;
 
 public:
     Camera(int width, int height);
@@ -25,5 +28,15 @@ public:
 
 	D3DXVECTOR3 getPosition();
     RECT getBound();
+
+	D3DXVECTOR2 getVelocity();
+	void setVelocity(D3DXVECTOR2 vec);
+
+	RECT getActiveArea();
+
+	void update(float dt);
+
+	void setCanFoLLowHorizontal(bool flag);
+	bool canFollowHorizon();
 };
 

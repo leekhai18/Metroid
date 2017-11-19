@@ -75,13 +75,12 @@ void Metroid::initialize(HWND hwnd)
 	}
 
 	camera = new Camera(GAME_WIDTH, GAME_HEIGHT);
-	camera->setPosition(VECTOR2(640, 3232));
+	camera->setPosition(VECTOR2(640, 3240));
 
 	mapBrinstar->setCamera(camera);
 
 	samus = new Samus(textureManager, graphics, input);
 	samus->setCamera(this->camera);
-	samus->setPosition(VECTOR2(640, 3240));
 
 	skree = new Skree(textureManager, graphics);
 	zeb = new Zeb(textureManager, graphics);
@@ -111,7 +110,7 @@ void Metroid::update(float dt)
 	rio->setTarget(VECTOR2(samus->getPosition().x, samus->getPosition().y), samus->isInStatus(eStatus::ROLLING));
 	rio->update(dt);
 
-	camera->setPosition(samus->getPosition());
+	this->camera->update(dt);
 }
 
 void Metroid::handleInput(float dt)
@@ -134,8 +133,8 @@ void Metroid::render()
 	// BEGIN
 	this->getGraphics()->spriteBegin();
 
-	mapBrinstar->draw();
 	samus->draw();
+	mapBrinstar->draw();
 	skree->draw();
 	zeb->draw();
 	waver->draw();
