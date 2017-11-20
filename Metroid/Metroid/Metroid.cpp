@@ -78,6 +78,12 @@ void Metroid::initialize(HWND hwnd)
 	camera->setPosition(VECTOR2(640, 3240));
 
 	mapBrinstar->setCamera(camera);
+	ObjectManager::getInstance()->setCamera(camera);
+
+	if (!ObjectManager::getInstance()->load_list(OBJECT_LAYER_BRINSTAR_JSON))
+	{
+		throw GameError(GameErrorNS::FATAL_ERROR, "Can not load object layer brinstar json");
+	}
 
 	samus = new Samus(textureManager, graphics, input);
 	samus->setCamera(this->camera);
@@ -120,12 +126,7 @@ void Metroid::handleInput(float dt)
 
 void Metroid::collisions(float dt)
 {
-	samus->handleInput(dt);
 	ObjectManager::getInstance()->onCheckCollision(samus, dt);
-	//for (size_t i = 0; i < length; i++)
-	//{
-	//	ObjectManager::getInstance()->onCheckCollision(i, dt);
-	//}
 }
 
 void Metroid::render()

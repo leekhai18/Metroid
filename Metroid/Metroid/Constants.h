@@ -49,6 +49,7 @@ const char SOURCE_IMAGE[] = "Resources\\SpriteSheets\\MetroidTexture.png";//char
 const char SOURCE_JSON[] = "json\\MetroidTexture.json"; //json file of metroid sprite
 const char MAP_BRINSTAR_JSON[] = "json\\MapBrinstar.json"; //json file of map brinstar
 const char TILESET_IMAGE[] = "Resources\\Tileset\\Tileset.png"; //tileset of map brinstar
+const char OBJECT_LAYER_BRINSTAR_JSON[] = "json\\ObjectLayerBrinstar.json"; //object layer json of Brinstar
 
 //Rectangle of metroid
 struct MetroidRect

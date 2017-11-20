@@ -8,11 +8,15 @@
 #include "BaseObject.h"
 #include "Graphics.h"
 #include "Constants.h"
+#include "Camera.h"
+
 using namespace rapidjson;
 using namespace std;
 class ObjectManager
 {
 private:
+	Camera* camera;
+
 	list<BaseObject> object_list;
 	static ObjectManager* instance;
 public:
@@ -27,5 +31,7 @@ public:
 	~ObjectManager();
 
 	void release();
+
+	void setCamera(Camera* cam);
 };
 

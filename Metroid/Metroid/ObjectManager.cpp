@@ -1,4 +1,5 @@
-#include "ObjectManager.h"
+﻿#include "ObjectManager.h"
+#include "GameLog.h"
 
 ObjectManager* ObjectManager::instance = nullptr;
 ObjectManager * ObjectManager::getInstance()
@@ -30,24 +31,23 @@ bool ObjectManager::load_list(const char * filename)
 		const Value& listWall = jSon["Wall"];
 		if (listWall.IsArray())
 		{
+			float x, y, height, width;
 			for (SizeType i = 0; i < listWall.Size(); i++)
 			{
 				BaseObject object(eID::WALL);
-				int x, y, height, width;
-				x = listWall[i]["x"].GetInt();
-				y = listWall[i]["y"].GetInt();
-				height = listWall[i]["height"].GetInt();
-				width = listWall[i]["width"].GetInt();
+				x = listWall[i]["x"].GetFloat();
+				y = listWall[i]["y"].GetFloat();
+				height = listWall[i]["height"].GetFloat();
+				width = listWall[i]["width"].GetFloat();
 				MetroidRect bound;
 				bound.left = (float) x;
-				bound.top = (float) y;
-				bound.right = (float) x + width;
-				bound.bottom = (float) y + height;
+				bound.top = (float) y + 32; // Bị lệch 32bit giữa 2 layer WALL and map
+				bound.right = (float) bound.left + width;
+				bound.bottom = (float) bound.top + height;
 				object.setBoundCollision(bound);
 
 				object_list.push_back(object);
-			}
-			
+				}
 		}
 	/*	const Value& listPort = jSon["Port"];
 		if (listPort.IsArray())
@@ -92,4 +92,9 @@ ObjectManager::~ObjectManager()
 void ObjectManager::release()
 {
 	delete instance;
+}
+
+void ObjectManager::setCamera(Camera * cam)
+{
+	this->camera = cam;
 }
