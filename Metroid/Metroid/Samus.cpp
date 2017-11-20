@@ -65,7 +65,7 @@ void Samus::handleInput(float dt)
 
 	if (this->camera->canFollowHorizon())
 	{
-		if ((input->isKeyUp(VK_LEFT) && input->isKeyUp(VK_RIGHT)) || (input->isKeyDown(VK_LEFT) && input->isKeyDown(VK_RIGHT)))
+		if ((input->isKeyUp(VK_LEFT) && input->isKeyUp(VK_RIGHT)) || (input->isKeyDown(VK_LEFT) && input->isKeyDown(VK_RIGHT)) || this->isInStatus(eStatus::STANDING))
 			this->camera->setVelocity(VECTOR2(this->getVelocity().x, 0));
 	}
 }

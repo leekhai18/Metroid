@@ -53,7 +53,7 @@ void SamusStateRunning::handleInput(float dt)
 	if (input->isKeyDown(VK_LEFT) && input->isKeyUp(VK_RIGHT))
 	{
 		if (this->samus->isInDirection(eDirection::right))
-		{
+		{ 
 			this->samus->setFlipX(true);
 			this->samus->setDirection(eDirection::left);
 		}
