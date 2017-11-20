@@ -1,0 +1,259 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;hm;inl;inc;xsd</Extensions>
+    </Filter>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="Framework">
+      <UniqueIdentifier>{ca7357d5-4f3d-4a60-b7c8-756c591b6b6b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Objects">
+      <UniqueIdentifier>{a2606627-782c-4fdf-a3ed-b62f9b602dde}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Constants.h">
+      <Filter>Framework</Filter>
+    </ClInclude>
+    <ClInclude Include="GameError.h">
+      <Filter>Framework</Filter>
+    </ClInclude>
+    <ClInclude Include="Graphics.h">
+      <Filter>Framework</Filter>
+    </ClInclude>
+    <ClInclude Include="GameManager.h">
+      <Filter>Framework</Filter>
+    </ClInclude>
+    <ClInclude Include="Input.h">
+      <Filter>Framework</Filter>
+    </ClInclude>
+    <ClInclude Include="Metroid.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="resource.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Sprite.h">
+      <Filter>Framework</Filter>
+    </ClInclude>
+    <ClInclude Include="SpriteManager.h">
+      <Filter>Framework</Filter>
+    </ClInclude>
+    <ClInclude Include="TextureManager.h">
+      <Filter>Framework</Filter>
+    </ClInclude>
+    <ClInclude Include="Animation.h">
+      <Filter>Framework</Filter>
+    </ClInclude>
+    <ClInclude Include="BaseObject.h">
+      <Filter>Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="IndexManager.h">
+      <Filter>Framework</Filter>
+    </ClInclude>
+    <ClInclude Include="BaseState.h">
+      <Filter>Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="Skree.h">
+      <Filter>Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="SkreeEffectDeathPart.h">
+      <Filter>Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="SkreeEffectDeath.h">
+      <Filter>Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="Bullet.h">
+      <Filter>Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="BulletPool.h">
+      <Filter>Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="Zeb.h">
+      <Filter>Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="Waver.h">
+      <Filter>Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="Rio.h">
+      <Filter>Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="Zommer.h">
+      <Filter>Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="Text.h">
+      <Filter>Framework</Filter>
+    </ClInclude>
+    <ClInclude Include="Sound.h">
+      <Filter>Framework</Filter>
+    </ClInclude>
+    <ClInclude Include="GameLog.h">
+      <Filter>Framework</Filter>
+    </ClInclude>
+    <ClInclude Include="Camera.h">
+      <Filter>Framework</Filter>
+    </ClInclude>
+    <ClInclude Include="MapInfo.h">
+      <Filter>Framework</Filter>
+    </ClInclude>
+    <ClInclude Include="Map.h">
+      <Filter>Framework</Filter>
+    </ClInclude>
+    <ClInclude Include="Samus.h">
+      <Filter>Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="SamusStateJumping.h">
+      <Filter>Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="SamusStateManager.h">
+      <Filter>Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="SamusStateRolling.h">
+      <Filter>Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="SamusStateRunning.h">
+      <Filter>Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="SamusStateStanding.h">
+      <Filter>Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="SamusStateStart.h">
+      <Filter>Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="Collision.h">
+      <Filter>Framework</Filter>
+    </ClInclude>
+    <ClInclude Include="ObjectManager.h">
+      <Filter>Objects</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="GameManager.cpp">
+      <Filter>Framework</Filter>
+    </ClCompile>
+    <ClCompile Include="Graphics.cpp">
+      <Filter>Framework</Filter>
+    </ClCompile>
+    <ClCompile Include="Input.cpp">
+      <Filter>Framework</Filter>
+    </ClCompile>
+    <ClCompile Include="Sprite.cpp">
+      <Filter>Framework</Filter>
+    </ClCompile>
+    <ClCompile Include="SpriteManager.cpp">
+      <Filter>Framework</Filter>
+    </ClCompile>
+    <ClCompile Include="TextureManager.cpp">
+      <Filter>Framework</Filter>
+    </ClCompile>
+    <ClCompile Include="WinMain.cpp">
+      <Filter>Framework</Filter>
+    </ClCompile>
+    <ClCompile Include="Animation.cpp">
+      <Filter>Framework</Filter>
+    </ClCompile>
+    <ClCompile Include="BaseObject.cpp">
+      <Filter>Objects</Filter>
+    </ClCompile>
+    <ClCompile Include="IndexManager.cpp">
+      <Filter>Framework</Filter>
+    </ClCompile>
+    <ClCompile Include="BaseState.cpp">
+      <Filter>Objects</Filter>
+    </ClCompile>
+    <ClCompile Include="Skree.cpp">
+      <Filter>Objects</Filter>
+    </ClCompile>
+    <ClCompile Include="SkreeEffectDeathPart.cpp">
+      <Filter>Objects</Filter>
+    </ClCompile>
+    <ClCompile Include="SkreeEffectDeath.cpp">
+      <Filter>Objects</Filter>
+    </ClCompile>
+    <ClCompile Include="Bullet.cpp">
+      <Filter>Objects</Filter>
+    </ClCompile>
+    <ClCompile Include="BulletPool.cpp">
+      <Filter>Objects</Filter>
+    </ClCompile>
+    <ClCompile Include="Zeb.cpp">
+      <Filter>Objects</Filter>
+    </ClCompile>
+    <ClCompile Include="Waver.cpp">
+      <Filter>Objects</Filter>
+    </ClCompile>
+    <ClCompile Include="Rio.cpp">
+      <Filter>Objects</Filter>
+    </ClCompile>
+    <ClCompile Include="Zommer.cpp">
+      <Filter>Objects</Filter>
+    </ClCompile>
+    <ClCompile Include="Text.cpp">
+      <Filter>Framework</Filter>
+    </ClCompile>
+    <ClCompile Include="Sound.cpp">
+      <Filter>Framework</Filter>
+    </ClCompile>
+    <ClCompile Include="GameLog.cpp">
+      <Filter>Framework</Filter>
+    </ClCompile>
+    <ClCompile Include="Camera.cpp">
+      <Filter>Framework</Filter>
+    </ClCompile>
+    <ClCompile Include="Map.cpp">
+      <Filter>Framework</Filter>
+    </ClCompile>
+    <ClCompile Include="MapInfo.cpp">
+      <Filter>Framework</Filter>
+    </ClCompile>
+    <ClCompile Include="Metroid.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Samus.cpp">
+      <Filter>Objects</Filter>
+    </ClCompile>
+    <ClCompile Include="SamusStateJumping.cpp">
+      <Filter>Objects</Filter>
+    </ClCompile>
+    <ClCompile Include="SamusStateManager.cpp">
+      <Filter>Objects</Filter>
+    </ClCompile>
+    <ClCompile Include="SamusStateRolling.cpp">
+      <Filter>Objects</Filter>
+    </ClCompile>
+    <ClCompile Include="SamusStateRunning.cpp">
+      <Filter>Objects</Filter>
+    </ClCompile>
+    <ClCompile Include="SamusStateStanding.cpp">
+      <Filter>Objects</Filter>
+    </ClCompile>
+    <ClCompile Include="SamusStateStart.cpp">
+      <Filter>Objects</Filter>
+    </ClCompile>
+    <ClCompile Include="Collision.cpp">
+      <Filter>Framework</Filter>
+    </ClCompile>
+    <ClCompile Include="ObjectManager.cpp">
+      <Filter>Objects</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="Metroid.rc">
+      <Filter>Resource Files</Filter>
+    </ResourceCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="Resoures\Icon\Metroid.ico">
+      <Filter>Resource Files</Filter>
+    </Image>
+  </ItemGroup>
+</Project>
