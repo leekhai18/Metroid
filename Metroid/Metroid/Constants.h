@@ -59,15 +59,16 @@ struct MetroidRect
 
 // Element ID
 enum eID {
-	SAMUS = 0,
-	SKREE = 1,
-	ZEB = 2,
-	WAVER = 3,
-	WALL = 4,
-	PORT = 5,
-	FIRE = 6,
-	ZOMMER = 7,
-	RIO = 8,
+	SAMUS,
+	SKREE,
+	ZEB,
+	WAVER,
+	WALL,
+	PORT,
+	FIRE,
+	ZOMMER,
+	RIO,
+	MARUMARI,
 };
 // collision direction
 enum CollideDirection
@@ -81,15 +82,15 @@ enum CollideDirection
 
 // Element's status
 enum eStatus {
-	START = 0,
-	JUMPING = 1,
-	RUNNING = 2,
-	ROLLING = 3,
-	ENDING = 4,
-	STANDING = 5,
-	FALLING = 6,
-	FOLLOW = 7,
-	HITTING = 8,
+	START,
+	JUMPING,
+	RUNNING,
+	ROLLING,
+	ENDING,
+	STANDING,
+	FALLING,
+	FOLLOW,
+	HITTING,
 };
 
 // direction

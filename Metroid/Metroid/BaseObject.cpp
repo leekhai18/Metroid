@@ -42,7 +42,6 @@ eStatus BaseObject::getStatus()
 
 void BaseObject::setStatus(eStatus status)
 {
-	if (this->status != status)
 		this->status = status;
 }
 
@@ -62,7 +61,6 @@ eDirection BaseObject::getDirection()
 
 void BaseObject::setDirection(eDirection direct)
 {
-	if (this->direction != direct)
 		this->direction = direct;
 }
 

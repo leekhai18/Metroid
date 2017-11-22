@@ -8,7 +8,7 @@
 class Zommer: public BaseObject
 {
 private:
-	Animation *animation;
+	Animation *anim;
 	bool flag = true;
 	int change = 1;
 
@@ -19,6 +19,5 @@ public:
 
 	void update(float dt);
 	void draw();
-	void release();
 };
 

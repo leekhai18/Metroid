@@ -1,5 +1,6 @@
 ﻿#include "ObjectManager.h"
 #include "GameLog.h"
+#include "MaruMari.h"
 
 ObjectManager* ObjectManager::instance = nullptr;
 ObjectManager * ObjectManager::getInstance()
@@ -20,57 +21,72 @@ void ObjectManager::onCheckCollision(BaseObject * obj, float frametime)
 	}
 }
 
+void ObjectManager::init(TextureManager * textureM, Graphics * graphics)
+{
+	this->textureManager = textureM; 
+	this->graphics = graphics;
+}
+
 bool ObjectManager::load_list(const char * filename)
 {
+	VECTOR2 transform;
+	if (this->camera)
+		transform = VECTOR2(GAME_WIDTH*0.5f - camera->getPosition().x, GAME_HEIGHT*0.5f - camera->getPosition().y);
+
 	try
 	{
 		ifstream ifs(filename);
 		IStreamWrapper isw(ifs);
 		Document jSon;
 		jSon.ParseStream(isw);
+		float x, y, height, width;
+
+		// Load Wall POS
 		const Value& listWall = jSon["Wall"];
 		if (listWall.IsArray())
 		{
-			float x, y, height, width;
+			BaseObject object(eID::WALL);
+			MetroidRect bound;
+
 			for (SizeType i = 0; i < listWall.Size(); i++)
 			{
-				BaseObject object(eID::WALL);
+
 				x = listWall[i]["x"].GetFloat();
 				y = listWall[i]["y"].GetFloat();
 				height = listWall[i]["height"].GetFloat();
 				width = listWall[i]["width"].GetFloat();
-				MetroidRect bound;
-				bound.left = (float) x;
-				bound.top = (float) y + 32; // Bị lệch 32bit giữa 2 layer WALL and map
-				bound.right = (float) bound.left + width;
-				bound.bottom = (float) bound.top + height;
+
+				bound.left =  x;
+				bound.top =   y + 32; // Bị lệch 32bit giữa 2 layer WALL and map
+				bound.right =  bound.left + width;
+				bound.bottom = bound.top + height;
 				object.setBoundCollision(bound);
 
 				object_list.push_back(object);
-				}
-		}
-	/*	const Value& listPort = jSon["Port"];
-		if (listPort.IsArray())
-		{
-			for (SizeType i = 0; i < listPort.Size(); i++)
-			{
-				BaseObject entity(eID::PORT);
-				int x, y, height, width;
-				x = listPort[i]["x"].GetInt();
-				y = listPort[i]["y"].GetInt();
-				height = listPort[i]["height"].GetInt();
-				width = listPort[i]["width"].GetInt();
-				MetroidRect bound;
-				bound.left = x;
-				bound.top = y;
-				bound.right = x + width;
-				bound.bottom = y + height;
-				entity.setBoundCollision(bound);
-
-				entity_list.push_back(entity);
 			}
+		}
 
-		}*/
+		// create maru mari
+		const Value& maruMari = jSon["MaruMari"];
+		if (maruMari.IsObject())
+		{
+			MaruMari mm(this->textureManager, this->graphics);
+
+			x = maruMari["x"].GetFloat();
+			y = maruMari["y"].GetFloat();
+			
+			mm.setPosition(VECTOR2(x, y));
+
+			MetroidRect bound;
+			bound.left = x;
+			bound.top = y;
+			bound.right = bound.left + mm.getSprite()->getWidth();
+			bound.bottom = bound.top + mm.getSprite()->getHeight();
+			mm.setBoundCollision(bound);
+
+			object_list.push_back(mm);
+		}
+
 		return true;
 	}
 	catch(...)
@@ -91,6 +107,7 @@ ObjectManager::~ObjectManager()
 
 void ObjectManager::release()
 {
+	this->object_list.clear();
 	delete instance;
 }
 

@@ -214,7 +214,7 @@ void SamusStateRunning::onCollision(BaseObject * obj, float dt)
 {
 	CollideDirection collideDirection;
 	MetroidRect collideRect;
-	float addX = 0, addY = 0;
+
 	if (!Collision::getInstance()->checkOnGround(samus->getBoundCollision(), dt*samus->getVelocity().x))
 	{
 		this->samus->setAcrobat(false);
@@ -228,6 +228,7 @@ void SamusStateRunning::onCollision(BaseObject * obj, float dt)
 
 		return;
 	}
+
 	if (Collision::getInstance()->checkCollision(samus, obj, dt, collideDirection, collideRect))
 	{
 		switch (obj->getId())

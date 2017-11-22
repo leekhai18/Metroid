@@ -1,5 +1,5 @@
 #include "Map.h"
-
+#include "Camera.h"
 
 
 bool Map::isContain(RECT rect1, RECT rect2)
@@ -33,30 +33,23 @@ bool Map::initialize(Graphics * graphics, TextureManager * texture, MapInfo * in
 	return true;
 }
 
-void Map::setCamera(Camera * camera)
-{
-	this->camera = camera;
-}
-
 void Map::draw()
 {
-	VECTOR2 trans = VECTOR2(camera->getWidth()*0.5f - camera->getPosition().x, camera->getHeight()*0.5f - camera->getPosition().y);
-
 	int tileH = this->info->getTileHeight();
 	int tileW = this->info->getTileWidth();
 	MapCell** mapCell = this->info->getMap();
 
-	RECT viewport = this->camera->getBound();
+	RECT viewport = Camera::getInstance()->getBound();
 	int columnBegin = viewport.left / tileW;
-	int columnEnd = columnBegin + this->camera->getWidth() / tileW + 1;
+	int columnEnd = columnBegin + Camera::getInstance()->getWidth() / tileW + 1;
 	int rowBegin = viewport.top / tileH;
-	int rowEnd = rowBegin + this->camera->getHeight() / tileH + 1;
+	int rowEnd = rowBegin + Camera::getInstance()->getHeight() / tileH + 1;
 
 	// set Follow direction for camera
 	if (mapCell[rowBegin - 1][columnBegin].rect == NULL)
-		this->camera->setCanFoLLowHorizontal(true);
+		Camera::getInstance()->setCanFoLLowHorizontal(true);
 	else
-		this->camera->setCanFoLLowHorizontal(false);
+		Camera::getInstance()->setCanFoLLowHorizontal(false);
 
 	SpriteData spriteData;
 	for (int col = columnBegin; col < columnEnd; col++)
@@ -79,7 +72,6 @@ void Map::draw()
 			spriteData.height = tileH;
 			spriteData.flipVertical = false;
 			spriteData.flipHorizontal = false;
-			spriteData.transformCamera = trans;
 
 			graphics->drawSprite(spriteData);
 		}

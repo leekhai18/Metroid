@@ -1,5 +1,6 @@
 #include "Samus.h"
 #include "SamusStateManager.h"
+#include "Camera.h"
 
 Samus::Samus(TextureManager* textureM,Graphics* graphics, Input* input) : BaseObject(eID::SAMUS)
 {
@@ -44,29 +45,20 @@ Samus::~Samus()
 
 void Samus::draw()
 {
-	if (this->camera)
-	{
-		this->sprite->setTransformCamera(VECTOR2(GAME_WIDTH*0.5f - camera->getPosition().x, GAME_HEIGHT*0.5f - camera->getPosition().y));
-
-		for (unsigned i = 0; i < this->bulletPool->getListUsing().size(); i++)
-		{
-			this->bulletPool->getListUsing().at(i)->getSprite()->setTransformCamera(VECTOR2(GAME_WIDTH*0.5f - camera->getPosition().x, GAME_HEIGHT*0.5f - camera->getPosition().y));
-			this->bulletPool->getListUsing().at(i)->draw();
-		}
-	}
+	for (unsigned i = 0; i < this->bulletPool->getListUsing().size(); i++)
+		this->bulletPool->getListUsing().at(i)->draw();
 
 	this->sprite->draw();
-
 }
 
 void Samus::handleInput(float dt)
 {
 	SamusStateManager::getInstance()->getCurrentState()->handleInput(dt);
 
-	if (this->camera->canFollowHorizon())
+	if (Camera::getInstance()->canFollowHorizon())
 	{
 		if ((input->isKeyUp(VK_LEFT) && input->isKeyUp(VK_RIGHT)) || (input->isKeyDown(VK_LEFT) && input->isKeyDown(VK_RIGHT)) || this->isInStatus(eStatus::STANDING))
-			this->camera->setVelocity(VECTOR2(this->getVelocity().x, 0));
+			Camera::getInstance()->setVelocity(VECTOR2(this->getVelocity().x, 0));
 	}
 }
 
@@ -77,15 +69,17 @@ void Samus::onCollision(BaseObject * object, float dt)
 
 void Samus::update(float dt)
 {
-	if (this->camera->canFollowHorizon())
+	if (Camera::getInstance()->canFollowHorizon())
 	{
-		if ((this->getPosition().x > this->camera->getActiveArea().right) || (this->getPosition().x < this->camera->getActiveArea().left))
-			this->camera->setVelocity(VECTOR2(this->getVelocity().x, 0));
+		if ((this->getPosition().x > Camera::getInstance()->getActiveArea().right) || 
+			(this->getPosition().x < Camera::getInstance()->getActiveArea().left))
+			Camera::getInstance()->setVelocity(VECTOR2(this->getVelocity().x, 0));
 	}
 	else
 	{
-		if ((this->getPosition().y > this->camera->getActiveArea().top) || (this->getPosition().y < this->camera->getActiveArea().bottom))
-			this->camera->setVelocity(VECTOR2(0, this->getVelocity().y));
+		if ((this->getPosition().y > Camera::getInstance()->getActiveArea().top) ||
+			(this->getPosition().y < Camera::getInstance()->getActiveArea().bottom))
+			Camera::getInstance()->setVelocity(VECTOR2(0, this->getVelocity().y));
 	}
 
 
@@ -98,7 +92,7 @@ void Samus::update(float dt)
 
 void Samus::release()
 {
-	delete sprite;
+	delete this->sprite;
 	delete runningNormalAnimation;
 	delete runningUpAnimation;
 	delete runningHittingRightAnimation;
@@ -202,10 +196,5 @@ Animation * Samus::getRollingAnim()
 Animation * Samus::getJumpingAnim()
 {
 	return this->jumpingAnimation;
-}
-
-void Samus::setCamera(Camera * cam)
-{
-	this->camera = cam;
 }
 

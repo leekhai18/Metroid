@@ -19,6 +19,9 @@
     <Filter Include="Objects">
       <UniqueIdentifier>{a2606627-782c-4fdf-a3ed-b62f9b602dde}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Objects\Items">
+      <UniqueIdentifier>{82bab096-89df-4b5c-ba2c-2d6c1e7a3ad8}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Constants.h">
@@ -135,6 +138,9 @@
     <ClInclude Include="ObjectManager.h">
       <Filter>Objects</Filter>
     </ClInclude>
+    <ClInclude Include="MaruMari.h">
+      <Filter>Objects\Items</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="GameManager.cpp">
@@ -244,6 +250,9 @@
     </ClCompile>
     <ClCompile Include="ObjectManager.cpp">
       <Filter>Objects</Filter>
+    </ClCompile>
+    <ClCompile Include="MaruMari.cpp">
+      <Filter>Objects\Items</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

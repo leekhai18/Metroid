@@ -35,7 +35,7 @@ void SkreeEffectDeathPart::init(VECTOR2 target, VECTOR2 startPosition)
 
 void SkreeEffectDeathPart::update(float dt)
 {
-	if (!this->isInStatus(eStatus::JUMPING))
+	if (this->isInStatus(eStatus::START))
 	{
 		if (t < 1)
 		{

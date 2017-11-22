@@ -75,23 +75,20 @@ void Metroid::initialize(HWND hwnd)
 	}
 
 	camera = new Camera(GAME_WIDTH, GAME_HEIGHT);
-	camera->setPosition(VECTOR2(640, 3240));
+	camera->setPosition(VECTOR2(CAM_POS_X, CAM_POS_Y));
 
-	mapBrinstar->setCamera(camera);
-	ObjectManager::getInstance()->setCamera(camera);
 
+	ObjectManager::getInstance()->init(textureManager, graphics);
 	if (!ObjectManager::getInstance()->load_list(OBJECT_LAYER_BRINSTAR_JSON))
 	{
 		throw GameError(GameErrorNS::FATAL_ERROR, "Can not load object layer brinstar json");
 	}
 
 	samus = new Samus(textureManager, graphics, input);
-	samus->setCamera(this->camera);
 
 	skree = new Skree(textureManager, graphics);
 	zeb = new Zeb(textureManager, graphics);
 	waver = new Waver(textureManager, graphics);
-	waver->setCamera(this->camera);
 	zommer = new Zommer(textureManager, graphics);
 	rio = new Rio(textureManager, graphics);
 
@@ -103,7 +100,7 @@ void Metroid::update(float dt)
 {
 	samus->update(dt);
 	
-	skree->setTarget(VECTOR2(samus->getPosition().x + samus->getSprite()->getWidth()*0.5f, GAME_HEIGHT*0.8f));
+	skree->setTarget(VECTOR2(samus->getPosition().x + samus->getSprite()->getWidth()*0.5f, samus->getPosition().y));
 	skree->update(dt);
 
 	if (zeb->isInStatus(eStatus::START))

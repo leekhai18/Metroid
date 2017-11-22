@@ -1,49 +1,35 @@
 {
     "MaruMari" : {
-         "height":16,
-         "width":16,
          "x":352,
          "y":3264
         },
 
     "IceBeam" : {
-         "height":16,
-         "width":16,
          "x":4720,
          "y":1968
         },
 
     "Varia" : {
-         "height":16,
-         "width":16,
          "x":3696,
          "y":288
         },
 
     "Bomb" : {
-        "height":16,
-        "width":16,
         "x":6256,
         "y":1008
        },
 
     "LongBeam" :  {
-        "height":16,
-        "width":16,
         "x":1648,
         "y":1008
        },
 
     "MissileRocket" : [
         {
-         "height":16,
-         "width":16,
          "x":4464,
          "y":2496
         }, 
         {
-         "height":16,
-         "width":16,
          "x":6000,
          "y":576
         }
@@ -51,14 +37,10 @@
 
     "EnergyTank" : [
         {
-         "height":16,
-         "width":16,
          "x":2080,
          "y":3136
         }, 
         {
-         "height":16,
-         "width":16,
          "x":6256,
          "y":1568
         }
@@ -66,14 +48,10 @@
 
     "BossKraid" : [
         {
-         "height":32,
-         "width":24,
          "x":544,
          "y":336
         }, 
         {
-         "height":32,
-         "width":32,
          "x":5568,
          "y":2496
         }

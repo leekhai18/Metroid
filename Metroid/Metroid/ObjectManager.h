@@ -16,21 +16,26 @@ class ObjectManager
 {
 private:
 	Camera* camera;
+	TextureManager* textureManager;
+	Graphics* graphics;
 
 	list<BaseObject> object_list;
 	static ObjectManager* instance;
 public:
 	list<BaseObject>& getEntityList() { return object_list; };
+	void init(TextureManager* textureM, Graphics* graphics);
+	bool load_list(const char *filename);
+	void release();
+
 	//get instance
 	static ObjectManager* getInstance();
+
 	//check collide between entity with another object
 	void onCheckCollision(BaseObject* entity, float frametime);
-	bool load_list(const char *filename);
+
 
 	ObjectManager();
 	~ObjectManager();
-
-	void release();
 
 	void setCamera(Camera* cam);
 };

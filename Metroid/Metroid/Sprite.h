@@ -49,9 +49,6 @@ public:
 	// Return RECT structure of Image.
 	virtual RECT  getSpriteDataRect() { return spriteData.rect; }
 
-	// Return transformCamera
-	virtual VECTOR2 getTransformCamera() { return spriteData.transformCamera; }
-
 	// Return flip
 	virtual bool getFlipX() { return spriteData.flipHorizontal; }
 	virtual bool getFlipY() { return spriteData.flipVertical; }
@@ -137,10 +134,6 @@ public:
 
 	// Set spriteData.rect to r.
 	virtual void setSpriteDataRect(RECT r) { spriteData.rect = r; }
-
-	// set transformCamera
-	virtual void setTransformCamera(VECTOR2 trans) { spriteData.transformCamera = trans; }
-
 
 	// Set TextureManager
 	virtual void setTextureManager(TextureManager *textureM)

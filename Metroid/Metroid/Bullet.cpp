@@ -28,6 +28,7 @@ Bullet::Bullet()
 
 Bullet::~Bullet()
 {
+	delete this->sprite;
 }
 
 void Bullet::update(float dt)

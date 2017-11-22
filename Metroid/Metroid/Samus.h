@@ -9,7 +9,6 @@
 #include "BaseObject.h"
 #include "Bullet.h"
 #include "BulletPool.h"
-#include "Camera.h"
 
 #define SAMUS_HEIGHT 30
 #define SAMUS_VERLOCITY_X 100
@@ -30,8 +29,6 @@ class Samus: public BaseObject
 {
 private:
 	Input* input;
-
-	Camera* camera;
 
 	Animation	*runningNormalAnimation,
 				*runningUpAnimation,
@@ -87,7 +84,5 @@ public:
 	Animation* getRunningHittingRightAnim();
 	Animation* getRollingAnim();
 	Animation* getJumpingAnim();
-
-	void setCamera(Camera* cam);
 };
 
