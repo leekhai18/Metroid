@@ -1,7 +1,7 @@
 #pragma once
 // Class used to manage Index Sprites in Texture
 
-#define MAX_INDEX 190
+#define MAX_INDEX 192
 
 // Define NUM_FRAMES
 #define NUM_FRAMES_ZOOMER 2
@@ -137,7 +137,9 @@ public:
 	const int alienBigR = 182;
 	const int brickBlue = 183;
 	const int brickGreen = 184;
-	const int brickSecret = 185;
+	const int brickRed = 192;
+	const int brickSecretBlue = 185;
+	const int brickSecretGreen = 191;
 	const int bossDragonL = 186;
 	const int gateBlueR = 187;
 	const int gateRed = 188;

@@ -91,6 +91,7 @@ void Metroid::initialize(HWND hwnd)
 	skree = new Skree(textureManager, graphics);
 	zeb = new Zeb(textureManager, graphics);
 	waver = new Waver(textureManager, graphics);
+	waver->setCamera(this->camera);
 	zommer = new Zommer(textureManager, graphics);
 	rio = new Rio(textureManager, graphics);
 

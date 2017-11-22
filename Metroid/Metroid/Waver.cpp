@@ -19,7 +19,7 @@ Waver::Waver(TextureManager * textureM, Graphics * graphics) : BaseObject(eID::W
 	this->anim = new Animation(this->sprite, IndexManager::getInstance()->waverBrown, NUM_FRAMES_WAVER, 0.5f);
 	this->anim->start();
 
-	this->setPosition(VECTOR2(100, 100));
+	this->setPosition(VECTOR2(640, 3200));
 }
 
 
@@ -38,6 +38,9 @@ void Waver::update(float dt)
 
 void Waver::draw()
 {
+	if (this->camera)
+		this->sprite->setTransformCamera(VECTOR2(GAME_WIDTH*0.5f - camera->getPosition().x, GAME_HEIGHT*0.5f - camera->getPosition().y));
+
 	this->sprite->draw();
 }
 
