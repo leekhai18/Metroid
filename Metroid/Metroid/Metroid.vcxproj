@@ -124,10 +124,14 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="AlienBig.h" />
+    <ClInclude Include="AlienSmall.h" />
     <ClInclude Include="Animation.h" />
     <ClInclude Include="BaseObject.h" />
     <ClInclude Include="BaseState.h" />
     <ClInclude Include="Bomb.h" />
+    <ClInclude Include="BossDragon.h" />
+    <ClInclude Include="BossKraid.h" />
     <ClInclude Include="Bullet.h" />
     <ClInclude Include="Camera.h" />
     <ClInclude Include="Collision.h" />
@@ -136,6 +140,8 @@
     <ClInclude Include="GameError.h" />
     <ClInclude Include="GameLog.h" />
     <ClInclude Include="GameManager.h" />
+    <ClInclude Include="GateBlue.h" />
+    <ClInclude Include="GateRed.h" />
     <ClInclude Include="Graphics.h" />
     <ClInclude Include="IceBeam.h" />
     <ClInclude Include="IndexManager.h" />
@@ -171,16 +177,22 @@
     <ClInclude Include="Zommer.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="AlienBig.cpp" />
+    <ClCompile Include="AlienSmall.cpp" />
     <ClCompile Include="Animation.cpp" />
     <ClCompile Include="BaseObject.cpp" />
     <ClCompile Include="BaseState.cpp" />
     <ClCompile Include="Bomb.cpp" />
+    <ClCompile Include="BossDragon.cpp" />
+    <ClCompile Include="BossKraid.cpp" />
     <ClCompile Include="Bullet.cpp" />
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="Collision.cpp" />
     <ClCompile Include="EnergyTank.cpp" />
     <ClCompile Include="GameLog.cpp" />
     <ClCompile Include="GameManager.cpp" />
+    <ClCompile Include="GateBlue.cpp" />
+    <ClCompile Include="GateRed.cpp" />
     <ClCompile Include="Graphics.cpp" />
     <ClCompile Include="IceBeam.cpp" />
     <ClCompile Include="IndexManager.cpp" />

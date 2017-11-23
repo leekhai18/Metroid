@@ -28,6 +28,9 @@
     <Filter Include="Objects\Enemies">
       <UniqueIdentifier>{ae6d33de-7019-402d-9e61-90c64a0b563d}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Objects\Others">
+      <UniqueIdentifier>{6add415d-c17d-47ac-917c-e841ba734aff}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Constants.h">
@@ -165,6 +168,24 @@
     <ClInclude Include="Samus.h">
       <Filter>Objects\Player</Filter>
     </ClInclude>
+    <ClInclude Include="BossKraid.h">
+      <Filter>Objects\Enemies</Filter>
+    </ClInclude>
+    <ClInclude Include="BossDragon.h">
+      <Filter>Objects\Enemies</Filter>
+    </ClInclude>
+    <ClInclude Include="AlienBig.h">
+      <Filter>Objects\Enemies</Filter>
+    </ClInclude>
+    <ClInclude Include="AlienSmall.h">
+      <Filter>Objects\Enemies</Filter>
+    </ClInclude>
+    <ClInclude Include="GateBlue.h">
+      <Filter>Objects\Others</Filter>
+    </ClInclude>
+    <ClInclude Include="GateRed.h">
+      <Filter>Objects\Others</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="GameManager.cpp">
@@ -295,6 +316,24 @@
     </ClCompile>
     <ClCompile Include="Samus.cpp">
       <Filter>Objects\Player</Filter>
+    </ClCompile>
+    <ClCompile Include="BossKraid.cpp">
+      <Filter>Objects\Enemies</Filter>
+    </ClCompile>
+    <ClCompile Include="BossDragon.cpp">
+      <Filter>Objects\Enemies</Filter>
+    </ClCompile>
+    <ClCompile Include="AlienBig.cpp">
+      <Filter>Objects\Enemies</Filter>
+    </ClCompile>
+    <ClCompile Include="AlienSmall.cpp">
+      <Filter>Objects\Enemies</Filter>
+    </ClCompile>
+    <ClCompile Include="GateBlue.cpp">
+      <Filter>Objects\Others</Filter>
+    </ClCompile>
+    <ClCompile Include="GateRed.cpp">
+      <Filter>Objects\Others</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
