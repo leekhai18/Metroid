@@ -2,15 +2,15 @@
 #include "BaseObject.h"
 #include "Animation.h"
 
-class MaruMari : public BaseObject
+class BossKraid : public BaseObject
 {
 private:
 	Animation *anim;
 
 public:
-	MaruMari();
-	MaruMari(TextureManager* textureM, Graphics* graphics);
-	~MaruMari();
+	BossKraid();
+	BossKraid(TextureManager* textureM, Graphics* graphics);
+	~BossKraid();
 
 	void update(float dt);
 	void draw();

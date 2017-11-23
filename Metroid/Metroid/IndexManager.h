@@ -142,6 +142,6 @@ public:
 	const int brickSecretGreen = 191;
 	const int bossDragonL = 186;
 	const int gateBlueR = 187;
-	const int gateRed = 188;
+	const int gateRedR = 188;
 	const int bossKraidR[2] = { 189,190 };
 };

@@ -63,11 +63,12 @@ enum eID {
 	SKREE,
 	ZEB,
 	WAVER,
-	WALL,
-	PORT,
-	FIRE,
 	ZOMMER,
 	RIO,
+	ALIENBIG,
+	ALIENSMALL,
+	BOSSDRAGON,
+	BOSSKRAID,
 	MARUMARI,
 	VARIA,
 	MISSILEROCKET,
@@ -75,6 +76,11 @@ enum eID {
 	ICEBEAM,
 	ENERGYTANK,
 	BOMB,
+	WALL,
+	PORT,
+	FIRE,
+	GATEBLUE,
+	GATERED,
 };
 // collision direction
 enum CollideDirection
