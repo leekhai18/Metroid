@@ -12,6 +12,8 @@
 
 using namespace rapidjson;
 using namespace std;
+
+
 class ObjectManager
 {
 private:
@@ -19,10 +21,11 @@ private:
 	TextureManager* textureManager;
 	Graphics* graphics;
 
-	list<BaseObject> object_list;
+	list<BaseObject*> *object_list;
 	static ObjectManager* instance;
+
 public:
-	list<BaseObject>& getEntityList() { return object_list; };
+	list<BaseObject*> *getObjectList() { return object_list; };
 	void init(TextureManager* textureM, Graphics* graphics);
 	bool load_list(const char *filename);
 	void release();

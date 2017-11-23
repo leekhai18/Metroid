@@ -12,6 +12,7 @@ Camera * Camera::getInstance()
 		instance = new Camera();
 		instance->width = GAME_WIDTH;
 		instance->height = GAME_HEIGHT;
+		instance->setPosition(D3DXVECTOR2(CAM_POS_X, CAM_POS_Y));
 	}
 
 	return instance;

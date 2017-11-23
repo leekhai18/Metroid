@@ -1,5 +1,8 @@
 #include "Rio.h"
 #define RATE_BEZIER 0.3f
+#define TIME_FRAME_DELAY 0.15f
+#define RATE_AREA_ACTIVE 0.15f
+#define WIDTH_AREA_ACTIVE 200
 
 Rio::Rio(TextureManager * textureM, Graphics * graphics) : BaseObject(eID::RIO)
 {

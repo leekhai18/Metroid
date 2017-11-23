@@ -115,6 +115,9 @@ void Metroid::update(float dt)
 	rio->update(dt);
 
 	this->camera->update(dt);
+
+
+	ObjectManager::getInstance()->getObjectList()->back()->update(dt);
 }
 
 void Metroid::handleInput(float dt)
@@ -139,6 +142,8 @@ void Metroid::render()
 	waver->draw();
 	zommer->draw();
 	rio->draw();
+
+	ObjectManager::getInstance()->getObjectList()->back()->draw();
 
 	// END
 	this->getGraphics()->spriteEnd();

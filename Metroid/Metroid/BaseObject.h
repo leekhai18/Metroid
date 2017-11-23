@@ -2,6 +2,9 @@
 #include "Sprite.h"
 #include "IndexManager.h"
 
+#define TIME_FRAME_ITEM 0.1f
+
+
 class BaseObject
 {
 protected:

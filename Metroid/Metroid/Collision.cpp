@@ -10,6 +10,7 @@ Collision* Collision::getInstance()
 	}
 	return instance;
 }
+
 bool Collision::checkOnGround(MetroidRect obj,float distance)
 {
 	MetroidRect sweptRect;
@@ -17,14 +18,14 @@ bool Collision::checkOnGround(MetroidRect obj,float distance)
 	sweptRect.bottom = obj.bottom +1;
 	sweptRect.left = obj.left + distance-1;
 	sweptRect.right = obj.right + distance+1;
-	list<BaseObject>::iterator begin = ObjectManager::getInstance()->getEntityList().begin();
+	list<BaseObject*>::iterator begin = ObjectManager::getInstance()->getObjectList()->begin();
 
-	list<BaseObject>::iterator end = ObjectManager::getInstance()->getEntityList().end();
-	for (list<BaseObject>::iterator i = begin; i !=end; ++i)
+	list<BaseObject*>::iterator end = ObjectManager::getInstance()->getObjectList()->end();
+	for (list<BaseObject*>::iterator i = begin; i !=end; ++i)
 	{
-		if(i->getBoundCollision().top==sweptRect.bottom)
+		if((*i)->getBoundCollision().top==sweptRect.bottom)
 		{
-			if(isCollide(i->getBoundCollision(),sweptRect))
+			if(isCollide((*i)->getBoundCollision(),sweptRect))
 			{
 				return true;
 			}

@@ -15,9 +15,9 @@ ObjectManager * ObjectManager::getInstance()
 void ObjectManager::onCheckCollision(BaseObject * obj, float frametime)
 {
 
-	for (list<BaseObject>::iterator i = object_list.begin(); i != object_list.end(); ++i)
+	for (list<BaseObject*>::iterator i = object_list->begin(); i != object_list->end(); ++i)
 	{
-		obj->onCollision(&*(i), frametime);
+		obj->onCollision(*i, frametime);
 	}
 }
 
@@ -29,10 +29,6 @@ void ObjectManager::init(TextureManager * textureM, Graphics * graphics)
 
 bool ObjectManager::load_list(const char * filename)
 {
-	VECTOR2 transform;
-	if (this->camera)
-		transform = VECTOR2(GAME_WIDTH*0.5f - camera->getPosition().x, GAME_HEIGHT*0.5f - camera->getPosition().y);
-
 	try
 	{
 		ifstream ifs(filename);
@@ -40,16 +36,16 @@ bool ObjectManager::load_list(const char * filename)
 		Document jSon;
 		jSon.ParseStream(isw);
 		float x, y, height, width;
+		MetroidRect bound;
 
 		// Load Wall POS
 		const Value& listWall = jSon["Wall"];
 		if (listWall.IsArray())
 		{
-			BaseObject object(eID::WALL);
-			MetroidRect bound;
 
 			for (SizeType i = 0; i < listWall.Size(); i++)
 			{
+				BaseObject *wall = new BaseObject(eID::WALL);
 
 				x = listWall[i]["x"].GetFloat();
 				y = listWall[i]["y"].GetFloat();
@@ -60,9 +56,9 @@ bool ObjectManager::load_list(const char * filename)
 				bound.top =   y + 32; // Bị lệch 32bit giữa 2 layer WALL and map
 				bound.right =  bound.left + width;
 				bound.bottom = bound.top + height;
-				object.setBoundCollision(bound);
+				wall->setBoundCollision(bound);
 
-				object_list.push_back(object);
+				object_list->push_back(wall);
 			}
 		}
 
@@ -70,22 +66,23 @@ bool ObjectManager::load_list(const char * filename)
 		const Value& maruMari = jSon["MaruMari"];
 		if (maruMari.IsObject())
 		{
-			MaruMari mm(this->textureManager, this->graphics);
+			MaruMari *mm = new MaruMari(this->textureManager, this->graphics);
 
 			x = maruMari["x"].GetFloat();
 			y = maruMari["y"].GetFloat();
 			
-			mm.setPosition(VECTOR2(x, y));
+			mm->setPosition(VECTOR2(x + 2, y));
 
-			MetroidRect bound;
 			bound.left = x;
 			bound.top = y;
-			bound.right = bound.left + mm.getSprite()->getWidth();
-			bound.bottom = bound.top + mm.getSprite()->getHeight();
-			mm.setBoundCollision(bound);
+			bound.right = bound.left + mm->getSprite()->getWidth();
+			bound.bottom = bound.top + mm->getSprite()->getHeight();
+			mm->setBoundCollision(bound);
 
-			object_list.push_back(mm);
+			object_list->push_back(mm);
 		}
+
+
 
 		return true;
 	}
@@ -98,6 +95,7 @@ bool ObjectManager::load_list(const char * filename)
 
 ObjectManager::ObjectManager()
 {
+	object_list = new list<BaseObject*>();
 }
 
 
@@ -107,7 +105,13 @@ ObjectManager::~ObjectManager()
 
 void ObjectManager::release()
 {
-	this->object_list.clear();
+	for (list<BaseObject*>::iterator i = object_list->begin(); i != object_list->end(); ++i)
+	{
+		delete *i;
+	}
+	object_list->clear();
+	delete object_list;
+
 	delete instance;
 }
 

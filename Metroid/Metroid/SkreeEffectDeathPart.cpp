@@ -1,5 +1,4 @@
 #include "SkreeEffectDeathPart.h"
-
 #define RATE_BEZIER 4
 
 

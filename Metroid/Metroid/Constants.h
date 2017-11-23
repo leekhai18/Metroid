@@ -69,6 +69,12 @@ enum eID {
 	ZOMMER,
 	RIO,
 	MARUMARI,
+	VARIA,
+	MISSILEROCKET,
+	LONGBEAM,
+	ICEBEAM,
+	ENERGYTANK,
+	BOMB,
 };
 // collision direction
 enum CollideDirection

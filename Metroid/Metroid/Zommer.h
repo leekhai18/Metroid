@@ -2,9 +2,6 @@
 #include "BaseObject.h"
 #include "Animation.h"
 
-
-#define TIME_FRAME_DELAY 0.15f
-
 class Zommer: public BaseObject
 {
 private:

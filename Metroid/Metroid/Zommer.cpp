@@ -1,5 +1,5 @@
 #include "Zommer.h"
-
+#define TIME_FRAME_DELAY 0.15f
 
 Zommer::Zommer(TextureManager * textureM, Graphics * graphics) : BaseObject(eID::ZOMMER)
 {

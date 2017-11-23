@@ -2,11 +2,6 @@
 #include "BaseObject.h"
 #include "Animation.h"
 
-
-#define TIME_FRAME_DELAY 0.15f
-#define RATE_AREA_ACTIVE 0.15f
-#define WIDTH_AREA_ACTIVE 200
-
 class Rio: public BaseObject
 {
 private:
