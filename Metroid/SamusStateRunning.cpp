@@ -138,15 +138,8 @@ void SamusStateRunning::handleInput(float dt)
 		this->animation->stop();
 		//reset velocity
 		this->samus->setVelocityX(0);
-		//When change to jump state, orgin will (0.5,0.5), so we change position( depend on samus side)
-		if(this->samus->getDirection() == eDirection::right)
-		{
-			this->samus->setPosition(VECTOR2(this->samus->getPosition().x + WIDTH_RUN*0.5f, this->samus->getPosition().y - HEIGHT_RUN*0.5f));
-		}
-		else
-		{
-			this->samus->setPosition(VECTOR2(this->samus->getPosition().x - WIDTH_RUN*0.5f, this->samus->getPosition().y - HEIGHT_RUN*0.5f));
-		}
+		//When change to jump state, orgin will (0.5,0.5), so we change position.y
+		this->samus->setPosition(VECTOR2(this->samus->getPosition().x, this->samus->getPosition().y - HEIGHT_RUN*0.5f));	
 		//change state to jump
 		this->samus->setStatus(eStatus::JUMPING);
 		SamusStateManager::getInstance()->changeStateTo(eStatus::JUMPING);
