@@ -186,6 +186,9 @@
     <ClInclude Include="GateRed.h">
       <Filter>Objects\Others</Filter>
     </ClInclude>
+    <ClInclude Include="Brick.h">
+      <Filter>Objects\Others</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="GameManager.cpp">
@@ -333,6 +336,9 @@
       <Filter>Objects\Others</Filter>
     </ClCompile>
     <ClCompile Include="GateRed.cpp">
+      <Filter>Objects\Others</Filter>
+    </ClCompile>
+    <ClCompile Include="Brick.cpp">
       <Filter>Objects\Others</Filter>
     </ClCompile>
   </ItemGroup>

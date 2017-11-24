@@ -81,6 +81,7 @@ enum eID {
 	FIRE,
 	GATEBLUE,
 	GATERED,
+	BRICK,
 };
 // collision direction
 enum CollideDirection

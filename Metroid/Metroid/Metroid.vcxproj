@@ -132,6 +132,7 @@
     <ClInclude Include="Bomb.h" />
     <ClInclude Include="BossDragon.h" />
     <ClInclude Include="BossKraid.h" />
+    <ClInclude Include="Brick.h" />
     <ClInclude Include="Bullet.h" />
     <ClInclude Include="Camera.h" />
     <ClInclude Include="Collision.h" />
@@ -185,6 +186,7 @@
     <ClCompile Include="Bomb.cpp" />
     <ClCompile Include="BossDragon.cpp" />
     <ClCompile Include="BossKraid.cpp" />
+    <ClCompile Include="Brick.cpp" />
     <ClCompile Include="Bullet.cpp" />
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="Collision.cpp" />

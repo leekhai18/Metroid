@@ -13,6 +13,7 @@
 #include "AlienSmall.h"
 #include "GateBlue.h"
 #include "GateRed.h"
+#include "Brick.h"
 
 ObjectManager* ObjectManager::instance = nullptr;
 ObjectManager * ObjectManager::getInstance()
@@ -76,7 +77,111 @@ bool ObjectManager::load_list(const char * filename)
 		}
 #pragma endregion
 
-#pragma region Others
+#pragma region Special Bricks
+		// BrickSecretBlue, 2
+		const Value& brickSecretBlue = jSon["BrickSecretBlue"];
+		if (brickSecretBlue.IsObject())
+		{
+			Brick *bsb = new Brick(this->textureManager, this->graphics, BrickStyle::BrickSecretBlue);
+
+			x = brickSecretBlue["x"].GetFloat();
+			y = brickSecretBlue["y"].GetFloat();
+			bsb->setPosition(VECTOR2(x, y));
+
+			bound.left = x;
+			bound.top = y;
+			bound.right = bound.left + bsb->getSprite()->getWidth();
+			bound.bottom = bound.top + bsb->getSprite()->getHeight();
+			bsb->setBoundCollision(bound);
+
+			object_list->push_back(bsb);
+		}
+
+		// BrickSerectGreen, 5
+		const Value& brickSerectGreen = jSon["BrickSerectGreen"];
+		if (brickSerectGreen.IsObject())
+		{
+			Brick *bsg = new Brick(this->textureManager, this->graphics, BrickStyle::BrickSerectGreen);
+
+			x = brickSerectGreen["x"].GetFloat();
+			y = brickSerectGreen["y"].GetFloat();
+			bsg->setPosition(VECTOR2(x, y));
+
+			bound.left = x;
+			bound.top = y;
+			bound.right = bound.left + bsg->getSprite()->getWidth();
+			bound.bottom = bound.top + bsg->getSprite()->getHeight();
+			bsg->setBoundCollision(bound);
+
+			object_list->push_back(bsg);
+		}
+
+
+		// BrickGreen, 5
+		const Value& brickGreen = jSon["BrickGreen"];
+		if (brickGreen.IsObject())
+		{
+			Brick *bg = new Brick(this->textureManager, this->graphics, BrickStyle::BrickGreen);
+
+			x = brickGreen["x"].GetFloat();
+			y = brickGreen["y"].GetFloat();
+			bg->setPosition(VECTOR2(x, y));
+
+			bound.left = x;
+			bound.top = y;
+			bound.right = bound.left + bg->getSprite()->getWidth();
+			bound.bottom = bound.top + bg->getSprite()->getHeight();
+			bg->setBoundCollision(bound);
+
+			object_list->push_back(bg);
+		}
+
+
+		// BrickBlue, 28, có 8 viên visible is false, so you need to check 
+		bool isVisible;
+		const Value& brickBlue = jSon["BrickBlue"];
+		if (brickBlue.IsObject())
+		{
+			Brick *bg = new Brick(this->textureManager, this->graphics, BrickStyle::BrickBlue);
+
+			x = brickBlue["x"].GetFloat();
+			y = brickBlue["y"].GetFloat();
+			bg->setPosition(VECTOR2(x, y));
+
+			isVisible = brickBlue["visible"].GetBool();
+			bg->setVisible(isVisible);
+
+			bound.left = x;
+			bound.top = y;
+			bound.right = bound.left + bg->getSprite()->getWidth();
+			bound.bottom = bound.top + bg->getSprite()->getHeight();
+			bg->setBoundCollision(bound);
+
+			object_list->push_back(bg);
+		}
+
+		// BrickRed, 63
+		const Value& brickRed = jSon["BrickRed"];
+		if (brickRed.IsObject())
+		{
+			Brick *br = new Brick(this->textureManager, this->graphics, BrickStyle::BrickRed);
+
+			x = brickRed["x"].GetFloat();
+			y = brickRed["y"].GetFloat();
+			br->setPosition(VECTOR2(x, y));
+
+			bound.left = x;
+			bound.top = y;
+			bound.right = bound.left + br->getSprite()->getWidth();
+			bound.bottom = bound.top + br->getSprite()->getHeight();
+			br->setBoundCollision(bound);
+
+			object_list->push_back(br);
+		}
+
+#pragma endregion
+
+#pragma region Gates and Ports
 		// create GateBlue R, 25 
 		const Value& listGateBlueR = jSon["GateBlueR"];
 		if (listGateBlueR.IsArray())
@@ -191,6 +296,8 @@ bool ObjectManager::load_list(const char * filename)
 				object_list->push_back(port);
 			}
 		}
+
+
 #pragma endregion
 
 #pragma region Items
@@ -421,9 +528,6 @@ bool ObjectManager::load_list(const char * filename)
 		}
 
 #pragma endregion
-
-
-
 
 
 		return true;
