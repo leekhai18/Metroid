@@ -2,28 +2,43 @@
 
 #define VELOCITY_X 120
 #define VELOCITY_Y 120
+#define TIME_FRAME_DELAY 0.2f
 
 
 Zeb::Zeb()
 {
 }
 
-Zeb::Zeb(TextureManager * textureM, Graphics * graphics) : BaseObject(eID::ZEB)
+Zeb::Zeb(TextureManager * textureM, Graphics * graphics, EnemyColors color) : BaseObject(eID::ZEB)
 {
 	this->sprite = new Sprite();
 	if (!this->sprite->initialize(graphics, textureM, SpriteManager::getInstance()))
 	{
 		throw GameError(GameErrorNS::FATAL_ERROR, "Can not init sprite Zeb");
 	}
-
-	this->sprite->setOrigin(VECTOR2(0.5f, 0.5f));
-
-	this->anim = new Animation(this->sprite, IndexManager::getInstance()->zebYellow, NUM_FRAMES_ZEB, 0.2f);
-	this->anim->start();
-
-	this->setPosition(VECTOR2(GAME_WIDTH + this->sprite->getWidth()*0.5f, GAME_HEIGHT + this->sprite->getHeight()*0.5f));
-
 	this->samusPosition = VECTOR2ZERO;
+
+	switch (color)
+	{
+	case Yellow:
+		anim = new Animation(this->sprite, IndexManager::getInstance()->zebYellow, NUM_FRAMES_ZEB, TIME_FRAME_DELAY);
+		health = 1;
+		break;
+
+	case Brown:
+		anim = new Animation(this->sprite, IndexManager::getInstance()->zebBrown, NUM_FRAMES_ZEB, TIME_FRAME_DELAY);
+		health = 1;
+		break;
+	case Red:
+		anim = new Animation(this->sprite, IndexManager::getInstance()->zebRed, NUM_FRAMES_ZEB, TIME_FRAME_DELAY);
+		health = 2;
+		break;
+
+	default:
+		break;
+	}
+
+	this->anim->start();
 }
 
 

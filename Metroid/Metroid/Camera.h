@@ -44,5 +44,7 @@ public:
 
 	void setCanFoLLowHorizontal(bool flag);
 	bool canFollowHorizon();
+
+	void release();
 };
 

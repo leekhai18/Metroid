@@ -308,15 +308,12 @@ void SamusStateRunning::fire()
 
 		//bullet has distance, and time to shoot to that distance
 		//so we can calculate velocity of bullet
-
 		//when we call getBullet() this bullet will send to listUsing to draw()
-		Bullet* temp = BulletPool::getInstance()->getBullet();
-
 		//we init start point and target point to bullet,
 		//when collision we only call BulletPool.returnBool()
+		Bullet* temp = BulletPool::getInstance()->getBullet();
 		temp->init(stP, tar);
 		temp->setVelocity(VECTOR2(0, (100.0f) / temp->getTimeToTar()));
-
 		temp->setBoundCollision();
 	}
 	else
@@ -332,15 +329,12 @@ void SamusStateRunning::fire()
 			stP = VECTOR2(this->samus->getPosition().x - this->samus->getSprite()->getWidth()*0.4f, this->samus->getPosition().y - this->samus->getSprite()->getHeight()*0.7f);
 			tar = VECTOR2(stP.x - 100, stP.y);
 		}
-		Bullet* temp = BulletPool::getInstance()->getBullet();
 
 		//we init start point and target point to bullet,
 		//when collision we only call BulletPool.returnBool()
+		Bullet* temp = BulletPool::getInstance()->getBullet();
 		temp->init(stP, tar);
 		temp->setVelocity(VECTOR2((100.0f) / temp->getTimeToTar(), 0));
-
 		temp->setBoundCollision();
 	}
-
-
 }

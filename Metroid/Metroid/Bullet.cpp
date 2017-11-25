@@ -33,6 +33,7 @@ Bullet::Bullet()
 
 Bullet::~Bullet()
 {
+	delete this->sprite;
 }
 
 void Bullet::setTimeToTar(float time)

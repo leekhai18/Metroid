@@ -1,5 +1,6 @@
 #include "SkreeEffectDeath.h"
-
+#define NUM_PART 4
+#define DISTANCE 70
 
 SkreeEffectDeath::SkreeEffectDeath(TextureManager * textureM, Graphics * graphics)
 {

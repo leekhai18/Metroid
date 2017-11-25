@@ -6,10 +6,11 @@ class Waver : public BaseObject
 {
 private:
 	Animation* anim;
+	int health;
 
 public:
 	Waver();
-	Waver(TextureManager* textureM, Graphics* graphics);
+	Waver(TextureManager* textureM, Graphics* graphics, EnemyColors color);
 	~Waver();
 
 	void update(float dt);

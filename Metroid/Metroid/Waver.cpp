@@ -1,4 +1,5 @@
 ﻿#include "Waver.h"
+#define TIME_FRAME_DELAY 0.5f
 
 
 
@@ -6,7 +7,7 @@ Waver::Waver()
 {
 }
 
-Waver::Waver(TextureManager * textureM, Graphics * graphics) : BaseObject(eID::WAVER)
+Waver::Waver(TextureManager * textureM, Graphics * graphics, EnemyColors color) : BaseObject(eID::WAVER)
 {
 	this->sprite = new Sprite();
 	if (!this->sprite->initialize(graphics, textureM, SpriteManager::getInstance()))
@@ -14,10 +15,23 @@ Waver::Waver(TextureManager * textureM, Graphics * graphics) : BaseObject(eID::W
 		throw GameError(GameErrorNS::FATAL_ERROR, "Can not init sprite Waver");
 	}
 
-	this->anim = new Animation(this->sprite, IndexManager::getInstance()->waverBrown, NUM_FRAMES_WAVER, 0.5f);
-	this->anim->start();
+	switch (color)
+	{
+	case Brown:
+		anim = new Animation(this->sprite, IndexManager::getInstance()->waverBrown, NUM_FRAMES_WAVER, TIME_FRAME_DELAY);
+		health = 4;
+		break;
 
-	this->setPosition(VECTOR2(640, 3200));
+	case Red:
+		anim = new Animation(this->sprite, IndexManager::getInstance()->waverRed, NUM_FRAMES_WAVER, TIME_FRAME_DELAY);
+		health = 8;
+		break;
+
+	default:
+		break;
+	}
+
+	this->anim->start();
 }
 
 

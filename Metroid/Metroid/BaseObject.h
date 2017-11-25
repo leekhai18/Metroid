@@ -2,6 +2,9 @@
 #include "Sprite.h"
 #include "IndexManager.h"
 
+#define TIME_FRAME_ITEM 0.1f
+
+
 class BaseObject
 {
 protected:
@@ -63,11 +66,9 @@ public:
 	virtual void setVelocity(VECTOR2 velocity);
 
 	virtual bool getActive();
-
 	virtual void setActive(bool active);
 
 	virtual MetroidRect getActiveBound();
-
 	virtual void setActiveBound(MetroidRect rect);
 };
 

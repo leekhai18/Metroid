@@ -1,7 +1,8 @@
 #include "Camera.h"
+#include "Constants.h"
+
 #define ACTIVE_AREA_WIDTH 32
 #define ACTIVE_AREA_HEIGHT 32
-#include "Constants.h"
 
 
 Camera* Camera::instance = nullptr;
@@ -12,6 +13,7 @@ Camera * Camera::getInstance()
 		instance = new Camera();
 		instance->width = GAME_WIDTH;
 		instance->height = GAME_HEIGHT;
+		instance->setPosition(D3DXVECTOR2(CAM_POS_X, CAM_POS_Y));
 	}
 
 	return instance;
@@ -99,6 +101,11 @@ void Camera::setCanFoLLowHorizontal(bool flag)
 bool Camera::canFollowHorizon()
 {
 	return this->canFollowHorizontal;
+}
+
+void Camera::release()
+{
+	delete instance;
 }
 
 int Camera::getWidth()

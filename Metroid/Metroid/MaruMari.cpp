@@ -12,7 +12,8 @@ MaruMari::MaruMari(TextureManager * textureM, Graphics * graphics) : BaseObject(
 		throw GameError(GameErrorNS::FATAL_ERROR, "Can not init sprite MaruMari");
 	}
 
-	this->anim = new Animation(this->sprite, IndexManager::getInstance()->maruMari, NUM_FRAMES_ITEM, 0.5f);
+
+	this->anim = new Animation(this->sprite, IndexManager::getInstance()->maruMari, NUM_FRAMES_ITEM, TIME_FRAME_ITEM);
 	this->anim->start();
 }
 

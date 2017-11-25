@@ -2,11 +2,6 @@
 #include "BaseObject.h"
 #include "Animation.h"
 
-
-#define TIME_FRAME_DELAY 0.15f
-#define RATE_AREA_ACTIVE 0.15f
-#define WIDTH_AREA_ACTIVE 200
-
 class Rio: public BaseObject
 {
 private:
@@ -26,9 +21,12 @@ private:
 	float t1;
 	int flag = 0;
 	
-	bool statusRollTarget;
+	bool isSamusRolling;
+
+	int health;
+
 public:
-	Rio(TextureManager* textureM, Graphics* graphics);
+	Rio(TextureManager* textureM, Graphics* graphics, EnemyColors color);
 	Rio();
 	~Rio();
 
@@ -36,7 +34,8 @@ public:
 	void draw();
 
 	VECTOR2 getTarget();
-	bool getStatusRollTarget();
 	void setTarget(VECTOR2 target, bool statusTarget);
+
+	void initPositions(VECTOR2 stP);
 };
 

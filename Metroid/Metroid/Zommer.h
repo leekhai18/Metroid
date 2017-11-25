@@ -2,9 +2,6 @@
 #include "BaseObject.h"
 #include "Animation.h"
 
-
-#define TIME_FRAME_DELAY 0.15f
-
 class Zommer: public BaseObject
 {
 private:
@@ -12,8 +9,10 @@ private:
 	bool flag = true;
 	int change = 1;
 
+	int health;
+
 public:
-	Zommer(TextureManager* textureM, Graphics* graphics);
+	Zommer(TextureManager* textureM, Graphics* graphics, EnemyColors color);
 	Zommer();
 	~Zommer();
 

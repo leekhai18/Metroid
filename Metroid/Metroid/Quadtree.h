@@ -1,8 +1,10 @@
-#define MAX_LEVEL                6
-#define MAX_OBJECT_IN_REGION    5
 #include "BaseObject.h"
 #include <list>
 #include "Constants.h"
+
+#define MAX_LEVEL                6
+#define MAX_OBJECT_IN_REGION    5
+
 
 class Quadtree
 {
@@ -21,5 +23,4 @@ public:
 	void insert(BaseObject* entity);
 	void retrieve(list<BaseObject*>* objects_list, BaseObject* obj);
 	static Quadtree*  createQuadTree(MetroidRect rect , list<BaseObject*>* object_list);
-
 };

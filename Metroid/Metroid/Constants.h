@@ -67,19 +67,35 @@ struct MetroidRect
 	};
 };
 
+
 // Element ID
 enum eID {
 	SAMUS,
 	SKREE,
 	ZEB,
 	WAVER,
+	ZOMMER,
+	RIO,
+	RIPPER,
+	ALIENBIG,
+	ALIENSMALL,
+	BOSSDRAGON,
+	BOSSKRAID,
+	MARUMARI,
+	VARIA,
+	MISSILEROCKET,
+	LONGBEAM,
+	ICEBEAM,
+	ENERGYTANK,
+	BOMB,
 	WALL,
 	PORT,
 	FIRE,
-	ZOMMER,
-	RIO,
-	MARUMARI,
+	GATEBLUE,
+	GATERED,
+	BRICK,
 };
+
 // collision direction
 enum CollideDirection
 {
@@ -115,6 +131,25 @@ enum eFont {
 	header,
 	header1,
 };
+
+// Brick style
+enum BrickStyle
+{
+	BrickSecretBlue,
+	BrickSerectGreen,
+	BrickGreen,
+	BrickBlue,
+	BrickRed
+};
+
+// Enemy colors
+enum EnemyColors
+{
+	Yellow,
+	Brown,
+	Red
+};
+
 
 struct CollisionReturn
 {

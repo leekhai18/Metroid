@@ -1,9 +1,6 @@
 #pragma once
 #include "SkreeEffectDeathPart.h"
 
-#define NUM_PART 4
-#define DISTANCE 70
-
 class SkreeEffectDeath
 {
 private:
