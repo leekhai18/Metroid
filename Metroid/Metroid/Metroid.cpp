@@ -31,6 +31,7 @@ Metroid::~Metroid()
 	delete rio;
 	delete zommer;
 	delete fpsText;
+	delete opsText;
 
 	ObjectManager::getInstance()->release();
 	Collision::getInstance()->release();
@@ -99,6 +100,9 @@ void Metroid::initialize(HWND hwnd)
 
 	fpsText = new Text("FPS: 0", eFont::body, 8, VECTOR2(GAME_WIDTH - 70, 5), GraphicsNS::WHITE, false, true);
 	fpsText->initialize(graphics);
+
+	opsText = new Text("OPS: 0", eFont::body, 8, VECTOR2(GAME_WIDTH - 70, 15), GraphicsNS::WHITE, false, true);
+	opsText->initialize(graphics);
 }
 
 void Metroid::update(float dt)
@@ -157,6 +161,9 @@ void Metroid::render()
 
 	fpsText->setText("FPS: " + std::to_string((int)this->fps));
 	fpsText->draw();
+
+	opsText->setText("OPS: " + std::to_string(ObjectManager::getInstance()->getTotalObjectsPerFrame()));
+	opsText->draw();
 }
 
 void Metroid::releaseAll()

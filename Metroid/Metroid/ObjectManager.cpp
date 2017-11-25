@@ -48,7 +48,14 @@ void ObjectManager::onCheckCollision(BaseObject * obj, float dt)
 	obj->onCollision();
 	Collision::getInstance()->clearDataReturn();
 
+	this->totalObjectsPerFrame = (int) return_objects_list->size();
+
 	delete return_objects_list;
+}
+
+int ObjectManager::getTotalObjectsPerFrame()
+{
+	return this->totalObjectsPerFrame;
 }
 
 void ObjectManager::init(TextureManager * textureM, Graphics * graphics)

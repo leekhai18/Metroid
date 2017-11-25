@@ -35,6 +35,7 @@ private:
 	Zommer *zommer;
 
 	Text* fpsText;
+	Text* opsText;
 
 public:
 	Metroid();

@@ -29,6 +29,8 @@ private:
 
 	list<BaseObject*>* object_list;
 
+	int totalObjectsPerFrame;
+
 public:
 	static ObjectManager* getInstance();
 
@@ -38,6 +40,8 @@ public:
 	void release();
 
 	void onCheckCollision(BaseObject* entity, float frametime);
+
+	int getTotalObjectsPerFrame();
 
 	ObjectManager();
 	~ObjectManager();
