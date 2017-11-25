@@ -86,11 +86,16 @@ void Metroid::initialize(HWND hwnd)
 
 	samus = new Samus(textureManager, graphics, input);
 
-	skree = new Skree(textureManager, graphics);
-	zeb = new Zeb(textureManager, graphics);
-	waver = new Waver(textureManager, graphics);
-	zommer = new Zommer(textureManager, graphics);
-	rio = new Rio(textureManager, graphics);
+	skree = new Skree(textureManager, graphics, EnemyColors::Yellow);
+	skree->initPositions(VECTOR2(840, 3212));
+	zeb = new Zeb(textureManager, graphics, EnemyColors::Yellow);
+	zeb->setPosition(VECTOR2(840, 3333));
+	waver = new Waver(textureManager, graphics, EnemyColors::Brown);
+	waver->setPosition(VECTOR2(640, 3180));
+	zommer = new Zommer(textureManager, graphics, EnemyColors::Yellow);
+	zommer->setPosition(VECTOR2(680, 3180));
+	rio = new Rio(textureManager, graphics, EnemyColors::Yellow);
+	rio->initPositions(VECTOR2(780, 3130));
 
 	fpsText = new Text("FPS: 0", eFont::body, 8, VECTOR2(GAME_WIDTH - 70, 5), GraphicsNS::WHITE, false, true);
 	fpsText->initialize(graphics);
