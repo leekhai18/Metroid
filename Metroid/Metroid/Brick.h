@@ -2,15 +2,6 @@
 #include "BaseObject.h"
 #include "Animation.h"
 
-enum BrickStyle
-{
-	BrickSecretBlue,
-	BrickSerectGreen,
-	BrickGreen,
-	BrickBlue,
-	BrickRed
-};
-
 class Brick : public BaseObject
 {
 private:

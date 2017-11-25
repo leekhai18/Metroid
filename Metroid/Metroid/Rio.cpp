@@ -4,7 +4,7 @@
 #define RATE_AREA_ACTIVE 0.15f
 #define WIDTH_AREA_ACTIVE 200
 
-Rio::Rio(TextureManager * textureM, Graphics * graphics) : BaseObject(eID::RIO)
+Rio::Rio(TextureManager * textureM, Graphics * graphics, EnemyColors color) : BaseObject(eID::RIO)
 {
 	this->sprite = new Sprite();
 	if (!this->sprite->initialize(graphics, textureM, SpriteManager::getInstance()))
@@ -12,17 +12,29 @@ Rio::Rio(TextureManager * textureM, Graphics * graphics) : BaseObject(eID::RIO)
 		throw GameError(GameErrorNS::FATAL_ERROR, "Can not init sprite Rio");
 	}
 
-	this->sprite->setOrigin(VECTOR2(0.5f, 0.5f));
 
-	anim = new Animation(this->sprite, IndexManager::getInstance()->rioBlue, NUM_FRAMES_RIO, TIME_FRAME_DELAY);
+	switch (color)
+	{
+	case Yellow:
+		anim = new Animation(this->sprite, IndexManager::getInstance()->rioYellow, NUM_FRAMES_RIO, TIME_FRAME_DELAY);
+		health = 4;
+		break;
+
+	case Brown:
+		anim = new Animation(this->sprite, IndexManager::getInstance()->rioBrown, NUM_FRAMES_RIO, TIME_FRAME_DELAY);
+		health = 4;
+		break;
+
+	case Red:
+		anim = new Animation(this->sprite, IndexManager::getInstance()->rioRed, NUM_FRAMES_RIO, TIME_FRAME_DELAY);
+		health = 6;
+		break;
+
+	default:
+		break;
+	}
+
 	anim->start();
-
-	this->startPosition = VECTOR2(200, 100);
-	this->target = VECTOR2ZERO;
-	this->P1 = this->startPosition;
-	this->P3 = VECTOR2(P1.x + WIDTH_AREA_ACTIVE, startPosition.y);
-	this->P5 = VECTOR2(P3.x + WIDTH_AREA_ACTIVE, startPosition.y);
-	this->setPosition(this->P1);
 
 	t = 0;
 	t1 = 0;
@@ -44,12 +56,12 @@ void Rio::update(float dt)
 	this->anim->update(dt);
 	if (this->target != VECTOR2ZERO && this->isInStatus(eStatus::START))
 	{
-		if (P1.x < target.x && target.x < P3.x && getStatusRollTarget() == true)
+		if (P1.x < target.x && target.x < P3.x && isSamusRolling == true)
 		{
 			flag = 0;
 			this->setStatus(eStatus::FALLING);
 		}
-		if (P1.x < target.x && target.x < P3.x && getStatusRollTarget() == false)
+		if (P1.x < target.x && target.x < P3.x && isSamusRolling == false)
 		{
 			this->setStatus(eStatus::FOLLOW);
 		}
@@ -107,7 +119,7 @@ void Rio::update(float dt)
 				}
 			}
 		}
-		if (getStatusRollTarget() == false) {
+		if (isSamusRolling == false) {
 			this->setStatus(eStatus::FOLLOW);
 		}
 	}
@@ -136,11 +148,19 @@ VECTOR2 Rio::getTarget()
 	return this->target;
 }
 
-bool Rio::getStatusRollTarget() {
-	return this->statusRollTarget;
-}
 void Rio::setTarget(VECTOR2 target, bool statusRollTarget)
 {
 	this->target = target;
-	this->statusRollTarget = statusRollTarget;
+	this->isSamusRolling = statusRollTarget;
+}
+
+void Rio::initPositions(VECTOR2 stP)
+{
+	this->startPosition = stP;
+	this->P1 = this->startPosition;
+	this->P3 = VECTOR2(P1.x + WIDTH_AREA_ACTIVE, startPosition.y);
+	this->P5 = VECTOR2(P3.x + WIDTH_AREA_ACTIVE, startPosition.y);
+
+	this->setPosition(stP);
+	this->target = VECTOR2ZERO;
 }

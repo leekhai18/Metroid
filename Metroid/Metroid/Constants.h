@@ -65,6 +65,7 @@ enum eID {
 	WAVER,
 	ZOMMER,
 	RIO,
+	RIPPER,
 	ALIENBIG,
 	ALIENSMALL,
 	BOSSDRAGON,
@@ -117,4 +118,22 @@ enum eFont {
 	body,
 	header,
 	header1,
+};
+
+// Brick style
+enum BrickStyle
+{
+	BrickSecretBlue,
+	BrickSerectGreen,
+	BrickGreen,
+	BrickBlue,
+	BrickRed
+};
+
+// Enemy colors
+enum EnemyColors
+{
+	Yellow,
+	Brown,
+	Red
 };

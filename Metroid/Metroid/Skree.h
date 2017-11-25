@@ -17,8 +17,11 @@ private:
 	float t;
 
 	float timerDeath;
+
+	int health;
+
 public:
-	Skree(TextureManager* textureM, Graphics* graphics);
+	Skree(TextureManager* textureM, Graphics* graphics, EnemyColors color);
 	Skree();
 	~Skree();
 
@@ -28,5 +31,7 @@ public:
 
 	VECTOR2 getTarget();
 	void setTarget(VECTOR2 target);
+
+	void initPositions(VECTOR2 stP);
 };
 

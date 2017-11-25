@@ -14,6 +14,12 @@
 #include "GateBlue.h"
 #include "GateRed.h"
 #include "Brick.h"
+#include "Zommer.h"
+#include "Zeb.h"
+#include "Waver.h"
+#include "Skree.h"
+#include "Ripper.h"
+#include "Rio.h"
 
 ObjectManager* ObjectManager::instance = nullptr;
 ObjectManager * ObjectManager::getInstance()
@@ -481,7 +487,360 @@ bool ObjectManager::load_list(const char * filename)
 			object_list->push_back(alienS);
 		}
 
-		
+		// create ZommerYellow
+		const Value& listZommerYellow = jSon["ZommerYellow"];
+		if (listZommerYellow.IsArray())
+		{
+			for (SizeType i = 0; i < listZommerYellow.Size(); i++)
+			{
+				Zommer *zmy = new Zommer(this->textureManager, this->graphics, EnemyColors::Yellow);
+
+				x = listZommerYellow[i]["x"].GetFloat();
+				y = listZommerYellow[i]["y"].GetFloat();
+				zmy->setPosition(VECTOR2(x, y));
+
+				bound.left = x;
+				bound.top = y;
+				bound.right = bound.left + zmy->getSprite()->getWidth();
+				bound.bottom = bound.top + zmy->getSprite()->getHeight();
+				zmy->setBoundCollision(bound);
+
+				object_list->push_back(zmy);
+			}
+		}
+
+		// create ZommerBrown
+		const Value& listZommerBrown = jSon["ZommerBrown"];
+		if (listZommerBrown.IsArray())
+		{
+			for (SizeType i = 0; i < listZommerBrown.Size(); i++)
+			{
+				Zommer *zmb = new Zommer(this->textureManager, this->graphics, EnemyColors::Brown);
+
+				x = listZommerBrown[i]["x"].GetFloat();
+				y = listZommerBrown[i]["y"].GetFloat();
+				zmb->setPosition(VECTOR2(x, y));
+
+				bound.left = x;
+				bound.top = y;
+				bound.right = bound.left + zmb->getSprite()->getWidth();
+				bound.bottom = bound.top + zmb->getSprite()->getHeight();
+				zmb->setBoundCollision(bound);
+
+				object_list->push_back(zmb);
+			}
+		}
+
+		// create ZommerRed
+		const Value& listZommerRed = jSon["ZommerRed"];
+		if (listZommerRed.IsArray())
+		{
+			for (SizeType i = 0; i < listZommerRed.Size(); i++)
+			{
+				Zommer *zmr = new Zommer(this->textureManager, this->graphics, EnemyColors::Red);
+
+				x = listZommerRed[i]["x"].GetFloat();
+				y = listZommerRed[i]["y"].GetFloat();
+				zmr->setPosition(VECTOR2(x, y));
+
+				bound.left = x;
+				bound.top = y;
+				bound.right = bound.left + zmr->getSprite()->getWidth();
+				bound.bottom = bound.top + zmr->getSprite()->getHeight();
+				zmr->setBoundCollision(bound);
+
+				object_list->push_back(zmr);
+			}
+		}
+
+		// create ZebYellow
+		const Value& listZebYellow = jSon["SpawnZebYellow"];
+		if (listZebYellow.IsArray())
+		{
+			for (SizeType i = 0; i < listZebYellow.Size(); i++)
+			{
+				Zeb *zby = new Zeb(this->textureManager, this->graphics, EnemyColors::Yellow);
+
+				x = listZebYellow[i]["x"].GetFloat();
+				y = listZebYellow[i]["y"].GetFloat();
+				zby->setPosition(VECTOR2(x, y));
+
+				bound.left = x;
+				bound.top = y;
+				bound.right = bound.left + zby->getSprite()->getWidth();
+				bound.bottom = bound.top + zby->getSprite()->getHeight();
+				zby->setBoundCollision(bound);
+
+				object_list->push_back(zby);
+			}
+		}
+
+		// create ZebBrown
+		const Value& listZebBrown = jSon["SpawnZebBrown"];
+		if (listZebBrown.IsArray())
+		{
+			for (SizeType i = 0; i < listZebBrown.Size(); i++)
+			{
+				Zeb *zbb = new Zeb(this->textureManager, this->graphics, EnemyColors::Brown);
+
+				x = listZebBrown[i]["x"].GetFloat();
+				y = listZebBrown[i]["y"].GetFloat();
+				zbb->setPosition(VECTOR2(x, y));
+
+				bound.left = x;
+				bound.top = y;
+				bound.right = bound.left + zbb->getSprite()->getWidth();
+				bound.bottom = bound.top + zbb->getSprite()->getHeight();
+				zbb->setBoundCollision(bound);
+
+				object_list->push_back(zbb);
+			}
+		}
+
+		// create ZebRed
+		const Value& listZebRed = jSon["SpawnZebRed"];
+		if (listZebRed.IsArray())
+		{
+			for (SizeType i = 0; i < listZebRed.Size(); i++)
+			{
+				Zeb *zbr = new Zeb(this->textureManager, this->graphics, EnemyColors::Red);
+
+				x = listZebRed[i]["x"].GetFloat();
+				y = listZebRed[i]["y"].GetFloat();
+				zbr->setPosition(VECTOR2(x, y));
+
+				bound.left = x;
+				bound.top = y;
+				bound.right = bound.left + zbr->getSprite()->getWidth();
+				bound.bottom = bound.top + zbr->getSprite()->getHeight();
+				zbr->setBoundCollision(bound);
+
+				object_list->push_back(zbr);
+			}
+		}
+
+		// create WaverBrown
+		const Value& listWaverBrown = jSon["WaverGreen"];
+		if (listWaverBrown.IsArray())
+		{
+			for (SizeType i = 0; i < listWaverBrown.Size(); i++)
+			{
+				Waver *wvb = new Waver(this->textureManager, this->graphics, EnemyColors::Brown);
+
+				x = listWaverBrown[i]["x"].GetFloat();
+				y = listWaverBrown[i]["y"].GetFloat();
+				wvb->setPosition(VECTOR2(x, y));
+
+				bound.left = x;
+				bound.top = y;
+				bound.right = bound.left + wvb->getSprite()->getWidth();
+				bound.bottom = bound.top + wvb->getSprite()->getHeight();
+				wvb->setBoundCollision(bound);
+
+				object_list->push_back(wvb);
+			}
+		}
+
+		// create WaverRed
+		const Value& listWaverRed = jSon["WaverBlue"];
+		if (listWaverRed.IsArray())
+		{
+			for (SizeType i = 0; i < listWaverRed.Size(); i++)
+			{
+				Waver *wvr = new Waver(this->textureManager, this->graphics, EnemyColors::Red);
+
+				x = listWaverRed[i]["x"].GetFloat();
+				y = listWaverRed[i]["y"].GetFloat();
+				wvr->setPosition(VECTOR2(x, y));
+
+				bound.left = x;
+				bound.top = y;
+				bound.right = bound.left + wvr->getSprite()->getWidth();
+				bound.bottom = bound.top + wvr->getSprite()->getHeight();
+				wvr->setBoundCollision(bound);
+
+				object_list->push_back(wvr);
+			}
+		}
+
+		// create SkreeYellow
+		const Value& listSkreeYellow = jSon["SkreeYellow"];
+		if (listSkreeYellow.IsArray())
+		{
+			for (SizeType i = 0; i < listSkreeYellow.Size(); i++)
+			{
+				Skree *sky = new Skree(this->textureManager, this->graphics, EnemyColors::Yellow);
+
+				x = listSkreeYellow[i]["x"].GetFloat();
+				y = listSkreeYellow[i]["y"].GetFloat();
+				sky->initPositions(VECTOR2(x, y));
+
+				bound.left = x;
+				bound.top = y;
+				bound.right = bound.left + sky->getSprite()->getWidth();
+				bound.bottom = bound.top + sky->getSprite()->getHeight();
+				sky->setBoundCollision(bound);
+
+				object_list->push_back(sky);
+			}
+		}
+
+		// create SkreeBrown
+		const Value& listSkreeBrown = jSon["SkreeBrown"];
+		if (listSkreeBrown.IsArray())
+		{
+			for (SizeType i = 0; i < listSkreeBrown.Size(); i++)
+			{
+				Skree *skb = new Skree(this->textureManager, this->graphics, EnemyColors::Brown);
+
+				x = listSkreeBrown[i]["x"].GetFloat();
+				y = listSkreeBrown[i]["y"].GetFloat();
+				skb->initPositions(VECTOR2(x, y));
+
+				bound.left = x;
+				bound.top = y;
+				bound.right = bound.left + skb->getSprite()->getWidth();
+				bound.bottom = bound.top + skb->getSprite()->getHeight();
+				skb->setBoundCollision(bound);
+
+				object_list->push_back(skb);
+			}
+		}
+
+		// create RipperYellow
+		const Value& listRipperYellow = jSon["RipperYellow"];
+		if (listRipperYellow.IsArray())
+		{
+			for (SizeType i = 0; i < listRipperYellow.Size(); i++)
+			{
+				Ripper *rpy = new Ripper(this->textureManager, this->graphics, EnemyColors::Yellow);
+
+				x = listRipperYellow[i]["x"].GetFloat();
+				y = listRipperYellow[i]["y"].GetFloat();
+				rpy->setPosition(VECTOR2(x, y));
+
+				bound.left = x;
+				bound.top = y;
+				bound.right = bound.left + rpy->getSprite()->getWidth();
+				bound.bottom = bound.top + rpy->getSprite()->getHeight();
+				rpy->setBoundCollision(bound);
+
+				object_list->push_back(rpy);
+			}
+		}
+
+		// create RipperBrown
+		const Value& listRipperBrown = jSon["RipperBrown"];
+		if (listRipperBrown.IsArray())
+		{
+			for (SizeType i = 0; i < listRipperBrown.Size(); i++)
+			{
+				Ripper *rpb = new Ripper(this->textureManager, this->graphics, EnemyColors::Brown);
+
+				x = listRipperBrown[i]["x"].GetFloat();
+				y = listRipperBrown[i]["y"].GetFloat();
+				rpb->setPosition(VECTOR2(x, y));
+
+				bound.left = x;
+				bound.top = y;
+				bound.right = bound.left + rpb->getSprite()->getWidth();
+				bound.bottom = bound.top + rpb->getSprite()->getHeight();
+				rpb->setBoundCollision(bound);
+
+				object_list->push_back(rpb);
+			}
+		}
+
+		// create RipperRed
+		const Value& listRipperRed = jSon["RipperRed"];
+		if (listRipperRed.IsArray())
+		{
+			for (SizeType i = 0; i < listRipperRed.Size(); i++)
+			{
+				Ripper *rpr = new Ripper(this->textureManager, this->graphics, EnemyColors::Red);
+
+				x = listRipperRed[i]["x"].GetFloat();
+				y = listRipperRed[i]["y"].GetFloat();
+				rpr->setPosition(VECTOR2(x, y));
+
+				bound.left = x;
+				bound.top = y;
+				bound.right = bound.left + rpr->getSprite()->getWidth();
+				bound.bottom = bound.top + rpr->getSprite()->getHeight();
+				rpr->setBoundCollision(bound);
+
+				object_list->push_back(rpr);
+			}
+		}
+
+		// create RioYellow
+		const Value& listRioYellow = jSon["RioYellow"];
+		if (listRioYellow.IsArray())
+		{
+			for (SizeType i = 0; i < listRioYellow.Size(); i++)
+			{
+				Rio *roy = new Rio(this->textureManager, this->graphics, EnemyColors::Yellow);
+
+				x = listRioYellow[i]["x"].GetFloat();
+				y = listRioYellow[i]["y"].GetFloat();
+				roy->initPositions(VECTOR2(x, y));
+
+				bound.left = x;
+				bound.top = y;
+				bound.right = bound.left + roy->getSprite()->getWidth();
+				bound.bottom = bound.top + roy->getSprite()->getHeight();
+				roy->setBoundCollision(bound);
+
+				object_list->push_back(roy);
+			}
+		}
+
+		// create RioBrown
+		const Value& listRioBrown = jSon["RioBrown"];
+		if (listRioBrown.IsArray())
+		{
+			for (SizeType i = 0; i < listRioBrown.Size(); i++)
+			{
+				Rio *rob = new Rio(this->textureManager, this->graphics, EnemyColors::Brown);
+
+				x = listRioBrown[i]["x"].GetFloat();
+				y = listRioBrown[i]["y"].GetFloat();
+				rob->initPositions(VECTOR2(x, y));
+
+				bound.left = x;
+				bound.top = y;
+				bound.right = bound.left + rob->getSprite()->getWidth();
+				bound.bottom = bound.top + rob->getSprite()->getHeight();
+				rob->setBoundCollision(bound);
+
+				object_list->push_back(rob);
+			}
+		}
+
+		// create RioRed
+		const Value& listRioRed = jSon["RioRed"];
+		if (listRioRed.IsArray())
+		{
+			for (SizeType i = 0; i < listRioRed.Size(); i++)
+			{
+				Rio *ror = new Rio(this->textureManager, this->graphics, EnemyColors::Red);
+
+				x = listRioRed[i]["x"].GetFloat();
+				y = listRioRed[i]["y"].GetFloat();
+				ror->initPositions(VECTOR2(x, y));
+
+				bound.left = x;
+				bound.top = y;
+				bound.right = bound.left + ror->getSprite()->getWidth();
+				bound.bottom = bound.top + ror->getSprite()->getHeight();
+				ror->setBoundCollision(bound);
+
+				object_list->push_back(ror);
+			}
+		}
+
+
+
 
 #pragma endregion
 

@@ -9,8 +9,10 @@ private:
 	bool flag = true;
 	int change = 1;
 
+	int health;
+
 public:
-	Zommer(TextureManager* textureM, Graphics* graphics);
+	Zommer(TextureManager* textureM, Graphics* graphics, EnemyColors color);
 	Zommer();
 	~Zommer();
 

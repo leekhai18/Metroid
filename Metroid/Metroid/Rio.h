@@ -21,9 +21,12 @@ private:
 	float t1;
 	int flag = 0;
 	
-	bool statusRollTarget;
+	bool isSamusRolling;
+
+	int health;
+
 public:
-	Rio(TextureManager* textureM, Graphics* graphics);
+	Rio(TextureManager* textureM, Graphics* graphics, EnemyColors color);
 	Rio();
 	~Rio();
 
@@ -31,7 +34,8 @@ public:
 	void draw();
 
 	VECTOR2 getTarget();
-	bool getStatusRollTarget();
 	void setTarget(VECTOR2 target, bool statusTarget);
+
+	void initPositions(VECTOR2 stP);
 };
 

@@ -6,12 +6,13 @@ class Zeb : public BaseObject
 {
 private:
 	Animation *anim;
-
 	VECTOR2 samusPosition;
+
+	int health;
 
 public:
 	Zeb();
-	Zeb(TextureManager* textureM, Graphics* graphics);
+	Zeb(TextureManager* textureM, Graphics* graphics, EnemyColors color);
 	~Zeb();
 
 	void update(float dt);

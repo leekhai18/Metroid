@@ -157,6 +157,7 @@
     <ClInclude Include="ObjectManager.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="Rio.h" />
+    <ClInclude Include="Ripper.h" />
     <ClInclude Include="Samus.h" />
     <ClInclude Include="SamusStateJumping.h" />
     <ClInclude Include="SamusStateManager.h" />
@@ -208,6 +209,7 @@
     <ClCompile Include="MissileRocket.cpp" />
     <ClCompile Include="ObjectManager.cpp" />
     <ClCompile Include="Rio.cpp" />
+    <ClCompile Include="Ripper.cpp" />
     <ClCompile Include="Samus.cpp" />
     <ClCompile Include="SamusStateJumping.cpp" />
     <ClCompile Include="SamusStateManager.cpp" />

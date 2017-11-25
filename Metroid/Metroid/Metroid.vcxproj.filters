@@ -189,6 +189,9 @@
     <ClInclude Include="Brick.h">
       <Filter>Objects\Others</Filter>
     </ClInclude>
+    <ClInclude Include="Ripper.h">
+      <Filter>Objects\Enemies</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="GameManager.cpp">
@@ -340,6 +343,9 @@
     </ClCompile>
     <ClCompile Include="Brick.cpp">
       <Filter>Objects\Others</Filter>
+    </ClCompile>
+    <ClCompile Include="Ripper.cpp">
+      <Filter>Objects\Enemies</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
