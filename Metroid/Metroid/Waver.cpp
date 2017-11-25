@@ -14,18 +14,15 @@ Waver::Waver(TextureManager * textureM, Graphics * graphics) : BaseObject(eID::W
 		throw GameError(GameErrorNS::FATAL_ERROR, "Can not init sprite Waver");
 	}
 
-	this->sprite->setOrigin(VECTOR2(0.5f, 0.5f));
-
 	this->anim = new Animation(this->sprite, IndexManager::getInstance()->waverBrown, NUM_FRAMES_WAVER, 0.5f);
 	this->anim->start();
 
-	this->setPosition(VECTOR2(100, 100));
+	this->setPosition(VECTOR2(640, 3200));
 }
 
 
 Waver::~Waver()
 {
-	delete sprite;
 	delete anim;
 }
 
@@ -39,9 +36,4 @@ void Waver::update(float dt)
 void Waver::draw()
 {
 	this->sprite->draw();
-}
-
-void Waver::setCamera(Camera * cam)
-{
-	this->camera = cam;
 }

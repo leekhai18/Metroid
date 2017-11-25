@@ -9,7 +9,8 @@ protected:
 	eID id;
 	eStatus status;
 	eDirection direction;
-
+	MetroidRect activeBound;
+	bool active;
 	MetroidRect boundCollision;
 	VECTOR2 velocity;
 public:
@@ -49,7 +50,7 @@ public:
 	Sprite* getSprite();
 
 	//TO DO: update position, velocity... if this object collide with another object(call before update() )
-	virtual void onCollision(BaseObject* object, float dt);
+	virtual void onCollision();
 
 	virtual void setBoundCollision(MetroidRect rect);
 	virtual MetroidRect getBoundCollision();
@@ -61,5 +62,12 @@ public:
 	virtual void setVelocityY(float y);
 	virtual void setVelocity(VECTOR2 velocity);
 
+	virtual bool getActive();
+
+	virtual void setActive(bool active);
+
+	virtual MetroidRect getActiveBound();
+
+	virtual void setActiveBound(MetroidRect rect);
 };
 

@@ -29,7 +29,6 @@ Zeb::Zeb(TextureManager * textureM, Graphics * graphics) : BaseObject(eID::ZEB)
 
 Zeb::~Zeb()
 {
-	delete this->sprite;
 	delete this->anim;
 }
 

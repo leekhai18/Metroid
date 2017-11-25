@@ -9,7 +9,6 @@
 #include "BaseObject.h"
 #include "Bullet.h"
 #include "BulletPool.h"
-#include "Camera.h"
 
 #define SAMUS_HEIGHT 30
 #define SAMUS_VERLOCITY_X 100
@@ -17,17 +16,21 @@
 #define MIN_JUMP  32.0f
 #define MAX_JUMP 80.0f
 #define TIME_SHOOTING 0.1f
-#define MAX_WIDTH 14
+#define MAX_WIDTH 12
 #define MAX_HEIHT 32
-#define WIDTH_RUN 20
+#define WIDTH_RUN 24
 #define HEIGHT_RUN 32
+#define ROLL_WIDTH 12
+#define ROLL_HEIGHT 12
+
+// In tilemap
+#define POSITION_FIRST_X 632
+#define POSITION_FIRST_Y 3280
 
 class Samus: public BaseObject
 {
 private:
 	Input* input;
-
-	Camera* camera;
 
 	Animation	*runningNormalAnimation,
 				*runningUpAnimation,
@@ -74,8 +77,9 @@ public:
 	void setFall(bool isFall);
 	void setAcrobat(bool acrobat);
 
+	void setBoundCollision(MetroidRect rect);
 
-	void onCollision(BaseObject* object, float dt);
+	void onCollision();
 
 	Animation* getStartingAnim();
 	Animation* getRunningNormalAnim();
@@ -83,7 +87,5 @@ public:
 	Animation* getRunningHittingRightAnim();
 	Animation* getRollingAnim();
 	Animation* getJumpingAnim();
-
-	void setCamera(Camera* cam);
 };
 

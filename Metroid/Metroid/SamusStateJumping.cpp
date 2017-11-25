@@ -20,13 +20,13 @@ void SamusStateJumping::setBoundCollision()
 	MetroidRect rect;
 	if (animation == NULL)
 	{
-		
+
 		if (this->samus->getDirection() == eDirection::right)
 		{
 			VECTOR2 position(this->samus->getPosition().x, samus->getPosition().y + HEIGHT_RUN);
 			rect.left = position.x + 1;
-			rect.right = position.x + (MAX_WIDTH) - 1;
-			rect.top = position.y - (MAX_HEIHT) + 1;
+			rect.right = position.x + (MAX_WIDTH)-1;
+			rect.top = position.y - (MAX_HEIHT)+1;
 			rect.bottom = position.y - 1;
 		}
 		else
@@ -52,19 +52,18 @@ void SamusStateJumping::setBoundCollision()
 		else
 		{
 			VECTOR2 position(this->samus->getPosition().x + WIDTH_RUN*0.5f, samus->getPosition().y + HEIGHT_RUN*0.5f);
-			rect.left = position.x - (MAX_WIDTH) + 1;
+			rect.left = position.x - (MAX_WIDTH)+1;
 			rect.right = position.x - 1;
-			rect.top = position.y - (MAX_HEIHT) + 1;
+			rect.top = position.y - (MAX_HEIHT)+1;
 			rect.bottom = position.y - 1;
 
 		}
 	}
-
 	samus->setBoundCollision(rect);
 }
 void SamusStateJumping::init()
 {
-
+	//if(input->isKeyDown(VK_LEFT))
 	if ((input->isKeyDown(VK_LEFT) || input->isKeyDown(VK_RIGHT)) && this->samus->isAcrobat())
 	{
 		this->animation = samus->getJumpingAnim();
@@ -73,16 +72,16 @@ void SamusStateJumping::init()
 	}
 
 	// Set Data for sprite
-	if(samus->getDirection() == eDirection::left)
+	if (samus->getDirection() == eDirection::left)
 	{
 		this->samus->setOrigin(VECTOR2(1.0f, 0));
 	}
 	else
 	{
-		this->samus->setOrigin(VECTOR2( 0, 0));
+		this->samus->setOrigin(VECTOR2(0, 0));
 	}
 	this->samus->getSprite()->setData(IndexManager::getInstance()->samusYellowJumpRight);
-	
+
 }
 
 void SamusStateJumping::handleInput(float dt)
@@ -94,7 +93,7 @@ void SamusStateJumping::handleInput(float dt)
 
 		//set velocity to move right
 		this->samus->setVelocityX(SAMUS_VERLOCITY_X);
-		
+
 		// Handle direction
 		if (this->samus->isInDirection(eDirection::left))
 		{
@@ -122,7 +121,7 @@ void SamusStateJumping::handleInput(float dt)
 				//change to orgin (0,1)
 				this->samus->setOrigin(VECTOR2(0, 0));
 			}
-			
+
 
 			this->samus->setDirection(eDirection::right);
 		}
@@ -174,11 +173,22 @@ void SamusStateJumping::handleInput(float dt)
 				//set direction to left
 				this->samus->setDirection(eDirection::left);
 			}
+			this->samus->setDirection(eDirection::left);
 		}
+
 	}
+
+	// Handle horizontal
+	//if (input->isKeyDown(VK_LEFT) && input->isKeyDown(VK_RIGHT))
+	//{
+	//	//this->samus->updateHorizontal(dt);
+	//	//this->samus->setVelocityX(-SAMUS_VERLOCITY_X);
+	//}
 #pragma endregion
 
 #pragma region Vertical
+	// Handle vertical
+
 	//set velocity.y to jump up
 	this->samus->setVelocityY(-SAMUS_VERLOCITY_Y);
 
@@ -194,12 +204,12 @@ void SamusStateJumping::handleInput(float dt)
 
 	if (this->samus->isFaling() == false)
 	{
-		
-		
+
+
 		float distance = samus->getVelocity().y*dt;
 		jumpDistance += distance*-1.0f;
-		
-		if (jumpDistance <= MAX_JUMP )
+
+		if (jumpDistance <= MAX_JUMP)
 		{
 			this->samus->setVelocityY(-SAMUS_VERLOCITY_Y);
 			this->samus->setFall(false);
@@ -224,27 +234,27 @@ void SamusStateJumping::handleInput(float dt)
 	{
 		if (input->isKeyDown(VK_Z) && input->isKeyUp(VK_UP))
 		{
+			// Set Data for sprite
+			this->samus->getSprite()->setData(IndexManager::getInstance()->samusYellowHittingAndJumpRight);
+
 			this->isUp = false;
 			if (this->samus->timerShoot > TIME_SHOOTING)
 			{
 				this->fire();
 				this->samus->timerShoot = 0;
-
-				// Set Data for sprite
-				this->samus->getSprite()->setData(IndexManager::getInstance()->samusYellowHittingAndJumpRight);
 			}
 		}
 
 		if (input->isKeyDown(VK_Z) && input->isKeyDown(VK_UP))
 		{
+			// Set Data for sprite
+			this->samus->getSprite()->setData(IndexManager::getInstance()->samusYellowHittingJumpUp);
+
 			this->isUp = true;
 			if (this->samus->timerShoot > TIME_SHOOTING)
 			{
 				this->fire();
 				this->samus->timerShoot = 0;
-
-				// Set Data for sprite
-				this->samus->getSprite()->setData(IndexManager::getInstance()->samusYellowHittingJumpUp);
 			}
 		}
 
@@ -263,79 +273,64 @@ void SamusStateJumping::handleInput(float dt)
 #pragma endregion
 
 }
-void SamusStateJumping::onCollision(BaseObject * obj, float dt)
+void SamusStateJumping::onCollision()
 {
-	CollideDirection collideDirection;
-	MetroidRect collideRect;
+	list<CollisionReturn> dataReturn = Collision::getInstance()->getDataReturn();
 	float addX = 0, addY = 0;
-	if (Collision::getInstance()->checkCollision(samus, obj, dt, collideDirection, collideRect))
+	for (list<CollisionReturn>::iterator object = dataReturn.begin(); object != dataReturn.end(); ++object)
 	{
-		switch (obj->getId())
+		eID objectID = (*object).idObject;
+		CollideDirection collideDirection = (*object).direction;
+		float entryTime = (*object).entryTime;
+		float positionCollision = (*object).positionCollision;
+		switch (objectID)
 		{
 			//handle collision with wall
-			case eID::WALL:
-				switch (collideDirection)
-				{
-					case CollideDirection::LEFT:
+		case eID::WALL:
+			switch (collideDirection)
+			{
+			case CollideDirection::LEFT:
 
-						this->samus->setCanMoveRight(false);
-						this->samus->setVelocityX(0);
-						break;
-					case CollideDirection::RIGHT:
-						this->samus->setCanMoveLeft(false);
-						this->samus->setVelocityX(0);
-						break;
-					case CollideDirection::TOP:
-						jumpDistance = 0;
-						//set jump = false, when user release jump button set to true
-						this->samus->setJump(false);
-						//when player release jump button jump is set true
-						this->samus->setJump(false);
-						//set fall to false
-						this->samus->setFall(false);
-						//reset velocity
-						this->samus->setVelocity(VECTOR2(0, 0));
-						addY = collideRect.top;
-						if (animation == NULL)
-						{
-							addX = this->samus->getPosition().x;
-						}
-						else
-						{
-							if(this->samus->isInDirection(eDirection::right))
-							{
-								addX = this->samus->getPosition().x - WIDTH_RUN*0.5f;
-							}
-							else
-							{
-								addX = this->samus->getPosition().x + WIDTH_RUN*0.5f;
-							}
-							
-						}
-						this->samus->setPosition(VECTOR2(addX, addY));
-						this->samus->setStatus(eStatus::STANDING);
-						SamusStateManager::getInstance()->changeStateTo(eStatus::STANDING);						
-						break;
-					case CollideDirection::BOTTOM:
-						jumpDistance = 0;
-						this->samus->setFall(true);
-						this->samus->setVelocityY(0);
-						addY = collideRect.bottom;
-						this->samus->setVelocityY(0);
-						
-						if(animation != NULL)
-						{
-							addY = addY + HEIGHT_RUN*0.5f;
-						}
-						this->samus->setPositionY(addY);
-						break;
+				this->samus->setCanMoveRight(false);
+				this->samus->setVelocityX(0);
+
+				break;
+			case CollideDirection::RIGHT:
+				this->samus->setCanMoveLeft(false);
+				this->samus->setVelocityX(0);
+
+
+				break;
+			case CollideDirection::TOP:
+				jumpDistance = 0;
+				//set jump = false, when user release jump button set to true
+				this->samus->setJump(false);
+				//set fall to false
+				this->samus->setFall(false);
+				//reset velocity
+				this->samus->setVelocityY(0);
+				positionCollide = positionCollision;
+				this->samus->setStatus(eStatus::STANDING);
+				break;
+			case CollideDirection::BOTTOM:
+				jumpDistance = 0;
+				this->samus->setFall(true);
+				this->samus->setVelocityY(0);
+				addY = positionCollision;
+				this->samus->setVelocityY(0);
+
+				if (animation != NULL)
+				{
+					addY = addY + HEIGHT_RUN*0.5f;
+				}
+				this->samus->setPositionY(addY);
+				break;
 			}
 			break;
 			//another object
-			default:
-				break;
+		default:
+			break;
 		}
-
 	}
 }
 void SamusStateJumping::update(float dt)
@@ -344,17 +339,46 @@ void SamusStateJumping::update(float dt)
 	{
 		this->animation->update(dt);
 	}
-	if(this->samus->canMoveLeft()||this->samus->canMoveRight())
+	if (this->samus->canMoveLeft() || this->samus->canMoveRight())
 	{
 		this->samus->updateHorizontal(dt);
 	}
-	
+
 	this->samus->updateVertical(dt);
 
-	setBoundCollision();
 
+	setBoundCollision();
+	if (this->samus->getStatus() != eStatus::JUMPING)
+	{
+		switch (this->samus->getStatus())
+		{
+		case eStatus::STANDING:
+			this->samus->setVelocityX(0);
+			if (animation == NULL)
+			{
+				this->samus->setPositionY(positionCollide);
+			}
+			else
+			{
+				if (this->samus->isInDirection(eDirection::right))
+				{
+					this->samus->setPosition(VECTOR2(this->samus->getPosition().x - WIDTH_RUN*0.5f, positionCollide));
+				}
+				else
+				{
+					this->samus->setPosition(VECTOR2(this->samus->getPosition().x + WIDTH_RUN*0.5f, positionCollide));
+				}
+			}
+			break;
+		default:
+			break;
+		}
+		SamusStateManager::getInstance()->changeStateTo(this->samus->getStatus());
+		return;
+	}
 	this->samus->setCanMoveLeft(true);
 	this->samus->setCanMoveRight(true);
+
 }
 
 

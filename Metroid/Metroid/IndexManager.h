@@ -1,30 +1,25 @@
 #pragma once
 // Class used to manage Index Sprites in Texture
 
-#define MAX_INDEX 180
+#define MAX_INDEX 192
 
 // Define NUM_FRAMES
 #define NUM_FRAMES_ZOOMER 2
 #define NUM_FRAMES_ZEB 2
 #define NUM_FRAMES_SKREE 3
-#define NUM_FRAMES_SKREE_DEATH 1
 #define NUM_FRAMES_RIO 2
-#define NUM_FRAMES_RIPPER 1
 #define NUM_FRAMES_MELLOW 2
 #define NUM_FRAMES_WAVER 3
 #define NUM_FRAMES_GUARDIAN 3
 #define NUM_FRAMES_ITEM 4
 #define NUM_FRAMES_BONUS 2
 #define NUM_FRAMES_SAMUS_START 4
-#define NUM_FRAMES_SAMUS_TURN_RIGHT 1
-#define NUM_FRAMES_SAMUS_TURN_UP 1
 #define NUM_FRAMES_SAMUS_RUNNING 3
 #define NUM_FRAMES_SAMUS_ROLLING 4
-#define NUM_FRAMES_SAMUS_JUMP 1
 #define NUM_FRAMES_SAMUS_JUMPING 4
-#define NUM_FRAMES_SAMUS_BULLET 1
 #define NUM_FRAMES_SAMUS_BOMB 3
 #define NUM_FRAMES_EXPLOSION 2
+#define NUM_FRAMES_BOSS_KRAID 2
 
 
 
@@ -136,4 +131,17 @@ public:
 	const int samusPinkBulletIceColliding = 175;
 	const int samusPinkBombEffect[3] = { 176,177,178 };
 	const int samusPinkExplosion[2] = { 179,180 };
+
+
+	const int alienSmallR = 181;
+	const int alienBigR = 182;
+	const int brickBlue = 183;
+	const int brickGreen = 184;
+	const int brickRed = 192;
+	const int brickSecretBlue = 185;
+	const int brickSecretGreen = 191;
+	const int bossDragonL = 186;
+	const int gateBlueR = 187;
+	const int gateRed = 188;
+	const int bossKraidR[2] = { 189,190 };
 };

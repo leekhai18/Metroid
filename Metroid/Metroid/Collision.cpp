@@ -10,21 +10,21 @@ Collision* Collision::getInstance()
 	}
 	return instance;
 }
-bool Collision::checkOnGround(MetroidRect obj,float distance)
+bool Collision::checkOnGround(MetroidRect obj)
 {
 	MetroidRect sweptRect;
-	sweptRect.top = obj.top-1;
-	sweptRect.bottom = obj.bottom +1;
-	sweptRect.left = obj.left + distance-1;
-	sweptRect.right = obj.right + distance+1;
-	list<BaseObject>::iterator begin = ObjectManager::getInstance()->getEntityList().begin();
+	sweptRect.top = obj.top;
+	sweptRect.bottom = obj.bottom + 1;
+	sweptRect.left = obj.left;
+	sweptRect.right = obj.right;
+	list<BaseObject*>::iterator begin = ObjectManager::getInstance()->getEntityList()->begin();
 
-	list<BaseObject>::iterator end = ObjectManager::getInstance()->getEntityList().end();
-	for (list<BaseObject>::iterator i = begin; i !=end; ++i)
+	list<BaseObject*>::iterator end = ObjectManager::getInstance()->getEntityList()->end();
+	for (list<BaseObject*>::iterator i = begin; i != end; ++i)
 	{
-		if(i->getBoundCollision().top==sweptRect.bottom)
+		if ((*i)->getBoundCollision().top == sweptRect.bottom)
 		{
-			if(isCollide(i->getBoundCollision(),sweptRect))
+			if (isCollide((*i)->getBoundCollision(), sweptRect))
 			{
 				return true;
 			}
@@ -42,13 +42,18 @@ bool Collision::isCollide(MetroidRect myRect, MetroidRect otherRect)
 	return false;
 }
 
-bool Collision::checkCollision(BaseObject * myEntity,BaseObject * otherEntity, float frametime, CollideDirection & direction, MetroidRect & collideRect)
+bool Collision::checkCollision(BaseObject * myEntity, BaseObject * otherEntity, float frametime)
 {
 	float _dxEntry, _dyEntry, _dxExit, _dyExit;
 	float _txEntry, _tyEntry, _txExit, _tyExit;
-
+	CollisionReturn data;
+	CollideDirection direction;
 	MetroidRect   myRect = myEntity->getBoundCollision();
 	MetroidRect   otherRect = otherEntity->getBoundCollision();
+	if(otherRect.top==3296)
+	{
+		int test = 0;
+	}
 	MetroidRect   broadphaseRect = getSweptBroadphaseRect(myEntity, frametime);	// là bound của object được mở rộng ra thêm một phần bằng với vận tốc (dự đoán trước bound)
 	if (!isCollide(broadphaseRect, otherRect))				// kiểm tra tính chồng lắp của 2 hcn
 	{
@@ -158,14 +163,31 @@ bool Collision::checkCollision(BaseObject * myEntity,BaseObject * otherEntity, f
 			direction = CollideDirection::TOP;
 		}
 	}
+
 	if (0<entryTime&& entryTime<1.0f)
 	{
-		collideRect = CalculateCollisionRect(broadphaseRect, otherEntity->getBoundCollision());
+		data.direction = direction;
+		data.entryTime = entryTime;
+		data.idObject = otherEntity->getId();
+		switch (direction)
+		{
+		case TOP:
+			data.positionCollision = otherRect.top;
+			break;
+		case BOTTOM:
+			data.positionCollision = otherRect.bottom;
+			break;
+		case LEFT:
+			data.positionCollision = otherRect.left;
+			break;
+		case RIGHT:
+			data.positionCollision = otherRect.right;
+			break;
+		}
+		dataReturn.push_back(data);
+		return true;
 	}
-	
-
-
-	return true;
+	return false;
 }
 
 MetroidRect Collision::CalculateCollisionRect(MetroidRect rect1, MetroidRect rect2)
@@ -197,18 +219,26 @@ MetroidRect Collision::getSweptBroadphaseRect(BaseObject * obj, float frametime)
 	return rect;
 }
 
+list<CollisionReturn>& Collision::getDataReturn()
+{
+	// TO DO: insert return statement here
+	return this->dataReturn;
+}
+
+void Collision::clearDataReturn()
+{
+	this->dataReturn.clear();
+}
+
 Collision::Collision()
 {
 }
-
-
-Collision::~Collision()
-{
-}
-
 void Collision::release()
 {
 	delete instance;
 }
 
-
+Collision::~Collision()
+{
+	
+}

@@ -22,10 +22,7 @@ void BaseState::setBoundCollision()
 {
 }
 
-void BaseState::onCollision(BaseObject * obj, float dt)
+void BaseState::onCollision()
 {
 }
 
-void BaseState::onCollisionBullet(BaseObject * obj, float dt)
-{
-}

@@ -9,16 +9,14 @@ private:
 	float timerToRunning;
 
 public:
-	SamusStateStanding(); 
+	SamusStateStanding();
 	SamusStateStanding(Samus* samus, Input* input);
 	~SamusStateStanding();
 
 	void init();
-	void setBoundCollision();
-
 	void handleInput(float dt);
 	void update(float dt);
-
+	void setBoundCollision();
 	void onStart();
 	void onExit();
 

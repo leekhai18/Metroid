@@ -12,8 +12,8 @@ Zommer::Zommer(TextureManager * textureM, Graphics * graphics) : BaseObject(eID:
 
 	this->sprite->setOrigin(VECTOR2(0.5f, 0.5f));
 
-	animation = new Animation(this->sprite, IndexManager::getInstance()->zoomerRed, NUM_FRAMES_ZOOMER, TIME_FRAME_DELAY);
-	animation->start();
+	anim = new Animation(this->sprite, IndexManager::getInstance()->zoomerRed, NUM_FRAMES_ZOOMER, TIME_FRAME_DELAY);
+	anim->start();
 
 	
 }
@@ -25,12 +25,12 @@ Zommer::Zommer()
 
 Zommer::~Zommer()
 {
-	
+	delete this->anim;
 }
 
 void Zommer::update(float dt)
 {
-	this->animation->update(dt);
+	this->anim->update(dt);
 	this->setPosition(VECTOR2(this->getPosition().x + 3 * change, this->getPosition().y));
 	if (this->getPosition().x > GAME_WIDTH) {
 		change = -1;
@@ -43,13 +43,4 @@ void Zommer::update(float dt)
 void Zommer::draw()
 {
 		this->sprite->draw();
-}
-
-void Zommer::release()
-{
-	delete this->sprite;
-	delete this->animation;
-
-	this->sprite = nullptr;
-	this->animation = nullptr;
 }

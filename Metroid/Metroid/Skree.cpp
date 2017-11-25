@@ -1,4 +1,9 @@
 #include "Skree.h"
+#define TIME_FRAME_DELAY 0.15f
+#define X_OVER_HEAD 50
+#define RATE_AREA_ACTIVE 0.15f
+#define RATE_TIME_FRAME_UP 0.3f
+#define EFFECT_DEATH_TIME 1.5f
 
 
 Skree::Skree(TextureManager * textureM, Graphics * graphics) : BaseObject(eID::SKREE)
@@ -16,7 +21,7 @@ Skree::Skree(TextureManager * textureM, Graphics * graphics) : BaseObject(eID::S
 
 	effectDeath = new SkreeEffectDeath(textureM, graphics);
 
-	this->startPosition = VECTOR2(500, 100);
+	this->startPosition = VECTOR2(800, 3200);
 	this->target = VECTOR2ZERO;
 	this->setPosition(this->startPosition);
 
@@ -49,7 +54,7 @@ void Skree::update(float dt)
 	{
 		if (t < 1)
 		{
-			t += dt * RATE_BEZIER;
+			t += dt;
 			this->setPosition((1-t)*(1-t)*startPosition + 2*(1-t)*t*VECTOR2(target.x, target.y - X_OVER_HEAD) + t*t*target);
 		}
 		else 
@@ -75,17 +80,18 @@ void Skree::update(float dt)
 
 void Skree::draw()
 {
-	if (this->sprite != nullptr)
-		this->sprite->draw();
+		if (this->sprite != nullptr)
+			this->sprite->draw();
 
-	if (this->effectDeath->isInit())
-		this->effectDeath->draw();
+		if (this->effectDeath->isInit())
+			this->effectDeath->draw();
 }
+
 
 void Skree::release()
 {
-	delete this->sprite;
 	delete this->animationRotate;
+	delete this->sprite;
 
 	this->sprite = nullptr;
 	this->animationRotate = nullptr;

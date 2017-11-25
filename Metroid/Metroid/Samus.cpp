@@ -1,5 +1,6 @@
 #include "Samus.h"
 #include "SamusStateManager.h"
+#include "Camera.h"
 
 Samus::Samus(TextureManager* textureM,Graphics* graphics, Input* input) : BaseObject(eID::SAMUS)
 {
@@ -11,10 +12,10 @@ Samus::Samus(TextureManager* textureM,Graphics* graphics, Input* input) : BaseOb
 	}
 
 	this->setPosition(VECTOR2(640, 3312));
-	runningNormalAnimation = new Animation(this->sprite, IndexManager::getInstance()->samusYellowRunningRight, NUM_FRAMES_SAMUS_RUNNING, 0.07f);
-	runningUpAnimation = new Animation(this->sprite, IndexManager::getInstance()->samusYellowRunningUpRight, NUM_FRAMES_SAMUS_RUNNING, 0.07f);
-	runningHittingRightAnimation = new Animation(this->sprite, IndexManager::getInstance()->samusYellowHittingAndRunningRight, NUM_FRAMES_SAMUS_RUNNING, 0.07f);
-	rollingAnimation = new Animation(this->sprite, IndexManager::getInstance()->samusYellowRollingRight, NUM_FRAMES_SAMUS_ROLLING, 0.07f);
+	runningNormalAnimation = new Animation(this->sprite, IndexManager::getInstance()->samusYellowRunningRight, NUM_FRAMES_SAMUS_RUNNING, 0.05f);
+	runningUpAnimation = new Animation(this->sprite, IndexManager::getInstance()->samusYellowRunningUpRight, NUM_FRAMES_SAMUS_RUNNING, 0.05f);
+	runningHittingRightAnimation = new Animation(this->sprite, IndexManager::getInstance()->samusYellowHittingAndRunningRight, NUM_FRAMES_SAMUS_RUNNING, 0.05f);
+	rollingAnimation = new Animation(this->sprite, IndexManager::getInstance()->samusYellowRollingRight, NUM_FRAMES_SAMUS_ROLLING, 0.1f);
 	jumpingAnimation = new Animation(this->sprite, IndexManager::getInstance()->samusYellowJumpingRight, NUM_FRAMES_SAMUS_JUMPING, 0.04f);
 	startingAnimation = new Animation(this->sprite, IndexManager::getInstance()->samusYellowStart, NUM_FRAMES_SAMUS_START, 1, false);
 
@@ -44,48 +45,41 @@ Samus::~Samus()
 
 void Samus::draw()
 {
-	if (this->camera)
-	{
-		this->sprite->setTransformCamera(VECTOR2(GAME_WIDTH*0.5f - camera->getPosition().x, GAME_HEIGHT*0.5f - camera->getPosition().y));
-
-		for (unsigned i = 0; i < this->bulletPool->getListUsing().size(); i++)
-		{
-			this->bulletPool->getListUsing().at(i)->getSprite()->setTransformCamera(VECTOR2(GAME_WIDTH*0.5f - camera->getPosition().x, GAME_HEIGHT*0.5f - camera->getPosition().y));
-			this->bulletPool->getListUsing().at(i)->draw();
-		}
-	}
+	for (unsigned i = 0; i < this->bulletPool->getListUsing().size(); i++)
+		this->bulletPool->getListUsing().at(i)->draw();
 
 	this->sprite->draw();
-
 }
 
 void Samus::handleInput(float dt)
 {
 	SamusStateManager::getInstance()->getCurrentState()->handleInput(dt);
 
-	if (this->camera->canFollowHorizon())
+	if (Camera::getInstance()->canFollowHorizon())
 	{
-		if ((input->isKeyUp(VK_LEFT) && input->isKeyUp(VK_RIGHT)) || (input->isKeyDown(VK_LEFT) && input->isKeyDown(VK_RIGHT)))
-			this->camera->setVelocity(VECTOR2(this->getVelocity().x, 0));
+		if ((input->isKeyUp(VK_LEFT) && input->isKeyUp(VK_RIGHT)) || (input->isKeyDown(VK_LEFT) && input->isKeyDown(VK_RIGHT)) || this->isInStatus(eStatus::STANDING))
+			Camera::getInstance()->setVelocity(VECTOR2(this->getVelocity().x, 0));
 	}
 }
 
-void Samus::onCollision(BaseObject * object, float dt)
+void Samus::onCollision()
 {
-	SamusStateManager::getInstance()->getCurrentState()->onCollision(object, dt);
+	SamusStateManager::getInstance()->getCurrentState()->onCollision();
 }
 
 void Samus::update(float dt)
 {
-	if (this->camera->canFollowHorizon())
+	if (Camera::getInstance()->canFollowHorizon())
 	{
-		if ((this->getPosition().x > this->camera->getActiveArea().right) || (this->getPosition().x < this->camera->getActiveArea().left))
-			this->camera->setVelocity(VECTOR2(this->getVelocity().x, 0));
+		if ((this->getPosition().x > Camera::getInstance()->getActiveArea().right) || 
+			(this->getPosition().x < Camera::getInstance()->getActiveArea().left))
+			Camera::getInstance()->setVelocity(VECTOR2(this->getVelocity().x, 0));
 	}
 	else
 	{
-		if ((this->getPosition().y > this->camera->getActiveArea().top) || (this->getPosition().y < this->camera->getActiveArea().bottom))
-			this->camera->setVelocity(VECTOR2(0, this->getVelocity().y));
+		if ((this->getPosition().y > Camera::getInstance()->getActiveArea().top) ||
+			(this->getPosition().y < Camera::getInstance()->getActiveArea().bottom))
+			Camera::getInstance()->setVelocity(VECTOR2(0, this->getVelocity().y));
 	}
 
 
@@ -98,7 +92,7 @@ void Samus::update(float dt)
 
 void Samus::release()
 {
-	delete sprite;
+	delete this->sprite;
 	delete runningNormalAnimation;
 	delete runningUpAnimation;
 	delete runningHittingRightAnimation;
@@ -168,6 +162,11 @@ void Samus::setFall(bool isFall)
 			this->totalHeightWasJumped = 0;
 	}
 }
+void Samus::setBoundCollision(MetroidRect rect)
+{
+	this->boundCollision = rect;
+	this->activeBound = rect;
+}
 
 void Samus::setAcrobat(bool acrobat)
 {
@@ -202,10 +201,5 @@ Animation * Samus::getRollingAnim()
 Animation * Samus::getJumpingAnim()
 {
 	return this->jumpingAnimation;
-}
-
-void Samus::setCamera(Camera * cam)
-{
-	this->camera = cam;
 }
 

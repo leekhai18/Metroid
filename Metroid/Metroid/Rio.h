@@ -4,15 +4,13 @@
 
 
 #define TIME_FRAME_DELAY 0.15f
-#define X_OVER_HEAD 200
-#define Y_OVER_TARGET 2
 #define RATE_AREA_ACTIVE 0.15f
 #define WIDTH_AREA_ACTIVE 200
 
 class Rio: public BaseObject
 {
 private:
-	Animation *animation;
+	Animation *anim;
 
 	VECTOR2 startPosition;
 	VECTOR2 target;
@@ -36,7 +34,6 @@ public:
 
 	void update(float dt);
 	void draw();
-	void release();
 
 	VECTOR2 getTarget();
 	bool getStatusRollTarget();

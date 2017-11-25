@@ -22,7 +22,7 @@ public:
 	void update(float dt);
 
 	void setBoundCollision();
-	void onCollision(BaseObject* obj, float dt);
+	void onCollision();
 
 	void onStart();
 	void onExit();

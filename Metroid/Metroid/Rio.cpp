@@ -11,8 +11,8 @@ Rio::Rio(TextureManager * textureM, Graphics * graphics) : BaseObject(eID::RIO)
 
 	this->sprite->setOrigin(VECTOR2(0.5f, 0.5f));
 
-	animation = new Animation(this->sprite, IndexManager::getInstance()->rioBlue, NUM_FRAMES_RIO, TIME_FRAME_DELAY);
-	animation->start();
+	anim = new Animation(this->sprite, IndexManager::getInstance()->rioBlue, NUM_FRAMES_RIO, TIME_FRAME_DELAY);
+	anim->start();
 
 	this->startPosition = VECTOR2(200, 100);
 	this->target = VECTOR2ZERO;
@@ -32,12 +32,13 @@ Rio::Rio()
 
 Rio::~Rio()
 {
-
+	delete this->anim;
+	delete this->sprite;
 }
 
 void Rio::update(float dt)
 {
-	this->animation->update(dt);
+	this->anim->update(dt);
 	if (this->target != VECTOR2ZERO && this->isInStatus(eStatus::START))
 	{
 		if (P1.x < target.x && target.x < P3.x && getStatusRollTarget() == true)
@@ -125,15 +126,6 @@ void Rio::update(float dt)
 void Rio::draw()
 {
 	this->sprite->draw();
-}
-
-void Rio::release()
-{
-	delete this->sprite;
-	delete this->animation;
-
-	this->sprite = nullptr;
-	this->animation = nullptr;
 }
 
 VECTOR2 Rio::getTarget()

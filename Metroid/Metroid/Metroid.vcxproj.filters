@@ -19,6 +19,21 @@
     <Filter Include="Objects">
       <UniqueIdentifier>{a2606627-782c-4fdf-a3ed-b62f9b602dde}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Objects\Items">
+      <UniqueIdentifier>{82bab096-89df-4b5c-ba2c-2d6c1e7a3ad8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Objects\Samus">
+      <UniqueIdentifier>{2d91bc63-efa7-48b1-adf0-00db7af7516e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Objects\BaseObject">
+      <UniqueIdentifier>{cce2dc4e-cbc2-41f4-a404-9c5799c9883b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Objects\ObjectManager">
+      <UniqueIdentifier>{39f017f9-ea53-4642-b232-fca00505a5b3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="QuadTree">
+      <UniqueIdentifier>{699e57c9-9f4f-4ac5-860b-108ef39dd5fa}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Constants.h">
@@ -54,14 +69,8 @@
     <ClInclude Include="Animation.h">
       <Filter>Framework</Filter>
     </ClInclude>
-    <ClInclude Include="BaseObject.h">
-      <Filter>Objects</Filter>
-    </ClInclude>
     <ClInclude Include="IndexManager.h">
       <Filter>Framework</Filter>
-    </ClInclude>
-    <ClInclude Include="BaseState.h">
-      <Filter>Objects</Filter>
     </ClInclude>
     <ClInclude Include="Skree.h">
       <Filter>Objects</Filter>
@@ -70,12 +79,6 @@
       <Filter>Objects</Filter>
     </ClInclude>
     <ClInclude Include="SkreeEffectDeath.h">
-      <Filter>Objects</Filter>
-    </ClInclude>
-    <ClInclude Include="Bullet.h">
-      <Filter>Objects</Filter>
-    </ClInclude>
-    <ClInclude Include="BulletPool.h">
       <Filter>Objects</Filter>
     </ClInclude>
     <ClInclude Include="Zeb.h">
@@ -108,32 +111,50 @@
     <ClInclude Include="Map.h">
       <Filter>Framework</Filter>
     </ClInclude>
-    <ClInclude Include="Samus.h">
-      <Filter>Objects</Filter>
-    </ClInclude>
-    <ClInclude Include="SamusStateJumping.h">
-      <Filter>Objects</Filter>
-    </ClInclude>
-    <ClInclude Include="SamusStateManager.h">
-      <Filter>Objects</Filter>
-    </ClInclude>
-    <ClInclude Include="SamusStateRolling.h">
-      <Filter>Objects</Filter>
-    </ClInclude>
-    <ClInclude Include="SamusStateRunning.h">
-      <Filter>Objects</Filter>
-    </ClInclude>
-    <ClInclude Include="SamusStateStanding.h">
-      <Filter>Objects</Filter>
-    </ClInclude>
-    <ClInclude Include="SamusStateStart.h">
-      <Filter>Objects</Filter>
-    </ClInclude>
     <ClInclude Include="Collision.h">
       <Filter>Framework</Filter>
     </ClInclude>
+    <ClInclude Include="MaruMari.h">
+      <Filter>Objects\Items</Filter>
+    </ClInclude>
+    <ClInclude Include="Bullet.h">
+      <Filter>Objects\Samus</Filter>
+    </ClInclude>
+    <ClInclude Include="Samus.h">
+      <Filter>Objects\Samus</Filter>
+    </ClInclude>
+    <ClInclude Include="SamusStateJumping.h">
+      <Filter>Objects\Samus</Filter>
+    </ClInclude>
+    <ClInclude Include="SamusStateManager.h">
+      <Filter>Objects\Samus</Filter>
+    </ClInclude>
+    <ClInclude Include="SamusStateRolling.h">
+      <Filter>Objects\Samus</Filter>
+    </ClInclude>
+    <ClInclude Include="SamusStateRunning.h">
+      <Filter>Objects\Samus</Filter>
+    </ClInclude>
+    <ClInclude Include="SamusStateStanding.h">
+      <Filter>Objects\Samus</Filter>
+    </ClInclude>
+    <ClInclude Include="SamusStateStart.h">
+      <Filter>Objects\Samus</Filter>
+    </ClInclude>
+    <ClInclude Include="BaseObject.h">
+      <Filter>Objects\BaseObject</Filter>
+    </ClInclude>
+    <ClInclude Include="BaseState.h">
+      <Filter>Objects\BaseObject</Filter>
+    </ClInclude>
+    <ClInclude Include="BulletPool.h">
+      <Filter>Objects\Samus</Filter>
+    </ClInclude>
     <ClInclude Include="ObjectManager.h">
-      <Filter>Objects</Filter>
+      <Filter>Objects\ObjectManager</Filter>
+    </ClInclude>
+    <ClInclude Include="Quadtree.h">
+      <Filter>QuadTree</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -161,14 +182,8 @@
     <ClCompile Include="Animation.cpp">
       <Filter>Framework</Filter>
     </ClCompile>
-    <ClCompile Include="BaseObject.cpp">
-      <Filter>Objects</Filter>
-    </ClCompile>
     <ClCompile Include="IndexManager.cpp">
       <Filter>Framework</Filter>
-    </ClCompile>
-    <ClCompile Include="BaseState.cpp">
-      <Filter>Objects</Filter>
     </ClCompile>
     <ClCompile Include="Skree.cpp">
       <Filter>Objects</Filter>
@@ -177,12 +192,6 @@
       <Filter>Objects</Filter>
     </ClCompile>
     <ClCompile Include="SkreeEffectDeath.cpp">
-      <Filter>Objects</Filter>
-    </ClCompile>
-    <ClCompile Include="Bullet.cpp">
-      <Filter>Objects</Filter>
-    </ClCompile>
-    <ClCompile Include="BulletPool.cpp">
       <Filter>Objects</Filter>
     </ClCompile>
     <ClCompile Include="Zeb.cpp">
@@ -218,32 +227,50 @@
     <ClCompile Include="Metroid.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Samus.cpp">
-      <Filter>Objects</Filter>
-    </ClCompile>
-    <ClCompile Include="SamusStateJumping.cpp">
-      <Filter>Objects</Filter>
-    </ClCompile>
-    <ClCompile Include="SamusStateManager.cpp">
-      <Filter>Objects</Filter>
-    </ClCompile>
-    <ClCompile Include="SamusStateRolling.cpp">
-      <Filter>Objects</Filter>
-    </ClCompile>
-    <ClCompile Include="SamusStateRunning.cpp">
-      <Filter>Objects</Filter>
-    </ClCompile>
-    <ClCompile Include="SamusStateStanding.cpp">
-      <Filter>Objects</Filter>
-    </ClCompile>
-    <ClCompile Include="SamusStateStart.cpp">
-      <Filter>Objects</Filter>
-    </ClCompile>
     <ClCompile Include="Collision.cpp">
       <Filter>Framework</Filter>
     </ClCompile>
+    <ClCompile Include="MaruMari.cpp">
+      <Filter>Objects\Items</Filter>
+    </ClCompile>
+    <ClCompile Include="Bullet.cpp">
+      <Filter>Objects\Samus</Filter>
+    </ClCompile>
+    <ClCompile Include="Samus.cpp">
+      <Filter>Objects\Samus</Filter>
+    </ClCompile>
+    <ClCompile Include="SamusStateJumping.cpp">
+      <Filter>Objects\Samus</Filter>
+    </ClCompile>
+    <ClCompile Include="SamusStateManager.cpp">
+      <Filter>Objects\Samus</Filter>
+    </ClCompile>
+    <ClCompile Include="SamusStateRolling.cpp">
+      <Filter>Objects\Samus</Filter>
+    </ClCompile>
+    <ClCompile Include="SamusStateRunning.cpp">
+      <Filter>Objects\Samus</Filter>
+    </ClCompile>
+    <ClCompile Include="SamusStateStanding.cpp">
+      <Filter>Objects\Samus</Filter>
+    </ClCompile>
+    <ClCompile Include="SamusStateStart.cpp">
+      <Filter>Objects\Samus</Filter>
+    </ClCompile>
+    <ClCompile Include="BaseObject.cpp">
+      <Filter>Objects\BaseObject</Filter>
+    </ClCompile>
+    <ClCompile Include="BaseState.cpp">
+      <Filter>Objects\BaseObject</Filter>
+    </ClCompile>
+    <ClCompile Include="BulletPool.cpp">
+      <Filter>Objects\Samus</Filter>
+    </ClCompile>
     <ClCompile Include="ObjectManager.cpp">
-      <Filter>Objects</Filter>
+      <Filter>Objects\ObjectManager</Filter>
+    </ClCompile>
+    <ClCompile Include="Quadtree.cpp">
+      <Filter>QuadTree</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

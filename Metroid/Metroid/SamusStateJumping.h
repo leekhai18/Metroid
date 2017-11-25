@@ -6,6 +6,7 @@ class SamusStateJumping : public BaseState
 private:
 	bool isUp;
 	float jumpDistance;
+	float positionCollide;
 public:
 	SamusStateJumping();
 	SamusStateJumping(Samus* samus, Input* input);
@@ -16,7 +17,7 @@ public:
 	void update(float dt);
 
 	void setBoundCollision();
-	void onCollision(BaseObject * obj, float dt);
+	void onCollision();
 
 	void onStart();
 	void onExit();

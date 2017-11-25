@@ -1,6 +1,14 @@
 #include "BaseObject.h"
 
+bool BaseObject::getActive()
+{
+	return this->active;
+}
 
+void BaseObject::setActive(bool active)
+{
+	this->active = active;
+}
 
 BaseObject::BaseObject(eID id)
 {
@@ -42,7 +50,6 @@ eStatus BaseObject::getStatus()
 
 void BaseObject::setStatus(eStatus status)
 {
-	if (this->status != status)
 		this->status = status;
 }
 
@@ -62,7 +69,6 @@ eDirection BaseObject::getDirection()
 
 void BaseObject::setDirection(eDirection direct)
 {
-	if (this->direction != direct)
 		this->direction = direct;
 }
 
@@ -146,7 +152,7 @@ Sprite * BaseObject::getSprite()
 	return this->sprite;
 }
 
-void BaseObject::onCollision(BaseObject * object, float dt)
+void BaseObject::onCollision()
 {
 
 }
@@ -179,4 +185,13 @@ void BaseObject::setVelocityY(float y)
 void BaseObject::setVelocity(VECTOR2 velocity)
 {
 	this->velocity = velocity;
+}
+MetroidRect BaseObject::getActiveBound()
+{
+	return this->activeBound;
+}
+
+void BaseObject::setActiveBound(MetroidRect rect)
+{
+	this->activeBound = rect;
 }

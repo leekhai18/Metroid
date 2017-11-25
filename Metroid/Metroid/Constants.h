@@ -49,24 +49,36 @@ const char SOURCE_IMAGE[] = "Resources\\SpriteSheets\\MetroidTexture.png";//char
 const char SOURCE_JSON[] = "json\\MetroidTexture.json"; //json file of metroid sprite
 const char MAP_BRINSTAR_JSON[] = "json\\MapBrinstar.json"; //json file of map brinstar
 const char TILESET_IMAGE[] = "Resources\\Tileset\\Tileset.png"; //tileset of map brinstar
+const char OBJECT_LAYER_BRINSTAR_JSON[] = "json\\ObjectLayerBrinstar.json"; //object layer json of Brinstar
 
-//Rectangle of metroid
+																			//Rectangle of metroid
 struct MetroidRect
 {
 	float top, left, right, bottom;
+	MetroidRect()
+	{
+	};
+	MetroidRect(float top, float bottom, float left, float right)
+	{
+		this->top = top;
+		this->bottom = bottom;
+		this->left = left;
+		this->right = right;
+	};
 };
 
 // Element ID
 enum eID {
-	SAMUS = 0,
-	SKREE = 1,
-	ZEB = 2,
-	WAVER = 3,
-	WALL = 4,
-	PORT = 5,
-	FIRE = 6,
-	ZOMMER = 7,
-	RIO = 8,
+	SAMUS,
+	SKREE,
+	ZEB,
+	WAVER,
+	WALL,
+	PORT,
+	FIRE,
+	ZOMMER,
+	RIO,
+	MARUMARI,
 };
 // collision direction
 enum CollideDirection
@@ -80,15 +92,15 @@ enum CollideDirection
 
 // Element's status
 enum eStatus {
-	START = 0,
-	JUMPING = 1,
-	RUNNING = 2,
-	ROLLING = 3,
-	ENDING = 4,
-	STANDING = 5,
-	FALLING = 6,
-	FOLLOW = 7,
-	HITTING = 8,
+	START,
+	JUMPING,
+	RUNNING,
+	ROLLING,
+	ENDING,
+	STANDING,
+	FALLING,
+	FOLLOW,
+	HITTING,
 };
 
 // direction
@@ -102,4 +114,16 @@ enum eFont {
 	body,
 	header,
 	header1,
+};
+
+struct CollisionReturn
+{
+	// top, left ,right ,bottom
+	CollideDirection direction;
+	//id of object that main object collide with
+	eID idObject;
+	//time two object collide
+	float entryTime;
+	//position of side that object collide. For example, when direction = TOP, it means positionCollision = otherBound.top
+	float positionCollision;
 };

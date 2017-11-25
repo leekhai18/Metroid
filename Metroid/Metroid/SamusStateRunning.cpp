@@ -13,6 +13,7 @@ SamusStateRunning::SamusStateRunning(Samus * samus, Input * input) : BaseState(s
 
 SamusStateRunning::~SamusStateRunning()
 {
+
 }
 void SamusStateRunning::setBoundCollision()
 {
@@ -34,7 +35,6 @@ void SamusStateRunning::setBoundCollision()
 		rect.bottom = position.y - 1;
 
 	}
-
 	samus->setBoundCollision(rect);
 }
 
@@ -50,112 +50,46 @@ void SamusStateRunning::init()
 void SamusStateRunning::handleInput(float dt)
 {
 #pragma region Horizontal
+	if ((input->isKeyUp(VK_RIGHT) && input->isKeyUp(VK_LEFT)) || (input->isKeyDown(VK_LEFT) && input->isKeyDown(VK_RIGHT))
+		|| (input->isKeyDown(VK_RIGHT) && this->samus->isInDirection(eDirection::left))
+		|| (input->isKeyDown(VK_LEFT) && this->samus->isInDirection(eDirection::right)))
+	{
+		//reset velocity
+		this->samus->setVelocityX(0);
+		this->samus->setStatus(eStatus::STANDING);
+		return;
+	}
 	if (input->isKeyDown(VK_LEFT) && input->isKeyUp(VK_RIGHT))
 	{
-		if (this->samus->isInDirection(eDirection::right))
-		{
-			this->samus->setFlipX(true);
-			this->samus->setDirection(eDirection::left);
-		}
-
 		this->samus->setVelocityX(-SAMUS_VERLOCITY_X);
 	}
 
 	if (input->isKeyUp(VK_LEFT) && input->isKeyDown(VK_RIGHT))
 	{
-		if (this->samus->isInDirection(eDirection::left))
-		{
-			this->samus->setFlipX(false);
-			this->samus->setDirection(eDirection::right);
-		}
-
 		this->samus->setVelocityX(SAMUS_VERLOCITY_X);
 	}
 
-	if ((input->isKeyUp(VK_RIGHT) && input->isKeyUp(VK_LEFT)) || (input->isKeyDown(VK_LEFT) && input->isKeyDown(VK_RIGHT)))
-	{
-		//reset velocity
-		this->samus->setVelocityX(0);
-		//When change to state standing, we must change position because orgin of state running is (0.5 , 1) 
-		//and orgin of state running is (0,1) or (1,1) depend on samus side 
-		if(samus->getDirection() == eDirection::right)
-		{
-			//	BoundCollision    TOTAL_RECT
-			//		   \		 /
-			//	 	    \___ __ /
-			//		  	|   |_||
-			//			|	|  |
-			//1			|___|__|     position
-			//			   |_ _ _ _ _ _ |	
-			//         _ _/				|
-			//	Orgin /_ _ _ _ _		|
-			//	     ______	    / 		|	
-			// 2    |	|_||   /		|
-			//		|	|  |  /		   /
-			//		|___|__| /		  /
-			//      |_ _ _ _/		 /
-			//        |_ _ _ _ _ _ _/
-			//when change to standing state, orgin change from (0.5, 0,5) to (0 , 1).  
-			this->samus->setPositionX(this->samus->getPosition().x - WIDTH_RUN*0.5f);
-		}
-		else
-		{
-			//
-			//
-			//TOTAL_RECT	BoundCollision
-			//	   \		  /
-			//	 	\ __ ___ /
-			//		 ||_|	|
-			//		 |	|	|	
-			//1		 |__|___|        position
-			//			/_ _ _ _ _ _ _ _|	
-			//         /				|
-			//	Orgin /_ _ _ _			|
-			//	  __ ___	 /			|	
-			// 2 ||_|	|	/			|
-			//	 |	|	|  /		   /
-			//	 |__|___| /		      /
-			//   |_ _ _ |/			 /
-			//          | _ _ _ _ _ /  
-			//when change to standing state, orgin change from (0.5, 0,5) to (1 , 1). 
-			this->samus->setPositionX(this->samus->getPosition().x + WIDTH_RUN*0.5f);
-		}
-		this->samus->setStatus(eStatus::STANDING);
-		SamusStateManager::getInstance()->changeStateTo(eStatus::STANDING);
-		return;
-	}
+
 #pragma endregion
 
-	if(input->isKeyUp(VK_X) == true)
+	if (input->isKeyUp(VK_X) == true)
 	{
 		this->samus->setJump(true);
 	}
 	//When we press jump key, change state to jump
-	if (input->isKeyDown(VK_X)&&this->samus->isJump() == true)
+	if (input->isKeyDown(VK_X) && this->samus->isJump() == true)
 	{
-		this->samus->setAcrobat(true);
-		//stop current animation
-		this->animation->stop();
 		//reset velocity
 		this->samus->setVelocityX(0);
-		//When change to jump state, orgin will (0.5,0.5), so we change position( depend on samus side)
-		if(this->samus->getDirection() == eDirection::right)
-		{
-			this->samus->setPosition(VECTOR2(this->samus->getPosition().x + WIDTH_RUN*0.5f, this->samus->getPosition().y - HEIGHT_RUN*0.5f));
-		}
-		else
-		{
-			this->samus->setPosition(VECTOR2(this->samus->getPosition().x - WIDTH_RUN*0.5f, this->samus->getPosition().y - HEIGHT_RUN*0.5f));
-		}
-		//change state to jump
+		this->samus->setFall(false);
+		this->samus->setAcrobat(true);
 		this->samus->setStatus(eStatus::JUMPING);
-		SamusStateManager::getInstance()->changeStateTo(eStatus::JUMPING);
 		return;
 	}
 
 	//when we press up button hand of samus will raise to sky
 	if (input->isKeyDown(VK_UP))
-	{		
+	{
 		//stop current animation
 		this->animation->stop();
 		//change animation to hand raise to sky
@@ -187,8 +121,6 @@ void SamusStateRunning::handleInput(float dt)
 		this->animation->stop();
 
 		this->samus->getSprite()->setData(IndexManager::getInstance()->samusYellowHittingUp);
-		this->samus->setOrigin(VECTOR2(0.5f, 1.0f));
-
 		this->animation = runningUp;
 		this->animation->start();
 
@@ -208,60 +140,54 @@ void SamusStateRunning::handleInput(float dt)
 		this->animation->start();
 	}
 
-	
-}
-void SamusStateRunning::onCollision(BaseObject * obj, float dt)
-{
-	CollideDirection collideDirection;
-	MetroidRect collideRect;
-	float addX = 0, addY = 0;
-	if (!Collision::getInstance()->checkOnGround(samus->getBoundCollision(), dt*samus->getVelocity().x))
+	if (!Collision::getInstance()->checkOnGround(samus->getBoundCollision()))
 	{
 		this->samus->setAcrobat(false);
 		this->samus->setFall(true);
 		this->samus->setVelocityX(0);
-		//change orgin.y = 1 in running state to orgin.y = 0 in jumping state, so we change position.y		
-		this->samus->setPositionY(this->samus->getPosition().y - HEIGHT_RUN);
 
 		this->samus->setStatus(eStatus::JUMPING);
-		SamusStateManager::getInstance()->changeStateTo(eStatus::JUMPING);
-
 		return;
 	}
-	if (Collision::getInstance()->checkCollision(samus, obj, dt, collideDirection, collideRect))
-	{
-		switch (obj->getId())
-		{
-			case eID::WALL:
-				switch (collideDirection)
-				{
-					case CollideDirection::LEFT:
-						this->samus->setVelocityX(0);
-						//not allow move left
-						this->samus->setCanMoveRight(false);
-						//change to standing state
-						this->samus->setPositionX(this->samus->getPosition().x - WIDTH_RUN*0.5f);
-						this->samus->setStatus(eStatus::STANDING);
-						SamusStateManager::getInstance()->changeStateTo(eStatus::STANDING);
-						break;
-					case CollideDirection::RIGHT:
-						this->samus->setVelocityX(0);
-						//not allow move right
-						this->samus->setCanMoveLeft(false);
-						//change to standing state
-						this->samus->setPositionX(this->samus->getPosition().x + WIDTH_RUN*0.5f);
-						this->samus->setStatus(eStatus::STANDING);
-						SamusStateManager::getInstance()->changeStateTo(eStatus::STANDING);
-						break;
-					case CollideDirection::TOP:
-						break;
-				}
-				break;
-			default:
-				break;
-		}
 
+}
+void SamusStateRunning::onCollision()
+{
+	list<CollisionReturn> dataReturn = Collision::getInstance()->getDataReturn();
+	float addX = 0, addY = 0;
+	for (list<CollisionReturn>::iterator object = dataReturn.begin(); object != dataReturn.end(); ++object)
+	{
+		eID objectID = (*object).idObject;
+		CollideDirection collideDirection = (*object).direction;
+		float entryTime = (*object).entryTime;
+		float positionCollision = (*object).positionCollision;
+		switch (objectID)
+		{
+		case eID::WALL:
+			switch (collideDirection)
+			{
+			case CollideDirection::LEFT:
+				this->samus->setVelocityX(0);
+				//not allow move left
+				this->samus->setCanMoveRight(false);
+				this->samus->setStatus(eStatus::STANDING);
+				break;
+			case CollideDirection::RIGHT:
+				this->samus->setVelocityX(0);
+				//not allow move right
+				this->samus->setCanMoveLeft(false);
+				this->samus->setStatus(eStatus::STANDING);
+				break;
+			case CollideDirection::TOP:
+				break;
+			}
+			break;
+		default:
+			break;
+		}
 	}
+
+
 }
 void SamusStateRunning::update(float dt)
 {
@@ -271,8 +197,84 @@ void SamusStateRunning::update(float dt)
 
 	setBoundCollision();
 
-	this->samus->setVelocity(VECTOR2(0, 0));
+	if (this->samus->getStatus() != eStatus::RUNNING)
+	{
+		switch (this->samus->getStatus())
+		{
+		case eStatus::JUMPING:
 
+			//stop current animation
+			this->animation->stop();
+			if (this->samus->isAcrobat())
+			{
+				//When change to jump state, orgin will (0.5,0.5), so we change position.y
+				this->samus->setPosition(VECTOR2(this->samus->getPosition().x, this->samus->getPosition().y - HEIGHT_RUN*0.5f));
+			}
+			else
+			{
+				//change orgin.y = 1 in running state to orgin.y = 0 in jumping state, so we change position.y		
+				if (this->samus->getDirection() == eDirection::right)
+				{
+					this->samus->setPosition(this->samus->getPosition().x - WIDTH_RUN*0.5f, this->samus->getPosition().y - HEIGHT_RUN);
+				}
+				else
+				{
+					this->samus->setPosition(this->samus->getPosition().x + WIDTH_RUN*0.5f, this->samus->getPosition().y - HEIGHT_RUN);
+				}
+			}
+			break;
+		case eStatus::STANDING:
+			//When change to state standing, we must change position because orgin of state running is (0.5 , 1) 
+			//and orgin of state running is (0,1) or (1,1) depend on samus side 
+			if (samus->getDirection() == eDirection::right)
+			{
+				//	BoundCollision    TOTAL_RECT
+				//		   \		 /
+				//	 	    \___ __ /
+				//		  	|   |_||
+				//			|	|  |
+				//1			|___|__|     position
+				//			   |_ _ _ _ _ _ |	
+				//         _ _/				|
+				//	Orgin /_ _ _ _ _		|
+				//	     ______	    / 		|	
+				// 2    |	|_||   /		|
+				//		|	|  |  /		   /
+				//		|___|__| /		  /
+				//      |_ _ _ _/		 /
+				//        |_ _ _ _ _ _ _/
+				//when change to standing state, orgin change from (0.5, 1) to (0 , 1).  
+				this->samus->setPositionX(this->samus->getPosition().x - WIDTH_RUN*0.5f);
+			}
+			else
+			{
+				//
+				//
+				//TOTAL_RECT	BoundCollision
+				//	   \		  /
+				//	 	\ __ ___ /
+				//		 ||_|	|
+				//		 |	|	|	
+				//1		 |__|___|        position
+				//			/_ _ _ _ _ _ _ _|	
+				//         /				|
+				//	Orgin /_ _ _ _			|
+				//	  __ ___	 /			|	
+				// 2 ||_|	|	/			|
+				//	 |	|	|  /		   /
+				//	 |__|___| /		      /
+				//   |_ _ _ |/			 /
+				//          | _ _ _ _ _ /  
+				//when change to standing state, orgin change from (0.5, 1) to (1 , 1). 
+				this->samus->setPositionX(this->samus->getPosition().x + WIDTH_RUN*0.5f);
+			}
+			break;
+		default:
+			break;
+		}
+		SamusStateManager::getInstance()->changeStateTo(this->samus->getStatus());
+		return;
+	}
 	this->samus->setCanMoveLeft(true);
 
 	this->samus->setCanMoveRight(true);
@@ -303,6 +305,19 @@ void SamusStateRunning::fire()
 			stP = VECTOR2(this->samus->getPosition().x - this->samus->getSprite()->getWidth()*0.3f, this->samus->getPosition().y - this->samus->getSprite()->getHeight()*0.8f);
 
 		tar = VECTOR2(stP.x, stP.y - 100);
+
+		//bullet has distance, and time to shoot to that distance
+		//so we can calculate velocity of bullet
+
+		//when we call getBullet() this bullet will send to listUsing to draw()
+		Bullet* temp = BulletPool::getInstance()->getBullet();
+
+		//we init start point and target point to bullet,
+		//when collision we only call BulletPool.returnBool()
+		temp->init(stP, tar);
+		temp->setVelocity(VECTOR2(0, (100.0f) / temp->getTimeToTar()));
+
+		temp->setBoundCollision();
 	}
 	else
 	{
@@ -317,7 +332,15 @@ void SamusStateRunning::fire()
 			stP = VECTOR2(this->samus->getPosition().x - this->samus->getSprite()->getWidth()*0.4f, this->samus->getPosition().y - this->samus->getSprite()->getHeight()*0.7f);
 			tar = VECTOR2(stP.x - 100, stP.y);
 		}
+		Bullet* temp = BulletPool::getInstance()->getBullet();
+
+		//we init start point and target point to bullet,
+		//when collision we only call BulletPool.returnBool()
+		temp->init(stP, tar);
+		temp->setVelocity(VECTOR2((100.0f) / temp->getTimeToTar(), 0));
+
+		temp->setBoundCollision();
 	}
 
-	BulletPool::getInstance()->getBullet()->init(stP, tar);
+
 }
