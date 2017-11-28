@@ -15,7 +15,7 @@ Samus::Samus(TextureManager* textureM,Graphics* graphics, Input* input) : BaseOb
 	runningNormalAnimation = new Animation(this->sprite, IndexManager::getInstance()->samusYellowRunningRight, NUM_FRAMES_SAMUS_RUNNING, 0.05f);
 	runningUpAnimation = new Animation(this->sprite, IndexManager::getInstance()->samusYellowRunningUpRight, NUM_FRAMES_SAMUS_RUNNING, 0.05f);
 	runningHittingRightAnimation = new Animation(this->sprite, IndexManager::getInstance()->samusYellowHittingAndRunningRight, NUM_FRAMES_SAMUS_RUNNING, 0.05f);
-	rollingAnimation = new Animation(this->sprite, IndexManager::getInstance()->samusYellowRollingRight, NUM_FRAMES_SAMUS_ROLLING, 0.1f);
+	rollingAnimation = new Animation(this->sprite, IndexManager::getInstance()->samusYellowRollingRight, NUM_FRAMES_SAMUS_ROLLING, 0.05f);
 	jumpingAnimation = new Animation(this->sprite, IndexManager::getInstance()->samusYellowJumpingRight, NUM_FRAMES_SAMUS_JUMPING, 0.04f);
 	startingAnimation = new Animation(this->sprite, IndexManager::getInstance()->samusYellowStart, NUM_FRAMES_SAMUS_START, 1, false);
 
@@ -165,7 +165,15 @@ void Samus::setFall(bool isFall)
 void Samus::setBoundCollision(MetroidRect rect)
 {
 	this->boundCollision = rect;
-	this->activeBound = rect;
+	this->setActiveBound();
+}
+
+void Samus::setActiveBound()
+{
+	this->activeBound.top = this->boundCollision.top - 4;
+	this->activeBound.left = this->boundCollision.left - 4;
+	this->activeBound.right = this->boundCollision.right + 4;
+	this->activeBound.bottom = this->boundCollision.bottom + 4;
 }
 
 void Samus::setAcrobat(bool acrobat)

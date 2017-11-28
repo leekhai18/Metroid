@@ -278,6 +278,16 @@ void Graphics::drawSprite(const SpriteData &spriteData, COLOR_ARGB color)
 		}
 	}
 
+	//D3DXMATRIX mt;
+	//D3DXVECTOR4 posViewport;
+
+	//D3DXMatrixIdentity(&mt);
+	//mt._22 = 1.0f;
+	//mt._41 = (-1) * Camera::getInstance()->getBound().left;
+	//mt._42 = (-1) * Camera::getInstance()->getBound().top;
+
+	//D3DXVec3Transform(&posViewport, &VECTOR3(position.x, position.y, 0), &mt);
+
 	sprite->GetTransform(&matOld);
 
 	D3DXMatrixTransformation2D(

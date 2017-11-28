@@ -123,6 +123,8 @@ void Metroid::update(float dt)
 	rio->setTarget(VECTOR2(samus->getPosition().x, samus->getPosition().y), samus->isInStatus(eStatus::ROLLING));
 	rio->update(dt);
 
+	ObjectManager::getInstance()->update(dt);
+
 	this->camera->update(dt);
 
 
@@ -147,6 +149,9 @@ void Metroid::render()
 
 	samus->draw();
 	mapBrinstar->draw();
+
+	ObjectManager::getInstance()->draw();
+
 	skree->draw();
 	zeb->draw();
 	waver->draw();

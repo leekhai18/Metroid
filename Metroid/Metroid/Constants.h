@@ -24,6 +24,8 @@ const char GAME_TITLE[] = "Metroid";
 const bool FULLSCREEN = false;              // windowed or fullscreen
 const UINT GAME_WIDTH = 256;               // width of game in pixels
 const UINT GAME_HEIGHT = 224;               // height of game in pixels
+const UINT MAP_WIDTH = 7680;
+const UINT MAP_HEIGHT = 4560;
 
 // Game Manger
 const double PI = 3.14159265;

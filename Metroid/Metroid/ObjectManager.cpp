@@ -1,7 +1,6 @@
 ﻿#include "ObjectManager.h"
 #include "GameLog.h"
 #include "MaruMari.h"
-#include "Collision.h"
 #include "Bomb.h"
 #include "EnergyTank.h"
 #include "IceBeam.h"
@@ -21,8 +20,9 @@
 #include "Skree.h"
 #include "Ripper.h"
 #include "Rio.h"
+#include "Camera.h"
+#include "Collision.h"
 
-#define EXPAND 3
 
 ObjectManager* ObjectManager::instance = nullptr;
 ObjectManager * ObjectManager::getInstance()
@@ -37,25 +37,49 @@ ObjectManager * ObjectManager::getInstance()
 
 void ObjectManager::onCheckCollision(BaseObject * obj, float dt)
 {
-	list<BaseObject*>* return_objects_list = new list<BaseObject*>();
-
-	//Get all objects that can collide with current entity
-	quadtree->retrieve(return_objects_list, obj);
+	RECT r = Camera::getInstance()->getBound();
+	//Get all objects that can collide with current obj
+	quadtree->retrieve(return_objects_list, return_objects_list_not_wall, MetroidRect((float)r.top, (float)r.bottom, (float)r.left, (float)r.right), obj);
 	for (auto x = return_objects_list->begin(); x != return_objects_list->end(); x++)
 	{
 		Collision::getInstance()->checkCollision(obj, (*x), dt);
 	}
+
 	obj->onCollision();
+
 	Collision::getInstance()->clearDataReturn();
 
 	this->totalObjectsPerFrame = (int) return_objects_list->size();
-
-	delete return_objects_list;
 }
 
 int ObjectManager::getTotalObjectsPerFrame()
 {
 	return this->totalObjectsPerFrame;
+}
+
+void ObjectManager::update(float dt)
+{
+	if (return_objects_list_not_wall)
+	{
+		for (list<BaseObject*>::iterator i = return_objects_list_not_wall->begin(); i != return_objects_list_not_wall->end(); ++i)
+		{
+			(*i)->update(dt);
+		}
+	}
+}
+
+void ObjectManager::draw()
+{
+	if (return_objects_list_not_wall)
+	{
+		for (list<BaseObject*>::iterator i = return_objects_list_not_wall->begin(); i != return_objects_list_not_wall->end(); ++i)
+		{
+			(*i)->draw();
+		}
+	}
+
+	return_objects_list->clear();
+	return_objects_list_not_wall->clear();
 }
 
 void ObjectManager::init(TextureManager * textureM, Graphics * graphics)
@@ -96,10 +120,6 @@ bool ObjectManager::load_list(const char * filename)
 				bound.bottom = bound.top + height;
 				wall->setBoundCollision(bound);
 
-				bound.left = x - EXPAND;
-				bound.top = y - EXPAND;
-				bound.right = bound.left + width + EXPAND;
-				bound.bottom = bound.top + height + EXPAND;
 				wall->setActiveBound(bound);
 
 				object_list->push_back(wall);
@@ -347,6 +367,8 @@ bool ObjectManager::load_list(const char * filename)
 			bound.bottom = bound.top + mm->getSprite()->getHeight();
 			mm->setBoundCollision(bound);
 
+			mm->setActiveBound(bound);
+
 			object_list->push_back(mm);
 		}
 
@@ -489,6 +511,8 @@ bool ObjectManager::load_list(const char * filename)
 			bound.bottom = bound.top + alienB->getSprite()->getHeight();
 			alienB->setBoundCollision(bound);
 
+			alienB->setActiveBound(bound);
+
 			object_list->push_back(alienB);
 		}
 
@@ -507,6 +531,8 @@ bool ObjectManager::load_list(const char * filename)
 			bound.right = bound.left + alienS->getSprite()->getWidth();
 			bound.bottom = bound.top + alienS->getSprite()->getHeight();
 			alienS->setBoundCollision(bound);
+
+			alienS->setActiveBound(bound);
 
 			object_list->push_back(alienS);
 		}
@@ -528,6 +554,8 @@ bool ObjectManager::load_list(const char * filename)
 				bound.right = bound.left + zmy->getSprite()->getWidth();
 				bound.bottom = bound.top + zmy->getSprite()->getHeight();
 				zmy->setBoundCollision(bound);
+
+				zmy->setActiveBound(bound);
 
 				object_list->push_back(zmy);
 			}
@@ -551,6 +579,8 @@ bool ObjectManager::load_list(const char * filename)
 				bound.bottom = bound.top + zmb->getSprite()->getHeight();
 				zmb->setBoundCollision(bound);
 
+				zmb->setActiveBound(bound);
+
 				object_list->push_back(zmb);
 			}
 		}
@@ -572,6 +602,8 @@ bool ObjectManager::load_list(const char * filename)
 				bound.right = bound.left + zmr->getSprite()->getWidth();
 				bound.bottom = bound.top + zmr->getSprite()->getHeight();
 				zmr->setBoundCollision(bound);
+
+				zmr->setActiveBound(bound);
 
 				object_list->push_back(zmr);
 			}
@@ -595,6 +627,8 @@ bool ObjectManager::load_list(const char * filename)
 				bound.bottom = bound.top + zby->getSprite()->getHeight();
 				zby->setBoundCollision(bound);
 
+				zby->setActiveBound(bound);
+
 				object_list->push_back(zby);
 			}
 		}
@@ -616,6 +650,8 @@ bool ObjectManager::load_list(const char * filename)
 				bound.right = bound.left + zbb->getSprite()->getWidth();
 				bound.bottom = bound.top + zbb->getSprite()->getHeight();
 				zbb->setBoundCollision(bound);
+
+				zbb->setActiveBound(bound);
 
 				object_list->push_back(zbb);
 			}
@@ -704,6 +740,8 @@ bool ObjectManager::load_list(const char * filename)
 				bound.right = bound.left + sky->getSprite()->getWidth();
 				bound.bottom = bound.top + sky->getSprite()->getHeight();
 				sky->setBoundCollision(bound);
+
+				sky->setActiveBound(bound);
 
 				object_list->push_back(sky);
 			}
@@ -930,6 +968,8 @@ bool ObjectManager::load_list(const char * filename)
 ObjectManager::ObjectManager()
 {
 	this->object_list = new list<BaseObject*>();
+	this->return_objects_list = new list<BaseObject*>();
+	this->return_objects_list_not_wall = new list<BaseObject*>();
 }
 
 
@@ -945,6 +985,9 @@ void ObjectManager::release()
 	}
 	object_list->clear();
 	delete object_list;
+
+	delete return_objects_list;
+	delete return_objects_list_not_wall;
 
 	quadtree->clear();
 	delete quadtree;
