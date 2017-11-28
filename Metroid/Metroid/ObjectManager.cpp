@@ -49,7 +49,7 @@ void ObjectManager::onCheckCollision(BaseObject * obj, float dt)
 
 	Collision::getInstance()->clearDataReturn();
 
-	this->totalObjectsPerFrame = (int) return_objects_list->size();
+	this->totalObjectsPerFrame = (int) (return_objects_list->size() + return_objects_list_not_wall->size());
 }
 
 int ObjectManager::getTotalObjectsPerFrame()
