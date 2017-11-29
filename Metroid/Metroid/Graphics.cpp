@@ -9,8 +9,8 @@ Graphics::Graphics()
 	device3d = NULL;
 	sprite = NULL;
 	fullscreen = false;
-	width = GAME_WIDTH;    // width & height are replaced in initialize()
-	height = GAME_HEIGHT;
+	width = VIEWPORT_WIDTH;    // width & height are replaced in initialize()
+	height = VIEWPORT_HEIGHT;
 	backColor = GraphicsNS::BLACK;
 }
 

@@ -1,6 +1,7 @@
 #include "SamusStateRunning.h"
 #include "SamusStateManager.h"
-
+#include "GameLog.h"
+#include "Camera.h"
 
 SamusStateRunning::SamusStateRunning()
 {
@@ -154,13 +155,15 @@ void SamusStateRunning::handleInput(float dt)
 void SamusStateRunning::onCollision()
 {
 	list<CollisionReturn> dataReturn = Collision::getInstance()->getDataReturn();
-	float addX = 0, addY = 0;
+
 	for (list<CollisionReturn>::iterator object = dataReturn.begin(); object != dataReturn.end(); ++object)
 	{
 		eID objectID = (*object).idObject;
 		CollideDirection collideDirection = (*object).direction;
 		float entryTime = (*object).entryTime;
 		float positionCollision = (*object).positionCollision;
+
+
 		switch (objectID)
 		{
 		case eID::WALL:
@@ -168,17 +171,35 @@ void SamusStateRunning::onCollision()
 			{
 			case CollideDirection::LEFT:
 				this->samus->setVelocityX(0);
-				//not allow move left
+				//not allow move right
 				this->samus->setCanMoveRight(false);
 				this->samus->setStatus(eStatus::STANDING);
 				break;
 			case CollideDirection::RIGHT:
 				this->samus->setVelocityX(0);
-				//not allow move right
+				//not allow move left
 				this->samus->setCanMoveLeft(false);
 				this->samus->setStatus(eStatus::STANDING);
 				break;
 			case CollideDirection::TOP:
+				break;
+			}
+			break;
+
+		case eID::PORT:
+			switch (collideDirection)
+			{
+			case LEFT:
+				GAMELOG("Tao dang di qua phai");
+				Camera::getInstance()->setVelocity(VECTOR2(100, 0));
+				Camera::getInstance()->setOnPort(true);
+				break;
+			case RIGHT:
+				GAMELOG("Tao dang di qua traiiiiiiiiii");
+				Camera::getInstance()->setVelocity(VECTOR2(-100, 0));
+				Camera::getInstance()->setOnPort(true);
+				break;
+			default:
 				break;
 			}
 			break;

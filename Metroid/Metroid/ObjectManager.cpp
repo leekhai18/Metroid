@@ -263,7 +263,7 @@ bool ObjectManager::load_list(const char * filename)
 				bound.bottom = bound.top + gateBlueR->getSprite()->getHeight();
 				gateBlueR->setBoundCollision(bound);
 
-				gateBlueR->setActiveBound(bound);
+				//gateBlueR->setActiveBound(bound);
 
 				object_list->push_back(gateBlueR);
 			}
@@ -288,7 +288,7 @@ bool ObjectManager::load_list(const char * filename)
 				bound.bottom = bound.top + gateBlueL->getSprite()->getHeight();
 				gateBlueL->setBoundCollision(bound);
 
-				gateBlueL->setActiveBound(bound);
+				//gateBlueL->setActiveBound(bound);
 
 				object_list->push_back(gateBlueL);
 			}

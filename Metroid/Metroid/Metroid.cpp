@@ -75,7 +75,7 @@ void Metroid::initialize(HWND hwnd)
 		throw GameError(GameErrorNS::FATAL_ERROR, "Can not initalize map brinstar");
 	}
 
-	camera = new Camera(GAME_WIDTH, GAME_HEIGHT);
+	camera = new Camera(VIEWPORT_WIDTH, VIEWPORT_HEIGHT);
 	camera->setPosition(VECTOR2(CAM_POS_X, CAM_POS_Y));
 
 
@@ -98,17 +98,15 @@ void Metroid::initialize(HWND hwnd)
 	rio = new Rio(textureManager, graphics, EnemyColors::Yellow);
 	rio->initPositions(VECTOR2(780, 3130));
 
-	fpsText = new Text("FPS: 0", eFont::body, 8, VECTOR2(GAME_WIDTH - 70, 5), GraphicsNS::WHITE, false, true);
+	fpsText = new Text("FPS: 0", eFont::body, 8, VECTOR2(VIEWPORT_WIDTH - 70, 5), GraphicsNS::WHITE, false, true);
 	fpsText->initialize(graphics);
 
-	opsText = new Text("OPS: 0", eFont::body, 8, VECTOR2(GAME_WIDTH - 70, 15), GraphicsNS::WHITE, false, true);
+	opsText = new Text("OPS: 0", eFont::body, 8, VECTOR2(VIEWPORT_WIDTH - 70, 15), GraphicsNS::WHITE, false, true);
 	opsText->initialize(graphics);
 }
 
 void Metroid::update(float dt)
-{
-	samus->update(dt);
-	
+{	
 	skree->setTarget(VECTOR2(samus->getPosition().x + samus->getSprite()->getWidth()*0.5f, samus->getPosition().y));
 	skree->update(dt);
 
@@ -124,6 +122,8 @@ void Metroid::update(float dt)
 	rio->update(dt);
 
 	ObjectManager::getInstance()->update(dt);
+
+	samus->update(dt);
 
 	this->camera->update(dt);
 

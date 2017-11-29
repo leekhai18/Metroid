@@ -19,6 +19,9 @@ private:
 	bool			canFollowVetical;
 	bool			canFollowOnRight;
 	bool			canFollowOnLeft;
+	bool			isOnPort;
+	float			distanceMoveWhenThoughtPort;
+	int				numPort;
 
 public:
 	static Camera* getInstance();
@@ -52,6 +55,12 @@ public:
 
 	void setCanFollowOnLeft(bool flag);
 	bool canFolowOnLeft();
+
+	void setOnPort(bool flag);
+	bool onPort();
+
+	void setNumPort(int num);
+	int getNumPort();
 
 	void release();
 };

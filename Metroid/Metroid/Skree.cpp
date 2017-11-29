@@ -113,7 +113,7 @@ VECTOR2 Skree::getTarget()
 
 void Skree::setTarget(VECTOR2 target)
 {
-	if (this->target != target && abs(target.x - this->startPosition.x) < GAME_WIDTH*RATE_AREA_ACTIVE)
+	if (this->target != target && abs(target.x - this->startPosition.x) < VIEWPORT_WIDTH*RATE_AREA_ACTIVE)
 		this->target = target;
 }
 

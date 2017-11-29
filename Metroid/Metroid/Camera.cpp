@@ -1,5 +1,6 @@
 #include "Camera.h"
 #include "Constants.h"
+#include <cmath>
 
 #define ACTIVE_AREA_WIDTH 32
 #define ACTIVE_AREA_HEIGHT 32
@@ -11,8 +12,8 @@ Camera * Camera::getInstance()
 	if (instance == nullptr)
 	{
 		instance = new Camera();
-		instance->width = GAME_WIDTH;
-		instance->height = GAME_HEIGHT;
+		instance->width = VIEWPORT_WIDTH;
+		instance->height = VIEWPORT_HEIGHT;
 		instance->setPosition(D3DXVECTOR2(CAM_POS_X, CAM_POS_Y));
 	}
 
@@ -28,6 +29,9 @@ Camera::Camera(int width, int height)
 	this->canFollowVetical = false;
 	this->canFollowOnLeft = true;
 	this->canFollowOnRight = true;
+	this->isOnPort = false;
+	this->distanceMoveWhenThoughtPort = 0;
+	this->numPort = 0;
 
 	instance = this;
 }
@@ -93,6 +97,18 @@ RECT Camera::getActiveArea()
 void Camera::update(float dt)
 {
 	this->position = D3DXVECTOR3(this->position.x + this->velocity.x * dt, this->position.y + this->velocity.y * dt, 0);
+
+	if (this->isOnPort)
+	{
+		this->distanceMoveWhenThoughtPort += this->velocity.x * dt;
+
+		if (std::abs(this->distanceMoveWhenThoughtPort) >= VIEWPORT_WIDTH)
+		{
+			this->velocity.x = 0;
+			this->distanceMoveWhenThoughtPort = 0;
+			this->isOnPort = false;
+		}
+	}
 }
 
 void Camera::setCanFoLLowVertical(bool flag)
@@ -123,6 +139,26 @@ void Camera::setCanFollowOnLeft(bool flag)
 bool Camera::canFolowOnLeft()
 {
 	return this->canFollowOnLeft;
+}
+
+void Camera::setOnPort(bool flag)
+{
+	this->isOnPort = flag;
+}
+
+bool Camera::onPort()
+{
+	return this->isOnPort;
+}
+
+void Camera::setNumPort(int num)
+{
+	this->numPort = num;
+}
+
+int Camera::getNumPort()
+{
+	return this->numPort;
 }
 
 void Camera::release()
