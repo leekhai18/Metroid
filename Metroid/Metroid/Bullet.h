@@ -1,6 +1,5 @@
 #pragma once
 #include "BaseObject.h"
-#include "Collision.h"
 
 #define WIDTH_BULLET 4
 #define HEIGHT_BULLET 4

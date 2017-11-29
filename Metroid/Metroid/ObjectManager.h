@@ -9,6 +9,7 @@
 #include "Graphics.h"
 #include "Constants.h"
 #include "Quadtree.h"
+#include "Samus.h"
 
 #define QUADTREE_W 7680
 #define QUADTREE_H 7680
@@ -41,9 +42,11 @@ public:
 	bool load_list(const char *filename);
 	void release();
 
-	void onCheckCollision(BaseObject* entity, float frametime);
+	void onCheckCollision(Samus* samus, float frametime);
+	void onCheckCollision(BaseObject* obj, float frametime);
 
 	int getTotalObjectsPerFrame();
+	void setTotalObjectPerFrame(int num);
 
 	void update(float dt);
 	void draw();

@@ -144,6 +144,8 @@ void Metroid::collisions(float dt)
 
 void Metroid::render()
 {
+	ObjectManager::getInstance()->setTotalObjectPerFrame(0);
+
 	// BEGIN
 	this->getGraphics()->spriteBegin();
 
@@ -158,16 +160,15 @@ void Metroid::render()
 	zommer->draw();
 	rio->draw();
 
-	// Need draw() some object created in object_List
-	//ObjectManager::getInstance()->getObjectList()->back()->draw();
-
 	// END
 	this->getGraphics()->spriteEnd();
 
+
+	// to test
 	fpsText->setText("FPS: " + std::to_string((int)this->fps));
 	fpsText->draw();
 
-	opsText->setText("OPS: " + std::to_string(ObjectManager::getInstance()->getTotalObjectsPerFrame()));
+	opsText->setText("DPS: " + std::to_string(ObjectManager::getInstance()->getTotalObjectsPerFrame()));
 	opsText->draw();
 }
 

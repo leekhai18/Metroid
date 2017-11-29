@@ -1,7 +1,7 @@
 #include "Graphics.h"
 #include "Metroid.h"
 #include "Camera.h"
-
+#include "ObjectManager.h"
 
 Graphics::Graphics()
 {
@@ -308,6 +308,8 @@ void Graphics::drawSprite(const SpriteData &spriteData, COLOR_ARGB color)
 
 	// Magic... TO use only this sprite or you can know as to refesh to old
 	sprite->SetTransform(&matOld);
+
+	ObjectManager::getInstance()->setTotalObjectPerFrame(ObjectManager::getInstance()->getTotalObjectsPerFrame() + 1);
 }
 
 

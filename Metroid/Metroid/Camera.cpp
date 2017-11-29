@@ -25,7 +25,9 @@ Camera::Camera(int width, int height)
     this->height = height ;
     this->position = D3DXVECTOR3(0, 0, 0);
 	this->velocity = D3DXVECTOR2(0, 0);
-	this->canFollowHorizontal = true;
+	this->canFollowVetical = false;
+	this->canFollowOnLeft = true;
+	this->canFollowOnRight = true;
 
 	instance = this;
 }
@@ -93,14 +95,34 @@ void Camera::update(float dt)
 	this->position = D3DXVECTOR3(this->position.x + this->velocity.x * dt, this->position.y + this->velocity.y * dt, 0);
 }
 
-void Camera::setCanFoLLowHorizontal(bool flag)
+void Camera::setCanFoLLowVertical(bool flag)
 {
-	this->canFollowHorizontal = flag;
+	this->canFollowVetical = flag;
 }
 
-bool Camera::canFollowHorizon()
+bool Camera::canFolowVertical()
 {
-	return this->canFollowHorizontal;
+	return this->canFollowVetical;
+}
+
+void Camera::setCanFollowOnRight(bool flag)
+{
+	this->canFollowOnRight = flag;
+}
+
+bool Camera::canFolowOnRight()
+{
+	return this->canFollowOnRight;
+}
+
+void Camera::setCanFollowOnLeft(bool flag)
+{
+	this->canFollowOnLeft = flag;
+}
+
+bool Camera::canFolowOnLeft()
+{
+	return this->canFollowOnLeft;
 }
 
 void Camera::release()

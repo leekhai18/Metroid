@@ -1,4 +1,5 @@
 #include "GateBlue.h"
+#include "Camera.h"
 
 GateBlue::GateBlue()
 {
@@ -23,6 +24,7 @@ GateBlue::~GateBlue()
 
 void GateBlue::update(float dt)
 {
+
 }
 
 void GateBlue::draw()

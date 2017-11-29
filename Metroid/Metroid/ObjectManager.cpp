@@ -13,6 +13,7 @@
 #include "AlienSmall.h"
 #include "GateBlue.h"
 #include "GateRed.h"
+#include "Port.h"
 #include "Brick.h"
 #include "Zommer.h"
 #include "Zeb.h"
@@ -35,26 +36,41 @@ ObjectManager * ObjectManager::getInstance()
 	return instance;
 }
 
-void ObjectManager::onCheckCollision(BaseObject * obj, float dt)
+void ObjectManager::onCheckCollision(Samus * samus, float dt)
 {
-	RECT r = Camera::getInstance()->getBound();
-	//Get all objects that can collide with current obj
-	quadtree->retrieve(return_objects_list, return_objects_list_not_wall, MetroidRect((float)r.top, (float)r.bottom, (float)r.left, (float)r.right), obj);
-	for (auto x = return_objects_list->begin(); x != return_objects_list->end(); x++)
+	if (Camera::getInstance()->getVelocity() != VECTOR2ZERO || samus->isInStatus(eStatus::START))
 	{
-		Collision::getInstance()->checkCollision(obj, (*x), dt);
+		return_objects_list->clear();
+		return_objects_list_not_wall->clear();
+
+		RECT r = Camera::getInstance()->getBound();
+		//Get all objects that can collide with current obj
+		quadtree->retrieve(return_objects_list, return_objects_list_not_wall, MetroidRect((float)r.top, (float)r.bottom, (float)r.left, (float)r.right), samus);
 	}
 
-	obj->onCollision();
+	for (auto x = return_objects_list->begin(); x != return_objects_list->end(); x++)
+	{
+		Collision::getInstance()->checkCollision(samus, (*x), dt);
+	}
+
+	samus->onCollision();
 
 	Collision::getInstance()->clearDataReturn();
+}
 
-	this->totalObjectsPerFrame = (int) (return_objects_list->size() + return_objects_list_not_wall->size());
+void ObjectManager::onCheckCollision(BaseObject * obj, float frametime)
+{
+
 }
 
 int ObjectManager::getTotalObjectsPerFrame()
 {
 	return this->totalObjectsPerFrame;
+}
+
+void ObjectManager::setTotalObjectPerFrame(int num)
+{
+	this->totalObjectsPerFrame = num;
 }
 
 void ObjectManager::update(float dt)
@@ -77,9 +93,6 @@ void ObjectManager::draw()
 			(*i)->draw();
 		}
 	}
-
-	return_objects_list->clear();
-	return_objects_list_not_wall->clear();
 }
 
 void ObjectManager::init(TextureManager * textureM, Graphics * graphics)
@@ -250,6 +263,8 @@ bool ObjectManager::load_list(const char * filename)
 				bound.bottom = bound.top + gateBlueR->getSprite()->getHeight();
 				gateBlueR->setBoundCollision(bound);
 
+				gateBlueR->setActiveBound(bound);
+
 				object_list->push_back(gateBlueR);
 			}
 		}
@@ -273,6 +288,8 @@ bool ObjectManager::load_list(const char * filename)
 				bound.bottom = bound.top + gateBlueL->getSprite()->getHeight();
 				gateBlueL->setBoundCollision(bound);
 
+				gateBlueL->setActiveBound(bound);
+
 				object_list->push_back(gateBlueL);
 			}
 		}
@@ -295,12 +312,14 @@ bool ObjectManager::load_list(const char * filename)
 				bound.bottom = bound.top + gateRedR->getSprite()->getHeight();
 				gateRedR->setBoundCollision(bound);
 
+				gateRedR->setActiveBound(bound);
+
 				object_list->push_back(gateRedR);
 			}
 		}
 
 		// create GateRed L, 4
-		const Value& listGateRedL = jSon["GateBuleL"];
+		const Value& listGateRedL = jSon["GateRedL"];
 		if (listGateRedL.IsArray())
 		{
 			for (SizeType i = 0; i < listGateRedL.Size(); i++)
@@ -318,6 +337,8 @@ bool ObjectManager::load_list(const char * filename)
 				bound.bottom = bound.top + gateRedL->getSprite()->getHeight();
 				gateRedL->setBoundCollision(bound);
 
+				gateRedL->setActiveBound(bound);
+
 				object_list->push_back(gateRedL);
 			}
 		}
@@ -330,7 +351,7 @@ bool ObjectManager::load_list(const char * filename)
 
 			for (SizeType i = 0; i < listPort.Size(); i++)
 			{
-				BaseObject *port = new BaseObject(eID::PORT);
+				Port *port = new Port();
 
 				x = listPort[i]["x"].GetFloat();
 				y = listPort[i]["y"].GetFloat();
@@ -342,6 +363,8 @@ bool ObjectManager::load_list(const char * filename)
 				bound.right = bound.left + width;
 				bound.bottom = bound.top + height;
 				port->setBoundCollision(bound);
+
+				port->setActiveBound(bound);
 
 				object_list->push_back(port);
 			}
@@ -970,6 +993,8 @@ ObjectManager::ObjectManager()
 	this->object_list = new list<BaseObject*>();
 	this->return_objects_list = new list<BaseObject*>();
 	this->return_objects_list_not_wall = new list<BaseObject*>();
+
+	this->totalObjectsPerFrame = 0;
 }
 
 

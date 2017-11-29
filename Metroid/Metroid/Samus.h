@@ -7,7 +7,6 @@
 #include "GameError.h"
 #include "Animation.h"
 #include "BaseObject.h"
-#include "Bullet.h"
 #include "BulletPool.h"
 
 #define SAMUS_HEIGHT 30

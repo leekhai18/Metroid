@@ -1,5 +1,6 @@
 #include "Bullet.h"
 #include "BulletPool.h"
+#include "Collision.h"
 
 #define TIME_TO_TARGET 0.3f
 

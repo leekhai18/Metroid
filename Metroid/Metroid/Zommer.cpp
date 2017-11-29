@@ -46,13 +46,6 @@ Zommer::~Zommer()
 void Zommer::update(float dt)
 {
 	this->anim->update(dt);
-	this->setPosition(VECTOR2(this->getPosition().x + 3 * change, this->getPosition().y));
-	if (this->getPosition().x > GAME_WIDTH) {
-		change = -1;
-	}
-	if (this->getPosition().x == 0) {
-		change = 1;
-	}
 }
 
 void Zommer::draw()

@@ -157,6 +157,9 @@
     <ClCompile Include="Zommer.cpp">
       <Filter>Objects\Enemies</Filter>
     </ClCompile>
+    <ClCompile Include="Port.cpp">
+      <Filter>Objects\Others</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AlienBig.h">
@@ -320,6 +323,9 @@
     </ClInclude>
     <ClInclude Include="Zommer.h">
       <Filter>Objects\Enemies</Filter>
+    </ClInclude>
+    <ClInclude Include="Port.h">
+      <Filter>Objects\Others</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
