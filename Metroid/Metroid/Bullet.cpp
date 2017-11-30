@@ -2,7 +2,8 @@
 #include "BulletPool.h"
 #include "Collision.h"
 
-#define TIME_TO_TARGET 0.3f
+#define WIDTH_BULLET_HALF 3
+#define HEIGHT_BULLET_HALF 3
 
 Bullet::Bullet(TextureManager * textureM, Graphics * graphics) : BaseObject()
 {
@@ -20,7 +21,6 @@ Bullet::Bullet(TextureManager * textureM, Graphics * graphics) : BaseObject()
 	this->setPosition(VECTOR2ZERO);
 
 	t = 0;
-	timeToTar = TIME_TO_TARGET;
 
 	this->setStatus(eStatus::START);
 
@@ -37,21 +37,12 @@ Bullet::~Bullet()
 	delete this->sprite;
 }
 
-void Bullet::setTimeToTar(float time)
-{
-	timeToTar = time;
-}
-
-float Bullet::getTimeToTar()
-{
-	return timeToTar;
-}
 
 void Bullet::update(float dt)
 {
 	if (t < 1)
 	{
-		t += dt * (1.0f / timeToTar);
+		t += dt * (1.0f / TIME_TO_TARGET);
 		this->setPosition((1 - t)*this->startPosition + t*this->target);
 		setBoundCollision();
 	}
@@ -70,24 +61,15 @@ void Bullet::draw()
 	this->sprite->draw();
 }
 
-void Bullet::onCollision()
+void Bullet::onCollision(BaseObject* object, CollisionReturn result)
 {
-	list<CollisionReturn> dataReturn = Collision::getInstance()->getDataReturn();
-	float addX = 0, addY = 0;
-	for (list<CollisionReturn>::iterator object = dataReturn.begin(); object != dataReturn.end(); ++object)
+	switch (result.idObject)
 	{
-		eID objectID = (*object).idObject;
-		CollideDirection collideDirection = (*object).direction;
-		float entryTime = (*object).entryTime;
-		float positionCollision = (*object).positionCollision;
-		switch (objectID)
-		{
-		case eID::WALL:
-			BulletPool::getInstance()->returnPool(this);
-			break;
-		default:
-			break;
-		}
+	case eID::WALL:
+		BulletPool::getInstance()->returnPool(this);
+		break;
+	default:
+		break;
 	}
 }
 
@@ -95,10 +77,10 @@ void Bullet::setBoundCollision()
 {
 	MetroidRect rect;
 
-	rect.left = getPosition().x - WIDTH_BULLET*0.5f + 1;
-	rect.right = getPosition().x + WIDTH_BULLET*0.5f - 1;
-	rect.top = getPosition().y - HEIGHT_BULLET*0.5f + 1;
-	rect.bottom = getPosition().y + HEIGHT_BULLET*0.5f - 1;
+	rect.left = getPosition().x - WIDTH_BULLET_HALF;
+	rect.right = getPosition().x + WIDTH_BULLET_HALF;
+	rect.top = getPosition().y - HEIGHT_BULLET_HALF;
+	rect.bottom = getPosition().y + HEIGHT_BULLET_HALF;
 
 	boundCollision = rect;
 }

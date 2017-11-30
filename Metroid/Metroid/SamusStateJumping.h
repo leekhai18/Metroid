@@ -17,7 +17,7 @@ public:
 	void update(float dt);
 
 	void setBoundCollision();
-	void onCollision();
+	void onCollision(BaseObject* object, CollisionReturn result);
 
 	void onStart();
 	void onExit();

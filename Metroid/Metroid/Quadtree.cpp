@@ -103,18 +103,18 @@ void Quadtree::insert(BaseObject * obj)
 	}
 }
 
-void Quadtree::retrieve(list<BaseObject*>* return_objects_list, list<BaseObject*>* list_not_wall, MetroidRect rect, BaseObject* samus)
+void Quadtree::retrieve(list<BaseObject*>* return_objects_list, list<BaseObject*>* list_not_wall, list<BaseObject*>* list_wall, MetroidRect rect, BaseObject* samus)
 {
 	if (nodes)
 	{
 		if (nodes[0]->isContain(rect))
-			nodes[0]->retrieve(return_objects_list, list_not_wall, rect, samus);
+			nodes[0]->retrieve(return_objects_list, list_not_wall, list_wall, rect, samus);
 		if (nodes[1]->isContain(rect))
-			nodes[1]->retrieve(return_objects_list, list_not_wall, rect, samus);
+			nodes[1]->retrieve(return_objects_list, list_not_wall, list_wall, rect, samus);
 		if (nodes[2]->isContain(rect))
-			nodes[2]->retrieve(return_objects_list, list_not_wall, rect, samus);
+			nodes[2]->retrieve(return_objects_list, list_not_wall, list_wall, rect, samus);
 		if (nodes[3]->isContain(rect))
-		    nodes[3]->retrieve(return_objects_list, list_not_wall, rect, samus);
+		    nodes[3]->retrieve(return_objects_list, list_not_wall, list_wall, rect, samus);
 
 		return; // Return here to ignore rest.
 	}
@@ -131,9 +131,12 @@ void Quadtree::retrieve(list<BaseObject*>* return_objects_list, list<BaseObject*
 				if (Collision::getInstance()->isCollide(samus->getActiveBound(), (*i)->getActiveBound()))
 					return_objects_list->push_back(*i);
 
-				if ((*i)->getId() != eID::WALL && Collision::getInstance()->isCollide(rect, (*i)->getBoundCollision()))
+				if (Collision::getInstance()->isCollide(rect, (*i)->getBoundCollision()))
 				{
-					list_not_wall->push_back(*i);
+					if ((*i)->getId() != eID::WALL)
+						list_not_wall->push_back(*i);
+					else
+						list_wall->push_back(*i);
 				}
 			}
 		}

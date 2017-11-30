@@ -5,6 +5,7 @@ class SamusStateStanding : public BaseState
 {
 private:
 	bool isUp;
+	bool isShoot;
 
 	float timerToRunning;
 

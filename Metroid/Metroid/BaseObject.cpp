@@ -152,7 +152,7 @@ Sprite * BaseObject::getSprite()
 	return this->sprite;
 }
 
-void BaseObject::onCollision()
+void BaseObject::onCollision(BaseObject* object, CollisionReturn result)
 {
 
 }

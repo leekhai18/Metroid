@@ -27,13 +27,6 @@ private:
 
 	Camera *camera;
 
-	// Enemy
-	Skree *skree;
-	Zeb *zeb;
-	Waver *waver;
-	Rio *rio;
-	Zommer *zommer;
-
 	Text* fpsText;
 	Text* opsText;
 

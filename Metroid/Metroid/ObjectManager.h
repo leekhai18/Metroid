@@ -33,11 +33,13 @@ private:
 	int totalObjectsPerFrame;
 	list<BaseObject*>* return_objects_list;
 	list<BaseObject*>* return_objects_list_not_wall;
+	list<BaseObject*>* return_list_wall;
 
 public:
 	static ObjectManager* getInstance();
 
-	list<BaseObject*> *getObjectList() { return object_list; };
+	list<BaseObject*> *getListWallOnViewPort() { return return_list_wall; };
+
 	void init(TextureManager* textureM, Graphics* graphics);
 	bool load_list(const char *filename);
 	void release();

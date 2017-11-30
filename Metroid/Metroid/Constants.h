@@ -118,7 +118,6 @@ enum eStatus {
 	STANDING,
 	FALLING,
 	FOLLOW,
-	HITTING,
 };
 
 // direction

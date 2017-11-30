@@ -68,9 +68,9 @@ void Samus::handleInput(float dt)
 #pragma endregion
 }
 
-void Samus::onCollision()
+void Samus::onCollision(BaseObject* object, CollisionReturn result)
 {
-	SamusStateManager::getInstance()->getCurrentState()->onCollision();
+	SamusStateManager::getInstance()->getCurrentState()->onCollision(object, result);
 }
 
 void Samus::update(float dt)

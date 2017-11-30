@@ -152,63 +152,67 @@ void SamusStateRunning::handleInput(float dt)
 	}
 
 }
-void SamusStateRunning::onCollision()
+void SamusStateRunning::onCollision(BaseObject* object, CollisionReturn result)
 {
-	list<CollisionReturn> dataReturn = Collision::getInstance()->getDataReturn();
-
-	for (list<CollisionReturn>::iterator object = dataReturn.begin(); object != dataReturn.end(); ++object)
+	switch (result.idObject)
 	{
-		eID objectID = (*object).idObject;
-		CollideDirection collideDirection = (*object).direction;
-		float entryTime = (*object).entryTime;
-		float positionCollision = (*object).positionCollision;
-
-
-		switch (objectID)
+	case eID::WALL:
+		switch (result.direction)
 		{
-		case eID::WALL:
-			switch (collideDirection)
-			{
-			case CollideDirection::LEFT:
-				this->samus->setVelocityX(0);
-				//not allow move right
-				this->samus->setCanMoveRight(false);
-				this->samus->setStatus(eStatus::STANDING);
-				break;
-			case CollideDirection::RIGHT:
-				this->samus->setVelocityX(0);
-				//not allow move left
-				this->samus->setCanMoveLeft(false);
-				this->samus->setStatus(eStatus::STANDING);
-				break;
-			case CollideDirection::TOP:
-				break;
-			}
+		case CollideDirection::LEFT:
+			this->samus->setVelocityX(0);
+			//not allow move right
+			this->samus->setCanMoveRight(false);
+			this->samus->setStatus(eStatus::STANDING);
 			break;
+		case CollideDirection::RIGHT:
+			this->samus->setVelocityX(0);
+			//not allow move left
+			this->samus->setCanMoveLeft(false);
+			this->samus->setStatus(eStatus::STANDING);
+			break;
+		case CollideDirection::TOP:
+			break;
+		}
+		break;
 
-		case eID::PORT:
-			switch (collideDirection)
-			{
-			case LEFT:
-				GAMELOG("Tao dang di qua phai");
-				Camera::getInstance()->setVelocity(VECTOR2(100, 0));
-				Camera::getInstance()->setOnPort(true);
-				break;
-			case RIGHT:
-				GAMELOG("Tao dang di qua traiiiiiiiiii");
-				Camera::getInstance()->setVelocity(VECTOR2(-100, 0));
-				Camera::getInstance()->setOnPort(true);
-				break;
-			default:
-				break;
-			}
+	case eID::PORT:
+		switch (result.direction)
+		{
+		case LEFT:
+			Camera::getInstance()->setVelocity(VECTOR2(SAMUS_VERLOCITY_X, 0));
+			Camera::getInstance()->setOnPort(true);
+			break;
+		case RIGHT:
+			Camera::getInstance()->setVelocity(VECTOR2(-SAMUS_VERLOCITY_X, 0));
+			Camera::getInstance()->setOnPort(true);
 			break;
 		default:
 			break;
 		}
+		break;
+
+	case eID::GATEBLUE:
+		switch (result.direction)
+		{
+		case CollideDirection::LEFT:
+			this->samus->setVelocityX(0);
+			//not allow move right
+			this->samus->setCanMoveRight(false);
+			this->samus->setStatus(eStatus::STANDING);
+			break;
+		case CollideDirection::RIGHT:
+			this->samus->setVelocityX(0);
+			//not allow move left
+			this->samus->setCanMoveLeft(false);
+			this->samus->setStatus(eStatus::STANDING);
+			break;
+		}
+		break;
+
+	default:
+		break;
 	}
-
-
 }
 void SamusStateRunning::update(float dt)
 {
@@ -317,6 +321,7 @@ void SamusStateRunning::fire()
 {
 	VECTOR2 stP;
 	VECTOR2 tar;
+	Bullet* bullet = BulletPool::getInstance()->getBullet();
 
 	if (isUp)
 	{
@@ -325,37 +330,28 @@ void SamusStateRunning::fire()
 		else if (this->samus->isInDirection(eDirection::left))
 			stP = VECTOR2(this->samus->getPosition().x - this->samus->getSprite()->getWidth()*0.3f, this->samus->getPosition().y - this->samus->getSprite()->getHeight()*0.8f);
 
-		tar = VECTOR2(stP.x, stP.y - 100);
+		tar = VECTOR2(stP.x, stP.y - DISTANCE_SHOOT);
 
-		//bullet has distance, and time to shoot to that distance
-		//so we can calculate velocity of bullet
-		//when we call getBullet() this bullet will send to listUsing to draw()
-		//we init start point and target point to bullet,
-		//when collision we only call BulletPool.returnBool()
-		Bullet* temp = BulletPool::getInstance()->getBullet();
-		temp->init(stP, tar);
-		temp->setVelocity(VECTOR2(0, (100.0f) / temp->getTimeToTar()));
-		temp->setBoundCollision();
+		bullet->setVelocity(VECTOR2(0, VELOCITY));
 	}
 	else
 	{
 		if (this->samus->isInDirection(eDirection::right))
 		{
 			stP = VECTOR2(this->samus->getPosition().x + this->samus->getSprite()->getWidth()*0.4f, this->samus->getPosition().y - this->samus->getSprite()->getHeight()*0.7f);
-			tar = VECTOR2(stP.x + 100, stP.y);
+			tar = VECTOR2(stP.x + DISTANCE_SHOOT, stP.y);
+
+			bullet->setVelocity(VECTOR2(VELOCITY, 0));
 		}
 
 		else if (this->samus->isInDirection(eDirection::left))
 		{
 			stP = VECTOR2(this->samus->getPosition().x - this->samus->getSprite()->getWidth()*0.4f, this->samus->getPosition().y - this->samus->getSprite()->getHeight()*0.7f);
-			tar = VECTOR2(stP.x - 100, stP.y);
-		}
+			tar = VECTOR2(stP.x - DISTANCE_SHOOT, stP.y);
 
-		//we init start point and target point to bullet,
-		//when collision we only call BulletPool.returnBool()
-		Bullet* temp = BulletPool::getInstance()->getBullet();
-		temp->init(stP, tar);
-		temp->setVelocity(VECTOR2((100.0f) / temp->getTimeToTar(), 0));
-		temp->setBoundCollision();
+			bullet->setVelocity(VECTOR2(-VELOCITY, 0));
+		}
 	}
+
+	bullet->init(stP, tar);
 }

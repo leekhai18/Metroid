@@ -10,11 +10,11 @@
 #include "BulletPool.h"
 
 #define SAMUS_HEIGHT 30
-#define SAMUS_VERLOCITY_X 100
-#define SAMUS_VERLOCITY_Y 100
+#define SAMUS_VERLOCITY_X 80
+#define SAMUS_VERLOCITY_Y 80
 #define MIN_JUMP  32.0f
 #define MAX_JUMP 80.0f
-#define TIME_SHOOTING 0.1f
+#define TIME_SHOOTING 0.15f
 #define MAX_WIDTH 12
 #define MAX_HEIHT 32
 #define WIDTH_RUN 24
@@ -79,7 +79,7 @@ public:
 	void setBoundCollision(MetroidRect rect);
 	void setActiveBound();
 
-	void onCollision();
+	void onCollision(BaseObject* object, CollisionReturn result);
 
 	Animation* getStartingAnim();
 	Animation* getRunningNormalAnim();

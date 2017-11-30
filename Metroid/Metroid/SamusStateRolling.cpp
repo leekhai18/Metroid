@@ -158,43 +158,35 @@ void SamusStateRolling::handleInput(float dt)
 		this->samus->setStatus(eStatus::STANDING);
 	}
 }
-void SamusStateRolling::onCollision()
+void SamusStateRolling::onCollision(BaseObject* object, CollisionReturn result)
 {
-	list<CollisionReturn> dataReturn = Collision::getInstance()->getDataReturn();
-	float addX = 0, addY = 0;
-	for (list<CollisionReturn>::iterator object = dataReturn.begin(); object != dataReturn.end(); ++object)
+	switch (result.idObject)
 	{
-		eID objectID = (*object).idObject;
-		CollideDirection collideDirection = (*object).direction;
-		float entryTime = (*object).entryTime;
-		float positionCollision = (*object).positionCollision;
-		switch (objectID)
+	case eID::WALL:
+		switch (result.direction)
 		{
-		case eID::WALL:
-			switch (collideDirection)
-			{
-			case CollideDirection::LEFT:
-				this->samus->setVelocityX(0);
-				//not allow move left
-				this->samus->setCanMoveRight(false);
-				break;
-			case CollideDirection::RIGHT:
-				this->samus->setVelocityX(0);
-				//not allow move right
-				this->samus->setCanMoveLeft(false);
-				break;
-			case CollideDirection::TOP:
-				this->samus->setPositionY(positionCollision);
-				this->samus->setVelocity(VECTOR2(0, 0));
-				this->samus->setFall(false);
-				setBoundCollision();
-				return;
-			}
+		case CollideDirection::LEFT:
+			this->samus->setVelocityX(0);
+			//not allow move left
+			this->samus->setCanMoveRight(false);
 			break;
-		default:
+		case CollideDirection::RIGHT:
+			this->samus->setVelocityX(0);
+			//not allow move right
+			this->samus->setCanMoveLeft(false);
 			break;
+		case CollideDirection::TOP:
+			this->samus->setPositionY(result.positionCollision);
+			this->samus->setVelocity(VECTOR2(0, 0));
+			this->samus->setFall(false);
+			setBoundCollision();
+			return;
 		}
+		break;
+	default:
+		break;
 	}
+	
 }
 void SamusStateRolling::update(float dt)
 {

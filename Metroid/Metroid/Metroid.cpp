@@ -26,10 +26,6 @@ Metroid::~Metroid()
 	delete mapBrinstar;
 
 	delete samus;
-	delete skree;
-	delete zeb;
-	delete rio;
-	delete zommer;
 	delete fpsText;
 	delete opsText;
 
@@ -87,17 +83,6 @@ void Metroid::initialize(HWND hwnd)
 
 	samus = new Samus(textureManager, graphics, input);
 
-	skree = new Skree(textureManager, graphics, EnemyColors::Yellow);
-	skree->initPositions(VECTOR2(840, 3212));
-	zeb = new Zeb(textureManager, graphics, EnemyColors::Yellow);
-	zeb->setPosition(VECTOR2(840, 3333));
-	waver = new Waver(textureManager, graphics, EnemyColors::Brown);
-	waver->setPosition(VECTOR2(640, 3180));
-	zommer = new Zommer(textureManager, graphics, EnemyColors::Yellow);
-	zommer->setPosition(VECTOR2(680, 3180));
-	rio = new Rio(textureManager, graphics, EnemyColors::Yellow);
-	rio->initPositions(VECTOR2(780, 3130));
-
 	fpsText = new Text("FPS: 0", eFont::body, 8, VECTOR2(VIEWPORT_WIDTH - 70, 5), GraphicsNS::WHITE, false, true);
 	fpsText->initialize(graphics);
 
@@ -107,29 +92,9 @@ void Metroid::initialize(HWND hwnd)
 
 void Metroid::update(float dt)
 {	
-	skree->setTarget(VECTOR2(samus->getPosition().x + samus->getSprite()->getWidth()*0.5f, samus->getPosition().y));
-	skree->update(dt);
-
-	if (zeb->isInStatus(eStatus::START))
-		zeb->init(samus->getPosition());
-	zeb->update(dt);
-	
-	waver->update(dt);
-
-	zommer->update(dt);
-	
-	rio->setTarget(VECTOR2(samus->getPosition().x, samus->getPosition().y), samus->isInStatus(eStatus::ROLLING));
-	rio->update(dt);
-
 	ObjectManager::getInstance()->update(dt);
-
 	samus->update(dt);
-
 	this->camera->update(dt);
-
-
-	// Need update() some object created in object_List
-	//ObjectManager::getInstance()->getObjectList()->back()->update(dt);
 }
 
 void Metroid::handleInput(float dt)
@@ -151,14 +116,7 @@ void Metroid::render()
 
 	samus->draw();
 	mapBrinstar->draw();
-
 	ObjectManager::getInstance()->draw();
-
-	skree->draw();
-	zeb->draw();
-	waver->draw();
-	zommer->draw();
-	rio->draw();
 
 	// END
 	this->getGraphics()->spriteEnd();

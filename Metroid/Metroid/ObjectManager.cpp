@@ -42,20 +42,30 @@ void ObjectManager::onCheckCollision(Samus * samus, float dt)
 	{
 		return_objects_list->clear();
 		return_objects_list_not_wall->clear();
+		return_list_wall->clear();
 
 		RECT r = Camera::getInstance()->getBound();
 		//Get all objects that can collide with current obj
-		quadtree->retrieve(return_objects_list, return_objects_list_not_wall, MetroidRect((float)r.top, (float)r.bottom, (float)r.left, (float)r.right), samus);
+		quadtree->retrieve(return_objects_list, return_objects_list_not_wall, return_list_wall, MetroidRect((float)r.top, (float)r.bottom, (float)r.left, (float)r.right), samus);
 	}
 
 	for (auto x = return_objects_list->begin(); x != return_objects_list->end(); x++)
 	{
-		Collision::getInstance()->checkCollision(samus, (*x), dt);
+		CollisionReturn result;
+
+		if (Collision::getInstance()->checkCollision(samus, *x, dt, result))
+		{
+			samus->onCollision(*x, result);
+		}
+		
+		for (unsigned i = 0; i < BulletPool::getInstance()->getListUsing().size(); i++)
+		{
+			if (Collision::getInstance()->checkCollision(BulletPool::getInstance()->getListUsing().at(i), *x, dt, result))
+			{
+				BulletPool::getInstance()->getListUsing().at(i)->onCollision(*x, result);
+			}
+		}
 	}
-
-	samus->onCollision();
-
-	Collision::getInstance()->clearDataReturn();
 }
 
 void ObjectManager::onCheckCollision(BaseObject * obj, float frametime)
@@ -263,7 +273,7 @@ bool ObjectManager::load_list(const char * filename)
 				bound.bottom = bound.top + gateBlueR->getSprite()->getHeight();
 				gateBlueR->setBoundCollision(bound);
 
-				//gateBlueR->setActiveBound(bound);
+				gateBlueR->setActiveBound(bound);
 
 				object_list->push_back(gateBlueR);
 			}
@@ -288,7 +298,7 @@ bool ObjectManager::load_list(const char * filename)
 				bound.bottom = bound.top + gateBlueL->getSprite()->getHeight();
 				gateBlueL->setBoundCollision(bound);
 
-				//gateBlueL->setActiveBound(bound);
+				gateBlueL->setActiveBound(bound);
 
 				object_list->push_back(gateBlueL);
 			}
@@ -993,6 +1003,7 @@ ObjectManager::ObjectManager()
 	this->object_list = new list<BaseObject*>();
 	this->return_objects_list = new list<BaseObject*>();
 	this->return_objects_list_not_wall = new list<BaseObject*>();
+	this->return_list_wall = new list<BaseObject*>();
 
 	this->totalObjectsPerFrame = 0;
 }
@@ -1013,6 +1024,7 @@ void ObjectManager::release()
 
 	delete return_objects_list;
 	delete return_objects_list_not_wall;
+	delete return_list_wall;
 
 	quadtree->clear();
 	delete quadtree;
