@@ -1,6 +1,7 @@
 #include "Bullet.h"
 #include "BulletPool.h"
 #include "Collision.h"
+#include "GateBlue.h"
 
 #define WIDTH_BULLET_HALF 3
 #define HEIGHT_BULLET_HALF 3
@@ -21,9 +22,6 @@ Bullet::Bullet(TextureManager * textureM, Graphics * graphics) : BaseObject()
 	this->setPosition(VECTOR2ZERO);
 
 	t = 0;
-
-	this->setStatus(eStatus::START);
-
 }
 
 Bullet::Bullet()
@@ -68,6 +66,15 @@ void Bullet::onCollision(BaseObject* object, CollisionReturn result)
 	case eID::WALL:
 		BulletPool::getInstance()->returnPool(this);
 		break;
+
+	case eID::GATEBLUE:
+		{
+		BulletPool::getInstance()->returnPool(this);
+		GateBlue* gate = static_cast<GateBlue*>(object);
+		gate->setHit(true);
+		break;
+		}
+	
 	default:
 		break;
 	}

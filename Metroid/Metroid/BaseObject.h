@@ -13,7 +13,6 @@ protected:
 	eStatus status;
 	eDirection direction;
 	MetroidRect activeBound;
-	bool active;
 	MetroidRect boundCollision;
 	VECTOR2 velocity;
 public:
@@ -64,9 +63,6 @@ public:
 	virtual void setVelocityX(float x);
 	virtual void setVelocityY(float y);
 	virtual void setVelocity(VECTOR2 velocity);
-
-	virtual bool getActive();
-	virtual void setActive(bool active);
 
 	virtual MetroidRect getActiveBound();
 	virtual void setActiveBound(MetroidRect rect);

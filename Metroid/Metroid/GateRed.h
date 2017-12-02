@@ -1,6 +1,5 @@
 #pragma once
 #include "BaseObject.h"
-#include "Animation.h"
 
 class GateRed : public BaseObject
 {

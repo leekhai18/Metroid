@@ -2,6 +2,8 @@
 #include "SamusStateManager.h"
 #include "Camera.h"
 
+#define DISTANCE_MOVE_FRONT_GATE 20
+
 Samus::Samus(TextureManager* textureM,Graphics* graphics, Input* input) : BaseObject(eID::SAMUS)
 {
 	this->input = input;
@@ -28,6 +30,7 @@ Samus::Samus(TextureManager* textureM,Graphics* graphics, Input* input) : BaseOb
 	this->moveLeft = true;
 	this->moveRight = true;
 	this->jump = true;
+	this->distance = 0;
 
 	this->timerShoot = 0;
 	bulletPool = new BulletPool(textureM, graphics, 20);
@@ -53,7 +56,8 @@ void Samus::draw()
 
 void Samus::handleInput(float dt)
 {
-	SamusStateManager::getInstance()->getCurrentState()->handleInput(dt);
+	if (!Camera::getInstance()->onPort())
+		SamusStateManager::getInstance()->getCurrentState()->handleInput(dt);
 
 #pragma region handle camera
 	if (!Camera::getInstance()->onPort() && Camera::getInstance()->getNumPort() < 2)
@@ -71,6 +75,21 @@ void Samus::handleInput(float dt)
 void Samus::onCollision(BaseObject* object, CollisionReturn result)
 {
 	SamusStateManager::getInstance()->getCurrentState()->onCollision(object, result);
+}
+
+void Samus::setIsCollidingPort(bool flag)
+{
+	this->isCollidingPort = flag;
+}
+
+bool Samus::isColliedPort()
+{
+	return isCollidingPort;
+}
+
+void Samus::setCanMoveToFrontGate(bool flag)
+{
+	this->moveToFontGate = flag;
 }
 
 void Samus::update(float dt)
@@ -105,6 +124,24 @@ void Samus::update(float dt)
 		}
 	}
 #pragma endregion
+
+	if (isCollidingPort)
+		this->setVelocityX(Camera::getInstance()->getVelocity().x);
+
+	if (moveToFontGate && !Camera::getInstance()->onPort())
+	{
+		float dis = dt * SAMUS_VERLOCITY_X;
+		this->distance += dis;
+		
+		if (this->distance < DISTANCE_MOVE_FRONT_GATE)
+			this->setPositionX(this->getPosition().x + dis*this->getDirection());
+		else
+		{
+			this->distance = 0;
+			moveToFontGate = false;
+			this->setStatus(eStatus::STANDING);
+		}
+	}
 
 	SamusStateManager::getInstance()->getCurrentState()->update(dt);
 

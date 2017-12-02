@@ -2,6 +2,7 @@
 #include "SamusStateManager.h"
 #include "GameLog.h"
 #include "Camera.h"
+#include "GateBlue.h"
 
 SamusStateRunning::SamusStateRunning()
 {
@@ -44,6 +45,7 @@ void SamusStateRunning::init()
 	runningNormal = samus->getRunningNormalAnim();
 	runningUp = samus->getRunningUpAnim();
 	runningHittingRight = samus->getRunningHittingRightAnim();
+
 	this->samus->setOrigin(VECTOR2(0.5f, 1));
 	this->animation = runningNormal;
 }
@@ -182,10 +184,14 @@ void SamusStateRunning::onCollision(BaseObject* object, CollisionReturn result)
 		case LEFT:
 			Camera::getInstance()->setVelocity(VECTOR2(SAMUS_VERLOCITY_X, 0));
 			Camera::getInstance()->setOnPort(true);
+			this->animation->setPause(true);
+			this->samus->setIsCollidingPort(true);
 			break;
 		case RIGHT:
 			Camera::getInstance()->setVelocity(VECTOR2(-SAMUS_VERLOCITY_X, 0));
 			Camera::getInstance()->setOnPort(true);
+			this->animation->setPause(true);
+			this->samus->setIsCollidingPort(true);
 			break;
 		default:
 			break;
@@ -196,17 +202,47 @@ void SamusStateRunning::onCollision(BaseObject* object, CollisionReturn result)
 		switch (result.direction)
 		{
 		case CollideDirection::LEFT:
-			this->samus->setVelocityX(0);
-			//not allow move right
-			this->samus->setCanMoveRight(false);
-			this->samus->setStatus(eStatus::STANDING);
-			break;
+			{
+				if (Camera::getInstance()->onPort())
+				{
+					//GateBlue* gate = static_cast<GateBlue*>(object);
+					//gate->setIsCollideSamusInPort(true);
+
+					this->samus->setIsCollidingPort(false);
+					this->samus->setVelocityX(0);
+					this->samus->setCanMoveToFrontGate(true);
+				}
+				else
+				{
+					this->samus->setVelocityX(0);
+					//not allow move right
+					this->samus->setCanMoveRight(false);
+					this->samus->setStatus(eStatus::STANDING);
+				}
+
+				break;
+			}
 		case CollideDirection::RIGHT:
-			this->samus->setVelocityX(0);
-			//not allow move left
-			this->samus->setCanMoveLeft(false);
-			this->samus->setStatus(eStatus::STANDING);
-			break;
+			{
+				if (Camera::getInstance()->onPort())
+				{
+					//GateBlue* gate = static_cast<GateBlue*>(object);
+					//gate->setIsCollideSamusInPort(true);
+
+					this->samus->setIsCollidingPort(false);
+					this->samus->setVelocityX(0);
+					this->samus->setCanMoveToFrontGate(true);
+				}
+				else
+				{
+					this->samus->setVelocityX(0);
+					//not allow move left
+					this->samus->setCanMoveLeft(false);
+					this->samus->setStatus(eStatus::STANDING);
+				}
+
+				break;
+			}
 		}
 		break;
 
@@ -309,6 +345,10 @@ void SamusStateRunning::update(float dt)
 
 void SamusStateRunning::onStart()
 {
+	runningNormal->setPause(false);
+	runningUp->setPause(false);
+	runningHittingRight->setPause(false);
+
 	this->animation->start();
 }
 

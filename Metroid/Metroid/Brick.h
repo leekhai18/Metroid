@@ -1,6 +1,5 @@
 #pragma once
 #include "BaseObject.h"
-#include "Animation.h"
 
 class Brick : public BaseObject
 {

@@ -1,15 +1,5 @@
 #include "BaseObject.h"
 
-bool BaseObject::getActive()
-{
-	return this->active;
-}
-
-void BaseObject::setActive(bool active)
-{
-	this->active = active;
-}
-
 BaseObject::BaseObject(eID id)
 {
 	this->id = id;

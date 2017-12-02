@@ -47,6 +47,10 @@ private:
 	bool moveVertical;
 	float totalHeightWasJumped;
 
+	bool isCollidingPort;
+	bool moveToFontGate;
+	float distance;
+
 	BulletPool *bulletPool;
 
 public:
@@ -80,6 +84,10 @@ public:
 	void setActiveBound();
 
 	void onCollision(BaseObject* object, CollisionReturn result);
+
+	void setIsCollidingPort(bool flag);
+	bool isColliedPort();
+	void setCanMoveToFrontGate(bool flag);
 
 	Animation* getStartingAnim();
 	Animation* getRunningNormalAnim();
