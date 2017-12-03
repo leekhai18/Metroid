@@ -154,56 +154,61 @@ void SamusStateRunning::handleInput(float dt)
 	}
 
 }
-void SamusStateRunning::onCollision(BaseObject* object, CollisionReturn result)
+void SamusStateRunning::onCollision()
 {
-	switch (result.idObject)
+	for (auto i = this->samus->getListCollide()->begin(); i != this->samus->getListCollide()->end(); i++)
 	{
-	case eID::WALL:
-		switch (result.direction)
+		switch (i->object->getId())
 		{
-		case CollideDirection::LEFT:
-			this->samus->setVelocityX(0);
-			this->samus->setCanMoveRight(false);
-			this->samus->setStatus(eStatus::STANDING);
+#pragma region Wall
+		case eID::WALL:
+			switch (i->direction)
+			{
+			case CollideDirection::LEFT:
+				this->samus->setVelocityX(0);
+				this->samus->setCanMoveRight(false);
+				this->samus->setStatus(eStatus::STANDING);
+				break;
+			case CollideDirection::RIGHT:
+				this->samus->setVelocityX(0);
+				this->samus->setCanMoveLeft(false);
+				this->samus->setStatus(eStatus::STANDING);
+				break;
+			case CollideDirection::TOP:
+				break;
+			}
 			break;
-		case CollideDirection::RIGHT:
-			this->samus->setVelocityX(0);
-			this->samus->setCanMoveLeft(false);
-			this->samus->setStatus(eStatus::STANDING);
-			break;
-		case CollideDirection::TOP:
-			break;
-		}
-		break;
 
-	case eID::PORT:
-		switch (result.direction)
-		{
-		case LEFT:
-			Camera::getInstance()->setVelocity(VECTOR2(SAMUS_VERLOCITY_X, 0));
-			Camera::getInstance()->setOnPort(true);
-			this->animation->setPause(true);
-			this->samus->setIsCollidingPort(true);
+		case eID::PORT:
+			switch (i->direction)
+			{
+			case LEFT:
+				Camera::getInstance()->setVelocity(VECTOR2(SAMUS_VERLOCITY_X, 0));
+				Camera::getInstance()->setOnPort(true);
+				this->animation->setPause(true);
+				this->samus->setIsCollidingPort(true);
+				break;
+			case RIGHT:
+				Camera::getInstance()->setVelocity(VECTOR2(-SAMUS_VERLOCITY_X, 0));
+				Camera::getInstance()->setOnPort(true);
+				this->animation->setPause(true);
+				this->samus->setIsCollidingPort(true);
+				break;
+			default:
+				break;
+			}
 			break;
-		case RIGHT:
-			Camera::getInstance()->setVelocity(VECTOR2(-SAMUS_VERLOCITY_X, 0));
-			Camera::getInstance()->setOnPort(true);
-			this->animation->setPause(true);
-			this->samus->setIsCollidingPort(true);
-			break;
-		default:
-			break;
-		}
-		break;
+#pragma endregion
 
-	case eID::GATEBLUE:
-		switch (result.direction)
-		{
-		case CollideDirection::LEFT:
+#pragma region GATE
+		case eID::GATEBLUE:
+			switch (i->direction)
+			{
+			case CollideDirection::LEFT:
 			{
 				if (Camera::getInstance()->moveWhenSamusOnPort())
 				{
-					GateBlue* gate = static_cast<GateBlue*>(object);
+					GateBlue* gate = static_cast<GateBlue*>(i->object);
 					gate->setIsCollideSamusInPort(true);
 
 					this->samus->setIsCollidingPort(false);
@@ -219,11 +224,11 @@ void SamusStateRunning::onCollision(BaseObject* object, CollisionReturn result)
 
 				break;
 			}
-		case CollideDirection::RIGHT:
+			case CollideDirection::RIGHT:
 			{
 				if (Camera::getInstance()->moveWhenSamusOnPort())
 				{
-					GateBlue* gate = static_cast<GateBlue*>(object);
+					GateBlue* gate = static_cast<GateBlue*>(i->object);
 					gate->setIsCollideSamusInPort(true);
 
 					this->samus->setIsCollidingPort(false);
@@ -239,11 +244,20 @@ void SamusStateRunning::onCollision(BaseObject* object, CollisionReturn result)
 
 				break;
 			}
-		}
-		break;
+			}
+			break;
+#pragma endregion
 
-	default:
-		break;
+#pragma region SKREE
+		case eID::SKREE:
+			GAMELOG("VA CHAM SKREE");
+			break;
+
+#pragma endregion
+		default:
+			break;
+		}
+
 	}
 }
 void SamusStateRunning::update(float dt)
@@ -356,7 +370,6 @@ void SamusStateRunning::onExit()
 void SamusStateRunning::fire()
 {
 	VECTOR2 stP;
-	VECTOR2 tar;
 	Bullet* bullet = BulletPool::getInstance()->getBullet();
 
 	if (isUp)
@@ -366,28 +379,22 @@ void SamusStateRunning::fire()
 		else if (this->samus->isInDirection(eDirection::left))
 			stP = VECTOR2(this->samus->getPosition().x - this->samus->getSprite()->getWidth()*0.3f, this->samus->getPosition().y - this->samus->getSprite()->getHeight()*0.8f);
 
-		tar = VECTOR2(stP.x, stP.y - DISTANCE_SHOOT);
-
-		bullet->setVelocity(VECTOR2(0, VELOCITY));
+		bullet->setVelocity(VECTOR2(0, -VELOCITY));
 	}
 	else
 	{
 		if (this->samus->isInDirection(eDirection::right))
 		{
 			stP = VECTOR2(this->samus->getPosition().x + this->samus->getSprite()->getWidth()*0.4f, this->samus->getPosition().y - this->samus->getSprite()->getHeight()*0.7f);
-			tar = VECTOR2(stP.x + DISTANCE_SHOOT, stP.y);
-
 			bullet->setVelocity(VECTOR2(VELOCITY, 0));
 		}
 
 		else if (this->samus->isInDirection(eDirection::left))
 		{
 			stP = VECTOR2(this->samus->getPosition().x - this->samus->getSprite()->getWidth()*0.4f, this->samus->getPosition().y - this->samus->getSprite()->getHeight()*0.7f);
-			tar = VECTOR2(stP.x - DISTANCE_SHOOT, stP.y);
-
 			bullet->setVelocity(VECTOR2(-VELOCITY, 0));
 		}
 	}
 
-	bullet->init(stP, tar);
+	bullet->init(stP);
 }

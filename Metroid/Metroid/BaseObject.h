@@ -52,7 +52,7 @@ public:
 	Sprite* getSprite();
 
 	//TO DO: update position, velocity... if this object collide with another object(call before update() )
-	virtual void onCollision(BaseObject* object, CollisionReturn result);
+	virtual void onCollision();
 
 	virtual void setBoundCollision(MetroidRect rect);
 	virtual MetroidRect getBoundCollision();
@@ -68,3 +68,16 @@ public:
 	virtual void setActiveBound(MetroidRect rect);
 };
 
+
+
+struct CollisionReturn
+{
+	// top, left ,right ,bottom
+	CollideDirection direction;
+	//time two object collide
+	float entryTime;
+	//position of side that object collide. For example, when direction = TOP, it means positionCollision = otherBound.top
+	float positionCollision;
+
+	BaseObject* object;
+};

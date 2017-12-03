@@ -22,7 +22,7 @@ void BaseState::setBoundCollision()
 {
 }
 
-void BaseState::onCollision(BaseObject* object, CollisionReturn result)
+void BaseState::onCollision()
 {
 }
 

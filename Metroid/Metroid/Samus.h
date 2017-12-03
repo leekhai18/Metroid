@@ -8,6 +8,7 @@
 #include "Animation.h"
 #include "BaseObject.h"
 #include "BulletPool.h"
+#include <list>
 
 #define SAMUS_HEIGHT 30
 #define SAMUS_VERLOCITY_X 80
@@ -53,6 +54,8 @@ private:
 
 	BulletPool *bulletPool;
 
+	list<CollisionReturn> *listCollide;
+
 public:
 	float timerShoot;
 
@@ -83,7 +86,7 @@ public:
 	void setBoundCollision(MetroidRect rect);
 	void setActiveBound();
 
-	void onCollision(BaseObject* object, CollisionReturn result);
+	void onCollision();
 
 	void setIsCollidingPort(bool flag);
 	bool isColliedPort();
@@ -95,5 +98,7 @@ public:
 	Animation* getRunningHittingRightAnim();
 	Animation* getRollingAnim();
 	Animation* getJumpingAnim();
+
+	list<CollisionReturn> *getListCollide();
 };
 

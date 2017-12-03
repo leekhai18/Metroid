@@ -6,7 +6,7 @@
 #define WIDTH_BULLET_HALF 3
 #define HEIGHT_BULLET_HALF 3
 
-Bullet::Bullet(TextureManager * textureM, Graphics * graphics) : BaseObject()
+Bullet::Bullet(TextureManager * textureM, Graphics * graphics) : BaseObject(eID::BULLET)
 {
 	this->sprite = new Sprite();
 	if (!this->sprite->initialize(graphics, textureM, SpriteManager::getInstance()))
@@ -18,10 +18,11 @@ Bullet::Bullet(TextureManager * textureM, Graphics * graphics) : BaseObject()
 	this->sprite->setData(IndexManager::getInstance()->samusYellowBulletNormal);
 	this->setOrigin(VECTOR2(0.5f, 0.5f));
 
-	this->startPosition = VECTOR2ZERO;
 	this->setPosition(VECTOR2ZERO);
 
-	t = 0;
+	this->distance = 0;
+
+	this->listCollide = new list<CollisionReturn>();
 }
 
 Bullet::Bullet()
@@ -33,25 +34,24 @@ Bullet::Bullet()
 Bullet::~Bullet()
 {
 	delete this->sprite;
+	this->listCollide->clear();
+	delete this->listCollide;
 }
 
 
 void Bullet::update(float dt)
 {
-	if (t < 1)
+	if (this->distance < DISTANCE_SHOOT)
 	{
-		t += dt * (1.0f / TIME_TO_TARGET);
-		this->setPosition((1 - t)*this->startPosition + t*this->target);
+		this->distance += VELOCITY*dt;
+		this->setPosition(this->getPosition().x + this->getVelocity().x*dt, this->getPosition().y + this->getVelocity().y*dt);
 		setBoundCollision();
 	}
 	else
 	{
 		this->setStatus(eStatus::ENDING);
-
 		BulletPool::getInstance()->returnPool(this);
 	}
-
-
 }
 
 void Bullet::draw()
@@ -59,25 +59,30 @@ void Bullet::draw()
 	this->sprite->draw();
 }
 
-void Bullet::onCollision(BaseObject* object, CollisionReturn result)
+void Bullet::onCollision()
 {
-	switch (result.idObject)
+	for (auto i = this->listCollide->begin(); i != this->listCollide->end(); i++)
 	{
-	case eID::WALL:
-		BulletPool::getInstance()->returnPool(this);
-		break;
-
-	case eID::GATEBLUE:
+		switch (i->object->getId())
 		{
-		BulletPool::getInstance()->returnPool(this);
-		GateBlue* gate = static_cast<GateBlue*>(object);
-		gate->setHit(true);
-		break;
+		case eID::WALL:
+			BulletPool::getInstance()->returnPool(this);
+			break;
+
+		case eID::GATEBLUE:
+		{
+			BulletPool::getInstance()->returnPool(this);
+			GateBlue* gate = static_cast<GateBlue*>(i->object);
+			gate->setHit(true);
+			break;
 		}
-	
-	default:
-		break;
+
+		default:
+			break;
+		}
 	}
+
+	this->listCollide->clear();
 }
 
 void Bullet::setBoundCollision()
@@ -92,17 +97,23 @@ void Bullet::setBoundCollision()
 	boundCollision = rect;
 }
 
-void Bullet::init(VECTOR2 stPosition, VECTOR2 target)
+void Bullet::init(VECTOR2 stPosition)
 {
-	this->startPosition = stPosition;
-	this->target = target;
+	this->setPosition(stPosition);
 
-	t = 0;
+	this->distance = 0;
 	this->setStatus(eStatus::RUNNING);
 }
 
 void Bullet::returnPool()
 {
-	this->startPosition = VECTOR2ZERO;
-	this->target = VECTOR2ZERO;
+	this->setPosition(VECTOR2ZERO);
 }
+
+
+
+list<CollisionReturn>* Bullet::getListCollide()
+{
+	return this->listCollide;
+}
+

@@ -73,6 +73,7 @@ struct MetroidRect
 // Element ID
 enum eID {
 	SAMUS,
+	BULLET,
 	SKREE,
 	ZEB,
 	WAVER,
@@ -149,17 +150,4 @@ enum EnemyColors
 	Yellow,
 	Brown,
 	Red
-};
-
-
-struct CollisionReturn
-{
-	// top, left ,right ,bottom
-	CollideDirection direction;
-	//id of object that main object collide with
-	eID idObject;
-	//time two object collide
-	float entryTime;
-	//position of side that object collide. For example, when direction = TOP, it means positionCollision = otherBound.top
-	float positionCollision;
 };

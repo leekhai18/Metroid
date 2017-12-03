@@ -74,14 +74,13 @@ void Metroid::initialize(HWND hwnd)
 	camera = new Camera(VIEWPORT_WIDTH, VIEWPORT_HEIGHT);
 	camera->setPosition(VECTOR2(CAM_POS_X, CAM_POS_Y));
 
+	samus = new Samus(textureManager, graphics, input);
 
-	ObjectManager::getInstance()->init(textureManager, graphics);
+	ObjectManager::getInstance()->init(textureManager, graphics, samus);
 	if (!ObjectManager::getInstance()->load_list(OBJECT_LAYER_BRINSTAR_JSON))
 	{
 		throw GameError(GameErrorNS::FATAL_ERROR, "Can not load object layer brinstar json");
 	}
-
-	samus = new Samus(textureManager, graphics, input);
 
 	fpsText = new Text("FPS: 0", eFont::body, 8, VECTOR2(VIEWPORT_WIDTH - 70, 5), GraphicsNS::WHITE, false, true);
 	fpsText->initialize(graphics);
@@ -104,7 +103,7 @@ void Metroid::handleInput(float dt)
 
 void Metroid::collisions(float dt)
 {
-	ObjectManager::getInstance()->onCheckCollision(samus, dt);
+	ObjectManager::getInstance()->onCheckCollision(dt);
 }
 
 void Metroid::render()

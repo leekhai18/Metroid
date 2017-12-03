@@ -1,18 +1,16 @@
 #pragma once
 #include "BaseObject.h"
+#include <list>
 
 #define DISTANCE_SHOOT 48.0f
-#define TIME_TO_TARGET 0.2f
-#define VELOCITY 240
+#define VELOCITY 190
 
 class Bullet : public BaseObject
 {
 private:
-	VECTOR2 startPosition;
-	VECTOR2 target;
+	float distance;
 
-	// Use Bézier Curve
-	float t;
+	list<CollisionReturn> *listCollide;
 
 public:
 	Bullet(TextureManager* textureM, Graphics* graphics);
@@ -22,12 +20,14 @@ public:
 	void update(float dt);
 	void draw();
 
-	void onCollision(BaseObject* object, CollisionReturn result);
+	void onCollision();
 
 	void setBoundCollision();
-	void init(VECTOR2 stPosition, VECTOR2 target);
+	void init(VECTOR2 stPosition);
 
 	// Use object pool
 	void returnPool();
+
+	list<CollisionReturn> *getListCollide();
 };
 

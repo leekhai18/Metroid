@@ -21,6 +21,8 @@ public:
 	void onStart();
 	void onExit();
 
+	void onCollision();
+
 	void fire();
 };
 

@@ -13,7 +13,7 @@ public:
 	void handleInput(float dt);
 	void update(float dt);
 	void setBoundCollision();
-	void onCollision(BaseObject* object, CollisionReturn result);
+	void onCollision();
 	void onStart();
 	void onExit();
 };

@@ -1,4 +1,5 @@
 #include "Collision.h"
+#include "ObjectManager.h"
 
 
 Collision* Collision::instance = nullptr;
@@ -43,12 +44,13 @@ bool Collision::isCollide(MetroidRect myRect, MetroidRect otherRect)
 	return false;
 }
 
-bool Collision::checkCollision(BaseObject * myEntity, BaseObject * otherEntity, float frametime, CollisionReturn &data)
+bool Collision::checkCollision(BaseObject * myEntity, BaseObject * otherEntity, float frametime)
 {
 	float _dxEntry, _dyEntry, _dxExit, _dyExit;
 	float _txEntry, _tyEntry, _txExit, _tyExit;
 	MetroidRect   myRect = myEntity->getBoundCollision();
 	MetroidRect   otherRect = otherEntity->getBoundCollision();
+	CollisionReturn data;
 
 	MetroidRect   broadphaseRect = getSweptBroadphaseRect(myEntity, frametime);	// là bound của object được mở rộng ra thêm một phần bằng với vận tốc (dự đoán trước bound)
 	if (!isCollide(broadphaseRect, otherRect))				// kiểm tra tính chồng lắp của 2 hcn
@@ -162,7 +164,7 @@ bool Collision::checkCollision(BaseObject * myEntity, BaseObject * otherEntity, 
 	if (0<entryTime&& entryTime<1.0f)
 	{
 		data.entryTime = entryTime;
-		data.idObject = otherEntity->getId();
+		data.object = otherEntity;
 		switch (data.direction)
 		{
 		case TOP:
@@ -176,6 +178,24 @@ bool Collision::checkCollision(BaseObject * myEntity, BaseObject * otherEntity, 
 			break;
 		case RIGHT:
 			data.positionCollision = otherRect.right;
+			break;
+		}
+
+		switch (myEntity->getId())
+		{
+		case eID::SAMUS:
+		{
+			Samus* samus = static_cast<Samus*>(myEntity);
+			samus->getListCollide()->push_back(data);
+			break;
+		}
+		case eID::BULLET:
+		{
+			Bullet* bullet = static_cast<Bullet*>(myEntity);
+			bullet->getListCollide()->push_back(data);
+			break;
+		}
+		default:
 			break;
 		}
 

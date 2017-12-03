@@ -23,7 +23,7 @@ public:
 	virtual void onExit() = 0; // Call samus do anthing before exit state
 
 	virtual void setBoundCollision();
-	virtual void onCollision(BaseObject* object, CollisionReturn result);
+	virtual void onCollision();
 
 };
 

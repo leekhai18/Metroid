@@ -36,7 +36,7 @@ ObjectManager * ObjectManager::getInstance()
 	return instance;
 }
 
-void ObjectManager::onCheckCollision(Samus * samus, float dt)
+void ObjectManager::onCheckCollision(float dt)
 {
 	if (Camera::getInstance()->getVelocity() != VECTOR2ZERO || samus->isInStatus(eStatus::START))
 	{
@@ -49,23 +49,25 @@ void ObjectManager::onCheckCollision(Samus * samus, float dt)
 		quadtree->retrieve(return_objects_list, return_objects_list_not_wall, return_list_wall, MetroidRect((float)r.top, (float)r.bottom, (float)r.left, (float)r.right), samus);
 	}
 
+	// Get listCollide
 	for (auto x = return_objects_list->begin(); x != return_objects_list->end(); x++)
 	{
-		CollisionReturn result;
+		Collision::getInstance()->checkCollision(samus, *x, dt);
 
-		if (Collision::getInstance()->checkCollision(samus, *x, dt, result))
-		{
-			samus->onCollision(*x, result);
-		}
-		
 		for (unsigned i = 0; i < BulletPool::getInstance()->getListUsing().size(); i++)
-		{
-			if (Collision::getInstance()->checkCollision(BulletPool::getInstance()->getListUsing().at(i), *x, dt, result))
-			{
-				BulletPool::getInstance()->getListUsing().at(i)->onCollision(*x, result);
-			}
-		}
+			Collision::getInstance()->checkCollision(BulletPool::getInstance()->getListUsing().at(i), *x, dt);
 	}
+
+	// handle on listCollide
+	samus->onCollision();
+	for (unsigned i = 0; i < BulletPool::getInstance()->getListUsing().size(); i++)
+		BulletPool::getInstance()->getListUsing().at(i)->onCollision();
+
+
+
+
+
+	
 }
 
 void ObjectManager::onCheckCollision(BaseObject * obj, float frametime)
@@ -90,6 +92,12 @@ void ObjectManager::update(float dt)
 		for (list<BaseObject*>::iterator i = return_objects_list_not_wall->begin(); i != return_objects_list_not_wall->end(); ++i)
 		{
 			(*i)->update(dt);
+
+			if ((*i)->getId() == eID::SKREE)
+			{
+				Skree* skr = static_cast<Skree*>(*i);
+				skr->setTarget(samus->getPosition());
+			}
 		}
 	}
 }
@@ -105,10 +113,11 @@ void ObjectManager::draw()
 	}
 }
 
-void ObjectManager::init(TextureManager * textureM, Graphics * graphics)
+void ObjectManager::init(TextureManager * textureM, Graphics * graphics, Samus* samus)
 {
 	this->textureManager = textureM; 
 	this->graphics = graphics;
+	this->samus = samus;
 }
 
 bool ObjectManager::load_list(const char * filename)
@@ -766,7 +775,7 @@ bool ObjectManager::load_list(const char * filename)
 
 				x = listSkreeYellow[i]["x"].GetFloat();
 				y = listSkreeYellow[i]["y"].GetFloat();
-				sky->initPositions(VECTOR2(x, y));
+				sky->setPosition(VECTOR2(x + sky->getSprite()->getWidth()*0.5f, y + sky->getSprite()->getHeight()));
 
 				bound.left = x;
 				bound.top = y;
@@ -790,7 +799,7 @@ bool ObjectManager::load_list(const char * filename)
 
 				x = listSkreeBrown[i]["x"].GetFloat();
 				y = listSkreeBrown[i]["y"].GetFloat();
-				skb->initPositions(VECTOR2(x, y));
+				skb->setPosition(VECTOR2(x + skb->getSprite()->getWidth()*0.5f, y + skb->getSprite()->getHeight()));
 
 				bound.left = x;
 				bound.top = y;

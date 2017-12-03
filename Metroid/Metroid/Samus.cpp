@@ -34,6 +34,7 @@ Samus::Samus(TextureManager* textureM,Graphics* graphics, Input* input) : BaseOb
 
 	this->timerShoot = 0;
 	bulletPool = new BulletPool(textureM, graphics, 20);
+	this->listCollide = new list<CollisionReturn>();
 }
 
 Samus::Samus()
@@ -72,9 +73,10 @@ void Samus::handleInput(float dt)
 #pragma endregion
 }
 
-void Samus::onCollision(BaseObject* object, CollisionReturn result)
+void Samus::onCollision()
 {
-	SamusStateManager::getInstance()->getCurrentState()->onCollision(object, result);
+	SamusStateManager::getInstance()->getCurrentState()->onCollision();
+	this->listCollide->clear();
 }
 
 void Samus::setIsCollidingPort(bool flag)
@@ -160,6 +162,8 @@ void Samus::release()
 	delete startingAnimation;
 	delete jumpingAnimation;
 	delete bulletPool;
+	this->listCollide->clear();
+	delete this->listCollide;
 }
 
 void Samus::updateHorizontal(float dt)
@@ -273,5 +277,10 @@ Animation * Samus::getRollingAnim()
 Animation * Samus::getJumpingAnim()
 {
 	return this->jumpingAnimation;
+}
+
+list<CollisionReturn>* Samus::getListCollide()
+{
+	return this->listCollide;
 }
 

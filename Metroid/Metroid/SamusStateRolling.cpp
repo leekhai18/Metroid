@@ -158,33 +158,37 @@ void SamusStateRolling::handleInput(float dt)
 		this->samus->setStatus(eStatus::STANDING);
 	}
 }
-void SamusStateRolling::onCollision(BaseObject* object, CollisionReturn result)
+void SamusStateRolling::onCollision()
 {
-	switch (result.idObject)
+	for (auto i = this->samus->getListCollide()->begin(); i != this->samus->getListCollide()->end(); i++)
 	{
-	case eID::WALL:
-		switch (result.direction)
+		switch (i->object->getId())
 		{
-		case CollideDirection::LEFT:
-			this->samus->setVelocityX(0);
-			//not allow move left
-			this->samus->setCanMoveRight(false);
+		case eID::WALL:
+			switch (i->direction)
+			{
+			case CollideDirection::LEFT:
+				this->samus->setVelocityX(0);
+				//not allow move left
+				this->samus->setCanMoveRight(false);
+				break;
+			case CollideDirection::RIGHT:
+				this->samus->setVelocityX(0);
+				//not allow move right
+				this->samus->setCanMoveLeft(false);
+				break;
+			case CollideDirection::TOP:
+				this->samus->setPositionY(i->positionCollision);
+				this->samus->setVelocity(VECTOR2(0, 0));
+				this->samus->setFall(false);
+				setBoundCollision();
+				return;
+			}
 			break;
-		case CollideDirection::RIGHT:
-			this->samus->setVelocityX(0);
-			//not allow move right
-			this->samus->setCanMoveLeft(false);
+		default:
 			break;
-		case CollideDirection::TOP:
-			this->samus->setPositionY(result.positionCollision);
-			this->samus->setVelocity(VECTOR2(0, 0));
-			this->samus->setFall(false);
-			setBoundCollision();
-			return;
 		}
-		break;
-	default:
-		break;
+
 	}
 	
 }

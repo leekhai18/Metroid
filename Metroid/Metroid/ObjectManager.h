@@ -28,6 +28,7 @@ private:
 
 	Quadtree* quadtree;
 
+	Samus* samus;
 	list<BaseObject*>* object_list;
 
 	int totalObjectsPerFrame;
@@ -40,11 +41,11 @@ public:
 
 	list<BaseObject*> *getListWallOnViewPort() { return return_list_wall; };
 
-	void init(TextureManager* textureM, Graphics* graphics);
+	void init(TextureManager* textureM, Graphics* graphics, Samus* samus);
 	bool load_list(const char *filename);
 	void release();
 
-	void onCheckCollision(Samus* samus, float frametime);
+	void onCheckCollision(float frametime);
 	void onCheckCollision(BaseObject* obj, float frametime);
 
 	int getTotalObjectsPerFrame();
