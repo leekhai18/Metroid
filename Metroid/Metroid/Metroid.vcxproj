@@ -160,6 +160,7 @@
     <ClInclude Include="Rio.h" />
     <ClInclude Include="Ripper.h" />
     <ClInclude Include="Samus.h" />
+    <ClInclude Include="SamusStateAcrobat.h" />
     <ClInclude Include="SamusStateJumping.h" />
     <ClInclude Include="SamusStateManager.h" />
     <ClInclude Include="SamusStateRolling.h" />
@@ -213,6 +214,7 @@
     <ClCompile Include="Rio.cpp" />
     <ClCompile Include="Ripper.cpp" />
     <ClCompile Include="Samus.cpp" />
+    <ClCompile Include="SamusStateAcrobat.cpp" />
     <ClCompile Include="SamusStateJumping.cpp" />
     <ClCompile Include="SamusStateManager.cpp" />
     <ClCompile Include="SamusStateRolling.cpp" />
