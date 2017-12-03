@@ -81,6 +81,10 @@ void Graphics::initialize(HWND hw, int w, int h, bool full)
 	if (FAILED(result))
 		throw(GameError(GameErrorNS::FATAL_ERROR, "Error creating Direct3D sprite"));
 
+	result = D3DXCreateLine(device3d, &line);
+	if (FAILED(result))
+		throw(GameError(GameErrorNS::FATAL_ERROR, "Error creating Direct3D line"));
+	line->SetWidth(2.0f);
 }
 
 void Graphics::initD3Dpp()
@@ -299,7 +303,13 @@ void Graphics::drawSprite(const SpriteData &spriteData, COLOR_ARGB color)
 	// Magic... TO use only this sprite or you can know as to refesh to old
 	sprite->SetTransform(&matOld);
 }
+void Graphics::drawLine(const VECTOR2* vertices, int count, COLOR_ARGB color)
+{
+	line->Begin();
+	line->Draw(vertices, count, color);
+	line->End();
 
+}
 
 HRESULT Graphics::getDeviceState()
 {

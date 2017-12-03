@@ -54,6 +54,7 @@
     <ClCompile Include="Zeb.cpp" />
     <ClCompile Include="Zommer.cpp" />
     <ClCompile Include="SamusStateAcrobat.cpp" />
+    <ClCompile Include="GameDebug.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AlienBig.h" />
@@ -111,6 +112,7 @@
     <ClInclude Include="Zeb.h" />
     <ClInclude Include="Zommer.h" />
     <ClInclude Include="SamusStateAcrobat.h" />
+    <ClInclude Include="GameDebug.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Metroid.rc" />

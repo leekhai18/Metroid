@@ -138,6 +138,7 @@
     <ClInclude Include="Collision.h" />
     <ClInclude Include="Constants.h" />
     <ClInclude Include="EnergyTank.h" />
+    <ClInclude Include="GameDebug.h" />
     <ClInclude Include="GameError.h" />
     <ClInclude Include="GameLog.h" />
     <ClInclude Include="GameManager.h" />
@@ -194,6 +195,7 @@
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="Collision.cpp" />
     <ClCompile Include="EnergyTank.cpp" />
+    <ClCompile Include="GameDebug.cpp" />
     <ClCompile Include="GameLog.cpp" />
     <ClCompile Include="GameManager.cpp" />
     <ClCompile Include="GateBlue.cpp" />

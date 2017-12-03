@@ -2,6 +2,7 @@
 #include "Sound.h"
 #include "ObjectManager.h"
 #include "Collision.h"
+#include "GameDebug.h"
 
 Metroid::Metroid()
 {
@@ -34,6 +35,7 @@ Metroid::~Metroid()
 
 	ObjectManager::getInstance()->release();
 	Collision::getInstance()->release();
+	GameDebug::getInstance()->release();
 }
 
 Metroid* Metroid::instance = nullptr;
@@ -83,7 +85,8 @@ void Metroid::initialize(HWND hwnd)
 	{
 		throw GameError(GameErrorNS::FATAL_ERROR, "Can not load object layer brinstar json");
 	}
-
+	GameDebug::getInstance()->initialize(graphics);
+	GameDebug::getInstance()->setCount(5);
 	samus = new Samus(textureManager, graphics, input);
 
 	skree = new Skree(textureManager, graphics, EnemyColors::Yellow);
@@ -157,6 +160,7 @@ void Metroid::render()
 
 	fpsText->setText("FPS: " + std::to_string((int)this->fps));
 	fpsText->draw();
+	GameDebug::getInstance()->draw();
 }
 
 void Metroid::releaseAll()

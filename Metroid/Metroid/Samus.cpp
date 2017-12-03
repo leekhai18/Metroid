@@ -1,7 +1,7 @@
 #include "Samus.h"
 #include "SamusStateManager.h"
 #include "Camera.h"
-
+#include "GameDebug.h"
 Samus::Samus(TextureManager* textureM,Graphics* graphics, Input* input) : BaseObject(eID::SAMUS)
 {
 	this->input = input;
@@ -166,6 +166,7 @@ void Samus::setBoundCollision(MetroidRect rect)
 {
 	this->boundCollision = rect;
 	this->activeBound = rect;
+	GameDebug::getInstance()->setVertices(rect);
 }
 
 void Samus::setAcrobat(bool acrobat)

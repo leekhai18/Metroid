@@ -245,12 +245,12 @@ void SamusStateAcrobat::onCollision()
 			{
 			case CollideDirection::LEFT:
 
-				this->samus->setMoveRight(false);
+				this->samus->setCanMoveRight(false);
 				this->samus->setVelocityX(0);
 
 				break;
 			case CollideDirection::RIGHT:
-				this->samus->setMoveLeft(false);
+				this->samus->setCanMoveLeft(false);
 				this->samus->setVelocityX(0);
 
 
@@ -296,7 +296,7 @@ void SamusStateAcrobat::update(float dt)
 		this->animation->update(dt);
 	}
 	//update position.x
-	if (this->samus->isMoveLeft() || this->samus->isMoveRight())
+	if (this->samus->canMoveLeft() || this->samus->canMoveRight())
 	{
 		this->samus->updateHorizontal(dt);
 	}
@@ -338,8 +338,8 @@ void SamusStateAcrobat::update(float dt)
 	}
 #pragma endregion
 
-	this->samus->setMoveLeft(true);
-	this->samus->setMoveRight(true);
+	this->samus->setCanMoveLeft(true);
+	this->samus->setCanMoveRight(true);
 
 }
 

@@ -24,7 +24,8 @@ SamusStateManager::~SamusStateManager()
 	delete stateRunning;
 	delete stateStanding;
 	delete stateJumping;
-	delete currentState;
+	delete stateAcrobat;
+	//delete currentState;
 
 	stateRunning = nullptr;
 	stateStart = nullptr;
@@ -41,6 +42,7 @@ void SamusStateManager::init(Samus * samus, Input * input)
 	stateStanding = new SamusStateStanding(samus, input);
 	stateRolling = new SamusStateRolling(samus, input);
 	stateJumping = new SamusStateJumping(samus, input);
+	stateAcrobat = new SamusStateAcrobat(samus, input);
 
 	currentState = stateStart;
 }
@@ -80,6 +82,13 @@ void SamusStateManager::changeStateTo(eStatus eStatus)
 	case eStatus::JUMPING:
 	{
 		currentState = stateJumping;
+		break;
+	}
+	case eStatus::ACROBAT:
+	{
+		currentState = stateAcrobat;
+		this->stateAcrobat->setVelocityFrame(this->stateJumping->getVelocity_Frame());
+		this->stateAcrobat->setJumpDistance(this->stateJumping->getJumpDistance());
 		break;
 	}
 	default:

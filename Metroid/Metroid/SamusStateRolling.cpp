@@ -24,14 +24,14 @@ void SamusStateRolling::setBoundCollision()
 	{
 		VECTOR2 position(this->samus->getPosition().x, samus->getPosition().y);
 		rect.left = position.x + 1;
-		rect.right = position.x + (MAX_WIDTH)-1;
+		rect.right = position.x + (WIDTH_COLLISION)-1;
 		rect.top = position.y - (ROLL_HEIGHT)+1;
 		rect.bottom = position.y - 1;
 	}
 	else
 	{
 		VECTOR2 position(this->samus->getPosition().x, samus->getPosition().y);
-		rect.left = position.x - (MAX_WIDTH)+1;
+		rect.left = position.x - (WIDTH_COLLISION)+1;
 		rect.right = position.x - 1;
 		rect.top = position.y - (ROLL_HEIGHT)+1;
 		rect.bottom = position.y - 1;
@@ -154,7 +154,6 @@ void SamusStateRolling::handleInput(float dt)
 
 	if (input->isKeyDown(VK_UP) || input->isKeyDown(VK_X))
 	{
-		float velocityY=(MAX_HEIHT);
 		this->samus->setStatus(eStatus::STANDING);
 	}
 }
@@ -210,10 +209,10 @@ void SamusStateRolling::update(float dt)
 		SamusStateManager::getInstance()->changeStateTo(eStatus::STANDING);
 	}
 	this->samus->setCanMoveLeft(true);
-	this->samus->setCanMoveRight(true);
+	this->samus->setCanMoveLeft(true);
 	if (this->samus->isFaling())
 	{
-		this->samus->setVelocity(VECTOR2(0, SAMUS_VERLOCITY_Y));
+		this->samus->setVelocity(VECTOR2(0, SAMUS_MAX_SPEED_Y));
 	}
 	else
 	{

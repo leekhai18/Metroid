@@ -18,19 +18,36 @@ SamusStateRunning::~SamusStateRunning()
 void SamusStateRunning::setBoundCollision()
 {
 	MetroidRect rect;
+	//example of right side, left side offset is the same, you can image from right side
+	//	BoundCollision  WIDTH = 20  
+	//	  	\_ _          / 
+	//	 	   _|_ _ _ __/ 
+	//		  | |   |_|__|
+	//		  | |	| |  |
+	//        |_|___|_|__|      
+	// _ _ _ _ _      |_ _position  
+	//|       |_|	   __           
+	//|	              |__|_ _offset_run        
+	//|                               
+	//offset_collison_x              
+	//(WIDTH_COLLISION -2) because bound collision will be subtract to 1 in four side(top,left,right,bottom)
+	//
+
 	if (this->samus->getDirection() == eDirection::right)
 	{
-		VECTOR2 position(this->samus->getPosition().x - WIDTH_RUN*0.5f, samus->getPosition().y);
-		rect.left = position.x + 1;
-		rect.right = position.x + (MAX_WIDTH)-1;
+
+		VECTOR2 position(this->samus->getPosition().x, samus->getPosition().y);
+		rect.left = position.x - (WIDTH_COLLISION)+1;
+		rect.right = position.x - 1;
 		rect.top = position.y - (MAX_HEIHT)+1;
 		rect.bottom = position.y - 1;
+
 	}
 	else
 	{
-		VECTOR2 position(this->samus->getPosition().x + WIDTH_RUN*0.5f, samus->getPosition().y);
-		rect.left = position.x - (MAX_WIDTH)+1;
-		rect.right = position.x - 1;
+		VECTOR2 position(this->samus->getPosition().x, samus->getPosition().y);
+		rect.left = position.x + 1;
+		rect.right = position.x + (WIDTH_COLLISION)-1;
 		rect.top = position.y - (MAX_HEIHT)+1;
 		rect.bottom = position.y - 1;
 
@@ -43,8 +60,17 @@ void SamusStateRunning::init()
 	runningNormal = samus->getRunningNormalAnim();
 	runningUp = samus->getRunningUpAnim();
 	runningHittingRight = samus->getRunningHittingRightAnim();
-	this->samus->setOrigin(VECTOR2(0.5f, 1));
+	if (this->samus->isInDirection(eDirection::right))
+	{
+		this->samus->setOrigin(VECTOR2(1, 1));
+	}
+	else
+	{
+		this->samus->setOrigin(VECTOR2(0, 1));
+	}
 	this->animation = runningNormal;
+	this->animation->setValueOfCurrentFrame(0);
+	setBoundCollision();
 }
 
 void SamusStateRunning::handleInput(float dt)
@@ -71,6 +97,84 @@ void SamusStateRunning::handleInput(float dt)
 
 
 #pragma endregion
+
+	if (input->isKeyUp(VK_X) == true)
+	{
+		this->samus->setJump(true);
+	}
+	//When we press jump key, change state to jump
+	if (input->isKeyDown(VK_X) && this->samus->isJump() == true)
+	{
+		//reset velocity
+		this->samus->setVelocityX(0);
+		this->samus->setFall(false);
+		this->samus->setAcrobat(true);
+		this->samus->setStatus(eStatus::JUMPING);
+		return;
+	}
+
+	//when we press up button hand of samus will raise to sky
+	if (input->isKeyDown(VK_UP))
+	{
+		//stop current animation
+		this->animation->stop();
+		//change animation to hand raise to sky
+		this->animation = runningUp;
+		//start new animation
+		this->animation->start();
+	}
+	//when we press shot button and not press up button, samus will shot horizontal 
+	if (input->isKeyDown(VK_Z) && input->isKeyUp(VK_UP))
+	{
+		//stop current animation
+		this->animation->stop();
+		//change animation to shot horizontal
+		this->animation = runningHittingRight;
+		//start new animation
+		this->animation->start();
+
+		//we must press shot button enoung long to samus shot
+		this->isUp = false;
+		if (this->samus->timerShoot > TIME_SHOOTING)
+		{
+			this->fire();
+			this->samus->timerShoot = 0;
+		}
+	}
+
+	if (input->isKeyDown(VK_UP) && input->isKeyDown(VK_Z))
+	{
+		this->animation->stop();
+
+		this->samus->getSprite()->setData(IndexManager::getInstance()->samusYellowHittingUp);
+		this->animation = runningUp;
+		this->animation->start();
+
+		this->isUp = true;
+		if (this->samus->timerShoot > TIME_SHOOTING)
+		{
+			this->fire();
+			this->samus->timerShoot = 0;
+		}
+	}
+
+	if (input->isKeyUp(VK_UP) && input->isKeyUp(VK_Z) && (input->isKeyDown(VK_LEFT) || input->isKeyDown(VK_RIGHT)))
+	{
+		this->animation->stop();
+
+		this->animation = runningNormal;
+		this->animation->start();
+	}
+
+	if (!Collision::getInstance()->checkOnGround(samus->getBoundCollision()))
+	{
+		this->samus->setAcrobat(false);
+		this->samus->setFall(true);
+		this->samus->setVelocityX(0);
+
+		this->samus->setStatus(eStatus::JUMPING);
+		return;
+	}
 
 	if (input->isKeyUp(VK_X) == true)
 	{
@@ -205,23 +309,8 @@ void SamusStateRunning::update(float dt)
 
 			//stop current animation
 			this->animation->stop();
-			if (this->samus->isAcrobat())
-			{
-				//When change to jump state, orgin will (0.5,0.5), so we change position.y
-				this->samus->setPosition(VECTOR2(this->samus->getPosition().x, this->samus->getPosition().y - HEIGHT_RUN*0.5f));
-			}
-			else
-			{
-				//change orgin.y = 1 in running state to orgin.y = 0 in jumping state, so we change position.y		
-				if (this->samus->getDirection() == eDirection::right)
-				{
-					this->samus->setPosition(this->samus->getPosition().x - WIDTH_RUN*0.5f, this->samus->getPosition().y - HEIGHT_RUN);
-				}
-				else
-				{
-					this->samus->setPosition(this->samus->getPosition().x + WIDTH_RUN*0.5f, this->samus->getPosition().y - HEIGHT_RUN);
-				}
-			}
+			//change orgin.y = 1 in running state to orgin.y = 0 in jumping state, so we change position.y
+			this->samus->setPosition(this->samus->getPosition().x, this->samus->getPosition().y - HEIGHT_RUN);
 			break;
 		case eStatus::STANDING:
 			//When change to state standing, we must change position because orgin of state running is (0.5 , 1) 
@@ -244,7 +333,7 @@ void SamusStateRunning::update(float dt)
 				//      |_ _ _ _/		 /
 				//        |_ _ _ _ _ _ _/
 				//when change to standing state, orgin change from (0.5, 1) to (0 , 1).  
-				this->samus->setPositionX(this->samus->getPosition().x - WIDTH_RUN*0.5f);
+				this->samus->setPositionX(this->samus->getPosition().x + OFFSET_RUN);
 			}
 			else
 			{
@@ -266,7 +355,7 @@ void SamusStateRunning::update(float dt)
 				//   |_ _ _ |/			 /
 				//          | _ _ _ _ _ /  
 				//when change to standing state, orgin change from (0.5, 1) to (1 , 1). 
-				this->samus->setPositionX(this->samus->getPosition().x + WIDTH_RUN*0.5f);
+				this->samus->setPositionX(this->samus->getPosition().x - OFFSET_RUN);
 			}
 			break;
 		default:

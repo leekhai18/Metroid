@@ -25,6 +25,7 @@ namespace GraphicsNS
 {
 	const COLOR_ARGB WHITE = D3DCOLOR_ARGB(255, 255, 255, 255);
 	const COLOR_ARGB BLACK = D3DCOLOR_ARGB(255, 0, 0, 0);
+	const COLOR_ARGB RED = D3DCOLOR_ARGB(255, 255, 0, 0);
 }
 
 // SpriteData: The properties required by Graphics::drawSprite to draw a sprite
@@ -51,6 +52,7 @@ private:
 	LP_3D       direct3d;
 	LP_3DDEVICE device3d;
 	LP_SPRITE   sprite;
+	LP_LINE line;
 	D3DPRESENT_PARAMETERS d3dpp;
 	D3DDISPLAYMODE pMode;
 
@@ -86,6 +88,8 @@ public:
 
 	void    drawSprite(const SpriteData &spriteData,           // sprite to draw
 		COLOR_ARGB color = GraphicsNS::WHITE);      // default to white color filter (no change)
+
+	void drawLine(const VECTOR2 * vertices, int count, COLOR_ARGB color = GraphicsNS::RED);
 
 													// Reset the graphics device.
 	HRESULT reset();
