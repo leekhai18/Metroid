@@ -57,7 +57,7 @@ public:
 	bool canFolowOnLeft();
 
 	void setOnPort(bool flag);
-	bool onPort();
+	bool moveWhenSamusOnPort();
 
 	void setNumPort(int num);
 	int getNumPort();

@@ -163,13 +163,11 @@ void SamusStateRunning::onCollision(BaseObject* object, CollisionReturn result)
 		{
 		case CollideDirection::LEFT:
 			this->samus->setVelocityX(0);
-			//not allow move right
 			this->samus->setCanMoveRight(false);
 			this->samus->setStatus(eStatus::STANDING);
 			break;
 		case CollideDirection::RIGHT:
 			this->samus->setVelocityX(0);
-			//not allow move left
 			this->samus->setCanMoveLeft(false);
 			this->samus->setStatus(eStatus::STANDING);
 			break;
@@ -203,10 +201,10 @@ void SamusStateRunning::onCollision(BaseObject* object, CollisionReturn result)
 		{
 		case CollideDirection::LEFT:
 			{
-				if (Camera::getInstance()->onPort())
+				if (Camera::getInstance()->moveWhenSamusOnPort())
 				{
-					//GateBlue* gate = static_cast<GateBlue*>(object);
-					//gate->setIsCollideSamusInPort(true);
+					GateBlue* gate = static_cast<GateBlue*>(object);
+					gate->setIsCollideSamusInPort(true);
 
 					this->samus->setIsCollidingPort(false);
 					this->samus->setVelocityX(0);
@@ -215,7 +213,6 @@ void SamusStateRunning::onCollision(BaseObject* object, CollisionReturn result)
 				else
 				{
 					this->samus->setVelocityX(0);
-					//not allow move right
 					this->samus->setCanMoveRight(false);
 					this->samus->setStatus(eStatus::STANDING);
 				}
@@ -224,10 +221,10 @@ void SamusStateRunning::onCollision(BaseObject* object, CollisionReturn result)
 			}
 		case CollideDirection::RIGHT:
 			{
-				if (Camera::getInstance()->onPort())
+				if (Camera::getInstance()->moveWhenSamusOnPort())
 				{
-					//GateBlue* gate = static_cast<GateBlue*>(object);
-					//gate->setIsCollideSamusInPort(true);
+					GateBlue* gate = static_cast<GateBlue*>(object);
+					gate->setIsCollideSamusInPort(true);
 
 					this->samus->setIsCollidingPort(false);
 					this->samus->setVelocityX(0);
@@ -236,7 +233,6 @@ void SamusStateRunning::onCollision(BaseObject* object, CollisionReturn result)
 				else
 				{
 					this->samus->setVelocityX(0);
-					//not allow move left
 					this->samus->setCanMoveLeft(false);
 					this->samus->setStatus(eStatus::STANDING);
 				}

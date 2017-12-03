@@ -146,7 +146,7 @@ void Camera::setOnPort(bool flag)
 	this->isOnPort = flag;
 }
 
-bool Camera::onPort()
+bool Camera::moveWhenSamusOnPort()
 {
 	return this->isOnPort;
 }

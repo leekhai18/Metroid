@@ -56,11 +56,11 @@ void Samus::draw()
 
 void Samus::handleInput(float dt)
 {
-	if (!Camera::getInstance()->onPort())
+	if (!Camera::getInstance()->moveWhenSamusOnPort())
 		SamusStateManager::getInstance()->getCurrentState()->handleInput(dt);
 
 #pragma region handle camera
-	if (!Camera::getInstance()->onPort() && Camera::getInstance()->getNumPort() < 2)
+	if (!Camera::getInstance()->moveWhenSamusOnPort() && Camera::getInstance()->getNumPort() < 2)
 	{
 		if (!Camera::getInstance()->canFolowVertical())
 		{
@@ -96,7 +96,7 @@ void Samus::update(float dt)
 {
 
 #pragma region handle camera
-	if (!Camera::getInstance()->onPort() && Camera::getInstance()->getNumPort() < 2)
+	if (!Camera::getInstance()->moveWhenSamusOnPort() && Camera::getInstance()->getNumPort() < 2)
 	{
 		if (!Camera::getInstance()->canFolowVertical())
 		{
@@ -128,7 +128,7 @@ void Samus::update(float dt)
 	if (isCollidingPort)
 		this->setVelocityX(Camera::getInstance()->getVelocity().x);
 
-	if (moveToFontGate && !Camera::getInstance()->onPort())
+	if (moveToFontGate && !Camera::getInstance()->moveWhenSamusOnPort())
 	{
 		float dis = dt * SAMUS_VERLOCITY_X;
 		this->distance += dis;

@@ -3,6 +3,7 @@
 
 #define SCALE_PER_FRAME 0.1f
 #define TIME_RE_SPAWN 3
+#define TIME_O_C_GATE 0.2f
 
 GateBlue::GateBlue()
 {
@@ -41,17 +42,17 @@ void GateBlue::update(float dt)
 	}
 
 
-	if (isCollideSamusInPort)
+	if (isCollideSamusInPort && !Camera::getInstance()->moveWhenSamusOnPort())
 	{
 		timer += dt;
 
-		if (timer > 2)
+		if (timer > TIME_O_C_GATE)
 			effectRespawn();
 		else
 			effectDisappear();
 	}
 
-	if (Camera::getInstance()->onPort())
+	if (Camera::getInstance()->moveWhenSamusOnPort() && isHit)
 	{
 		effectRespawn();
 	}

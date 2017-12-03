@@ -26,7 +26,7 @@ void Port::draw()
 	}
 	else
 	{
-		if (!Camera::getInstance()->onPort())
+		if (!Camera::getInstance()->moveWhenSamusOnPort())
 		{
 			if (Camera::getInstance()->getPosition().x < this->boundCollision.left) // port ben phai
 			{

@@ -114,9 +114,9 @@ void Metroid::render()
 	// BEGIN
 	this->getGraphics()->spriteBegin();
 
+	samus->draw();
 	mapBrinstar->draw();
 	ObjectManager::getInstance()->draw();
-	samus->draw();
 
 
 	// END
