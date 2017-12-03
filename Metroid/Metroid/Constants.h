@@ -22,8 +22,10 @@
 const char CLASS_NAME[] = "Metroid";	
 const char GAME_TITLE[] = "Metroid";
 const bool FULLSCREEN = false;              // windowed or fullscreen
-const UINT GAME_WIDTH = 256;               // width of game in pixels
-const UINT GAME_HEIGHT = 224;               // height of game in pixels
+const UINT VIEWPORT_WIDTH = 256;               // width of game in pixels
+const UINT VIEWPORT_HEIGHT = 224;               // height of game in pixels
+const UINT MAP_WIDTH = 7680;
+const UINT MAP_HEIGHT = 4560;
 
 // Game Manger
 const double PI = 3.14159265;
@@ -71,6 +73,7 @@ struct MetroidRect
 // Element ID
 enum eID {
 	SAMUS,
+	BULLET,
 	SKREE,
 	ZEB,
 	WAVER,
@@ -117,7 +120,6 @@ enum eStatus {
 	STANDING,
 	FALLING,
 	FOLLOW,
-	HITTING,
 };
 
 // direction
@@ -149,17 +151,4 @@ enum EnemyColors
 	Yellow,
 	Brown,
 	Red
-};
-
-
-struct CollisionReturn
-{
-	// top, left ,right ,bottom
-	CollideDirection direction;
-	//id of object that main object collide with
-	eID idObject;
-	//time two object collide
-	float entryTime;
-	//position of side that object collide. For example, when direction = TOP, it means positionCollision = otherBound.top
-	float positionCollision;
 };

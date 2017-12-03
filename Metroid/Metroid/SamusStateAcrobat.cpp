@@ -229,32 +229,26 @@ void SamusStateAcrobat::handleInput(float dt)
 #pragma region Collision
 void SamusStateAcrobat::onCollision()
 {
-	list<CollisionReturn> dataReturn = Collision::getInstance()->getDataReturn();
 	float addX = 0, addY = 0;
-	for (list<CollisionReturn>::iterator object = dataReturn.begin(); object != dataReturn.end(); ++object)
+
+	for (auto i = this->samus->getListCollide()->begin(); i != this->samus->getListCollide()->end(); i++)
 	{
-		eID objectID = (*object).idObject;
-		CollideDirection collideDirection = (*object).direction;
-		float entryTime = (*object).entryTime;
-		float positionCollision = (*object).positionCollision;
-		switch (objectID)
+		switch (i->object->getId())
 		{
-			//handle collision with wall
+#pragma region Wall
 		case eID::WALL:
-			switch (collideDirection)
+			switch (i->direction)
 			{
 			case CollideDirection::LEFT:
-
 				this->samus->setCanMoveRight(false);
 				this->samus->setVelocityX(0);
-
 				break;
+
 			case CollideDirection::RIGHT:
 				this->samus->setCanMoveLeft(false);
 				this->samus->setVelocityX(0);
-
-
 				break;
+
 			case CollideDirection::TOP:
 				jumpDistance = 0;
 				//set jump = false, when user release jump button set to true
@@ -263,14 +257,15 @@ void SamusStateAcrobat::onCollision()
 				this->samus->setFall(false);
 				//reset velocity
 				this->samus->setVelocityY(0);
-				positionCollide = positionCollision;
+				positionCollide = i->positionCollision;
 				this->samus->setStatus(eStatus::STANDING);
 				break;
+
 			case CollideDirection::BOTTOM:
 				jumpDistance = 0;
 				this->samus->setFall(true);
 				this->samus->setVelocityY(0);
-				addY = positionCollision;
+				addY = i->positionCollision;
 				this->samus->setVelocityY(0);
 
 				if (animation != NULL)
@@ -280,7 +275,10 @@ void SamusStateAcrobat::onCollision()
 				this->samus->setPositionY(addY);
 				break;
 			}
+
 			break;
+#pragma endregion
+
 			//another object
 		default:
 			break;

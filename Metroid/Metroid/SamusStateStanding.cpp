@@ -1,6 +1,7 @@
 #include "SamusStateStanding.h"
 #include "SamusStateManager.h"
 #include "BulletPool.h"
+#include "GameLog.h"
 
 #define TIME_TO_RUNNING 0.1f
 
@@ -67,10 +68,8 @@ void SamusStateStanding::init()
 
 void SamusStateStanding::handleInput(float dt)
 {
-
 	if (input->isKeyUp(VK_LEFT) && input->isKeyUp(VK_RIGHT))
 		timerToRunning = 0;
-
 
 	//handle press left button
 	if (input->isKeyDown(VK_LEFT) && input->isKeyUp(VK_RIGHT))
@@ -185,6 +184,7 @@ void SamusStateStanding::handleInput(float dt)
 			}
 		}
 	}
+
 	//reset jump when user release jump button
 	if (input->isKeyUp(VK_X))
 	{
@@ -206,7 +206,6 @@ void SamusStateStanding::handleInput(float dt)
 
 		// Set Data for sprite
 		this->samus->getSprite()->setData(IndexManager::getInstance()->samusYellowTurnUp);
-		//this->samus->setOrigin(VECTOR2(0, 1.0f));
 	}
 
 	if (isUp && input->isKeyUp(VK_UP))
@@ -215,7 +214,6 @@ void SamusStateStanding::handleInput(float dt)
 
 		// Set Data for sprite
 		this->samus->getSprite()->setData(IndexManager::getInstance()->samusYellowTurnRight);
-		//this->samus->setOrigin(VECTOR2(0, 1.0f));
 	}
 
 	if (input->isKeyDown(VK_DOWN))
@@ -225,6 +223,13 @@ void SamusStateStanding::handleInput(float dt)
 		return;
 	}
 
+	if (!isUp && input->isKeyUp(VK_Z) && isShoot)
+	{
+		// Set Data for sprite
+		this->samus->getSprite()->setData(IndexManager::getInstance()->samusYellowTurnRight);
+		isShoot = false;
+	}
+
 	if (input->isKeyDown(VK_Z))
 	{
 		// Set up sprite Shooting
@@ -232,19 +237,18 @@ void SamusStateStanding::handleInput(float dt)
 		{
 			// Set Data for sprite
 			this->samus->getSprite()->setData(IndexManager::getInstance()->samusYellowHittingUp);
-			//this->samus->setOrigin(VECTOR2(0, 1.0f));
 		}
 		else
 		{
 			// Set Data for sprite
 			this->samus->getSprite()->setData(IndexManager::getInstance()->samusYellowHittingRight);
-			//this->samus->setOrigin(VECTOR2(0, 1.0f));
 		}
 
 		if (this->samus->timerShoot > TIME_SHOOTING)
 		{
 			this->fire();
 			this->samus->timerShoot = 0;
+			this->isShoot = true;
 		}
 	}
 }
@@ -342,11 +346,25 @@ void SamusStateStanding::onExit()
 
 }
 
+void SamusStateStanding::onCollision()
+{
+	for (auto i = this->samus->getListCollide()->begin(); i != this->samus->getListCollide()->end(); i++)
+	{
+		switch (i->object->getId())
+		{
+		case eID::SKREE:
+			GAMELOG("VA CHAM SKREE");
+			break;
+
+		default:
+			break;
+		}
+	}
+}
+
 void SamusStateStanding::fire()
 {
-	//
 	VECTOR2 stP;
-	VECTOR2 tar;
 	Bullet* bullet = BulletPool::getInstance()->getBullet();
 
 
@@ -357,37 +375,22 @@ void SamusStateStanding::fire()
 		else if (this->samus->isInDirection(eDirection::left))
 			stP = VECTOR2(this->samus->getPosition().x - this->samus->getSprite()->getWidth()*0.65f, this->samus->getPosition().y - this->samus->getSprite()->getHeight()*0.9f);
 
-		tar = VECTOR2(stP.x, stP.y - DISTANCE_SHOOT);
-
-
-		bullet->setVelocity(VECTOR2(0, DISTANCE_SHOOT / bullet->getTimeToTar()));
-		bullet->setBoundCollision();
+		bullet->setVelocity(VECTOR2(0, -VELOCITY));
 	}
 	else
 	{
 		if (this->samus->isInDirection(eDirection::right))
 		{
 			stP = VECTOR2(this->samus->getPosition().x + this->samus->getSprite()->getWidth()*0.8f, this->samus->getPosition().y - this->samus->getSprite()->getHeight()*0.7f);
-			tar = VECTOR2(stP.x + DISTANCE_SHOOT, stP.y);
-
-			bullet->setVelocity(VECTOR2(DISTANCE_SHOOT / bullet->getTimeToTar(), 0));
+			bullet->setVelocity(VECTOR2(VELOCITY, 0));
 		}
 
 		else if (this->samus->isInDirection(eDirection::left))
 		{
 			stP = VECTOR2(this->samus->getPosition().x - this->samus->getSprite()->getWidth()*0.8f, this->samus->getPosition().y - this->samus->getSprite()->getHeight()*0.7f);
-			tar = VECTOR2(stP.x - DISTANCE_SHOOT, stP.y);
-
-			bullet->setVelocity(VECTOR2(-DISTANCE_SHOOT / bullet->getTimeToTar(), 0));
+			bullet->setVelocity(VECTOR2(-VELOCITY, 0));
 		}
 	}
 
-
-
-	//we init start point and target point to bullet,
-	//when collision we only call BulletPool.returnBool()
-	bullet->init(stP, tar);
-	bullet->setPosition(VECTOR2(stP.x, stP.y));
-
-	bullet->setBoundCollision();
+	bullet->init(stP);
 }

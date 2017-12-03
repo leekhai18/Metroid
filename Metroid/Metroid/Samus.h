@@ -7,8 +7,8 @@
 #include "GameError.h"
 #include "Animation.h"
 #include "BaseObject.h"
-#include "Bullet.h"
 #include "BulletPool.h"
+#include <list>
 
 #define SAMUS_MIN_SPEED_Y 50
 #define SAMUS_VERLOCITY_X 100
@@ -49,10 +49,6 @@
 #define POSITION_FIRST_X 632
 #define POSITION_FIRST_Y 3280
 
-// In tilemap
-#define POSITION_FIRST_X 632
-#define POSITION_FIRST_Y 3280
-
 class Samus: public BaseObject
 {
 private:
@@ -74,7 +70,13 @@ private:
 	bool moveVertical;
 	float totalHeightWasJumped;
 
+	bool isCollidingPort;
+	bool moveToFontGate;
+	float distance;
+
 	BulletPool *bulletPool;
+
+	list<CollisionReturn> *listCollide;
 
 public:
 	float timerShoot;
@@ -104,8 +106,13 @@ public:
 	void setAcrobat(bool acrobat);
 
 	void setBoundCollision(MetroidRect rect);
+	void setActiveBound();
 
 	void onCollision();
+
+	void setIsCollidingPort(bool flag);
+	bool isColliedPort();
+	void setCanMoveToFrontGate(bool flag);
 
 	Animation* getStartingAnim();
 	Animation* getRunningNormalAnim();
@@ -113,5 +120,7 @@ public:
 	Animation* getRunningHittingRightAnim();
 	Animation* getRollingAnim();
 	Animation* getJumpingAnim();
+
+	list<CollisionReturn> *getListCollide();
 };
 

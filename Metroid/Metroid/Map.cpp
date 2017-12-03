@@ -47,9 +47,17 @@ void Map::draw()
 
 	// set Follow direction for camera
 	if (mapCell[rowBegin - 1][columnBegin].rect == NULL)
-		Camera::getInstance()->setCanFoLLowHorizontal(true);
+	{
+		Camera::getInstance()->setCanFoLLowVertical(false);
+		//Camera::getInstance()->setCanFollowOnLeft(true);
+		//Camera::getInstance()->setCanFollowOnRight(true);
+	}
 	else
-		Camera::getInstance()->setCanFoLLowHorizontal(false);
+	{
+		Camera::getInstance()->setCanFoLLowVertical(true);
+		Camera::getInstance()->setCanFollowOnLeft(false);
+		Camera::getInstance()->setCanFollowOnRight(false);
+	}
 
 	SpriteData spriteData;
 	for (int col = columnBegin; col < columnEnd; col++)

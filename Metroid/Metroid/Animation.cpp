@@ -9,7 +9,8 @@ Animation::Animation(Sprite *sprite, const int* list, int totalFrames, float tim
 	this->currentFrame = 0;
 	this->startFrame = 0;
 	this->isloop = loop;
-	this->isCompleted = false;
+	this->isPause = false;
+	this->isFinish = false;
 	this->frameDelay = timeFrameDelay;
 	this->timerAnim = 0;
 	this->canAnimate = false;
@@ -28,7 +29,8 @@ Animation::Animation(Sprite *sprite, const int * list, int totalFrames, float ti
 	this->frameDelay = timeFrameDelay;
 	this->timerAnim = 0;
 	this->canAnimate = false;
-	this->isCompleted = false;
+	this->isPause = false;
+	this->isFinish = false;
 	this->isloop = true;
 
 	// Get data of sprite
@@ -47,7 +49,7 @@ void Animation::nextFrame()
 
 void Animation::setValueOfCurrentFrame(int index)
 {
-	if (totalFrames == 0)
+	if (totalFrames == 0 || isPause)
 		return;
 
 	currentFrame = index;
@@ -89,7 +91,7 @@ void Animation::start()
 	if (canAnimate == false)
 	{
 		canAnimate = true;
-		isCompleted = false;
+		isFinish = false;
 	}
 }
 
@@ -98,13 +100,23 @@ void Animation::stop()
 	if (canAnimate == true)
 	{
 		canAnimate = false;
-		isCompleted = true;
+		isFinish = true;
 	}
+}
+
+void Animation::setPause(bool pause)
+{
+	this->isPause = pause;
+}
+
+bool Animation::isPausing()
+{
+	return isPause;
 }
 
 bool Animation::isFinished()
 {
-	return isCompleted;
+	return isFinish;
 }
 
 void Animation::setTimeFrameDelay(float time)

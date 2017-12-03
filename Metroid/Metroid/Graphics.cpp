@@ -1,7 +1,7 @@
 #include "Graphics.h"
 #include "Metroid.h"
 #include "Camera.h"
-
+#include "ObjectManager.h"
 
 Graphics::Graphics()
 {
@@ -9,8 +9,8 @@ Graphics::Graphics()
 	device3d = NULL;
 	sprite = NULL;
 	fullscreen = false;
-	width = GAME_WIDTH;    // width & height are replaced in initialize()
-	height = GAME_HEIGHT;
+	width = VIEWPORT_WIDTH;    // width & height are replaced in initialize()
+	height = VIEWPORT_HEIGHT;
 	backColor = GraphicsNS::BLACK;
 }
 
@@ -282,6 +282,16 @@ void Graphics::drawSprite(const SpriteData &spriteData, COLOR_ARGB color)
 		}
 	}
 
+	//D3DXMATRIX mt;
+	//D3DXVECTOR4 posViewport;
+
+	//D3DXMatrixIdentity(&mt);
+	//mt._22 = 1.0f;
+	//mt._41 = (-1) * Camera::getInstance()->getBound().left;
+	//mt._42 = (-1) * Camera::getInstance()->getBound().top;
+
+	//D3DXVec3Transform(&posViewport, &VECTOR3(position.x, position.y, 0), &mt);
+
 	sprite->GetTransform(&matOld);
 
 	D3DXMatrixTransformation2D(
@@ -302,13 +312,19 @@ void Graphics::drawSprite(const SpriteData &spriteData, COLOR_ARGB color)
 
 	// Magic... TO use only this sprite or you can know as to refesh to old
 	sprite->SetTransform(&matOld);
-}
-void Graphics::drawLine(const VECTOR2* vertices, int count, COLOR_ARGB color)
-{
-	line->Begin();
-	line->Draw(vertices, count, color);
-	line->End();
 
+	ObjectManager::getInstance()->setTotalObjectPerFrame(ObjectManager::getInstance()->getTotalObjectsPerFrame() + 1);
+}
+void Graphics::drawLine(const VECTOR3* vertices, int count, COLOR_ARGB color)
+{
+	// Transform Camera
+	VECTOR2 trans = VECTOR2(Camera::getInstance()->getWidth()*0.5f - Camera::getInstance()->getPosition().x, Camera::getInstance()->getHeight()*0.5f - Camera::getInstance()->getPosition().y);
+	D3DXMATRIX mt;
+	D3DXMatrixTransformation2D(&mt, 0, 0, 0, 0, 0, &trans);
+
+	line->Begin();
+	line->DrawTransform(vertices, count, &mt, color);
+	line->End();
 }
 
 HRESULT Graphics::getDeviceState()

@@ -44,7 +44,7 @@ void SamusStateStart::setBoundCollision()
 void SamusStateStart::init()
 {
 	setBoundCollision();
-	this->samus->setActiveBound(this->samus->getBoundCollision());
+	this->samus->setActiveBound();
 }
 
 void SamusStateStart::handleInput(float dt)

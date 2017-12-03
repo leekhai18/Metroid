@@ -56,7 +56,7 @@ void GameManager::initialize(HWND hw)
 												// initialize graphics
 	graphics = new Graphics();
 	// throws GameError
-	graphics->initialize(hwnd, GAME_WIDTH, GAME_HEIGHT, FULLSCREEN);
+	graphics->initialize(hwnd, VIEWPORT_WIDTH, VIEWPORT_HEIGHT, FULLSCREEN);
 
 	// initialize input, do not capture mouse
 	input->initialize(hwnd, false);             // throws GameError

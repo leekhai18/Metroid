@@ -1,9 +1,14 @@
 #pragma once
 #include "BaseObject.h"
-#include "Animation.h"
 
 class GateBlue : public BaseObject
 {
+private:
+	bool isHit;
+	float timer;
+	MetroidRect baseBound;
+	bool isCollideSamusInPort;
+
 public:
 	GateBlue();
 	GateBlue(TextureManager* textureM, Graphics* graphics);
@@ -11,5 +16,12 @@ public:
 
 	void update(float dt);
 	void draw();
+
+	void effectDisappear();
+	void effectRespawn();
+	
+	void setHit(bool flag);
+	void setIsCollideSamusInPort(bool flag);
+	void setBoundCollision(MetroidRect rect);
 };
 

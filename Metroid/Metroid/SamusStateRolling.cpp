@@ -159,18 +159,12 @@ void SamusStateRolling::handleInput(float dt)
 }
 void SamusStateRolling::onCollision()
 {
-	list<CollisionReturn> dataReturn = Collision::getInstance()->getDataReturn();
-	float addX = 0, addY = 0;
-	for (list<CollisionReturn>::iterator object = dataReturn.begin(); object != dataReturn.end(); ++object)
+	for (auto i = this->samus->getListCollide()->begin(); i != this->samus->getListCollide()->end(); i++)
 	{
-		eID objectID = (*object).idObject;
-		CollideDirection collideDirection = (*object).direction;
-		float entryTime = (*object).entryTime;
-		float positionCollision = (*object).positionCollision;
-		switch (objectID)
+		switch (i->object->getId())
 		{
 		case eID::WALL:
-			switch (collideDirection)
+			switch (i->direction)
 			{
 			case CollideDirection::LEFT:
 				this->samus->setVelocityX(0);
@@ -183,7 +177,7 @@ void SamusStateRolling::onCollision()
 				this->samus->setCanMoveLeft(false);
 				break;
 			case CollideDirection::TOP:
-				this->samus->setPositionY(positionCollision);
+				this->samus->setPositionY(i->positionCollision);
 				this->samus->setVelocity(VECTOR2(0, 0));
 				this->samus->setFall(false);
 				setBoundCollision();
@@ -193,7 +187,9 @@ void SamusStateRolling::onCollision()
 		default:
 			break;
 		}
+
 	}
+	
 }
 void SamusStateRolling::update(float dt)
 {

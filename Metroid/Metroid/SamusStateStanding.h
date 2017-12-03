@@ -5,6 +5,7 @@ class SamusStateStanding : public BaseState
 {
 private:
 	bool isUp;
+	bool isShoot;
 
 	float timerToRunning;
 
@@ -19,6 +20,8 @@ public:
 	void setBoundCollision();
 	void onStart();
 	void onExit();
+
+	void onCollision();
 
 	void fire();
 };

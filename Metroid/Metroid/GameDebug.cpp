@@ -5,25 +5,23 @@ GameDebug* GameDebug::instance = nullptr;
 
 void GameDebug::setVertices(MetroidRect rect)
 {
-
 	//left top edge
-	VECTOR2 left_top(rect.left, rect.top);
+	VECTOR3 left_top(rect.left, rect.top, 0);
 
 	//left bottom edge
-	VECTOR2 left_bottom(rect.left, rect.bottom);
+	VECTOR3 left_bottom(rect.left, rect.bottom, 0);
 
 	//right bottom
-	VECTOR2 right_bottom(rect.right, rect.bottom);
+	VECTOR3 right_bottom(rect.right, rect.bottom, 0);
 
 	//right top
-	VECTOR2 right_top(rect.right, rect.top);
+	VECTOR3 right_top(rect.right, rect.top, 0);
 
 	vertices[0] = left_top;
 	vertices[1] = left_bottom;
 	vertices[2] = right_bottom;
 	vertices[3] = right_top;
 	vertices[4] = left_top;
-
 }
 
 GameDebug * GameDebug::getInstance()
@@ -37,9 +35,7 @@ GameDebug * GameDebug::getInstance()
 
 void GameDebug::initialize(Graphics * graphics)
 {
-
 	this->graphics = graphics;
-	vertices = new VECTOR2[5];
 	this->count = count;
 }
 
@@ -61,6 +57,7 @@ void GameDebug::release()
 
 GameDebug::GameDebug()
 {
+	vertices = new VECTOR3[5];
 }
 
 

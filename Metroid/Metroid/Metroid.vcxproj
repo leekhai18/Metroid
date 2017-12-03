@@ -156,6 +156,7 @@
     <ClInclude Include="BulletPool.h" />
     <ClInclude Include="MissileRocket.h" />
     <ClInclude Include="ObjectManager.h" />
+    <ClInclude Include="Port.h" />
     <ClInclude Include="Quadtree.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="Rio.h" />
@@ -212,6 +213,7 @@
     <ClCompile Include="BulletPool.cpp" />
     <ClCompile Include="MissileRocket.cpp" />
     <ClCompile Include="ObjectManager.cpp" />
+    <ClCompile Include="Port.cpp" />
     <ClCompile Include="Quadtree.cpp" />
     <ClCompile Include="Rio.cpp" />
     <ClCompile Include="Ripper.cpp" />

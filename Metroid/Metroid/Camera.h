@@ -16,7 +16,12 @@ private:
 
 	D3DXVECTOR2		velocity;
 
-	bool			canFollowHorizontal;
+	bool			canFollowVetical;
+	bool			canFollowOnRight;
+	bool			canFollowOnLeft;
+	bool			isOnPort;
+	float			distanceMoveWhenThoughtPort;
+	int				numPort;
 
 public:
 	static Camera* getInstance();
@@ -42,8 +47,20 @@ public:
 
 	void update(float dt);
 
-	void setCanFoLLowHorizontal(bool flag);
-	bool canFollowHorizon();
+	void setCanFoLLowVertical(bool flag);
+	bool canFolowVertical();
+
+	void setCanFollowOnRight(bool flag);
+	bool canFolowOnRight();
+
+	void setCanFollowOnLeft(bool flag);
+	bool canFolowOnLeft();
+
+	void setOnPort(bool flag);
+	bool moveWhenSamusOnPort();
+
+	void setNumPort(int num);
+	int getNumPort();
 
 	void release();
 };

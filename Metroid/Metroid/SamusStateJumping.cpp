@@ -288,31 +288,24 @@ void SamusStateJumping::handleInput(float dt)
 #pragma region Collision
 void SamusStateJumping::onCollision()
 {
-	list<CollisionReturn> dataReturn = Collision::getInstance()->getDataReturn();
 	float addX = 0, addY = 0;
-	for (list<CollisionReturn>::iterator object = dataReturn.begin(); object != dataReturn.end(); ++object)
+
+	for (auto i = this->samus->getListCollide()->begin(); i != this->samus->getListCollide()->end(); i++)
 	{
-		eID objectID = (*object).idObject;
-		CollideDirection collideDirection = (*object).direction;
-		float entryTime = (*object).entryTime;
-		float positionCollision = (*object).positionCollision;
-		switch (objectID)
+		switch (i->object->getId())
 		{
 			//handle collision with wall
 		case eID::WALL:
-			switch (collideDirection)
+			switch (i->direction)
 			{
 			case CollideDirection::LEFT:
 
 				this->samus->setCanMoveRight(false);
 				this->samus->setVelocityX(0);
-
 				break;
 			case CollideDirection::RIGHT:
 				this->samus->setCanMoveLeft(false);
 				this->samus->setVelocityX(0);
-
-
 				break;
 			case CollideDirection::TOP:
 				jumpDistance = 0;
@@ -322,14 +315,14 @@ void SamusStateJumping::onCollision()
 				this->samus->setFall(false);
 				//reset velocity
 				this->samus->setVelocityY(0);
-				positionCollide = positionCollision;
+				positionCollide = i->positionCollision;
 				this->samus->setStatus(eStatus::STANDING);
 				break;
 			case CollideDirection::BOTTOM:
 				jumpDistance = 0;
 				this->samus->setFall(true);
 				this->samus->setVelocityY(0);
-				addY = positionCollision;
+				addY = i->positionCollision;
 				this->samus->setVelocityY(0);
 
 				if (animation != NULL)
@@ -344,7 +337,9 @@ void SamusStateJumping::onCollision()
 		default:
 			break;
 		}
+
 	}
+
 }
 #pragma endregion
 
@@ -424,7 +419,8 @@ void SamusStateJumping::onExit()
 void SamusStateJumping::fire()
 {
 	VECTOR2 stP;
-	VECTOR2 tar;
+	Bullet* bullet = BulletPool::getInstance()->getBullet();
+
 
 	if (isUp)
 	{
@@ -433,24 +429,24 @@ void SamusStateJumping::fire()
 		else if (this->samus->isInDirection(eDirection::left))
 			stP = VECTOR2(this->samus->getPosition().x - this->samus->getSprite()->getWidth()*0.7f, this->samus->getPosition().y - this->samus->getSprite()->getHeight()*0.9f);
 
-		tar = VECTOR2(stP.x, stP.y - 100);
+		bullet->setVelocity(VECTOR2(0, -VELOCITY));
 	}
 	else
 	{
 		if (this->samus->isInDirection(eDirection::right))
 		{
 			stP = VECTOR2(this->samus->getPosition().x + this->samus->getSprite()->getWidth()*0.8f, this->samus->getPosition().y - this->samus->getSprite()->getHeight()*0.7f);
-			tar = VECTOR2(stP.x + 100, stP.y);
+			bullet->setVelocity(VECTOR2(VELOCITY, 0));
 		}
 
 		else if (this->samus->isInDirection(eDirection::left))
 		{
 			stP = VECTOR2(this->samus->getPosition().x - this->samus->getSprite()->getWidth()*0.8f, this->samus->getPosition().y - this->samus->getSprite()->getHeight()*0.7f);
-			tar = VECTOR2(stP.x - 100, stP.y);
+			bullet->setVelocity(VECTOR2(-VELOCITY, 0));
 		}
 	}
 
-	BulletPool::getInstance()->getBullet()->init(stP, tar);
+	bullet->init(stP);
 }
 
 

@@ -12,7 +12,8 @@ private:
 	float timerAnim;
 	float frameDelay;
 	bool isloop;
-	bool isCompleted;
+	bool isPause;
+	bool isFinish;
 	Sprite *sprite;
 
 public:
@@ -26,6 +27,10 @@ public:
 	void update(float dt);
 	void start();
 	void stop();
+
+	void setPause(bool pause);
+	bool isPausing();
+
 	bool isFinished();
 
 	void setTimeFrameDelay(float time);

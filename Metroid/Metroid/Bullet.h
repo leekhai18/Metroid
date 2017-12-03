@@ -1,30 +1,21 @@
 #pragma once
 #include "BaseObject.h"
-#include "Collision.h"
+#include <list>
 
-#define WIDTH_BULLET 4
-#define HEIGHT_BULLET 4
-#define DISTANCE_SHOOT 100.0f
+#define DISTANCE_SHOOT 48.0f
+#define VELOCITY 190
+
 class Bullet : public BaseObject
 {
 private:
-	VECTOR2 startPosition;
-	VECTOR2 target;
+	float distance;
 
-	float timeToTar;
-
-	// Use Bézier Curve
-	float t;
+	list<CollisionReturn> *listCollide;
 
 public:
 	Bullet(TextureManager* textureM, Graphics* graphics);
 	Bullet();
 	~Bullet();
-
-	void setTimeToTar(float time);
-	float getTimeToTar();
-
-
 
 	void update(float dt);
 	void draw();
@@ -32,9 +23,11 @@ public:
 	void onCollision();
 
 	void setBoundCollision();
-	void init(VECTOR2 stPosition, VECTOR2 target);
+	void init(VECTOR2 stPosition);
 
 	// Use object pool
 	void returnPool();
+
+	list<CollisionReturn> *getListCollide();
 };
 

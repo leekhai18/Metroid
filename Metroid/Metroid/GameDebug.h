@@ -5,7 +5,7 @@ class GameDebug
 {
 private:
 	//using to draw boundCollision of object to check collision
-	VECTOR2* vertices;
+	VECTOR3* vertices;
 	//graphics to draw
 	Graphics* graphics;
 	//number of vetice connect to each other

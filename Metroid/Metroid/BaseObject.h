@@ -13,7 +13,6 @@ protected:
 	eStatus status;
 	eDirection direction;
 	MetroidRect activeBound;
-	bool active;
 	MetroidRect boundCollision;
 	VECTOR2 velocity;
 public:
@@ -65,10 +64,20 @@ public:
 	virtual void setVelocityY(float y);
 	virtual void setVelocity(VECTOR2 velocity);
 
-	virtual bool getActive();
-	virtual void setActive(bool active);
-
 	virtual MetroidRect getActiveBound();
 	virtual void setActiveBound(MetroidRect rect);
 };
 
+
+
+struct CollisionReturn
+{
+	// top, left ,right ,bottom
+	CollideDirection direction;
+	//time two object collide
+	float entryTime;
+	//position of side that object collide. For example, when direction = TOP, it means positionCollision = otherBound.top
+	float positionCollision;
+
+	BaseObject* object;
+};

@@ -2,6 +2,11 @@
 #include "SamusStateManager.h"
 #include "Camera.h"
 #include "GameDebug.h"
+
+
+#define DISTANCE_MOVE_FRONT_GATE 20
+
+
 Samus::Samus(TextureManager* textureM,Graphics* graphics, Input* input) : BaseObject(eID::SAMUS)
 {
 	this->input = input;
@@ -15,7 +20,7 @@ Samus::Samus(TextureManager* textureM,Graphics* graphics, Input* input) : BaseOb
 	runningNormalAnimation = new Animation(this->sprite, IndexManager::getInstance()->samusYellowRunningRight, NUM_FRAMES_SAMUS_RUNNING, 0.05f);
 	runningUpAnimation = new Animation(this->sprite, IndexManager::getInstance()->samusYellowRunningUpRight, NUM_FRAMES_SAMUS_RUNNING, 0.05f);
 	runningHittingRightAnimation = new Animation(this->sprite, IndexManager::getInstance()->samusYellowHittingAndRunningRight, NUM_FRAMES_SAMUS_RUNNING, 0.05f);
-	rollingAnimation = new Animation(this->sprite, IndexManager::getInstance()->samusYellowRollingRight, NUM_FRAMES_SAMUS_ROLLING, 0.1f);
+	rollingAnimation = new Animation(this->sprite, IndexManager::getInstance()->samusYellowRollingRight, NUM_FRAMES_SAMUS_ROLLING, 0.05f);
 	jumpingAnimation = new Animation(this->sprite, IndexManager::getInstance()->samusYellowJumpingRight, NUM_FRAMES_SAMUS_JUMPING, 0.04f);
 	startingAnimation = new Animation(this->sprite, IndexManager::getInstance()->samusYellowStart, NUM_FRAMES_SAMUS_START, 1, false);
 
@@ -28,9 +33,11 @@ Samus::Samus(TextureManager* textureM,Graphics* graphics, Input* input) : BaseOb
 	this->moveLeft = true;
 	this->moveRight = true;
 	this->jump = true;
+	this->distance = 0;
 
 	this->timerShoot = 0;
 	bulletPool = new BulletPool(textureM, graphics, 20);
+	this->listCollide = new list<CollisionReturn>();
 }
 
 Samus::Samus()
@@ -53,35 +60,93 @@ void Samus::draw()
 
 void Samus::handleInput(float dt)
 {
-	SamusStateManager::getInstance()->getCurrentState()->handleInput(dt);
+	if (!Camera::getInstance()->moveWhenSamusOnPort())
+		SamusStateManager::getInstance()->getCurrentState()->handleInput(dt);
 
-	if (Camera::getInstance()->canFollowHorizon())
+#pragma region handle camera
+	if (!Camera::getInstance()->moveWhenSamusOnPort() && Camera::getInstance()->getNumPort() < 2)
 	{
-		if ((input->isKeyUp(VK_LEFT) && input->isKeyUp(VK_RIGHT)) || (input->isKeyDown(VK_LEFT) && input->isKeyDown(VK_RIGHT)) || this->isInStatus(eStatus::STANDING))
-			Camera::getInstance()->setVelocity(VECTOR2(this->getVelocity().x, 0));
+		if (!Camera::getInstance()->canFolowVertical())
+		{
+			if ((input->isKeyUp(VK_LEFT) && input->isKeyUp(VK_RIGHT)) || (input->isKeyDown(VK_LEFT) && input->isKeyDown(VK_RIGHT)) || this->isInStatus(eStatus::STANDING))
+				Camera::getInstance()->setVelocity(VECTOR2(0, 0));
+		}
 	}
+	Camera::getInstance()->setNumPort(0);
+#pragma endregion
 }
 
 void Samus::onCollision()
 {
 	SamusStateManager::getInstance()->getCurrentState()->onCollision();
+	this->listCollide->clear();
+}
+
+void Samus::setIsCollidingPort(bool flag)
+{
+	this->isCollidingPort = flag;
+}
+
+bool Samus::isColliedPort()
+{
+	return isCollidingPort;
+}
+
+void Samus::setCanMoveToFrontGate(bool flag)
+{
+	this->moveToFontGate = flag;
 }
 
 void Samus::update(float dt)
 {
-	if (Camera::getInstance()->canFollowHorizon())
-	{
-		if ((this->getPosition().x > Camera::getInstance()->getActiveArea().right) || 
-			(this->getPosition().x < Camera::getInstance()->getActiveArea().left))
-			Camera::getInstance()->setVelocity(VECTOR2(this->getVelocity().x, 0));
-	}
-	else
-	{
-		if ((this->getPosition().y > Camera::getInstance()->getActiveArea().top) ||
-			(this->getPosition().y < Camera::getInstance()->getActiveArea().bottom))
-			Camera::getInstance()->setVelocity(VECTOR2(0, this->getVelocity().y));
-	}
 
+#pragma region handle camera
+	if (!Camera::getInstance()->moveWhenSamusOnPort() && Camera::getInstance()->getNumPort() < 2)
+	{
+		if (!Camera::getInstance()->canFolowVertical())
+		{
+			if (Camera::getInstance()->canFolowOnLeft())
+			{
+				if (this->getPosition().x < Camera::getInstance()->getActiveArea().left)
+				{
+					Camera::getInstance()->setVelocity(VECTOR2(this->getVelocity().x, 0));
+				}
+			}
+
+			if (Camera::getInstance()->canFolowOnRight())
+			{
+				if (this->getPosition().x > Camera::getInstance()->getActiveArea().right)
+				{
+					Camera::getInstance()->setVelocity(VECTOR2(this->getVelocity().x, 0));
+				}
+			}
+		}
+		else
+		{
+			if ((this->getPosition().y > Camera::getInstance()->getActiveArea().top) ||
+				(this->getPosition().y < Camera::getInstance()->getActiveArea().bottom))
+				Camera::getInstance()->setVelocity(VECTOR2(0, this->getVelocity().y));
+		}
+	}
+#pragma endregion
+
+	if (isCollidingPort)
+		this->setVelocityX(Camera::getInstance()->getVelocity().x);
+
+	if (moveToFontGate && !Camera::getInstance()->moveWhenSamusOnPort())
+	{
+		float dis = dt * SAMUS_VERLOCITY_X;
+		this->distance += dis;
+		
+		if (this->distance < DISTANCE_MOVE_FRONT_GATE)
+			this->setPositionX(this->getPosition().x + dis*this->getDirection());
+		else
+		{
+			this->distance = 0;
+			moveToFontGate = false;
+			this->setStatus(eStatus::STANDING);
+		}
+	}
 
 	SamusStateManager::getInstance()->getCurrentState()->update(dt);
 
@@ -100,6 +165,8 @@ void Samus::release()
 	delete startingAnimation;
 	delete jumpingAnimation;
 	delete bulletPool;
+	this->listCollide->clear();
+	delete this->listCollide;
 }
 
 void Samus::updateHorizontal(float dt)
@@ -165,8 +232,17 @@ void Samus::setFall(bool isFall)
 void Samus::setBoundCollision(MetroidRect rect)
 {
 	this->boundCollision = rect;
-	this->activeBound = rect;
 	GameDebug::getInstance()->setVertices(rect);
+	this->setActiveBound();
+}
+
+void Samus::setActiveBound()
+{
+	// Can 1 con so hop ly
+	this->activeBound.top = this->boundCollision.top - 50;
+	this->activeBound.left = this->boundCollision.left - 50;
+	this->activeBound.right = this->boundCollision.right + 50;
+	this->activeBound.bottom = this->boundCollision.bottom + 50;
 }
 
 void Samus::setAcrobat(bool acrobat)
@@ -202,5 +278,10 @@ Animation * Samus::getRollingAnim()
 Animation * Samus::getJumpingAnim()
 {
 	return this->jumpingAnimation;
+}
+
+list<CollisionReturn>* Samus::getListCollide()
+{
+	return this->listCollide;
 }
 

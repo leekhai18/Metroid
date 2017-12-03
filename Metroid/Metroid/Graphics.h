@@ -89,9 +89,9 @@ public:
 	void    drawSprite(const SpriteData &spriteData,           // sprite to draw
 		COLOR_ARGB color = GraphicsNS::WHITE);      // default to white color filter (no change)
 
-	void drawLine(const VECTOR2 * vertices, int count, COLOR_ARGB color = GraphicsNS::RED);
-
-													// Reset the graphics device.
+	void drawLine(const VECTOR3 * vertices, int count, COLOR_ARGB color = GraphicsNS::RED);
+	
+	// Reset the graphics device.
 	HRESULT reset();
 
 	// Return device3d.

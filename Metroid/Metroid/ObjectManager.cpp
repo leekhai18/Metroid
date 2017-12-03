@@ -1,7 +1,6 @@
 ﻿#include "ObjectManager.h"
 #include "GameLog.h"
 #include "MaruMari.h"
-#include "Collision.h"
 #include "Bomb.h"
 #include "EnergyTank.h"
 #include "IceBeam.h"
@@ -14,6 +13,7 @@
 #include "AlienSmall.h"
 #include "GateBlue.h"
 #include "GateRed.h"
+#include "Port.h"
 #include "Brick.h"
 #include "Zommer.h"
 #include "Zeb.h"
@@ -21,8 +21,10 @@
 #include "Skree.h"
 #include "Ripper.h"
 #include "Rio.h"
+#include "Camera.h"
+#include "Collision.h"
 
-#define EXPAND 3
+#define TIME_RETRIEVE 0.4f
 
 ObjectManager* ObjectManager::instance = nullptr;
 ObjectManager * ObjectManager::getInstance()
@@ -35,26 +37,87 @@ ObjectManager * ObjectManager::getInstance()
 	return instance;
 }
 
-void ObjectManager::onCheckCollision(BaseObject * obj, float dt)
+void ObjectManager::onCheckCollision(float dt)
 {
-	list<BaseObject*>* return_objects_list = new list<BaseObject*>();
+	timer += dt;
 
-	//Get all objects that can collide with current entity
-	quadtree->retrieve(return_objects_list, obj);
-	for (auto x = return_objects_list->begin(); x != return_objects_list->end(); x++)
+	if (timer > TIME_RETRIEVE)
 	{
-		Collision::getInstance()->checkCollision(obj, (*x), dt);
-	}
-	obj->onCollision();
-	Collision::getInstance()->clearDataReturn();
+		timer = 0;
 
-	delete return_objects_list;
+		listCanCollideSamus->clear();
+		listObjectNotWallOnViewPort->clear();
+		listWallCanCollideSamus->clear();
+
+		RECT r = Camera::getInstance()->getBound();
+		//Get all objects that can collide with current obj
+		quadtree->retrieve(listCanCollideSamus, listObjectNotWallOnViewPort, listWallCanCollideSamus, MetroidRect((float)r.top, (float)r.bottom, (float)r.left, (float)r.right), samus);
+	}
+
+	// Get listCollide
+	for (auto x = listCanCollideSamus->begin(); x != listCanCollideSamus->end(); x++)
+	{
+		Collision::getInstance()->checkCollision(samus, *x, dt);
+
+		for (unsigned i = 0; i < BulletPool::getInstance()->getListUsing().size(); i++)
+			Collision::getInstance()->checkCollision(BulletPool::getInstance()->getListUsing().at(i), *x, dt);
+	}
+
+	// handle on listCollide
+	samus->onCollision();
+	for (unsigned i = 0; i < BulletPool::getInstance()->getListUsing().size(); i++)
+		BulletPool::getInstance()->getListUsing().at(i)->onCollision();
+
 }
 
-void ObjectManager::init(TextureManager * textureM, Graphics * graphics)
+void ObjectManager::onCheckCollision(BaseObject * obj, float frametime)
+{
+
+}
+
+int ObjectManager::getTotalObjectsPerFrame()
+{
+	return this->totalObjectsPerFrame;
+}
+
+void ObjectManager::setTotalObjectPerFrame(int num)
+{
+	this->totalObjectsPerFrame = num;
+}
+
+void ObjectManager::update(float dt)
+{
+	if (listObjectNotWallOnViewPort)
+	{
+		for (list<BaseObject*>::iterator i = listObjectNotWallOnViewPort->begin(); i != listObjectNotWallOnViewPort->end(); ++i)
+		{
+			(*i)->update(dt);
+
+			if ((*i)->getId() == eID::SKREE)
+			{
+				Skree* skr = static_cast<Skree*>(*i);
+				skr->setTarget(samus->getPosition());
+			}
+		}
+	}
+}
+
+void ObjectManager::draw()
+{
+	if (listObjectNotWallOnViewPort)
+	{
+		for (list<BaseObject*>::iterator i = listObjectNotWallOnViewPort->begin(); i != listObjectNotWallOnViewPort->end(); ++i)
+		{
+			(*i)->draw();
+		}
+	}
+}
+
+void ObjectManager::init(TextureManager * textureM, Graphics * graphics, Samus* samus)
 {
 	this->textureManager = textureM; 
 	this->graphics = graphics;
+	this->samus = samus;
 }
 
 bool ObjectManager::load_list(const char * filename)
@@ -89,10 +152,6 @@ bool ObjectManager::load_list(const char * filename)
 				bound.bottom = bound.top + height;
 				wall->setBoundCollision(bound);
 
-				bound.left = x - EXPAND;
-				bound.top = y - EXPAND;
-				bound.right = bound.left + width + EXPAND;
-				bound.bottom = bound.top + height + EXPAND;
 				wall->setActiveBound(bound);
 
 				object_list->push_back(wall);
@@ -223,6 +282,8 @@ bool ObjectManager::load_list(const char * filename)
 				bound.bottom = bound.top + gateBlueR->getSprite()->getHeight();
 				gateBlueR->setBoundCollision(bound);
 
+				gateBlueR->setActiveBound(bound);
+
 				object_list->push_back(gateBlueR);
 			}
 		}
@@ -246,6 +307,8 @@ bool ObjectManager::load_list(const char * filename)
 				bound.bottom = bound.top + gateBlueL->getSprite()->getHeight();
 				gateBlueL->setBoundCollision(bound);
 
+				gateBlueL->setActiveBound(bound);
+
 				object_list->push_back(gateBlueL);
 			}
 		}
@@ -268,12 +331,14 @@ bool ObjectManager::load_list(const char * filename)
 				bound.bottom = bound.top + gateRedR->getSprite()->getHeight();
 				gateRedR->setBoundCollision(bound);
 
+				gateRedR->setActiveBound(bound);
+
 				object_list->push_back(gateRedR);
 			}
 		}
 
 		// create GateRed L, 4
-		const Value& listGateRedL = jSon["GateBuleL"];
+		const Value& listGateRedL = jSon["GateRedL"];
 		if (listGateRedL.IsArray())
 		{
 			for (SizeType i = 0; i < listGateRedL.Size(); i++)
@@ -291,6 +356,8 @@ bool ObjectManager::load_list(const char * filename)
 				bound.bottom = bound.top + gateRedL->getSprite()->getHeight();
 				gateRedL->setBoundCollision(bound);
 
+				gateRedL->setActiveBound(bound);
+
 				object_list->push_back(gateRedL);
 			}
 		}
@@ -303,7 +370,7 @@ bool ObjectManager::load_list(const char * filename)
 
 			for (SizeType i = 0; i < listPort.Size(); i++)
 			{
-				BaseObject *port = new BaseObject(eID::PORT);
+				Port *port = new Port();
 
 				x = listPort[i]["x"].GetFloat();
 				y = listPort[i]["y"].GetFloat();
@@ -315,6 +382,8 @@ bool ObjectManager::load_list(const char * filename)
 				bound.right = bound.left + width;
 				bound.bottom = bound.top + height;
 				port->setBoundCollision(bound);
+
+				port->setActiveBound(bound);
 
 				object_list->push_back(port);
 			}
@@ -339,6 +408,8 @@ bool ObjectManager::load_list(const char * filename)
 			bound.right = bound.left + mm->getSprite()->getWidth();
 			bound.bottom = bound.top + mm->getSprite()->getHeight();
 			mm->setBoundCollision(bound);
+
+			mm->setActiveBound(bound);
 
 			object_list->push_back(mm);
 		}
@@ -482,6 +553,8 @@ bool ObjectManager::load_list(const char * filename)
 			bound.bottom = bound.top + alienB->getSprite()->getHeight();
 			alienB->setBoundCollision(bound);
 
+			alienB->setActiveBound(bound);
+
 			object_list->push_back(alienB);
 		}
 
@@ -500,6 +573,8 @@ bool ObjectManager::load_list(const char * filename)
 			bound.right = bound.left + alienS->getSprite()->getWidth();
 			bound.bottom = bound.top + alienS->getSprite()->getHeight();
 			alienS->setBoundCollision(bound);
+
+			alienS->setActiveBound(bound);
 
 			object_list->push_back(alienS);
 		}
@@ -521,6 +596,8 @@ bool ObjectManager::load_list(const char * filename)
 				bound.right = bound.left + zmy->getSprite()->getWidth();
 				bound.bottom = bound.top + zmy->getSprite()->getHeight();
 				zmy->setBoundCollision(bound);
+
+				zmy->setActiveBound(bound);
 
 				object_list->push_back(zmy);
 			}
@@ -544,6 +621,8 @@ bool ObjectManager::load_list(const char * filename)
 				bound.bottom = bound.top + zmb->getSprite()->getHeight();
 				zmb->setBoundCollision(bound);
 
+				zmb->setActiveBound(bound);
+
 				object_list->push_back(zmb);
 			}
 		}
@@ -565,6 +644,8 @@ bool ObjectManager::load_list(const char * filename)
 				bound.right = bound.left + zmr->getSprite()->getWidth();
 				bound.bottom = bound.top + zmr->getSprite()->getHeight();
 				zmr->setBoundCollision(bound);
+
+				zmr->setActiveBound(bound);
 
 				object_list->push_back(zmr);
 			}
@@ -588,6 +669,8 @@ bool ObjectManager::load_list(const char * filename)
 				bound.bottom = bound.top + zby->getSprite()->getHeight();
 				zby->setBoundCollision(bound);
 
+				zby->setActiveBound(bound);
+
 				object_list->push_back(zby);
 			}
 		}
@@ -609,6 +692,8 @@ bool ObjectManager::load_list(const char * filename)
 				bound.right = bound.left + zbb->getSprite()->getWidth();
 				bound.bottom = bound.top + zbb->getSprite()->getHeight();
 				zbb->setBoundCollision(bound);
+
+				zbb->setActiveBound(bound);
 
 				object_list->push_back(zbb);
 			}
@@ -690,13 +775,15 @@ bool ObjectManager::load_list(const char * filename)
 
 				x = listSkreeYellow[i]["x"].GetFloat();
 				y = listSkreeYellow[i]["y"].GetFloat();
-				sky->initPositions(VECTOR2(x, y));
+				sky->setPosition(VECTOR2(x + sky->getSprite()->getWidth()*0.5f, y + sky->getSprite()->getHeight()));
 
 				bound.left = x;
 				bound.top = y;
 				bound.right = bound.left + sky->getSprite()->getWidth();
 				bound.bottom = bound.top + sky->getSprite()->getHeight();
 				sky->setBoundCollision(bound);
+
+				sky->setActiveBound(bound);
 
 				object_list->push_back(sky);
 			}
@@ -712,7 +799,7 @@ bool ObjectManager::load_list(const char * filename)
 
 				x = listSkreeBrown[i]["x"].GetFloat();
 				y = listSkreeBrown[i]["y"].GetFloat();
-				skb->initPositions(VECTOR2(x, y));
+				skb->setPosition(VECTOR2(x + skb->getSprite()->getWidth()*0.5f, y + skb->getSprite()->getHeight()));
 
 				bound.left = x;
 				bound.top = y;
@@ -923,6 +1010,12 @@ bool ObjectManager::load_list(const char * filename)
 ObjectManager::ObjectManager()
 {
 	this->object_list = new list<BaseObject*>();
+	this->listCanCollideSamus = new list<BaseObject*>();
+	this->listObjectNotWallOnViewPort = new list<BaseObject*>();
+	this->listWallCanCollideSamus = new list<BaseObject*>();
+
+	this->totalObjectsPerFrame = 0;
+	this->timer = 0;
 }
 
 
@@ -938,6 +1031,10 @@ void ObjectManager::release()
 	}
 	object_list->clear();
 	delete object_list;
+
+	delete listCanCollideSamus;
+	delete listObjectNotWallOnViewPort;
+	delete listWallCanCollideSamus;
 
 	quadtree->clear();
 	delete quadtree;
