@@ -16,7 +16,7 @@ Samus::Samus(TextureManager* textureM,Graphics* graphics, Input* input) : BaseOb
 		throw GameError(GameErrorNS::FATAL_ERROR, "Can not init sprite Samus");
 	}
 
-	this->setPosition(VECTOR2(640, 3312));
+	this->setPosition(VECTOR2(640, MAP_HEIGHT - 3312));
 	runningNormalAnimation = new Animation(this->sprite, IndexManager::getInstance()->samusYellowRunningRight, NUM_FRAMES_SAMUS_RUNNING, 0.05f);
 	runningUpAnimation = new Animation(this->sprite, IndexManager::getInstance()->samusYellowRunningUpRight, NUM_FRAMES_SAMUS_RUNNING, 0.05f);
 	runningHittingRightAnimation = new Animation(this->sprite, IndexManager::getInstance()->samusYellowHittingAndRunningRight, NUM_FRAMES_SAMUS_RUNNING, 0.05f);
@@ -73,6 +73,16 @@ void Samus::handleInput(float dt)
 		}
 	}
 	Camera::getInstance()->setNumPort(0);
+
+	//if (input->isKeyDown(VK_LEFT))
+	//	Camera::getInstance()->setVelocity(VECTOR2(-150, 0));	
+	//if (input->isKeyDown(VK_RIGHT))
+	//	Camera::getInstance()->setVelocity(VECTOR2(150, 0));
+	//if (input->isKeyDown(VK_UP))
+	//	Camera::getInstance()->setVelocity(VECTOR2(0, 150));
+	//if (input->isKeyDown(VK_DOWN))
+	//	Camera::getInstance()->setVelocity(VECTOR2(0, -150));
+
 #pragma endregion
 }
 

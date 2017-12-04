@@ -6,7 +6,7 @@
 #define TIME_FRAME_DELAY_FALLING 0.05f
 #define EFFECT_DEATH_TIME 1.5f
 #define VELOCITY_X 80
-#define VELOCITY_Y 3
+#define VELOCITY_Y -3
 
 
 Skree::Skree(TextureManager * textureM, Graphics * graphics, EnemyColors color) : BaseObject(eID::SKREE)

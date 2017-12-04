@@ -42,7 +42,7 @@ void Map::draw()
 	RECT viewport = Camera::getInstance()->getBound();
 	int columnBegin = viewport.left / tileW;
 	int columnEnd = columnBegin + Camera::getInstance()->getWidth() / tileW + 1;
-	int rowBegin = viewport.top / tileH;
+	int rowBegin = (MAP_HEIGHT - viewport.bottom) / tileH ;
 	int rowEnd = rowBegin + Camera::getInstance()->getHeight() / tileH + 1;
 
 	// set Follow direction for camera
@@ -72,7 +72,7 @@ void Map::draw()
 			spriteData.rotate = 0;
 			spriteData.texture = this->texture->getTexture();
 			spriteData.position.x = (float)col*tileW;
-			spriteData.position.y = (float)row*tileH;
+			spriteData.position.y = MAP_HEIGHT - (float)row*tileH;
 			spriteData.scale = VECTOR2(1.0f, 1.0f);
 			spriteData.origin = VECTOR2(0, 0);
 			spriteData.rect = *(mapCell[row][col].rect);

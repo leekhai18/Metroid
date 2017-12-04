@@ -142,12 +142,12 @@ bool ObjectManager::load_list(const char * filename)
 				BaseObject *wall = new BaseObject(eID::WALL);
 
 				x = listWall[i]["x"].GetFloat();
-				y = listWall[i]["y"].GetFloat();
+				y = MAP_HEIGHT - listWall[i]["y"].GetFloat() - 32; // Bị lệch 32bit giữa 2 layer WALL and map
 				height = listWall[i]["height"].GetFloat();
 				width = listWall[i]["width"].GetFloat();
 
 				bound.left = x;
-				bound.top = y + 32; // Bị lệch 32bit giữa 2 layer WALL and map
+				bound.top = y; 
 				bound.right = bound.left + width;
 				bound.bottom = bound.top + height;
 				wall->setBoundCollision(bound);
@@ -167,7 +167,7 @@ bool ObjectManager::load_list(const char * filename)
 			Brick *bsb = new Brick(this->textureManager, this->graphics, BrickStyle::BrickSecretBlue);
 
 			x = brickSecretBlue["x"].GetFloat();
-			y = brickSecretBlue["y"].GetFloat();
+			y = MAP_HEIGHT - brickSecretBlue["y"].GetFloat();
 			bsb->setPosition(VECTOR2(x, y));
 
 			bound.left = x;
@@ -186,7 +186,7 @@ bool ObjectManager::load_list(const char * filename)
 			Brick *bsg = new Brick(this->textureManager, this->graphics, BrickStyle::BrickSerectGreen);
 
 			x = brickSerectGreen["x"].GetFloat();
-			y = brickSerectGreen["y"].GetFloat();
+			y = MAP_HEIGHT - brickSerectGreen["y"].GetFloat();
 			bsg->setPosition(VECTOR2(x, y));
 
 			bound.left = x;
@@ -206,7 +206,7 @@ bool ObjectManager::load_list(const char * filename)
 			Brick *bg = new Brick(this->textureManager, this->graphics, BrickStyle::BrickGreen);
 
 			x = brickGreen["x"].GetFloat();
-			y = brickGreen["y"].GetFloat();
+			y = MAP_HEIGHT - brickGreen["y"].GetFloat();
 			bg->setPosition(VECTOR2(x, y));
 
 			bound.left = x;
@@ -227,7 +227,7 @@ bool ObjectManager::load_list(const char * filename)
 			Brick *bg = new Brick(this->textureManager, this->graphics, BrickStyle::BrickBlue);
 
 			x = brickBlue["x"].GetFloat();
-			y = brickBlue["y"].GetFloat();
+			y = MAP_HEIGHT - brickBlue["y"].GetFloat();
 			bg->setPosition(VECTOR2(x, y));
 
 			isVisible = brickBlue["visible"].GetBool();
@@ -249,7 +249,7 @@ bool ObjectManager::load_list(const char * filename)
 			Brick *br = new Brick(this->textureManager, this->graphics, BrickStyle::BrickRed);
 
 			x = brickRed["x"].GetFloat();
-			y = brickRed["y"].GetFloat();
+			y = MAP_HEIGHT - brickRed["y"].GetFloat();
 			br->setPosition(VECTOR2(x, y));
 
 			bound.left = x;
@@ -273,7 +273,7 @@ bool ObjectManager::load_list(const char * filename)
 				GateBlue *gateBlueR = new GateBlue(this->textureManager, this->graphics);
 
 				x = listGateBlueR[i]["x"].GetFloat();
-				y = listGateBlueR[i]["y"].GetFloat();
+				y = MAP_HEIGHT - listGateBlueR[i]["y"].GetFloat();
 				gateBlueR->setPosition(VECTOR2(x, y));
 
 				bound.left = x;
@@ -298,7 +298,7 @@ bool ObjectManager::load_list(const char * filename)
 				gateBlueL->setFlipX(true);
 
 				x = listGateBlueL[i]["x"].GetFloat();
-				y = listGateBlueL[i]["y"].GetFloat();
+				y = MAP_HEIGHT - listGateBlueL[i]["y"].GetFloat();
 				gateBlueL->setPosition(VECTOR2(x, y));
 
 				bound.left = x;
@@ -322,7 +322,7 @@ bool ObjectManager::load_list(const char * filename)
 				GateRed *gateRedR = new GateRed(this->textureManager, this->graphics);
 
 				x = listGateRedR[i]["x"].GetFloat();
-				y = listGateRedR[i]["y"].GetFloat();
+				y = MAP_HEIGHT - listGateRedR[i]["y"].GetFloat();
 				gateRedR->setPosition(VECTOR2(x, y));
 
 				bound.left = x;
@@ -347,7 +347,7 @@ bool ObjectManager::load_list(const char * filename)
 				gateRedL->setFlipX(true);
 
 				x = listGateRedL[i]["x"].GetFloat();
-				y = listGateRedL[i]["y"].GetFloat();
+				y = MAP_HEIGHT - listGateRedL[i]["y"].GetFloat();
 				gateRedL->setPosition(VECTOR2(x, y));
 
 				bound.left = x;
@@ -373,7 +373,7 @@ bool ObjectManager::load_list(const char * filename)
 				Port *port = new Port();
 
 				x = listPort[i]["x"].GetFloat();
-				y = listPort[i]["y"].GetFloat();
+				y = MAP_HEIGHT - listPort[i]["y"].GetFloat();
 				height = listPort[i]["height"].GetFloat();
 				width = listPort[i]["width"].GetFloat();
 
@@ -400,7 +400,7 @@ bool ObjectManager::load_list(const char * filename)
 			MaruMari *mm = new MaruMari(this->textureManager, this->graphics);
 
 			x = maruMari["x"].GetFloat();
-			y = maruMari["y"].GetFloat();
+			y = MAP_HEIGHT - maruMari["y"].GetFloat();
 			mm->setPosition(VECTOR2(x + 2, y));
 
 			bound.left = x;
@@ -421,7 +421,7 @@ bool ObjectManager::load_list(const char * filename)
 			IceBeam *ib = new IceBeam(this->textureManager, this->graphics);
 
 			x = iceBeam["x"].GetFloat();
-			y = iceBeam["y"].GetFloat();
+			y = MAP_HEIGHT - iceBeam["y"].GetFloat();
 			ib->setPosition(VECTOR2(x, y));
 
 			bound.left = x;
@@ -440,7 +440,7 @@ bool ObjectManager::load_list(const char * filename)
 			Bomb *bm = new Bomb(this->textureManager, this->graphics);
 
 			x = bomb["x"].GetFloat();
-			y = bomb["y"].GetFloat();
+			y = MAP_HEIGHT - bomb["y"].GetFloat();
 			bm->setPosition(VECTOR2(x, y));
 
 			bound.left = x;
@@ -461,7 +461,7 @@ bool ObjectManager::load_list(const char * filename)
 				EnergyTank *energyT = new EnergyTank(this->textureManager, this->graphics);
 
 				x = listEnergyTank[i]["x"].GetFloat();
-				y = listEnergyTank[i]["y"].GetFloat();
+				y = MAP_HEIGHT - listEnergyTank[i]["y"].GetFloat();
 				energyT->setPosition(VECTOR2(x, y));
 
 				bound.left = x;
@@ -481,7 +481,7 @@ bool ObjectManager::load_list(const char * filename)
 			LongBeam *lb = new LongBeam(this->textureManager, this->graphics);
 
 			x = longBeam["x"].GetFloat();
-			y = longBeam["y"].GetFloat();
+			y = MAP_HEIGHT - longBeam["y"].GetFloat();
 			lb->setPosition(VECTOR2(x, y));
 
 			bound.left = x;
@@ -502,7 +502,7 @@ bool ObjectManager::load_list(const char * filename)
 				MissileRocket *rocket = new MissileRocket(this->textureManager, this->graphics);
 
 				x = listRocket[i]["x"].GetFloat();
-				y = listRocket[i]["y"].GetFloat();
+				y = MAP_HEIGHT - listRocket[i]["y"].GetFloat();
 				rocket->setPosition(VECTOR2(x, y));
 
 				bound.left = x;
@@ -522,7 +522,7 @@ bool ObjectManager::load_list(const char * filename)
 			Varia *va = new Varia(this->textureManager, this->graphics);
 
 			x = varia["x"].GetFloat();
-			y = varia["y"].GetFloat();
+			y = MAP_HEIGHT - varia["y"].GetFloat();
 			va->setPosition(VECTOR2(x, y));
 
 			bound.left = x;
@@ -544,7 +544,7 @@ bool ObjectManager::load_list(const char * filename)
 			AlienBig *alienB = new AlienBig(this->textureManager, this->graphics);
 
 			x = alienBig["x"].GetFloat();
-			y = alienBig["y"].GetFloat();
+			y = MAP_HEIGHT - alienBig["y"].GetFloat();
 			alienB->setPosition(VECTOR2(x, y));
 
 			bound.left = x;
@@ -565,7 +565,7 @@ bool ObjectManager::load_list(const char * filename)
 			AlienSmall *alienS = new AlienSmall(this->textureManager, this->graphics);
 
 			x = alienSmall["x"].GetFloat();
-			y = alienSmall["y"].GetFloat();
+			y = MAP_HEIGHT - alienSmall["y"].GetFloat();
 			alienS->setPosition(VECTOR2(x, y));
 
 			bound.left = x;
@@ -588,7 +588,7 @@ bool ObjectManager::load_list(const char * filename)
 				Zommer *zmy = new Zommer(this->textureManager, this->graphics, EnemyColors::Yellow);
 
 				x = listZommerYellow[i]["x"].GetFloat();
-				y = listZommerYellow[i]["y"].GetFloat();
+				y = MAP_HEIGHT - listZommerYellow[i]["y"].GetFloat();
 				zmy->setPosition(VECTOR2(x, y));
 
 				bound.left = x;
@@ -612,7 +612,7 @@ bool ObjectManager::load_list(const char * filename)
 				Zommer *zmb = new Zommer(this->textureManager, this->graphics, EnemyColors::Brown);
 
 				x = listZommerBrown[i]["x"].GetFloat();
-				y = listZommerBrown[i]["y"].GetFloat();
+				y = MAP_HEIGHT - listZommerBrown[i]["y"].GetFloat();
 				zmb->setPosition(VECTOR2(x, y));
 
 				bound.left = x;
@@ -636,7 +636,7 @@ bool ObjectManager::load_list(const char * filename)
 				Zommer *zmr = new Zommer(this->textureManager, this->graphics, EnemyColors::Red);
 
 				x = listZommerRed[i]["x"].GetFloat();
-				y = listZommerRed[i]["y"].GetFloat();
+				y = MAP_HEIGHT - listZommerRed[i]["y"].GetFloat();
 				zmr->setPosition(VECTOR2(x, y));
 
 				bound.left = x;
@@ -660,7 +660,7 @@ bool ObjectManager::load_list(const char * filename)
 				Zeb *zby = new Zeb(this->textureManager, this->graphics, EnemyColors::Yellow);
 
 				x = listZebYellow[i]["x"].GetFloat();
-				y = listZebYellow[i]["y"].GetFloat();
+				y = MAP_HEIGHT - listZebYellow[i]["y"].GetFloat();
 				zby->setPosition(VECTOR2(x, y));
 
 				bound.left = x;
@@ -684,7 +684,7 @@ bool ObjectManager::load_list(const char * filename)
 				Zeb *zbb = new Zeb(this->textureManager, this->graphics, EnemyColors::Brown);
 
 				x = listZebBrown[i]["x"].GetFloat();
-				y = listZebBrown[i]["y"].GetFloat();
+				y = MAP_HEIGHT - listZebBrown[i]["y"].GetFloat();
 				zbb->setPosition(VECTOR2(x, y));
 
 				bound.left = x;
@@ -708,7 +708,7 @@ bool ObjectManager::load_list(const char * filename)
 				Zeb *zbr = new Zeb(this->textureManager, this->graphics, EnemyColors::Red);
 
 				x = listZebRed[i]["x"].GetFloat();
-				y = listZebRed[i]["y"].GetFloat();
+				y = MAP_HEIGHT - listZebRed[i]["y"].GetFloat();
 				zbr->setPosition(VECTOR2(x, y));
 
 				bound.left = x;
@@ -730,7 +730,7 @@ bool ObjectManager::load_list(const char * filename)
 				Waver *wvb = new Waver(this->textureManager, this->graphics, EnemyColors::Brown);
 
 				x = listWaverBrown[i]["x"].GetFloat();
-				y = listWaverBrown[i]["y"].GetFloat();
+				y = MAP_HEIGHT - listWaverBrown[i]["y"].GetFloat();
 				wvb->setPosition(VECTOR2(x, y));
 
 				bound.left = x;
@@ -752,7 +752,7 @@ bool ObjectManager::load_list(const char * filename)
 				Waver *wvr = new Waver(this->textureManager, this->graphics, EnemyColors::Red);
 
 				x = listWaverRed[i]["x"].GetFloat();
-				y = listWaverRed[i]["y"].GetFloat();
+				y = MAP_HEIGHT - listWaverRed[i]["y"].GetFloat();
 				wvr->setPosition(VECTOR2(x, y));
 
 				bound.left = x;
@@ -774,7 +774,7 @@ bool ObjectManager::load_list(const char * filename)
 				Skree *sky = new Skree(this->textureManager, this->graphics, EnemyColors::Yellow);
 
 				x = listSkreeYellow[i]["x"].GetFloat();
-				y = listSkreeYellow[i]["y"].GetFloat();
+				y = MAP_HEIGHT - listSkreeYellow[i]["y"].GetFloat();
 				sky->setPosition(VECTOR2(x + sky->getSprite()->getWidth()*0.5f, y + sky->getSprite()->getHeight()));
 
 				bound.left = x;
@@ -798,7 +798,7 @@ bool ObjectManager::load_list(const char * filename)
 				Skree *skb = new Skree(this->textureManager, this->graphics, EnemyColors::Brown);
 
 				x = listSkreeBrown[i]["x"].GetFloat();
-				y = listSkreeBrown[i]["y"].GetFloat();
+				y = MAP_HEIGHT - listSkreeBrown[i]["y"].GetFloat();
 				skb->setPosition(VECTOR2(x + skb->getSprite()->getWidth()*0.5f, y + skb->getSprite()->getHeight()));
 
 				bound.left = x;
@@ -820,7 +820,7 @@ bool ObjectManager::load_list(const char * filename)
 				Ripper *rpy = new Ripper(this->textureManager, this->graphics, EnemyColors::Yellow);
 
 				x = listRipperYellow[i]["x"].GetFloat();
-				y = listRipperYellow[i]["y"].GetFloat();
+				y = MAP_HEIGHT - listRipperYellow[i]["y"].GetFloat();
 				rpy->setPosition(VECTOR2(x, y));
 
 				bound.left = x;
@@ -842,7 +842,7 @@ bool ObjectManager::load_list(const char * filename)
 				Ripper *rpb = new Ripper(this->textureManager, this->graphics, EnemyColors::Brown);
 
 				x = listRipperBrown[i]["x"].GetFloat();
-				y = listRipperBrown[i]["y"].GetFloat();
+				y = MAP_HEIGHT - listRipperBrown[i]["y"].GetFloat();
 				rpb->setPosition(VECTOR2(x, y));
 
 				bound.left = x;
@@ -864,7 +864,7 @@ bool ObjectManager::load_list(const char * filename)
 				Ripper *rpr = new Ripper(this->textureManager, this->graphics, EnemyColors::Red);
 
 				x = listRipperRed[i]["x"].GetFloat();
-				y = listRipperRed[i]["y"].GetFloat();
+				y = MAP_HEIGHT - listRipperRed[i]["y"].GetFloat();
 				rpr->setPosition(VECTOR2(x, y));
 
 				bound.left = x;
@@ -886,7 +886,7 @@ bool ObjectManager::load_list(const char * filename)
 				Rio *roy = new Rio(this->textureManager, this->graphics, EnemyColors::Yellow);
 
 				x = listRioYellow[i]["x"].GetFloat();
-				y = listRioYellow[i]["y"].GetFloat();
+				y = MAP_HEIGHT - listRioYellow[i]["y"].GetFloat();
 				roy->initPositions(VECTOR2(x, y));
 
 				bound.left = x;
@@ -908,7 +908,7 @@ bool ObjectManager::load_list(const char * filename)
 				Rio *rob = new Rio(this->textureManager, this->graphics, EnemyColors::Brown);
 
 				x = listRioBrown[i]["x"].GetFloat();
-				y = listRioBrown[i]["y"].GetFloat();
+				y = MAP_HEIGHT - listRioBrown[i]["y"].GetFloat();
 				rob->initPositions(VECTOR2(x, y));
 
 				bound.left = x;
@@ -930,7 +930,7 @@ bool ObjectManager::load_list(const char * filename)
 				Rio *ror = new Rio(this->textureManager, this->graphics, EnemyColors::Red);
 
 				x = listRioRed[i]["x"].GetFloat();
-				y = listRioRed[i]["y"].GetFloat();
+				y = MAP_HEIGHT - listRioRed[i]["y"].GetFloat();
 				ror->initPositions(VECTOR2(x, y));
 
 				bound.left = x;
@@ -958,7 +958,7 @@ bool ObjectManager::load_list(const char * filename)
 				BossKraid *kraid = new BossKraid(this->textureManager, this->graphics);
 
 				x = listKraid[i]["x"].GetFloat();
-				y = listKraid[i]["y"].GetFloat();
+				y = MAP_HEIGHT - listKraid[i]["y"].GetFloat();
 				kraid->setPosition(VECTOR2(x, y));
 
 				bound.left = x;
@@ -978,7 +978,7 @@ bool ObjectManager::load_list(const char * filename)
 			BossDragon *dg = new BossDragon(this->textureManager, this->graphics);
 
 			x = dragon["x"].GetFloat();
-			y = dragon["y"].GetFloat();
+			y = MAP_HEIGHT - dragon["y"].GetFloat();
 			dg->setPosition(VECTOR2(x, y));
 
 			bound.left = x;
