@@ -208,7 +208,7 @@ void SamusStateRolling::update(float dt)
 	this->samus->setCanMoveLeft(true);
 	if (this->samus->isFaling())
 	{
-		this->samus->setVelocity(VECTOR2(0, SAMUS_MAX_SPEED_Y));
+		this->samus->setVelocity(VECTOR2(0, -SAMUS_MAX_SPEED_Y));
 	}
 	else
 	{

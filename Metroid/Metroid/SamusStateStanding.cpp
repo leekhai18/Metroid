@@ -264,7 +264,7 @@ void SamusStateStanding::update(float dt)
 		case eStatus::JUMPING:
 			//change orgin.y = 1 in running state to orgin.y = 0 in jumping state, so we change position.y		
 
-			this->samus->setPositionY(this->samus->getPosition().y - HEIGHT_RUN);
+			this->samus->setPositionY(this->samus->getPosition().y + HEIGHT_RUN);
 
 			//we add 
 			if (this->samus->isInDirection(eDirection::right))

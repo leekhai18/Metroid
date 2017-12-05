@@ -152,12 +152,12 @@ bool Collision::checkCollision(BaseObject * myEntity, BaseObject * otherEntity, 
 		// xét y
 		if (_dyEntry < 0.0f)
 		{
-			data.direction = CollideDirection::BOTTOM;
+			data.direction = CollideDirection::TOP;
 
 		}
 		else
 		{
-			data.direction = CollideDirection::TOP;
+			data.direction = CollideDirection::BOTTOM;
 		}
 	}
 

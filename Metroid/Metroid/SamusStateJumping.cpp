@@ -39,17 +39,11 @@ void SamusStateJumping::setBoundCollision()
 }
 void SamusStateJumping::init()
 {
-	//if ((input->isKeyDown(VK_LEFT) || input->isKeyDown(VK_RIGHT)) && this->samus->isAcrobat())
-	//{
-	//	this->animation = samus->getJumpingAnim();
-	//	this->samus->setOrigin(VECTOR2(0.5f, 0.5f));
-	//	return;
-	//}
 	time = 0;
 	if (this->samus->isFaling() == false)
 	{
-		this->samus->setVelocityY(-SAMUS_MAX_SPEED_Y);
-		velocity_frame = -SAMUS_MAX_SPEED_Y;
+		this->samus->setVelocityY(SAMUS_MAX_SPEED_Y);
+		velocity_frame = SAMUS_MAX_SPEED_Y;
 	}
 	// Set Data for sprite
 	if (samus->getDirection() == eDirection::left)
@@ -197,7 +191,7 @@ void SamusStateJumping::handleInput(float dt)
 		this->samus->setVelocityY((velocity_frame + this->samus->getVelocity().y) / 2);
 
 		//distance = V*dt
-		float distance = this->samus->getVelocity().y*dt*-1;
+		float distance = this->samus->getVelocity().y*dt;
 		jumpDistance += distance;
 		time += dt;
 

@@ -34,7 +34,7 @@
 #define JUMP_HEIGHT 24
 #define JUMP_WIDTH 12
 
-#define ACCELERATE_Y 140.0f
+#define ACCELERATE_Y -140.0f
 #define ACCELERATE_X 50.0f
 
 #define OFFSET_JUMP 4
