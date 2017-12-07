@@ -5,7 +5,7 @@
 
 bool Quadtree::isContain(MetroidRect bound)
 {
-	if (bound.right >= region.left&&bound.left <= region.right&&bound.bottom >= region.top&&bound.top <= region.bottom)
+	if (bound.right >= region.left&&bound.left <= region.right&&bound.bottom <= region.top&&bound.top >= region.bottom)
 	{
 		return true;
 	}
@@ -16,13 +16,13 @@ void Quadtree::split()
 {
     nodes = new Quadtree*[4];
 
-	nodes[0] = new Quadtree(level + 1, MetroidRect(region.top,region.bottom/2,region.left,region.right/2));
+	nodes[0] = new Quadtree(level + 1, MetroidRect(region.top, region.top / 2, region.left, region.right / 2));
 
-	nodes[1] = new Quadtree(level + 1, MetroidRect(region.top, region.bottom / 2, region.right / 2, region.right));
+	nodes[1] = new Quadtree(level + 1, MetroidRect(region.top, region.top / 2, region.right / 2, region.right));
 
-	nodes[2] = new Quadtree(level + 1, MetroidRect(region.bottom / 2, region.bottom, region.left, region.right / 2));
+	nodes[2] = new Quadtree(level + 1, MetroidRect(region.top / 2, region.bottom, region.left, region.right / 2));
 
-	nodes[3] = new Quadtree(level + 1, MetroidRect(region.bottom / 2, region.bottom, region.right/2, region.right));
+	nodes[3] = new Quadtree(level + 1, MetroidRect(region.top / 2, region.bottom, region.right / 2, region.right));
 }
 
 Quadtree::Quadtree()

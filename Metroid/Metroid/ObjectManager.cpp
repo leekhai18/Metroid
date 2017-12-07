@@ -24,6 +24,9 @@
 #include "Camera.h"
 #include "Collision.h"
 
+#include "rapidjson-master\include\rapidjson\writer.h"
+#include "rapidjson-master\include\rapidjson\ostreamwrapper.h"
+
 #define TIME_RETRIEVE 0.4f
 
 ObjectManager* ObjectManager::instance = nullptr;
@@ -93,11 +96,11 @@ void ObjectManager::update(float dt)
 		{
 			(*i)->update(dt);
 
-			if ((*i)->getId() == eID::SKREE)
+			/*if ((*i)->getId() == eID::SKREE)
 			{
 				Skree* skr = static_cast<Skree*>(*i);
 				skr->setTarget(samus->getPosition());
-			}
+			}*/
 		}
 	}
 }
@@ -131,6 +134,13 @@ bool ObjectManager::load_list(const char * filename)
 		float x, y, height, width;
 		MetroidRect bound;
 
+		// write json file
+		//Document d;
+		//d.Parse("json");
+		//ofstream ofs("json\\objects.json");
+		//OStreamWrapper osw(ofs);
+		//Writer<OStreamWrapper> writer(osw);
+
 #pragma region Wall
 		// Load Wall POS , 650 
 		const Value& listWall = jSon["Wall"];
@@ -149,7 +159,7 @@ bool ObjectManager::load_list(const char * filename)
 				bound.left = x;
 				bound.top = y; 
 				bound.right = bound.left + width;
-				bound.bottom = bound.top + height;
+				bound.bottom = bound.top - height;
 				wall->setBoundCollision(bound);
 
 				wall->setActiveBound(bound);
@@ -173,8 +183,10 @@ bool ObjectManager::load_list(const char * filename)
 			bound.left = x;
 			bound.top = y;
 			bound.right = bound.left + bsb->getSprite()->getWidth();
-			bound.bottom = bound.top + bsb->getSprite()->getHeight();
+			bound.bottom = bound.top - bsb->getSprite()->getHeight();
 			bsb->setBoundCollision(bound);
+
+			bsb->setActiveBound(bound);
 
 			object_list->push_back(bsb);
 		}
@@ -192,8 +204,10 @@ bool ObjectManager::load_list(const char * filename)
 			bound.left = x;
 			bound.top = y;
 			bound.right = bound.left + bsg->getSprite()->getWidth();
-			bound.bottom = bound.top + bsg->getSprite()->getHeight();
+			bound.bottom = bound.top - bsg->getSprite()->getHeight();
 			bsg->setBoundCollision(bound);
+
+			bsg->setActiveBound(bound);
 
 			object_list->push_back(bsg);
 		}
@@ -212,8 +226,10 @@ bool ObjectManager::load_list(const char * filename)
 			bound.left = x;
 			bound.top = y;
 			bound.right = bound.left + bg->getSprite()->getWidth();
-			bound.bottom = bound.top + bg->getSprite()->getHeight();
+			bound.bottom = bound.top - bg->getSprite()->getHeight();
 			bg->setBoundCollision(bound);
+
+			bg->setActiveBound(bound);
 
 			object_list->push_back(bg);
 		}
@@ -224,22 +240,24 @@ bool ObjectManager::load_list(const char * filename)
 		const Value& brickBlue = jSon["BrickBlue"];
 		if (brickBlue.IsObject())
 		{
-			Brick *bg = new Brick(this->textureManager, this->graphics, BrickStyle::BrickBlue);
+			Brick *bb = new Brick(this->textureManager, this->graphics, BrickStyle::BrickBlue);
 
 			x = brickBlue["x"].GetFloat();
 			y = MAP_HEIGHT - brickBlue["y"].GetFloat();
-			bg->setPosition(VECTOR2(x, y));
+			bb->setPosition(VECTOR2(x, y));
 
 			isVisible = brickBlue["visible"].GetBool();
-			bg->setVisible(isVisible);
+			bb->setVisible(isVisible);
 
 			bound.left = x;
 			bound.top = y;
-			bound.right = bound.left + bg->getSprite()->getWidth();
-			bound.bottom = bound.top + bg->getSprite()->getHeight();
-			bg->setBoundCollision(bound);
+			bound.right = bound.left + bb->getSprite()->getWidth();
+			bound.bottom = bound.top - bb->getSprite()->getHeight();
+			bb->setBoundCollision(bound);
 
-			object_list->push_back(bg);
+			bb->setActiveBound(bound);
+
+			object_list->push_back(bb);
 		}
 
 		// BrickRed, 63
@@ -255,8 +273,10 @@ bool ObjectManager::load_list(const char * filename)
 			bound.left = x;
 			bound.top = y;
 			bound.right = bound.left + br->getSprite()->getWidth();
-			bound.bottom = bound.top + br->getSprite()->getHeight();
+			bound.bottom = bound.top - br->getSprite()->getHeight();
 			br->setBoundCollision(bound);
+
+			br->setActiveBound(bound);
 
 			object_list->push_back(br);
 		}
@@ -279,7 +299,7 @@ bool ObjectManager::load_list(const char * filename)
 				bound.left = x;
 				bound.top = y;
 				bound.right = bound.left + gateBlueR->getSprite()->getWidth();
-				bound.bottom = bound.top + gateBlueR->getSprite()->getHeight();
+				bound.bottom = bound.top - gateBlueR->getSprite()->getHeight();
 				gateBlueR->setBoundCollision(bound);
 
 				gateBlueR->setActiveBound(bound);
@@ -304,7 +324,7 @@ bool ObjectManager::load_list(const char * filename)
 				bound.left = x;
 				bound.top = y;
 				bound.right = bound.left + gateBlueL->getSprite()->getWidth();
-				bound.bottom = bound.top + gateBlueL->getSprite()->getHeight();
+				bound.bottom = bound.top - gateBlueL->getSprite()->getHeight();
 				gateBlueL->setBoundCollision(bound);
 
 				gateBlueL->setActiveBound(bound);
@@ -328,7 +348,7 @@ bool ObjectManager::load_list(const char * filename)
 				bound.left = x;
 				bound.top = y;
 				bound.right = bound.left + gateRedR->getSprite()->getWidth();
-				bound.bottom = bound.top + gateRedR->getSprite()->getHeight();
+				bound.bottom = bound.top - gateRedR->getSprite()->getHeight();
 				gateRedR->setBoundCollision(bound);
 
 				gateRedR->setActiveBound(bound);
@@ -353,7 +373,7 @@ bool ObjectManager::load_list(const char * filename)
 				bound.left = x;
 				bound.top = y;
 				bound.right = bound.left + gateRedL->getSprite()->getWidth();
-				bound.bottom = bound.top + gateRedL->getSprite()->getHeight();
+				bound.bottom = bound.top - gateRedL->getSprite()->getHeight();
 				gateRedL->setBoundCollision(bound);
 
 				gateRedL->setActiveBound(bound);
@@ -380,7 +400,7 @@ bool ObjectManager::load_list(const char * filename)
 				bound.left = x;
 				bound.top = y;
 				bound.right = bound.left + width;
-				bound.bottom = bound.top + height;
+				bound.bottom = bound.top - height;
 				port->setBoundCollision(bound);
 
 				port->setActiveBound(bound);
@@ -430,6 +450,8 @@ bool ObjectManager::load_list(const char * filename)
 			bound.bottom = bound.top + ib->getSprite()->getHeight();
 			ib->setBoundCollision(bound);
 
+			ib->setActiveBound(bound);
+
 			object_list->push_back(ib);
 		}
 
@@ -448,6 +470,8 @@ bool ObjectManager::load_list(const char * filename)
 			bound.right = bound.left + bm->getSprite()->getWidth();
 			bound.bottom = bound.top + bm->getSprite()->getHeight();
 			bm->setBoundCollision(bound);
+
+			bm->setActiveBound(bound);
 
 			object_list->push_back(bm);
 		}
@@ -470,6 +494,8 @@ bool ObjectManager::load_list(const char * filename)
 				bound.bottom = bound.top + energyT->getSprite()->getHeight();
 				energyT->setBoundCollision(bound);
 
+				energyT->setActiveBound(bound);
+
 				object_list->push_back(energyT);
 			}
 		}
@@ -489,6 +515,8 @@ bool ObjectManager::load_list(const char * filename)
 			bound.right = bound.left + lb->getSprite()->getWidth();
 			bound.bottom = bound.top + lb->getSprite()->getHeight();
 			lb->setBoundCollision(bound);
+
+			lb->setActiveBound(bound);
 
 			object_list->push_back(lb);
 		}
@@ -511,6 +539,8 @@ bool ObjectManager::load_list(const char * filename)
 				bound.bottom = bound.top + rocket->getSprite()->getHeight();
 				rocket->setBoundCollision(bound);
 
+				rocket->setActiveBound(bound);
+
 				object_list->push_back(rocket);
 			}
 		}
@@ -530,6 +560,8 @@ bool ObjectManager::load_list(const char * filename)
 			bound.right = bound.left + va->getSprite()->getWidth();
 			bound.bottom = bound.top + va->getSprite()->getHeight();
 			va->setBoundCollision(bound);
+
+			va->setActiveBound(bound);
 
 			object_list->push_back(va);
 		}
@@ -594,9 +626,13 @@ bool ObjectManager::load_list(const char * filename)
 				bound.left = x;
 				bound.top = y;
 				bound.right = bound.left + zmy->getSprite()->getWidth();
-				bound.bottom = bound.top + zmy->getSprite()->getHeight();
+				bound.bottom = bound.top - zmy->getSprite()->getHeight();
 				zmy->setBoundCollision(bound);
 
+				bound.bottom = MAP_HEIGHT - std::stof(listZommerYellow[i]["properties"]["bottomA"].GetString());
+				bound.top = MAP_HEIGHT - std::stof(listZommerYellow[i]["properties"]["topA"].GetString());
+				bound.left = std::stof(listZommerYellow[i]["properties"]["leftA"].GetString());
+				bound.right = std::stof(listZommerYellow[i]["properties"]["rightA"].GetString());
 				zmy->setActiveBound(bound);
 
 				object_list->push_back(zmy);
@@ -618,9 +654,13 @@ bool ObjectManager::load_list(const char * filename)
 				bound.left = x;
 				bound.top = y;
 				bound.right = bound.left + zmb->getSprite()->getWidth();
-				bound.bottom = bound.top + zmb->getSprite()->getHeight();
+				bound.bottom = bound.top - zmb->getSprite()->getHeight();
 				zmb->setBoundCollision(bound);
 
+				bound.bottom = MAP_HEIGHT - std::stof(listZommerBrown[i]["properties"]["bottomA"].GetString());
+				bound.top = MAP_HEIGHT - std::stof(listZommerBrown[i]["properties"]["topA"].GetString());
+				bound.left = std::stof(listZommerBrown[i]["properties"]["leftA"].GetString());
+				bound.right = std::stof(listZommerBrown[i]["properties"]["rightA"].GetString());
 				zmb->setActiveBound(bound);
 
 				object_list->push_back(zmb);
@@ -642,9 +682,13 @@ bool ObjectManager::load_list(const char * filename)
 				bound.left = x;
 				bound.top = y;
 				bound.right = bound.left + zmr->getSprite()->getWidth();
-				bound.bottom = bound.top + zmr->getSprite()->getHeight();
+				bound.bottom = bound.top - zmr->getSprite()->getHeight();
 				zmr->setBoundCollision(bound);
 
+				bound.bottom = MAP_HEIGHT - std::stof(listZommerRed[i]["properties"]["bottomA"].GetString());
+				bound.top = MAP_HEIGHT - std::stof(listZommerRed[i]["properties"]["topA"].GetString());
+				bound.left = std::stof(listZommerRed[i]["properties"]["leftA"].GetString());
+				bound.right = std::stof(listZommerRed[i]["properties"]["rightA"].GetString());
 				zmr->setActiveBound(bound);
 
 				object_list->push_back(zmr);
@@ -666,9 +710,13 @@ bool ObjectManager::load_list(const char * filename)
 				bound.left = x;
 				bound.top = y;
 				bound.right = bound.left + zby->getSprite()->getWidth();
-				bound.bottom = bound.top + zby->getSprite()->getHeight();
+				bound.bottom = bound.top - zby->getSprite()->getHeight();
 				zby->setBoundCollision(bound);
 
+				bound.bottom = MAP_HEIGHT - std::stof(listZebYellow[i]["bottomA"].GetString());
+				bound.top = MAP_HEIGHT - std::stof(listZebYellow[i]["topA"].GetString());
+				bound.left = std::stof(listZebYellow[i]["leftA"].GetString());
+				bound.right = std::stof(listZebYellow[i]["rightA"].GetString());
 				zby->setActiveBound(bound);
 
 				object_list->push_back(zby);
@@ -690,9 +738,13 @@ bool ObjectManager::load_list(const char * filename)
 				bound.left = x;
 				bound.top = y;
 				bound.right = bound.left + zbb->getSprite()->getWidth();
-				bound.bottom = bound.top + zbb->getSprite()->getHeight();
+				bound.bottom = bound.top - zbb->getSprite()->getHeight();
 				zbb->setBoundCollision(bound);
 
+				bound.bottom = MAP_HEIGHT - std::stof(listZebBrown[i]["bottomA"].GetString());
+				bound.top = MAP_HEIGHT - std::stof(listZebBrown[i]["topA"].GetString());
+				bound.left = std::stof(listZebBrown[i]["leftA"].GetString());
+				bound.right = std::stof(listZebBrown[i]["rightA"].GetString());
 				zbb->setActiveBound(bound);
 
 				object_list->push_back(zbb);
@@ -714,8 +766,14 @@ bool ObjectManager::load_list(const char * filename)
 				bound.left = x;
 				bound.top = y;
 				bound.right = bound.left + zbr->getSprite()->getWidth();
-				bound.bottom = bound.top + zbr->getSprite()->getHeight();
+				bound.bottom = bound.top - zbr->getSprite()->getHeight();
 				zbr->setBoundCollision(bound);
+
+				bound.bottom = MAP_HEIGHT - std::stof(listZebBrown[i]["bottomA"].GetString());
+				bound.top = MAP_HEIGHT - std::stof(listZebBrown[i]["topA"].GetString());
+				bound.left = std::stof(listZebBrown[i]["leftA"].GetString());
+				bound.right = std::stof(listZebBrown[i]["rightA"].GetString());
+				zbr->setActiveBound(bound);
 
 				object_list->push_back(zbr);
 			}
@@ -736,8 +794,14 @@ bool ObjectManager::load_list(const char * filename)
 				bound.left = x;
 				bound.top = y;
 				bound.right = bound.left + wvb->getSprite()->getWidth();
-				bound.bottom = bound.top + wvb->getSprite()->getHeight();
+				bound.bottom = bound.top - wvb->getSprite()->getHeight();
 				wvb->setBoundCollision(bound);
+
+				bound.bottom = MAP_HEIGHT - std::stof(listWaverBrown[i]["properties"]["bottomA"].GetString());
+				bound.top = MAP_HEIGHT - std::stof(listWaverBrown[i]["properties"]["topA"].GetString());
+				bound.left = std::stof(listWaverBrown[i]["properties"]["leftA"].GetString());
+				bound.right = std::stof(listWaverBrown[i]["properties"]["rightA"].GetString());
+				wvb->setActiveBound(bound);
 
 				object_list->push_back(wvb);
 			}
@@ -758,8 +822,14 @@ bool ObjectManager::load_list(const char * filename)
 				bound.left = x;
 				bound.top = y;
 				bound.right = bound.left + wvr->getSprite()->getWidth();
-				bound.bottom = bound.top + wvr->getSprite()->getHeight();
+				bound.bottom = bound.top - wvr->getSprite()->getHeight();
 				wvr->setBoundCollision(bound);
+
+				bound.bottom = MAP_HEIGHT - std::stof(listWaverBrown[i]["properties"]["bottomA"].GetString());
+				bound.top = MAP_HEIGHT - std::stof(listWaverBrown[i]["properties"]["topA"].GetString());
+				bound.left = std::stof(listWaverBrown[i]["properties"]["leftA"].GetString());
+				bound.right = std::stof(listWaverBrown[i]["properties"]["rightA"].GetString());
+				wvr->setActiveBound(bound);
 
 				object_list->push_back(wvr);
 			}
@@ -780,9 +850,13 @@ bool ObjectManager::load_list(const char * filename)
 				bound.left = x;
 				bound.top = y;
 				bound.right = bound.left + sky->getSprite()->getWidth();
-				bound.bottom = bound.top + sky->getSprite()->getHeight();
+				bound.bottom = bound.top - sky->getSprite()->getHeight();
 				sky->setBoundCollision(bound);
 
+				bound.bottom = MAP_HEIGHT - std::stof(listSkreeYellow[i]["properties"]["bottomA"].GetString()) - 5;
+				bound.top = MAP_HEIGHT - std::stof(listSkreeYellow[i]["properties"]["topA"].GetString());
+				bound.left = std::stof(listSkreeYellow[i]["properties"]["leftA"].GetString());
+				bound.right = std::stof(listSkreeYellow[i]["properties"]["rightA"].GetString());
 				sky->setActiveBound(bound);
 
 				object_list->push_back(sky);
@@ -804,8 +878,14 @@ bool ObjectManager::load_list(const char * filename)
 				bound.left = x;
 				bound.top = y;
 				bound.right = bound.left + skb->getSprite()->getWidth();
-				bound.bottom = bound.top + skb->getSprite()->getHeight();
+				bound.bottom = bound.top - skb->getSprite()->getHeight();
 				skb->setBoundCollision(bound);
+
+				bound.bottom = MAP_HEIGHT - std::stof(listSkreeBrown[i]["properties"]["bottomA"].GetString()) - 5;
+				bound.top = MAP_HEIGHT - std::stof(listSkreeBrown[i]["properties"]["topA"].GetString());
+				bound.left = std::stof(listSkreeBrown[i]["properties"]["leftA"].GetString());
+				bound.right = std::stof(listSkreeBrown[i]["properties"]["rightA"].GetString());
+				skb->setActiveBound(bound);
 
 				object_list->push_back(skb);
 			}
@@ -826,8 +906,14 @@ bool ObjectManager::load_list(const char * filename)
 				bound.left = x;
 				bound.top = y;
 				bound.right = bound.left + rpy->getSprite()->getWidth();
-				bound.bottom = bound.top + rpy->getSprite()->getHeight();
+				bound.bottom = bound.top - rpy->getSprite()->getHeight();
 				rpy->setBoundCollision(bound);
+
+				bound.bottom = MAP_HEIGHT - std::stof(listRipperYellow[i]["properties"]["bottomA"].GetString());
+				bound.top = MAP_HEIGHT - std::stof(listRipperYellow[i]["properties"]["topA"].GetString());
+				bound.left = std::stof(listRipperYellow[i]["properties"]["leftA"].GetString()) - 5;
+				bound.right = std::stof(listRipperYellow[i]["properties"]["rightA"].GetString()) + 5;
+				rpy->setActiveBound(bound);
 
 				object_list->push_back(rpy);
 			}
@@ -848,8 +934,14 @@ bool ObjectManager::load_list(const char * filename)
 				bound.left = x;
 				bound.top = y;
 				bound.right = bound.left + rpb->getSprite()->getWidth();
-				bound.bottom = bound.top + rpb->getSprite()->getHeight();
+				bound.bottom = bound.top - rpb->getSprite()->getHeight();
 				rpb->setBoundCollision(bound);
+
+				bound.bottom = MAP_HEIGHT - std::stof(listRipperBrown[i]["properties"]["bottomA"].GetString());
+				bound.top = MAP_HEIGHT - std::stof(listRipperBrown[i]["properties"]["topA"].GetString());
+				bound.left = std::stof(listRipperBrown[i]["properties"]["leftA"].GetString()) - 5;
+				bound.right = std::stof(listRipperBrown[i]["properties"]["rightA"].GetString()) + 5;
+				rpb->setActiveBound(bound);
 
 				object_list->push_back(rpb);
 			}
@@ -870,8 +962,14 @@ bool ObjectManager::load_list(const char * filename)
 				bound.left = x;
 				bound.top = y;
 				bound.right = bound.left + rpr->getSprite()->getWidth();
-				bound.bottom = bound.top + rpr->getSprite()->getHeight();
+				bound.bottom = bound.top - rpr->getSprite()->getHeight();
 				rpr->setBoundCollision(bound);
+
+				bound.bottom = MAP_HEIGHT - std::stof(listRipperRed[i]["properties"]["bottomA"].GetString());
+				bound.top = MAP_HEIGHT - std::stof(listRipperRed[i]["properties"]["topA"].GetString());
+				bound.left = std::stof(listRipperRed[i]["properties"]["leftA"].GetString()) - 5;
+				bound.right = std::stof(listRipperRed[i]["properties"]["rightA"].GetString()) + 5;
+				rpr->setActiveBound(bound);
 
 				object_list->push_back(rpr);
 			}
@@ -892,8 +990,14 @@ bool ObjectManager::load_list(const char * filename)
 				bound.left = x;
 				bound.top = y;
 				bound.right = bound.left + roy->getSprite()->getWidth();
-				bound.bottom = bound.top + roy->getSprite()->getHeight();
+				bound.bottom = bound.top - roy->getSprite()->getHeight();
 				roy->setBoundCollision(bound);
+
+				bound.bottom = MAP_HEIGHT - std::stof(listRioYellow[i]["properties"]["bottomA"].GetString());
+				bound.top = MAP_HEIGHT - std::stof(listRioYellow[i]["properties"]["topA"].GetString());
+				bound.left = std::stof(listRioYellow[i]["properties"]["leftA"].GetString());
+				bound.right = std::stof(listRioYellow[i]["properties"]["rightA"].GetString());
+				roy->setActiveBound(bound);
 
 				object_list->push_back(roy);
 			}
@@ -914,8 +1018,14 @@ bool ObjectManager::load_list(const char * filename)
 				bound.left = x;
 				bound.top = y;
 				bound.right = bound.left + rob->getSprite()->getWidth();
-				bound.bottom = bound.top + rob->getSprite()->getHeight();
+				bound.bottom = bound.top - rob->getSprite()->getHeight();
 				rob->setBoundCollision(bound);
+
+				bound.bottom = MAP_HEIGHT - std::stof(listRioBrown[i]["properties"]["bottomA"].GetString());
+				bound.top = MAP_HEIGHT - std::stof(listRioBrown[i]["properties"]["topA"].GetString());
+				bound.left = std::stof(listRioBrown[i]["properties"]["leftA"].GetString());
+				bound.right = std::stof(listRioBrown[i]["properties"]["rightA"].GetString());
+				rob->setActiveBound(bound);
 
 				object_list->push_back(rob);
 			}
@@ -936,8 +1046,14 @@ bool ObjectManager::load_list(const char * filename)
 				bound.left = x;
 				bound.top = y;
 				bound.right = bound.left + ror->getSprite()->getWidth();
-				bound.bottom = bound.top + ror->getSprite()->getHeight();
+				bound.bottom = bound.top - ror->getSprite()->getHeight();
 				ror->setBoundCollision(bound);
+
+				bound.bottom = MAP_HEIGHT - std::stof(listRioRed[i]["properties"]["bottomA"].GetString());
+				bound.top = MAP_HEIGHT - std::stof(listRioRed[i]["properties"]["topA"].GetString());
+				bound.left = std::stof(listRioRed[i]["properties"]["leftA"].GetString());
+				bound.right = std::stof(listRioRed[i]["properties"]["rightA"].GetString());
+				ror->setActiveBound(bound);
 
 				object_list->push_back(ror);
 			}
@@ -967,6 +1083,8 @@ bool ObjectManager::load_list(const char * filename)
 				bound.bottom = bound.top + kraid->getSprite()->getHeight();
 				kraid->setBoundCollision(bound);
 
+				kraid->setActiveBound(bound);
+
 				object_list->push_back(kraid);
 			}
 		}
@@ -987,6 +1105,8 @@ bool ObjectManager::load_list(const char * filename)
 			bound.bottom = bound.top + dg->getSprite()->getHeight();
 			dg->setBoundCollision(bound);
 
+			dg->setActiveBound(bound);
+
 			object_list->push_back(dg);
 		}
 
@@ -994,7 +1114,7 @@ bool ObjectManager::load_list(const char * filename)
 
 
 		// Create QuadTree
-		MetroidRect rect(0, QUADTREE_H, 0, QUADTREE_W);
+		MetroidRect rect(QUADTREE_H, 0, 0, QUADTREE_W);
 		quadtree = Quadtree::createQuadTree(rect, this->object_list);
 
 		return true;

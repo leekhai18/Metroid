@@ -67,8 +67,8 @@ RECT Camera::getBound()
 
     bound.left = (LONG) (position.x - width * 0.5f);
     bound.right =(LONG) (bound.left + width);
-    bound.top =  (LONG) (position.y - height * 0.5f);
-    bound.bottom=(LONG) (bound.top + height);
+    bound.top =  (LONG) (position.y + height * 0.5f);
+    bound.bottom=(LONG) (bound.top - height);
 
     return bound;
 }
@@ -88,8 +88,8 @@ RECT Camera::getActiveArea()
 	RECT area;
 	area.left = (LONG) (this->position.x - ACTIVE_AREA_WIDTH*0.5f);
 	area.right =(LONG) (area.left + ACTIVE_AREA_WIDTH);
-	area.top =  (LONG) (this->position.y - ACTIVE_AREA_HEIGHT*0.5f);
-	area.bottom=(LONG) (area.top + ACTIVE_AREA_HEIGHT);
+	area.top =  (LONG) (this->position.y + ACTIVE_AREA_HEIGHT*0.5f);
+	area.bottom=(LONG) (area.top - ACTIVE_AREA_HEIGHT);
 
 	return area;
 }

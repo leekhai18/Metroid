@@ -37,7 +37,7 @@ bool Collision::checkOnGround(MetroidRect obj)
 
 bool Collision::isCollide(MetroidRect myRect, MetroidRect otherRect)
 {
-	if (myRect.right >= otherRect.left&&myRect.left <= otherRect.right&&myRect.bottom >= otherRect.top&&myRect.top <= otherRect.bottom)
+	if (myRect.right >= otherRect.left&&myRect.left <= otherRect.right&&myRect.bottom <= otherRect.top&&myRect.top >= otherRect.bottom)
 	{
 		return true;
 	}

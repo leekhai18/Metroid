@@ -2,7 +2,7 @@
 #include <d3dx9.h>
 #include <d3d9.h>
 #define CAM_POS_X 640
-#define CAM_POS_Y (MAP_HEIGHT - 3240)
+#define CAM_POS_Y 1320
 
 class Camera
 {

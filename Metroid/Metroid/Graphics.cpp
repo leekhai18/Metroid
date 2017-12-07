@@ -288,7 +288,7 @@ void Graphics::drawSprite(const SpriteData &spriteData, COLOR_ARGB color)
 	D3DXMatrixIdentity(&mt);
 	mt._22 = -1.0f;
 	mt._41 = (float) (-1) * Camera::getInstance()->getBound().left;
-	mt._42 = (float)        Camera::getInstance()->getBound().bottom;
+	mt._42 = (float)        Camera::getInstance()->getBound().top;
 
 	D3DXVec3Transform(&posViewport, &VECTOR3(position.x, position.y, 0), &mt);
 

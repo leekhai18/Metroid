@@ -7,6 +7,9 @@
 #include "rapidjson-master\include\rapidjson\reader.h"
 #include "rapidjson-master\include\rapidjson\document.h"
 #include "rapidjson-master\include\rapidjson\filereadstream.h"
+#include "rapidjson-master\include\rapidjson\writer.h"
+#include "rapidjson-master\include\rapidjson\ostreamwrapper.h"
+
 using namespace rapidjson;
 using namespace std;
 

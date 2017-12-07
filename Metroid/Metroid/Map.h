@@ -11,8 +11,6 @@ private:
 	TextureManager* texture;
 	Graphics* graphics;
 
-	bool isContain(RECT rect1, RECT rect2);
-
 public:
 	Map();
 	~Map();
