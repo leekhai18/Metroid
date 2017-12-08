@@ -45,9 +45,6 @@
 #define OFFSET_COLLISION_X 2
 #define TIME_TO_ACROBAT 0.1f
 
-// In tilemap
-#define POSITION_FIRST_X 632
-#define POSITION_FIRST_Y 3280
 
 class Samus: public BaseObject
 {

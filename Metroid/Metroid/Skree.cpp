@@ -16,7 +16,7 @@ Skree::Skree(TextureManager * textureM, Graphics * graphics, EnemyColors color) 
 	{
 		throw GameError(GameErrorNS::FATAL_ERROR, "Can not init sprite Skree");
 	}
-	this->sprite->setOrigin(VECTOR2(0.5f, 1));
+	this->sprite->setOrigin(VECTOR2(0.5f, 0));
 
 	effectDeath = new SkreeEffectDeath(textureM, graphics);
 

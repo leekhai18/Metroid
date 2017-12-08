@@ -141,6 +141,11 @@ bool ObjectManager::load_list(const char * filename)
 		//OStreamWrapper osw(ofs);
 		//Writer<OStreamWrapper> writer(osw);
 
+		//writer.StartObject();
+
+		//writer.Key("Wall");
+		//writer.StartArray();
+
 #pragma region Wall
 		// Load Wall POS , 650 
 		const Value& listWall = jSon["Wall"];
@@ -152,9 +157,20 @@ bool ObjectManager::load_list(const char * filename)
 				BaseObject *wall = new BaseObject(eID::WALL);
 
 				x = listWall[i]["x"].GetFloat();
-				y = MAP_HEIGHT - listWall[i]["y"].GetFloat() - 32; // Bị lệch 32bit giữa 2 layer WALL and map
+				y = listWall[i]["y"].GetFloat() - 32; // Bị lệch 32bit giữa 2 layer WALL and map
 				height = listWall[i]["height"].GetFloat();
 				width = listWall[i]["width"].GetFloat();
+
+				//writer.StartObject();
+				//writer.Key("x");
+				//writer.Double(x);
+				//writer.Key("y");
+				//writer.Double(y);
+				//writer.Key("height");
+				//writer.Double(height);
+				//writer.Key("width");
+				//writer.Double(width);
+				//writer.EndObject();
 
 				bound.left = x;
 				bound.top = y; 
@@ -167,124 +183,199 @@ bool ObjectManager::load_list(const char * filename)
 				object_list->push_back(wall);
 			}
 		}
+
+		//writer.EndArray();
 #pragma endregion
+
 
 #pragma region Special Bricks
 		// BrickSecretBlue, 2
-		const Value& brickSecretBlue = jSon["BrickSecretBlue"];
-		if (brickSecretBlue.IsObject())
+		//writer.Key("BrickSecretBlue");
+		//writer.StartArray();
+		const Value& listBrickSecretBlue = jSon["BrickSecretBlue"];
+		if (listBrickSecretBlue.IsArray())
 		{
-			Brick *bsb = new Brick(this->textureManager, this->graphics, BrickStyle::BrickSecretBlue);
+			for (SizeType i = 0; i < listBrickSecretBlue.Size(); i++)
+			{
+				Brick *bsb = new Brick(this->textureManager, this->graphics, BrickStyle::BrickSecretBlue);
 
-			x = brickSecretBlue["x"].GetFloat();
-			y = MAP_HEIGHT - brickSecretBlue["y"].GetFloat();
-			bsb->setPosition(VECTOR2(x, y));
+				x = listBrickSecretBlue[i]["x"].GetFloat();
+				y = listBrickSecretBlue[i]["y"].GetFloat();
 
-			bound.left = x;
-			bound.top = y;
-			bound.right = bound.left + bsb->getSprite()->getWidth();
-			bound.bottom = bound.top - bsb->getSprite()->getHeight();
-			bsb->setBoundCollision(bound);
+				//writer.StartObject();
+				//writer.Key("x");
+				//writer.Double(x);
+				//writer.Key("y");
+				//writer.Double(y);
+				//writer.EndObject();
 
-			bsb->setActiveBound(bound);
+				bsb->setPosition(VECTOR2(x, y));
 
-			object_list->push_back(bsb);
+				bound.left = x;
+				bound.top = y;
+				bound.right = bound.left + bsb->getSprite()->getWidth();
+				bound.bottom = bound.top - bsb->getSprite()->getHeight();
+				bsb->setBoundCollision(bound);
+
+				bsb->setActiveBound(bound);
+
+				object_list->push_back(bsb);
+			}
 		}
+		//writer.EndArray();
 
-		// BrickSerectGreen, 5
-		const Value& brickSerectGreen = jSon["BrickSerectGreen"];
-		if (brickSerectGreen.IsObject())
+		// BrickSerectGreen, 9
+		//writer.Key("BrickSerectGreen");
+		//writer.StartArray();
+		const Value& listBrickSerectGreen = jSon["BrickSerectGreen"];
+		if (listBrickSerectGreen.IsArray())
 		{
-			Brick *bsg = new Brick(this->textureManager, this->graphics, BrickStyle::BrickSerectGreen);
+			for (SizeType i = 0; i < listBrickSerectGreen.Size(); i++)
+			{
+				Brick *bsg = new Brick(this->textureManager, this->graphics, BrickStyle::BrickSerectGreen);
 
-			x = brickSerectGreen["x"].GetFloat();
-			y = MAP_HEIGHT - brickSerectGreen["y"].GetFloat();
-			bsg->setPosition(VECTOR2(x, y));
+				x = listBrickSerectGreen[i]["x"].GetFloat();
+				y = listBrickSerectGreen[i]["y"].GetFloat();
 
-			bound.left = x;
-			bound.top = y;
-			bound.right = bound.left + bsg->getSprite()->getWidth();
-			bound.bottom = bound.top - bsg->getSprite()->getHeight();
-			bsg->setBoundCollision(bound);
+				//writer.StartObject();
+				//writer.Key("x");
+				//writer.Double(x);
+				//writer.Key("y");
+				//writer.Double(y);
+				//writer.EndObject();
 
-			bsg->setActiveBound(bound);
+				bsg->setPosition(VECTOR2(x, y));
 
-			object_list->push_back(bsg);
+				bound.left = x;
+				bound.top = y;
+				bound.right = bound.left + bsg->getSprite()->getWidth();
+				bound.bottom = bound.top - bsg->getSprite()->getHeight();
+				bsg->setBoundCollision(bound);
+
+				bsg->setActiveBound(bound);
+
+				object_list->push_back(bsg);
+			}
 		}
+		//writer.EndArray();
 
 
 		// BrickGreen, 5
-		const Value& brickGreen = jSon["BrickGreen"];
-		if (brickGreen.IsObject())
+		//writer.Key("BrickGreen");
+		//writer.StartArray();
+		const Value& listBrickGreen = jSon["BrickGreen"];
+		if (listBrickGreen.IsArray())
 		{
-			Brick *bg = new Brick(this->textureManager, this->graphics, BrickStyle::BrickGreen);
+			for (SizeType i = 0; i < listBrickGreen.Size(); i++)
+			{
+				Brick *bg = new Brick(this->textureManager, this->graphics, BrickStyle::BrickGreen);
 
-			x = brickGreen["x"].GetFloat();
-			y = MAP_HEIGHT - brickGreen["y"].GetFloat();
-			bg->setPosition(VECTOR2(x, y));
+				x = listBrickGreen[i]["x"].GetFloat();
+				y = listBrickGreen[i]["y"].GetFloat();
+				bg->setPosition(VECTOR2(x, y));
 
-			bound.left = x;
-			bound.top = y;
-			bound.right = bound.left + bg->getSprite()->getWidth();
-			bound.bottom = bound.top - bg->getSprite()->getHeight();
-			bg->setBoundCollision(bound);
+				//writer.StartObject();
+				//writer.Key("x");
+				//writer.Double(x);
+				//writer.Key("y");
+				//writer.Double(y);
+				//writer.EndObject();
 
-			bg->setActiveBound(bound);
+				bound.left = x;
+				bound.top = y;
+				bound.right = bound.left + bg->getSprite()->getWidth();
+				bound.bottom = bound.top - bg->getSprite()->getHeight();
+				bg->setBoundCollision(bound);
 
-			object_list->push_back(bg);
+				bg->setActiveBound(bound);
+
+				object_list->push_back(bg);
+			}
 		}
+		//writer.EndArray();
 
 
 		// BrickBlue, 28, có 8 viên visible is false, so you need to check 
+		//writer.Key("BrickBlue");
+		//writer.StartArray();
+
 		bool isVisible;
-		const Value& brickBlue = jSon["BrickBlue"];
-		if (brickBlue.IsObject())
+		const Value& listBrickBlue = jSon["BrickBlue"];
+		if (listBrickBlue.IsArray())
 		{
-			Brick *bb = new Brick(this->textureManager, this->graphics, BrickStyle::BrickBlue);
+			for (SizeType i = 0; i < listBrickBlue.Size(); i++)
+			{
+				Brick *bb = new Brick(this->textureManager, this->graphics, BrickStyle::BrickBlue);
 
-			x = brickBlue["x"].GetFloat();
-			y = MAP_HEIGHT - brickBlue["y"].GetFloat();
-			bb->setPosition(VECTOR2(x, y));
+				x = listBrickBlue[i]["x"].GetFloat();
+				y = listBrickBlue[i]["y"].GetFloat();
+				bb->setPosition(VECTOR2(x, y));
 
-			isVisible = brickBlue["visible"].GetBool();
-			bb->setVisible(isVisible);
+				isVisible = listBrickBlue[i]["visible"].GetBool();
+				bb->setVisible(isVisible);
 
-			bound.left = x;
-			bound.top = y;
-			bound.right = bound.left + bb->getSprite()->getWidth();
-			bound.bottom = bound.top - bb->getSprite()->getHeight();
-			bb->setBoundCollision(bound);
+				//writer.StartObject();
+				//writer.Key("x");
+				//writer.Double(x);
+				//writer.Key("y");
+				//writer.Double(y);
+				//writer.Key("visible");
+				//writer.Bool(isVisible);
+				//writer.EndObject();
 
-			bb->setActiveBound(bound);
+				bound.left = x;
+				bound.top = y;
+				bound.right = bound.left + bb->getSprite()->getWidth();
+				bound.bottom = bound.top - bb->getSprite()->getHeight();
+				bb->setBoundCollision(bound);
 
-			object_list->push_back(bb);
+				bb->setActiveBound(bound);
+
+				object_list->push_back(bb);
+			}
 		}
+		//writer.EndArray();
 
 		// BrickRed, 63
-		const Value& brickRed = jSon["BrickRed"];
-		if (brickRed.IsObject())
+		//writer.Key("BrickRed");
+		//writer.StartArray();
+		const Value& listBrickRed = jSon["BrickRed"];
+		if (listBrickRed.IsArray())
 		{
-			Brick *br = new Brick(this->textureManager, this->graphics, BrickStyle::BrickRed);
+			for (SizeType i = 0; i < listBrickRed.Size(); i++)
+			{
+				Brick *br = new Brick(this->textureManager, this->graphics, BrickStyle::BrickRed);
 
-			x = brickRed["x"].GetFloat();
-			y = MAP_HEIGHT - brickRed["y"].GetFloat();
-			br->setPosition(VECTOR2(x, y));
+				x = listBrickRed[i]["x"].GetFloat();
+				y = listBrickRed[i]["y"].GetFloat();
+				br->setPosition(VECTOR2(x, y));
 
-			bound.left = x;
-			bound.top = y;
-			bound.right = bound.left + br->getSprite()->getWidth();
-			bound.bottom = bound.top - br->getSprite()->getHeight();
-			br->setBoundCollision(bound);
+				//writer.StartObject();
+				//writer.Key("x");
+				//writer.Double(x);
+				//writer.Key("y");
+				//writer.Double(y);
+				//writer.EndObject();
 
-			br->setActiveBound(bound);
+				bound.left = x;
+				bound.top = y;
+				bound.right = bound.left + br->getSprite()->getWidth();
+				bound.bottom = bound.top - br->getSprite()->getHeight();
+				br->setBoundCollision(bound);
 
-			object_list->push_back(br);
+				br->setActiveBound(bound);
+
+				object_list->push_back(br);
+			}
 		}
+		//writer.EndArray();
 
 #pragma endregion
 
 #pragma region Gates and Ports
 		// create GateBlue R, 25 
+		//writer.Key("GateBlueR");
+		//writer.StartArray();
 		const Value& listGateBlueR = jSon["GateBlueR"];
 		if (listGateBlueR.IsArray())
 		{
@@ -293,8 +384,15 @@ bool ObjectManager::load_list(const char * filename)
 				GateBlue *gateBlueR = new GateBlue(this->textureManager, this->graphics);
 
 				x = listGateBlueR[i]["x"].GetFloat();
-				y = MAP_HEIGHT - listGateBlueR[i]["y"].GetFloat();
+				y = listGateBlueR[i]["y"].GetFloat();
 				gateBlueR->setPosition(VECTOR2(x, y));
+
+				//writer.StartObject();
+				//writer.Key("x");
+				//writer.Double(x);
+				//writer.Key("y");
+				//writer.Double(y);
+				//writer.EndObject();
 
 				bound.left = x;
 				bound.top = y;
@@ -307,8 +405,11 @@ bool ObjectManager::load_list(const char * filename)
 				object_list->push_back(gateBlueR);
 			}
 		}
+		//writer.EndArray();
 
 		// create GateBlue L, 25 
+		//writer.Key("GateBuleL");
+		//writer.StartArray();
 		const Value& listGateBlueL = jSon["GateBuleL"];
 		if (listGateBlueL.IsArray())
 		{
@@ -318,8 +419,15 @@ bool ObjectManager::load_list(const char * filename)
 				gateBlueL->setFlipX(true);
 
 				x = listGateBlueL[i]["x"].GetFloat();
-				y = MAP_HEIGHT - listGateBlueL[i]["y"].GetFloat();
+				y = listGateBlueL[i]["y"].GetFloat();
 				gateBlueL->setPosition(VECTOR2(x, y));
+
+				//writer.StartObject();
+				//writer.Key("x");
+				//writer.Double(x);
+				//writer.Key("y");
+				//writer.Double(y);
+				//writer.EndObject();
 
 				bound.left = x;
 				bound.top = y;
@@ -332,8 +440,11 @@ bool ObjectManager::load_list(const char * filename)
 				object_list->push_back(gateBlueL);
 			}
 		}
+		//writer.EndArray();
 
 		// create GateRed R, 4
+		//writer.Key("GateRedR");
+		//writer.StartArray();
 		const Value& listGateRedR = jSon["GateRedR"];
 		if (listGateRedR.IsArray())
 		{
@@ -342,8 +453,15 @@ bool ObjectManager::load_list(const char * filename)
 				GateRed *gateRedR = new GateRed(this->textureManager, this->graphics);
 
 				x = listGateRedR[i]["x"].GetFloat();
-				y = MAP_HEIGHT - listGateRedR[i]["y"].GetFloat();
+				y = listGateRedR[i]["y"].GetFloat();
 				gateRedR->setPosition(VECTOR2(x, y));
+
+				//writer.StartObject();
+				//writer.Key("x");
+				//writer.Double(x);
+				//writer.Key("y");
+				//writer.Double(y);
+				//writer.EndObject();
 
 				bound.left = x;
 				bound.top = y;
@@ -356,8 +474,11 @@ bool ObjectManager::load_list(const char * filename)
 				object_list->push_back(gateRedR);
 			}
 		}
+		//writer.EndArray();
 
 		// create GateRed L, 4
+		//writer.Key("GateRedL");
+		//writer.StartArray();
 		const Value& listGateRedL = jSon["GateRedL"];
 		if (listGateRedL.IsArray())
 		{
@@ -367,8 +488,15 @@ bool ObjectManager::load_list(const char * filename)
 				gateRedL->setFlipX(true);
 
 				x = listGateRedL[i]["x"].GetFloat();
-				y = MAP_HEIGHT - listGateRedL[i]["y"].GetFloat();
+				y = listGateRedL[i]["y"].GetFloat();
 				gateRedL->setPosition(VECTOR2(x, y));
+
+				//writer.StartObject();
+				//writer.Key("x");
+				//writer.Double(x);
+				//writer.Key("y");
+				//writer.Double(y);
+				//writer.EndObject();
 
 				bound.left = x;
 				bound.top = y;
@@ -381,9 +509,12 @@ bool ObjectManager::load_list(const char * filename)
 				object_list->push_back(gateRedL);
 			}
 		}
+		//writer.EndArray();
 
 
 		// Load Port , 29
+		//writer.Key("Port");
+		//writer.StartArray();
 		const Value& listPort = jSon["Port"];
 		if (listPort.IsArray())
 		{
@@ -393,9 +524,20 @@ bool ObjectManager::load_list(const char * filename)
 				Port *port = new Port();
 
 				x = listPort[i]["x"].GetFloat();
-				y = MAP_HEIGHT - listPort[i]["y"].GetFloat();
+				y = listPort[i]["y"].GetFloat();
 				height = listPort[i]["height"].GetFloat();
 				width = listPort[i]["width"].GetFloat();
+
+				//writer.StartObject();
+				//writer.Key("x");
+				//writer.Double(x);
+				//writer.Key("y");
+				//writer.Double(y);
+				//writer.Key("height");
+				//writer.Double(height);
+				//writer.Key("width");
+				//writer.Double(width);
+				//writer.EndObject();
 
 				bound.left = x;
 				bound.top = y;
@@ -408,6 +550,7 @@ bool ObjectManager::load_list(const char * filename)
 				object_list->push_back(port);
 			}
 		}
+		//writer.EndArray();
 
 
 #pragma endregion
@@ -420,13 +563,21 @@ bool ObjectManager::load_list(const char * filename)
 			MaruMari *mm = new MaruMari(this->textureManager, this->graphics);
 
 			x = maruMari["x"].GetFloat();
-			y = MAP_HEIGHT - maruMari["y"].GetFloat();
+			y = maruMari["y"].GetFloat();
 			mm->setPosition(VECTOR2(x + 2, y));
+
+			//writer.Key("MaruMari");
+			//writer.StartObject();
+			//writer.Key("x");
+			//writer.Double(x);
+			//writer.Key("y");
+			//writer.Double(y);
+			//writer.EndObject();
 
 			bound.left = x;
 			bound.top = y;
 			bound.right = bound.left + mm->getSprite()->getWidth();
-			bound.bottom = bound.top + mm->getSprite()->getHeight();
+			bound.bottom = bound.top - mm->getSprite()->getHeight();
 			mm->setBoundCollision(bound);
 
 			mm->setActiveBound(bound);
@@ -441,13 +592,21 @@ bool ObjectManager::load_list(const char * filename)
 			IceBeam *ib = new IceBeam(this->textureManager, this->graphics);
 
 			x = iceBeam["x"].GetFloat();
-			y = MAP_HEIGHT - iceBeam["y"].GetFloat();
+			y = iceBeam["y"].GetFloat();
 			ib->setPosition(VECTOR2(x, y));
+
+			//writer.Key("IceBeam");
+			//writer.StartObject();
+			//writer.Key("x");
+			//writer.Double(x);
+			//writer.Key("y");
+			//writer.Double(y);
+			//writer.EndObject();
 
 			bound.left = x;
 			bound.top = y;
 			bound.right = bound.left + ib->getSprite()->getWidth();
-			bound.bottom = bound.top + ib->getSprite()->getHeight();
+			bound.bottom = bound.top - ib->getSprite()->getHeight();
 			ib->setBoundCollision(bound);
 
 			ib->setActiveBound(bound);
@@ -462,13 +621,22 @@ bool ObjectManager::load_list(const char * filename)
 			Bomb *bm = new Bomb(this->textureManager, this->graphics);
 
 			x = bomb["x"].GetFloat();
-			y = MAP_HEIGHT - bomb["y"].GetFloat();
+			y = bomb["y"].GetFloat();
 			bm->setPosition(VECTOR2(x, y));
+
+			//writer.Key("Bomb");
+			//writer.StartObject();
+			//writer.Key("x");
+			//writer.Double(x);
+			//writer.Key("y");
+			//writer.Double(y);
+			//writer.EndObject();
+
 
 			bound.left = x;
 			bound.top = y;
 			bound.right = bound.left + bm->getSprite()->getWidth();
-			bound.bottom = bound.top + bm->getSprite()->getHeight();
+			bound.bottom = bound.top - bm->getSprite()->getHeight();
 			bm->setBoundCollision(bound);
 
 			bm->setActiveBound(bound);
@@ -476,22 +644,32 @@ bool ObjectManager::load_list(const char * filename)
 			object_list->push_back(bm);
 		}
 
-		// create EnergyTank, 2
+		// create EnergyTank, 3
+		//writer.Key("EnergyTank");
+		//writer.StartArray();
 		const Value& listEnergyTank = jSon["EnergyTank"];
 		if (listEnergyTank.IsArray())
 		{
 			for (SizeType i = 0; i < listEnergyTank.Size(); i++)
 			{
+				
 				EnergyTank *energyT = new EnergyTank(this->textureManager, this->graphics);
 
 				x = listEnergyTank[i]["x"].GetFloat();
-				y = MAP_HEIGHT - listEnergyTank[i]["y"].GetFloat();
+				y = listEnergyTank[i]["y"].GetFloat();
 				energyT->setPosition(VECTOR2(x, y));
+
+				//writer.StartObject();
+				//writer.Key("x");
+				//writer.Double(x);
+				//writer.Key("y");
+				//writer.Double(y);
+				//writer.EndObject();
 
 				bound.left = x;
 				bound.top = y;
 				bound.right = bound.left + energyT->getSprite()->getWidth();
-				bound.bottom = bound.top + energyT->getSprite()->getHeight();
+				bound.bottom = bound.top - energyT->getSprite()->getHeight();
 				energyT->setBoundCollision(bound);
 
 				energyT->setActiveBound(bound);
@@ -499,6 +677,7 @@ bool ObjectManager::load_list(const char * filename)
 				object_list->push_back(energyT);
 			}
 		}
+		//writer.EndArray();
 
 		// create Long Beam
 		const Value& longBeam = jSon["LongBeam"];
@@ -507,13 +686,22 @@ bool ObjectManager::load_list(const char * filename)
 			LongBeam *lb = new LongBeam(this->textureManager, this->graphics);
 
 			x = longBeam["x"].GetFloat();
-			y = MAP_HEIGHT - longBeam["y"].GetFloat();
+			y = longBeam["y"].GetFloat();
 			lb->setPosition(VECTOR2(x, y));
+
+			//writer.Key("LongBeam");
+			//writer.StartObject();
+			//writer.Key("x");
+			//writer.Double(x);
+			//writer.Key("y");
+			//writer.Double(y);
+			//writer.EndObject();
+
 
 			bound.left = x;
 			bound.top = y;
 			bound.right = bound.left + lb->getSprite()->getWidth();
-			bound.bottom = bound.top + lb->getSprite()->getHeight();
+			bound.bottom = bound.top - lb->getSprite()->getHeight();
 			lb->setBoundCollision(bound);
 
 			lb->setActiveBound(bound);
@@ -522,6 +710,9 @@ bool ObjectManager::load_list(const char * filename)
 		}
 
 		// create MissileRocket
+		//writer.Key("MissileRocket");
+		//writer.StartArray();
+
 		const Value& listRocket = jSon["MissileRocket"];
 		if (listRocket.IsArray())
 		{
@@ -530,13 +721,21 @@ bool ObjectManager::load_list(const char * filename)
 				MissileRocket *rocket = new MissileRocket(this->textureManager, this->graphics);
 
 				x = listRocket[i]["x"].GetFloat();
-				y = MAP_HEIGHT - listRocket[i]["y"].GetFloat();
+				y = listRocket[i]["y"].GetFloat();
 				rocket->setPosition(VECTOR2(x, y));
+
+				//writer.StartObject();
+				//writer.Key("x");
+				//writer.Double(x);
+				//writer.Key("y");
+				//writer.Double(y);
+				//writer.EndObject();
+
 
 				bound.left = x;
 				bound.top = y;
 				bound.right = bound.left + rocket->getSprite()->getWidth();
-				bound.bottom = bound.top + rocket->getSprite()->getHeight();
+				bound.bottom = bound.top - rocket->getSprite()->getHeight();
 				rocket->setBoundCollision(bound);
 
 				rocket->setActiveBound(bound);
@@ -544,6 +743,7 @@ bool ObjectManager::load_list(const char * filename)
 				object_list->push_back(rocket);
 			}
 		}
+		//writer.EndArray();
 
 		// create Varia
 		const Value& varia = jSon["Varia"];
@@ -552,13 +752,22 @@ bool ObjectManager::load_list(const char * filename)
 			Varia *va = new Varia(this->textureManager, this->graphics);
 
 			x = varia["x"].GetFloat();
-			y = MAP_HEIGHT - varia["y"].GetFloat();
+			y = varia["y"].GetFloat();
 			va->setPosition(VECTOR2(x, y));
+
+			//writer.Key("Varia");
+			//writer.StartObject();
+			//writer.Key("x");
+			//writer.Double(x);
+			//writer.Key("y");
+			//writer.Double(y);
+			//writer.EndObject();
+
 
 			bound.left = x;
 			bound.top = y;
 			bound.right = bound.left + va->getSprite()->getWidth();
-			bound.bottom = bound.top + va->getSprite()->getHeight();
+			bound.bottom = bound.top - va->getSprite()->getHeight();
 			va->setBoundCollision(bound);
 
 			va->setActiveBound(bound);
@@ -576,13 +785,21 @@ bool ObjectManager::load_list(const char * filename)
 			AlienBig *alienB = new AlienBig(this->textureManager, this->graphics);
 
 			x = alienBig["x"].GetFloat();
-			y = MAP_HEIGHT - alienBig["y"].GetFloat();
+			y = alienBig["y"].GetFloat();
 			alienB->setPosition(VECTOR2(x, y));
+
+			//writer.Key("AlienBig");
+			//writer.StartObject();
+			//writer.Key("x");
+			//writer.Double(x);
+			//writer.Key("y");
+			//writer.Double(y);
+			//writer.EndObject();
 
 			bound.left = x;
 			bound.top = y;
 			bound.right = bound.left + alienB->getSprite()->getWidth();
-			bound.bottom = bound.top + alienB->getSprite()->getHeight();
+			bound.bottom = bound.top - alienB->getSprite()->getHeight();
 			alienB->setBoundCollision(bound);
 
 			alienB->setActiveBound(bound);
@@ -597,13 +814,21 @@ bool ObjectManager::load_list(const char * filename)
 			AlienSmall *alienS = new AlienSmall(this->textureManager, this->graphics);
 
 			x = alienSmall["x"].GetFloat();
-			y = MAP_HEIGHT - alienSmall["y"].GetFloat();
+			y = alienSmall["y"].GetFloat();
 			alienS->setPosition(VECTOR2(x, y));
+
+			//writer.Key("AlienSmall");
+			//writer.StartObject();
+			//writer.Key("x");
+			//writer.Double(x);
+			//writer.Key("y");
+			//writer.Double(y);
+			//writer.EndObject();
 
 			bound.left = x;
 			bound.top = y;
 			bound.right = bound.left + alienS->getSprite()->getWidth();
-			bound.bottom = bound.top + alienS->getSprite()->getHeight();
+			bound.bottom = bound.top - alienS->getSprite()->getHeight();
 			alienS->setBoundCollision(bound);
 
 			alienS->setActiveBound(bound);
@@ -612,6 +837,8 @@ bool ObjectManager::load_list(const char * filename)
 		}
 
 		// create ZommerYellow
+		//writer.Key("ZommerYellow");
+		//writer.StartArray();
 		const Value& listZommerYellow = jSon["ZommerYellow"];
 		if (listZommerYellow.IsArray())
 		{
@@ -620,7 +847,7 @@ bool ObjectManager::load_list(const char * filename)
 				Zommer *zmy = new Zommer(this->textureManager, this->graphics, EnemyColors::Yellow);
 
 				x = listZommerYellow[i]["x"].GetFloat();
-				y = MAP_HEIGHT - listZommerYellow[i]["y"].GetFloat();
+				y = listZommerYellow[i]["y"].GetFloat();
 				zmy->setPosition(VECTOR2(x, y));
 
 				bound.left = x;
@@ -629,17 +856,36 @@ bool ObjectManager::load_list(const char * filename)
 				bound.bottom = bound.top - zmy->getSprite()->getHeight();
 				zmy->setBoundCollision(bound);
 
-				bound.bottom = MAP_HEIGHT - std::stof(listZommerYellow[i]["properties"]["bottomA"].GetString());
-				bound.top = MAP_HEIGHT - std::stof(listZommerYellow[i]["properties"]["topA"].GetString());
-				bound.left = std::stof(listZommerYellow[i]["properties"]["leftA"].GetString());
-				bound.right = std::stof(listZommerYellow[i]["properties"]["rightA"].GetString());
+				bound.bottom = listZommerYellow[i]["bottomA"].GetFloat();
+				bound.top = listZommerYellow[i]["topA"].GetFloat();
+				bound.left = listZommerYellow[i]["leftA"].GetFloat();
+				bound.right = listZommerYellow[i]["rightA"].GetFloat();
 				zmy->setActiveBound(bound);
+
+				//writer.StartObject();
+				//writer.Key("x");
+				//writer.Double(x);
+				//writer.Key("y");
+				//writer.Double(y);
+				//writer.Key("bottomA");
+				//writer.Double(bound.bottom);
+				//writer.Key("topA");
+				//writer.Double(bound.top);
+				//writer.Key("leftA");
+				//writer.Double(bound.left);
+				//writer.Key("rightA");
+				//writer.Double(bound.right);
+				//writer.EndObject();
+
 
 				object_list->push_back(zmy);
 			}
 		}
+		//writer.EndArray();
 
 		// create ZommerBrown
+		//writer.Key("ZommerBrown");
+		//writer.StartArray();
 		const Value& listZommerBrown = jSon["ZommerBrown"];
 		if (listZommerBrown.IsArray())
 		{
@@ -648,7 +894,7 @@ bool ObjectManager::load_list(const char * filename)
 				Zommer *zmb = new Zommer(this->textureManager, this->graphics, EnemyColors::Brown);
 
 				x = listZommerBrown[i]["x"].GetFloat();
-				y = MAP_HEIGHT - listZommerBrown[i]["y"].GetFloat();
+				y = listZommerBrown[i]["y"].GetFloat();
 				zmb->setPosition(VECTOR2(x, y));
 
 				bound.left = x;
@@ -657,17 +903,36 @@ bool ObjectManager::load_list(const char * filename)
 				bound.bottom = bound.top - zmb->getSprite()->getHeight();
 				zmb->setBoundCollision(bound);
 
-				bound.bottom = MAP_HEIGHT - std::stof(listZommerBrown[i]["properties"]["bottomA"].GetString());
-				bound.top = MAP_HEIGHT - std::stof(listZommerBrown[i]["properties"]["topA"].GetString());
-				bound.left = std::stof(listZommerBrown[i]["properties"]["leftA"].GetString());
-				bound.right = std::stof(listZommerBrown[i]["properties"]["rightA"].GetString());
+				bound.bottom = listZommerBrown[i]["bottomA"].GetFloat();
+				bound.top = listZommerBrown[i]["topA"].GetFloat();
+				bound.left = listZommerBrown[i]["leftA"].GetFloat();
+				bound.right = listZommerBrown[i]["rightA"].GetFloat();
 				zmb->setActiveBound(bound);
+
+				//writer.StartObject();
+				//writer.Key("x");
+				//writer.Double(x);
+				//writer.Key("y");
+				//writer.Double(y);
+				//writer.Key("bottomA");
+				//writer.Double(bound.bottom);
+				//writer.Key("topA");
+				//writer.Double(bound.top);
+				//writer.Key("leftA");
+				//writer.Double(bound.left);
+				//writer.Key("rightA");
+				//writer.Double(bound.right);
+				//writer.EndObject();
+
 
 				object_list->push_back(zmb);
 			}
 		}
+		//writer.EndArray();
 
 		// create ZommerRed
+		//writer.Key("ZommerRed");
+		//writer.StartArray();
 		const Value& listZommerRed = jSon["ZommerRed"];
 		if (listZommerRed.IsArray())
 		{
@@ -676,7 +941,7 @@ bool ObjectManager::load_list(const char * filename)
 				Zommer *zmr = new Zommer(this->textureManager, this->graphics, EnemyColors::Red);
 
 				x = listZommerRed[i]["x"].GetFloat();
-				y = MAP_HEIGHT - listZommerRed[i]["y"].GetFloat();
+				y = listZommerRed[i]["y"].GetFloat();
 				zmr->setPosition(VECTOR2(x, y));
 
 				bound.left = x;
@@ -685,17 +950,36 @@ bool ObjectManager::load_list(const char * filename)
 				bound.bottom = bound.top - zmr->getSprite()->getHeight();
 				zmr->setBoundCollision(bound);
 
-				bound.bottom = MAP_HEIGHT - std::stof(listZommerRed[i]["properties"]["bottomA"].GetString());
-				bound.top = MAP_HEIGHT - std::stof(listZommerRed[i]["properties"]["topA"].GetString());
-				bound.left = std::stof(listZommerRed[i]["properties"]["leftA"].GetString());
-				bound.right = std::stof(listZommerRed[i]["properties"]["rightA"].GetString());
+				bound.bottom = listZommerRed[i]["bottomA"].GetFloat();
+				bound.top = listZommerRed[i]["topA"].GetFloat();
+				bound.left = listZommerRed[i]["leftA"].GetFloat();
+				bound.right = listZommerRed[i]["rightA"].GetFloat();
 				zmr->setActiveBound(bound);
+
+				//writer.StartObject();
+				//writer.Key("x");
+				//writer.Double(x);
+				//writer.Key("y");
+				//writer.Double(y);
+				//writer.Key("bottomA");
+				//writer.Double(bound.bottom);
+				//writer.Key("topA");
+				//writer.Double(bound.top);
+				//writer.Key("leftA");
+				//writer.Double(bound.left);
+				//writer.Key("rightA");
+				//writer.Double(bound.right);
+				//writer.EndObject();
+
 
 				object_list->push_back(zmr);
 			}
 		}
+		//writer.EndArray();
 
 		// create ZebYellow
+		//writer.Key("SpawnZebYellow");
+		//writer.StartArray();
 		const Value& listZebYellow = jSon["SpawnZebYellow"];
 		if (listZebYellow.IsArray())
 		{
@@ -704,7 +988,7 @@ bool ObjectManager::load_list(const char * filename)
 				Zeb *zby = new Zeb(this->textureManager, this->graphics, EnemyColors::Yellow);
 
 				x = listZebYellow[i]["x"].GetFloat();
-				y = MAP_HEIGHT - listZebYellow[i]["y"].GetFloat();
+				y = listZebYellow[i]["y"].GetFloat();
 				zby->setPosition(VECTOR2(x, y));
 
 				bound.left = x;
@@ -713,17 +997,36 @@ bool ObjectManager::load_list(const char * filename)
 				bound.bottom = bound.top - zby->getSprite()->getHeight();
 				zby->setBoundCollision(bound);
 
-				bound.bottom = MAP_HEIGHT - std::stof(listZebYellow[i]["bottomA"].GetString());
-				bound.top = MAP_HEIGHT - std::stof(listZebYellow[i]["topA"].GetString());
-				bound.left = std::stof(listZebYellow[i]["leftA"].GetString());
-				bound.right = std::stof(listZebYellow[i]["rightA"].GetString());
+				bound.bottom = listZebYellow[i]["bottomA"].GetFloat();
+				bound.top = listZebYellow[i]["topA"].GetFloat();
+				bound.left = listZebYellow[i]["leftA"].GetFloat();
+				bound.right = listZebYellow[i]["rightA"].GetFloat();
 				zby->setActiveBound(bound);
+
+				//writer.StartObject();
+				//writer.Key("x");
+				//writer.Double(x);
+				//writer.Key("y");
+				//writer.Double(y);
+				//writer.Key("bottomA");
+				//writer.Double(bound.bottom);
+				//writer.Key("topA");
+				//writer.Double(bound.top);
+				//writer.Key("leftA");
+				//writer.Double(bound.left);
+				//writer.Key("rightA");
+				//writer.Double(bound.right);
+				//writer.EndObject();
+
 
 				object_list->push_back(zby);
 			}
 		}
+		//writer.EndArray();
 
 		// create ZebBrown
+		//writer.Key("SpawnZebBrown");
+		//writer.StartArray();
 		const Value& listZebBrown = jSon["SpawnZebBrown"];
 		if (listZebBrown.IsArray())
 		{
@@ -732,7 +1035,7 @@ bool ObjectManager::load_list(const char * filename)
 				Zeb *zbb = new Zeb(this->textureManager, this->graphics, EnemyColors::Brown);
 
 				x = listZebBrown[i]["x"].GetFloat();
-				y = MAP_HEIGHT - listZebBrown[i]["y"].GetFloat();
+				y = listZebBrown[i]["y"].GetFloat();
 				zbb->setPosition(VECTOR2(x, y));
 
 				bound.left = x;
@@ -741,17 +1044,36 @@ bool ObjectManager::load_list(const char * filename)
 				bound.bottom = bound.top - zbb->getSprite()->getHeight();
 				zbb->setBoundCollision(bound);
 
-				bound.bottom = MAP_HEIGHT - std::stof(listZebBrown[i]["bottomA"].GetString());
-				bound.top = MAP_HEIGHT - std::stof(listZebBrown[i]["topA"].GetString());
-				bound.left = std::stof(listZebBrown[i]["leftA"].GetString());
-				bound.right = std::stof(listZebBrown[i]["rightA"].GetString());
+				bound.bottom = listZebBrown[i]["bottomA"].GetFloat();
+				bound.top = listZebBrown[i]["topA"].GetFloat();
+				bound.left = listZebBrown[i]["leftA"].GetFloat();
+				bound.right = listZebBrown[i]["rightA"].GetFloat();
 				zbb->setActiveBound(bound);
+
+				//writer.StartObject();
+				//writer.Key("x");
+				//writer.Double(x);
+				//writer.Key("y");
+				//writer.Double(y);
+				//writer.Key("bottomA");
+				//writer.Double(bound.bottom);
+				//writer.Key("topA");
+				//writer.Double(bound.top);
+				//writer.Key("leftA");
+				//writer.Double(bound.left);
+				//writer.Key("rightA");
+				//writer.Double(bound.right);
+				//writer.EndObject();
+
 
 				object_list->push_back(zbb);
 			}
 		}
+		//writer.EndArray();
 
 		// create ZebRed
+		//writer.Key("SpawnZebRed");
+		//writer.StartArray();
 		const Value& listZebRed = jSon["SpawnZebRed"];
 		if (listZebRed.IsArray())
 		{
@@ -760,7 +1082,7 @@ bool ObjectManager::load_list(const char * filename)
 				Zeb *zbr = new Zeb(this->textureManager, this->graphics, EnemyColors::Red);
 
 				x = listZebRed[i]["x"].GetFloat();
-				y = MAP_HEIGHT - listZebRed[i]["y"].GetFloat();
+				y = listZebRed[i]["y"].GetFloat();
 				zbr->setPosition(VECTOR2(x, y));
 
 				bound.left = x;
@@ -769,17 +1091,36 @@ bool ObjectManager::load_list(const char * filename)
 				bound.bottom = bound.top - zbr->getSprite()->getHeight();
 				zbr->setBoundCollision(bound);
 
-				bound.bottom = MAP_HEIGHT - std::stof(listZebBrown[i]["bottomA"].GetString());
-				bound.top = MAP_HEIGHT - std::stof(listZebBrown[i]["topA"].GetString());
-				bound.left = std::stof(listZebBrown[i]["leftA"].GetString());
-				bound.right = std::stof(listZebBrown[i]["rightA"].GetString());
+				bound.bottom = listZebRed[i]["bottomA"].GetFloat();
+				bound.top = listZebRed[i]["topA"].GetFloat();
+				bound.left = listZebRed[i]["leftA"].GetFloat();
+				bound.right = listZebRed[i]["rightA"].GetFloat();
 				zbr->setActiveBound(bound);
+
+				//writer.StartObject();
+				//writer.Key("x");
+				//writer.Double(x);
+				//writer.Key("y");
+				//writer.Double(y);
+				//writer.Key("bottomA");
+				//writer.Double(bound.bottom);
+				//writer.Key("topA");
+				//writer.Double(bound.top);
+				//writer.Key("leftA");
+				//writer.Double(bound.left);
+				//writer.Key("rightA");
+				//writer.Double(bound.right);
+				//writer.EndObject();
+
 
 				object_list->push_back(zbr);
 			}
 		}
+		//writer.EndArray();
 
 		// create WaverBrown
+		//writer.Key("WaverGreen");
+		//writer.StartArray();
 		const Value& listWaverBrown = jSon["WaverGreen"];
 		if (listWaverBrown.IsArray())
 		{
@@ -788,7 +1129,7 @@ bool ObjectManager::load_list(const char * filename)
 				Waver *wvb = new Waver(this->textureManager, this->graphics, EnemyColors::Brown);
 
 				x = listWaverBrown[i]["x"].GetFloat();
-				y = MAP_HEIGHT - listWaverBrown[i]["y"].GetFloat();
+				y = listWaverBrown[i]["y"].GetFloat();
 				wvb->setPosition(VECTOR2(x, y));
 
 				bound.left = x;
@@ -797,17 +1138,37 @@ bool ObjectManager::load_list(const char * filename)
 				bound.bottom = bound.top - wvb->getSprite()->getHeight();
 				wvb->setBoundCollision(bound);
 
-				bound.bottom = MAP_HEIGHT - std::stof(listWaverBrown[i]["properties"]["bottomA"].GetString());
-				bound.top = MAP_HEIGHT - std::stof(listWaverBrown[i]["properties"]["topA"].GetString());
-				bound.left = std::stof(listWaverBrown[i]["properties"]["leftA"].GetString());
-				bound.right = std::stof(listWaverBrown[i]["properties"]["rightA"].GetString());
+				bound.bottom = listWaverBrown[i]["bottomA"].GetFloat();
+				bound.top = listWaverBrown[i]["topA"].GetFloat();
+				bound.left = listWaverBrown[i]["leftA"].GetFloat();
+				bound.right = listWaverBrown[i]["rightA"].GetFloat();
 				wvb->setActiveBound(bound);
+
+				//writer.StartObject();
+				//writer.Key("x");
+				//writer.Double(x);
+				//writer.Key("y");
+				//writer.Double(y);
+				//writer.Key("bottomA");
+				//writer.Double(bound.bottom);
+				//writer.Key("topA");
+				//writer.Double(bound.top);
+				//writer.Key("leftA");
+				//writer.Double(bound.left);
+				//writer.Key("rightA");
+				//writer.Double(bound.right);
+				//writer.EndObject();
+
+
 
 				object_list->push_back(wvb);
 			}
 		}
+		//writer.EndArray();
 
 		// create WaverRed
+		//writer.Key("WaverBlue");
+		//writer.StartArray();
 		const Value& listWaverRed = jSon["WaverBlue"];
 		if (listWaverRed.IsArray())
 		{
@@ -816,7 +1177,7 @@ bool ObjectManager::load_list(const char * filename)
 				Waver *wvr = new Waver(this->textureManager, this->graphics, EnemyColors::Red);
 
 				x = listWaverRed[i]["x"].GetFloat();
-				y = MAP_HEIGHT - listWaverRed[i]["y"].GetFloat();
+				y = listWaverRed[i]["y"].GetFloat();
 				wvr->setPosition(VECTOR2(x, y));
 
 				bound.left = x;
@@ -825,17 +1186,36 @@ bool ObjectManager::load_list(const char * filename)
 				bound.bottom = bound.top - wvr->getSprite()->getHeight();
 				wvr->setBoundCollision(bound);
 
-				bound.bottom = MAP_HEIGHT - std::stof(listWaverBrown[i]["properties"]["bottomA"].GetString());
-				bound.top = MAP_HEIGHT - std::stof(listWaverBrown[i]["properties"]["topA"].GetString());
-				bound.left = std::stof(listWaverBrown[i]["properties"]["leftA"].GetString());
-				bound.right = std::stof(listWaverBrown[i]["properties"]["rightA"].GetString());
+				bound.bottom = listWaverRed[i]["bottomA"].GetFloat();
+				bound.top = listWaverRed[i]["topA"].GetFloat();
+				bound.left = listWaverRed[i]["leftA"].GetFloat();
+				bound.right = listWaverRed[i]["rightA"].GetFloat();
 				wvr->setActiveBound(bound);
+
+				//writer.StartObject();
+				//writer.Key("x");
+				//writer.Double(x);
+				//writer.Key("y");
+				//writer.Double(y);
+				//writer.Key("bottomA");
+				//writer.Double(bound.bottom);
+				//writer.Key("topA");
+				//writer.Double(bound.top);
+				//writer.Key("leftA");
+				//writer.Double(bound.left);
+				//writer.Key("rightA");
+				//writer.Double(bound.right);
+				//writer.EndObject();
+
 
 				object_list->push_back(wvr);
 			}
 		}
+		//writer.EndArray();
 
 		// create SkreeYellow
+		//writer.Key("SkreeYellow");
+		//writer.StartArray();
 		const Value& listSkreeYellow = jSon["SkreeYellow"];
 		if (listSkreeYellow.IsArray())
 		{
@@ -844,8 +1224,8 @@ bool ObjectManager::load_list(const char * filename)
 				Skree *sky = new Skree(this->textureManager, this->graphics, EnemyColors::Yellow);
 
 				x = listSkreeYellow[i]["x"].GetFloat();
-				y = MAP_HEIGHT - listSkreeYellow[i]["y"].GetFloat();
-				sky->setPosition(VECTOR2(x + sky->getSprite()->getWidth()*0.5f, y + sky->getSprite()->getHeight()));
+				y = listSkreeYellow[i]["y"].GetFloat();
+				sky->setPosition(VECTOR2(x + sky->getSprite()->getWidth()*0.5f, y));
 
 				bound.left = x;
 				bound.top = y;
@@ -853,17 +1233,36 @@ bool ObjectManager::load_list(const char * filename)
 				bound.bottom = bound.top - sky->getSprite()->getHeight();
 				sky->setBoundCollision(bound);
 
-				bound.bottom = MAP_HEIGHT - std::stof(listSkreeYellow[i]["properties"]["bottomA"].GetString()) - 5;
-				bound.top = MAP_HEIGHT - std::stof(listSkreeYellow[i]["properties"]["topA"].GetString());
-				bound.left = std::stof(listSkreeYellow[i]["properties"]["leftA"].GetString());
-				bound.right = std::stof(listSkreeYellow[i]["properties"]["rightA"].GetString());
+				bound.bottom = listSkreeYellow[i]["bottomA"].GetFloat();
+				bound.top = listSkreeYellow[i]["topA"].GetFloat();
+				bound.left = listSkreeYellow[i]["leftA"].GetFloat();
+				bound.right = listSkreeYellow[i]["rightA"].GetFloat();
 				sky->setActiveBound(bound);
+
+				//writer.StartObject();
+				//writer.Key("x");
+				//writer.Double(x);
+				//writer.Key("y");
+				//writer.Double(y);
+				//writer.Key("bottomA");
+				//writer.Double(bound.bottom);
+				//writer.Key("topA");
+				//writer.Double(bound.top);
+				//writer.Key("leftA");
+				//writer.Double(bound.left);
+				//writer.Key("rightA");
+				//writer.Double(bound.right);
+				//writer.EndObject();
+
 
 				object_list->push_back(sky);
 			}
 		}
+		//writer.EndArray();
 
 		// create SkreeBrown
+		//writer.Key("SkreeBrown");
+		//writer.StartArray();
 		const Value& listSkreeBrown = jSon["SkreeBrown"];
 		if (listSkreeBrown.IsArray())
 		{
@@ -872,8 +1271,8 @@ bool ObjectManager::load_list(const char * filename)
 				Skree *skb = new Skree(this->textureManager, this->graphics, EnemyColors::Brown);
 
 				x = listSkreeBrown[i]["x"].GetFloat();
-				y = MAP_HEIGHT - listSkreeBrown[i]["y"].GetFloat();
-				skb->setPosition(VECTOR2(x + skb->getSprite()->getWidth()*0.5f, y + skb->getSprite()->getHeight()));
+				y = listSkreeBrown[i]["y"].GetFloat();
+				skb->setPosition(VECTOR2(x + skb->getSprite()->getWidth()*0.5f, y));
 
 				bound.left = x;
 				bound.top = y;
@@ -881,17 +1280,36 @@ bool ObjectManager::load_list(const char * filename)
 				bound.bottom = bound.top - skb->getSprite()->getHeight();
 				skb->setBoundCollision(bound);
 
-				bound.bottom = MAP_HEIGHT - std::stof(listSkreeBrown[i]["properties"]["bottomA"].GetString()) - 5;
-				bound.top = MAP_HEIGHT - std::stof(listSkreeBrown[i]["properties"]["topA"].GetString());
-				bound.left = std::stof(listSkreeBrown[i]["properties"]["leftA"].GetString());
-				bound.right = std::stof(listSkreeBrown[i]["properties"]["rightA"].GetString());
+				bound.bottom = listSkreeBrown[i]["bottomA"].GetFloat();
+				bound.top = listSkreeBrown[i]["topA"].GetFloat();
+				bound.left = listSkreeBrown[i]["leftA"].GetFloat();
+				bound.right = listSkreeBrown[i]["rightA"].GetFloat();
 				skb->setActiveBound(bound);
+
+				//writer.StartObject();
+				//writer.Key("x");
+				//writer.Double(x);
+				//writer.Key("y");
+				//writer.Double(y);
+				//writer.Key("bottomA");
+				//writer.Double(bound.bottom);
+				//writer.Key("topA");
+				//writer.Double(bound.top);
+				//writer.Key("leftA");
+				//writer.Double(bound.left);
+				//writer.Key("rightA");
+				//writer.Double(bound.right);
+				//writer.EndObject();
+
 
 				object_list->push_back(skb);
 			}
 		}
+		//writer.EndArray();
 
 		// create RipperYellow
+		//writer.Key("RipperYellow");
+		//writer.StartArray();
 		const Value& listRipperYellow = jSon["RipperYellow"];
 		if (listRipperYellow.IsArray())
 		{
@@ -900,7 +1318,7 @@ bool ObjectManager::load_list(const char * filename)
 				Ripper *rpy = new Ripper(this->textureManager, this->graphics, EnemyColors::Yellow);
 
 				x = listRipperYellow[i]["x"].GetFloat();
-				y = MAP_HEIGHT - listRipperYellow[i]["y"].GetFloat();
+				y = listRipperYellow[i]["y"].GetFloat();
 				rpy->setPosition(VECTOR2(x, y));
 
 				bound.left = x;
@@ -909,17 +1327,36 @@ bool ObjectManager::load_list(const char * filename)
 				bound.bottom = bound.top - rpy->getSprite()->getHeight();
 				rpy->setBoundCollision(bound);
 
-				bound.bottom = MAP_HEIGHT - std::stof(listRipperYellow[i]["properties"]["bottomA"].GetString());
-				bound.top = MAP_HEIGHT - std::stof(listRipperYellow[i]["properties"]["topA"].GetString());
-				bound.left = std::stof(listRipperYellow[i]["properties"]["leftA"].GetString()) - 5;
-				bound.right = std::stof(listRipperYellow[i]["properties"]["rightA"].GetString()) + 5;
+				bound.bottom = listRipperYellow[i]["bottomA"].GetFloat();
+				bound.top = listRipperYellow[i]["topA"].GetFloat();
+				bound.left = listRipperYellow[i]["leftA"].GetFloat();
+				bound.right = listRipperYellow[i]["rightA"].GetFloat();
 				rpy->setActiveBound(bound);
+
+				//writer.StartObject();
+				//writer.Key("x");
+				//writer.Double(x);
+				//writer.Key("y");
+				//writer.Double(y);
+				//writer.Key("bottomA");
+				//writer.Double(bound.bottom);
+				//writer.Key("topA");
+				//writer.Double(bound.top);
+				//writer.Key("leftA");
+				//writer.Double(bound.left);
+				//writer.Key("rightA");
+				//writer.Double(bound.right);
+				//writer.EndObject();
+
 
 				object_list->push_back(rpy);
 			}
 		}
+		//writer.EndArray();
 
 		// create RipperBrown
+		//writer.Key("RipperBrown");
+		//writer.StartArray();
 		const Value& listRipperBrown = jSon["RipperBrown"];
 		if (listRipperBrown.IsArray())
 		{
@@ -928,7 +1365,7 @@ bool ObjectManager::load_list(const char * filename)
 				Ripper *rpb = new Ripper(this->textureManager, this->graphics, EnemyColors::Brown);
 
 				x = listRipperBrown[i]["x"].GetFloat();
-				y = MAP_HEIGHT - listRipperBrown[i]["y"].GetFloat();
+				y = listRipperBrown[i]["y"].GetFloat();
 				rpb->setPosition(VECTOR2(x, y));
 
 				bound.left = x;
@@ -937,17 +1374,36 @@ bool ObjectManager::load_list(const char * filename)
 				bound.bottom = bound.top - rpb->getSprite()->getHeight();
 				rpb->setBoundCollision(bound);
 
-				bound.bottom = MAP_HEIGHT - std::stof(listRipperBrown[i]["properties"]["bottomA"].GetString());
-				bound.top = MAP_HEIGHT - std::stof(listRipperBrown[i]["properties"]["topA"].GetString());
-				bound.left = std::stof(listRipperBrown[i]["properties"]["leftA"].GetString()) - 5;
-				bound.right = std::stof(listRipperBrown[i]["properties"]["rightA"].GetString()) + 5;
+				bound.bottom = listRipperBrown[i]["bottomA"].GetFloat();
+				bound.top = listRipperBrown[i]["topA"].GetFloat();
+				bound.left = listRipperBrown[i]["leftA"].GetFloat();
+				bound.right = listRipperBrown[i]["rightA"].GetFloat();
 				rpb->setActiveBound(bound);
+
+				//writer.StartObject();
+				//writer.Key("x");
+				//writer.Double(x);
+				//writer.Key("y");
+				//writer.Double(y);
+				//writer.Key("bottomA");
+				//writer.Double(bound.bottom);
+				//writer.Key("topA");
+				//writer.Double(bound.top);
+				//writer.Key("leftA");
+				//writer.Double(bound.left);
+				//writer.Key("rightA");
+				//writer.Double(bound.right);
+				//writer.EndObject();
+
 
 				object_list->push_back(rpb);
 			}
 		}
+		//writer.EndArray();
 
 		// create RipperRed
+		//writer.Key("RipperRed");
+		//writer.StartArray();
 		const Value& listRipperRed = jSon["RipperRed"];
 		if (listRipperRed.IsArray())
 		{
@@ -956,7 +1412,7 @@ bool ObjectManager::load_list(const char * filename)
 				Ripper *rpr = new Ripper(this->textureManager, this->graphics, EnemyColors::Red);
 
 				x = listRipperRed[i]["x"].GetFloat();
-				y = MAP_HEIGHT - listRipperRed[i]["y"].GetFloat();
+				y = listRipperRed[i]["y"].GetFloat();
 				rpr->setPosition(VECTOR2(x, y));
 
 				bound.left = x;
@@ -965,17 +1421,36 @@ bool ObjectManager::load_list(const char * filename)
 				bound.bottom = bound.top - rpr->getSprite()->getHeight();
 				rpr->setBoundCollision(bound);
 
-				bound.bottom = MAP_HEIGHT - std::stof(listRipperRed[i]["properties"]["bottomA"].GetString());
-				bound.top = MAP_HEIGHT - std::stof(listRipperRed[i]["properties"]["topA"].GetString());
-				bound.left = std::stof(listRipperRed[i]["properties"]["leftA"].GetString()) - 5;
-				bound.right = std::stof(listRipperRed[i]["properties"]["rightA"].GetString()) + 5;
+				bound.bottom = listRipperRed[i]["bottomA"].GetFloat();
+				bound.top = listRipperRed[i]["topA"].GetFloat();
+				bound.left = listRipperRed[i]["leftA"].GetFloat();
+				bound.right = listRipperRed[i]["rightA"].GetFloat();
 				rpr->setActiveBound(bound);
+
+				//writer.StartObject();
+				//writer.Key("x");
+				//writer.Double(x);
+				//writer.Key("y");
+				//writer.Double(y);
+				//writer.Key("bottomA");
+				//writer.Double(bound.bottom);
+				//writer.Key("topA");
+				//writer.Double(bound.top);
+				//writer.Key("leftA");
+				//writer.Double(bound.left);
+				//writer.Key("rightA");
+				//writer.Double(bound.right);
+				//writer.EndObject();
+
 
 				object_list->push_back(rpr);
 			}
 		}
+		//writer.EndArray();
 
 		// create RioYellow
+		//writer.Key("RioYellow");
+		//writer.StartArray();
 		const Value& listRioYellow = jSon["RioYellow"];
 		if (listRioYellow.IsArray())
 		{
@@ -984,7 +1459,7 @@ bool ObjectManager::load_list(const char * filename)
 				Rio *roy = new Rio(this->textureManager, this->graphics, EnemyColors::Yellow);
 
 				x = listRioYellow[i]["x"].GetFloat();
-				y = MAP_HEIGHT - listRioYellow[i]["y"].GetFloat();
+				y = listRioYellow[i]["y"].GetFloat();
 				roy->initPositions(VECTOR2(x, y));
 
 				bound.left = x;
@@ -993,17 +1468,36 @@ bool ObjectManager::load_list(const char * filename)
 				bound.bottom = bound.top - roy->getSprite()->getHeight();
 				roy->setBoundCollision(bound);
 
-				bound.bottom = MAP_HEIGHT - std::stof(listRioYellow[i]["properties"]["bottomA"].GetString());
-				bound.top = MAP_HEIGHT - std::stof(listRioYellow[i]["properties"]["topA"].GetString());
-				bound.left = std::stof(listRioYellow[i]["properties"]["leftA"].GetString());
-				bound.right = std::stof(listRioYellow[i]["properties"]["rightA"].GetString());
+				bound.bottom = listRioYellow[i]["bottomA"].GetFloat();
+				bound.top = listRioYellow[i]["topA"].GetFloat();
+				bound.left = listRioYellow[i]["leftA"].GetFloat();
+				bound.right = listRioYellow[i]["rightA"].GetFloat();
 				roy->setActiveBound(bound);
+
+				//writer.StartObject();
+				//writer.Key("x");
+				//writer.Double(x);
+				//writer.Key("y");
+				//writer.Double(y);
+				//writer.Key("bottomA");
+				//writer.Double(bound.bottom);
+				//writer.Key("topA");
+				//writer.Double(bound.top);
+				//writer.Key("leftA");
+				//writer.Double(bound.left);
+				//writer.Key("rightA");
+				//writer.Double(bound.right);
+				//writer.EndObject();
+
 
 				object_list->push_back(roy);
 			}
 		}
+		//writer.EndArray();
 
 		// create RioBrown
+		//writer.Key("RioBrown");
+		//writer.StartArray();
 		const Value& listRioBrown = jSon["RioBrown"];
 		if (listRioBrown.IsArray())
 		{
@@ -1012,7 +1506,7 @@ bool ObjectManager::load_list(const char * filename)
 				Rio *rob = new Rio(this->textureManager, this->graphics, EnemyColors::Brown);
 
 				x = listRioBrown[i]["x"].GetFloat();
-				y = MAP_HEIGHT - listRioBrown[i]["y"].GetFloat();
+				y = listRioBrown[i]["y"].GetFloat();
 				rob->initPositions(VECTOR2(x, y));
 
 				bound.left = x;
@@ -1021,17 +1515,36 @@ bool ObjectManager::load_list(const char * filename)
 				bound.bottom = bound.top - rob->getSprite()->getHeight();
 				rob->setBoundCollision(bound);
 
-				bound.bottom = MAP_HEIGHT - std::stof(listRioBrown[i]["properties"]["bottomA"].GetString());
-				bound.top = MAP_HEIGHT - std::stof(listRioBrown[i]["properties"]["topA"].GetString());
-				bound.left = std::stof(listRioBrown[i]["properties"]["leftA"].GetString());
-				bound.right = std::stof(listRioBrown[i]["properties"]["rightA"].GetString());
+				bound.bottom = listRioBrown[i]["bottomA"].GetFloat();
+				bound.top = listRioBrown[i]["topA"].GetFloat();
+				bound.left = listRioBrown[i]["leftA"].GetFloat();
+				bound.right = listRioBrown[i]["rightA"].GetFloat();
 				rob->setActiveBound(bound);
+
+				//writer.StartObject();
+				//writer.Key("x");
+				//writer.Double(x);
+				//writer.Key("y");
+				//writer.Double(y);
+				//writer.Key("bottomA");
+				//writer.Double(bound.bottom);
+				//writer.Key("topA");
+				//writer.Double(bound.top);
+				//writer.Key("leftA");
+				//writer.Double(bound.left);
+				//writer.Key("rightA");
+				//writer.Double(bound.right);
+				//writer.EndObject();
+
 
 				object_list->push_back(rob);
 			}
 		}
+		//writer.EndArray();
 
 		// create RioRed
+		//writer.Key("RioRed");
+		//writer.StartArray();
 		const Value& listRioRed = jSon["RioRed"];
 		if (listRioRed.IsArray())
 		{
@@ -1040,7 +1553,7 @@ bool ObjectManager::load_list(const char * filename)
 				Rio *ror = new Rio(this->textureManager, this->graphics, EnemyColors::Red);
 
 				x = listRioRed[i]["x"].GetFloat();
-				y = MAP_HEIGHT - listRioRed[i]["y"].GetFloat();
+				y = listRioRed[i]["y"].GetFloat();
 				ror->initPositions(VECTOR2(x, y));
 
 				bound.left = x;
@@ -1049,15 +1562,32 @@ bool ObjectManager::load_list(const char * filename)
 				bound.bottom = bound.top - ror->getSprite()->getHeight();
 				ror->setBoundCollision(bound);
 
-				bound.bottom = MAP_HEIGHT - std::stof(listRioRed[i]["properties"]["bottomA"].GetString());
-				bound.top = MAP_HEIGHT - std::stof(listRioRed[i]["properties"]["topA"].GetString());
-				bound.left = std::stof(listRioRed[i]["properties"]["leftA"].GetString());
-				bound.right = std::stof(listRioRed[i]["properties"]["rightA"].GetString());
+				bound.bottom = listRioRed[i]["bottomA"].GetFloat();
+				bound.top = listRioRed[i]["topA"].GetFloat();
+				bound.left = listRioRed[i]["leftA"].GetFloat();
+				bound.right = listRioRed[i]["rightA"].GetFloat();
 				ror->setActiveBound(bound);
+
+				//writer.StartObject();
+				//writer.Key("x");
+				//writer.Double(x);
+				//writer.Key("y");
+				//writer.Double(y);
+				//writer.Key("bottomA");
+				//writer.Double(bound.bottom);
+				//writer.Key("topA");
+				//writer.Double(bound.top);
+				//writer.Key("leftA");
+				//writer.Double(bound.left);
+				//writer.Key("rightA");
+				//writer.Double(bound.right);
+				//writer.EndObject();
+
 
 				object_list->push_back(ror);
 			}
 		}
+		//writer.EndArray();
 
 
 
@@ -1066,6 +1596,8 @@ bool ObjectManager::load_list(const char * filename)
 
 #pragma region Boss
 		// create Kraid, 2
+		//writer.Key("BossKraid");
+		//writer.StartArray();
 		const Value& listKraid = jSon["BossKraid"];
 		if (listKraid.IsArray())
 		{
@@ -1074,20 +1606,29 @@ bool ObjectManager::load_list(const char * filename)
 				BossKraid *kraid = new BossKraid(this->textureManager, this->graphics);
 
 				x = listKraid[i]["x"].GetFloat();
-				y = MAP_HEIGHT - listKraid[i]["y"].GetFloat();
+				y = listKraid[i]["y"].GetFloat();
 				kraid->setPosition(VECTOR2(x, y));
 
 				bound.left = x;
 				bound.top = y;
 				bound.right = bound.left + kraid->getSprite()->getWidth();
-				bound.bottom = bound.top + kraid->getSprite()->getHeight();
+				bound.bottom = bound.top - kraid->getSprite()->getHeight();
 				kraid->setBoundCollision(bound);
+
+				//writer.StartObject();
+				//writer.Key("x");
+				//writer.Double(x);
+				//writer.Key("y");
+				//writer.Double(y);
+				//writer.EndObject();
+
 
 				kraid->setActiveBound(bound);
 
 				object_list->push_back(kraid);
 			}
 		}
+		//writer.EndArray();
 
 		// create Dragon
 		const Value& dragon = jSon["Dragon"];
@@ -1096,13 +1637,21 @@ bool ObjectManager::load_list(const char * filename)
 			BossDragon *dg = new BossDragon(this->textureManager, this->graphics);
 
 			x = dragon["x"].GetFloat();
-			y = MAP_HEIGHT - dragon["y"].GetFloat();
+			y = dragon["y"].GetFloat();
 			dg->setPosition(VECTOR2(x, y));
+
+			//writer.Key("Dragon");
+			//writer.StartObject();
+			//writer.Key("x");
+			//writer.Double(x);
+			//writer.Key("y");
+			//writer.Double(y);
+			//writer.EndObject();
 
 			bound.left = x;
 			bound.top = y;
 			bound.right = bound.left + dg->getSprite()->getWidth();
-			bound.bottom = bound.top + dg->getSprite()->getHeight();
+			bound.bottom = bound.top - dg->getSprite()->getHeight();
 			dg->setBoundCollision(bound);
 
 			dg->setActiveBound(bound);
@@ -1111,6 +1660,8 @@ bool ObjectManager::load_list(const char * filename)
 		}
 
 #pragma endregion
+
+		//writer.EndObject();
 
 
 		// Create QuadTree
