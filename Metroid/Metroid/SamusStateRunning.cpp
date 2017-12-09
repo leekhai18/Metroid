@@ -368,26 +368,13 @@ void SamusStateRunning::fire()
 
 	if (isUp)
 	{
-		if (this->samus->isInDirection(eDirection::right))
-			stP = VECTOR2(this->samus->getPosition().x + this->samus->getSprite()->getWidth()*0.3f, this->samus->getPosition().y - this->samus->getSprite()->getHeight()*0.8f);
-		else if (this->samus->isInDirection(eDirection::left))
-			stP = VECTOR2(this->samus->getPosition().x - this->samus->getSprite()->getWidth()*0.3f, this->samus->getPosition().y - this->samus->getSprite()->getHeight()*0.8f);
-
-		bullet->setVelocity(VECTOR2(0, -VELOCITY));
+		stP = VECTOR2(this->samus->getPosition().x + this->samus->getDirection(), this->samus->getPosition().y + this->samus->getSprite()->getHeight()*0.4f);
+		bullet->setVelocity(VECTOR2(0, VELOCITY));
 	}
 	else
 	{
-		if (this->samus->isInDirection(eDirection::right))
-		{
-			stP = VECTOR2(this->samus->getPosition().x + this->samus->getSprite()->getWidth()*0.4f, this->samus->getPosition().y - this->samus->getSprite()->getHeight()*0.7f);
-			bullet->setVelocity(VECTOR2(VELOCITY, 0));
-		}
-
-		else if (this->samus->isInDirection(eDirection::left))
-		{
-			stP = VECTOR2(this->samus->getPosition().x - this->samus->getSprite()->getWidth()*0.4f, this->samus->getPosition().y - this->samus->getSprite()->getHeight()*0.7f);
-			bullet->setVelocity(VECTOR2(-VELOCITY, 0));
-		}
+		stP = VECTOR2(this->samus->getPosition().x + this->samus->getDirection()*this->samus->getSprite()->getWidth()*0.6f, this->samus->getPosition().y + 4);
+		bullet->setVelocity(VECTOR2((float)VELOCITY*this->samus->getDirection(), 0));
 	}
 
 	bullet->init(stP);

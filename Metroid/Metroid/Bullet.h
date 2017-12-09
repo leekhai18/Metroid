@@ -3,7 +3,7 @@
 #include <list>
 
 #define DISTANCE_SHOOT 48.0f
-#define VELOCITY 190
+#define VELOCITY 200
 
 class Bullet : public BaseObject
 {

@@ -250,10 +250,6 @@ void Graphics::drawSprite(const SpriteData &spriteData, COLOR_ARGB color)
 	D3DXMATRIX matTransformed;
 	D3DXMATRIX matOld;
 
-
-	// Transform Camera
-	//VECTOR2 trans = VECTOR2(Camera::getInstance()->getWidth()*0.5f - Camera::getInstance()->getPosition().x, Camera::getInstance()->getHeight()*0.5f - Camera::getInstance()->getPosition().y);
-
 	//calculate scale position
 	VECTOR3 center = VECTOR3(spriteData.width * spriteData.origin.x, spriteData.height * spriteData.origin.y, 0);
 

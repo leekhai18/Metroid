@@ -19,7 +19,7 @@
 #define MIN_JUMP  32.0f
 #define MAX_JUMP 80.0f
 
-#define TIME_SHOOTING 0.1f
+#define TIME_SHOOTING 0.15f
 
 #define MAX_HEIHT 32
 
