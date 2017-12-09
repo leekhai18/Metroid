@@ -20,40 +20,13 @@ SamusStateRunning::~SamusStateRunning()
 void SamusStateRunning::setBoundCollision()
 {
 	MetroidRect rect;
-	//example of right side, left side offset is the same, you can image from right side
-	//	BoundCollision  WIDTH = 20  
-	//	  	\_ _          / 
-	//	 	   _|_ _ _ __/ 
-	//		  | |   |_|__|
-	//		  | |	| |  |
-	//        |_|___|_|__|      
-	// _ _ _ _ _      |_ _position  
-	//|       |_|	   __           
-	//|	              |__|_ _offset_run        
-	//|                               
-	//offset_collison_x              
-	//(WIDTH_COLLISION -2) because bound collision will be subtract to 1 in four side(top,left,right,bottom)
-	//
+	VECTOR2 position(this->samus->getPosition().x, samus->getPosition().y - OFFSET_COLLISION_Y + 1);
+	rect.left = position.x - WIDTH_COLLISION*0.5f;
+	rect.right = position.x + WIDTH_COLLISION*0.5f;
+	rect.top = position.y + HEIGHT_COLLISION*0.5f;
+	rect.bottom = position.y - HEIGHT_COLLISION*0.5f;
 
-	if (this->samus->getDirection() == eDirection::right)
-	{
 
-		VECTOR2 position(this->samus->getPosition().x, samus->getPosition().y);
-		rect.left = position.x - (WIDTH_COLLISION)+1;
-		rect.right = position.x - 1;
-		rect.top = position.y - (MAX_HEIHT)+1;
-		rect.bottom = position.y - 1;
-
-	}
-	else
-	{
-		VECTOR2 position(this->samus->getPosition().x, samus->getPosition().y);
-		rect.left = position.x + 1;
-		rect.right = position.x + (WIDTH_COLLISION)-1;
-		rect.top = position.y - (MAX_HEIHT)+1;
-		rect.bottom = position.y - 1;
-
-	}
 	samus->setBoundCollision(rect);
 }
 
@@ -63,11 +36,7 @@ void SamusStateRunning::init()
 	runningUp = samus->getRunningUpAnim();
 	runningHittingRight = samus->getRunningHittingRightAnim();
 
-	if (this->samus->isInDirection(eDirection::right))
-		this->samus->setOrigin(VECTOR2(1, 1));
-	else
-		this->samus->setOrigin(VECTOR2(0, 1));
-	
+	this->samus->setVelocityY(-SAMUS_MIN_SPEED_Y);
 	this->animation = runningNormal;
 	this->animation->setValueOfCurrentFrame(0);
 	setBoundCollision();
@@ -97,7 +66,6 @@ void SamusStateRunning::handleInput(float dt)
 
 
 #pragma endregion
-
 	if (input->isKeyUp(VK_X) == true)
 	{
 		this->samus->setJump(true);
@@ -106,7 +74,6 @@ void SamusStateRunning::handleInput(float dt)
 	if (input->isKeyDown(VK_X) && this->samus->isJump() == true)
 	{
 		//reset velocity
-		this->samus->setVelocityX(0);
 		this->samus->setFall(false);
 		this->samus->setAcrobat(true);
 		this->samus->setStatus(eStatus::JUMPING);
@@ -166,30 +133,9 @@ void SamusStateRunning::handleInput(float dt)
 		this->animation->start();
 	}
 
-	if (!Collision::getInstance()->checkOnGround(samus->getBoundCollision()))
-	{
-		this->samus->setAcrobat(false);
-		this->samus->setFall(true);
-		this->samus->setVelocityX(0);
 
-		this->samus->setStatus(eStatus::JUMPING);
-		return;
-	}
 
-	if (input->isKeyUp(VK_X) == true)
-	{
-		this->samus->setJump(true);
-	}
-	//When we press jump key, change state to jump
-	if (input->isKeyDown(VK_X) && this->samus->isJump() == true)
-	{
-		//reset velocity
-		this->samus->setVelocityX(0);
-		this->samus->setFall(false);
-		this->samus->setAcrobat(true);
-		this->samus->setStatus(eStatus::JUMPING);
-		return;
-	}
+
 
 	//when we press up button hand of samus will raise to sky
 	if (input->isKeyDown(VK_UP))
@@ -244,15 +190,7 @@ void SamusStateRunning::handleInput(float dt)
 		this->animation->start();
 	}
 
-	if (!Collision::getInstance()->checkOnGround(samus->getBoundCollision()))
-	{
-		this->samus->setAcrobat(false);
-		this->samus->setFall(true);
-		this->samus->setVelocityX(0);
-
-		this->samus->setStatus(eStatus::JUMPING);
-		return;
-	}
+	
 
 }
 void SamusStateRunning::onCollision()
@@ -276,6 +214,8 @@ void SamusStateRunning::onCollision()
 				this->samus->setStatus(eStatus::STANDING);
 				break;
 			case CollideDirection::TOP:
+				this->samus->setFall(false);
+				this->samus->setVelocityY(0);
 				break;
 			}
 			break;
@@ -367,8 +307,16 @@ void SamusStateRunning::update(float dt)
 
 	samus->updateHorizontal(dt);
 
+	samus->updateVertical(dt);
+
 	setBoundCollision();
 
+	if (this->samus->isFaling())
+	{
+		this->samus->setAcrobat(false);
+		this->samus->setFall(true);
+		this->samus->setStatus(eStatus::JUMPING);
+	}
 	if (this->samus->getStatus() != eStatus::RUNNING)
 	{
 		switch (this->samus->getStatus())
@@ -377,54 +325,10 @@ void SamusStateRunning::update(float dt)
 
 			//stop current animation
 			this->animation->stop();
-			//change orgin.y = 1 in running state to orgin.y = 0 in jumping state, so we change position.y
-			this->samus->setPosition(this->samus->getPosition().x, this->samus->getPosition().y - HEIGHT_RUN);
+
 			break;
 		case eStatus::STANDING:
-			//When change to state standing, we must change position because orgin of state running is (0.5 , 1) 
-			//and orgin of state running is (0,1) or (1,1) depend on samus side 
-			if (samus->getDirection() == eDirection::right)
-			{
-				//	BoundCollision    TOTAL_RECT
-				//		   \		 /
-				//	 	    \___ __ /
-				//		  	|   |_||
-				//			|	|  |
-				//1			|___|__|     position
-				//			   |_ _ _ _ _ _ |	
-				//         _ _/				|
-				//	Orgin /_ _ _ _ _		|
-				//	     ______	    / 		|	
-				// 2    |	|_||   /		|
-				//		|	|  |  /		   /
-				//		|___|__| /		  /
-				//      |_ _ _ _/		 /
-				//        |_ _ _ _ _ _ _/
-				//when change to standing state, orgin change from (0.5, 1) to (0 , 1).  
-				this->samus->setPositionX(this->samus->getPosition().x + OFFSET_RUN);
-			}
-			else
-			{
-				//
-				//
-				//TOTAL_RECT	BoundCollision
-				//	   \		  /
-				//	 	\ __ ___ /
-				//		 ||_|	|
-				//		 |	|	|	
-				//1		 |__|___|        position
-				//			/_ _ _ _ _ _ _ _|	
-				//         /				|
-				//	Orgin /_ _ _ _			|
-				//	  __ ___	 /			|	
-				// 2 ||_|	|	/			|
-				//	 |	|	|  /		   /
-				//	 |__|___| /		      /
-				//   |_ _ _ |/			 /
-				//          | _ _ _ _ _ /  
-				//when change to standing state, orgin change from (0.5, 1) to (1 , 1). 
-				this->samus->setPositionX(this->samus->getPosition().x - OFFSET_RUN);
-			}
+			
 			break;
 		default:
 			break;
@@ -432,9 +336,13 @@ void SamusStateRunning::update(float dt)
 		SamusStateManager::getInstance()->changeStateTo(this->samus->getStatus());
 		return;
 	}
+	this->samus->setVelocityY(-SAMUS_MIN_SPEED_Y);
+
 	this->samus->setCanMoveLeft(true);
 
 	this->samus->setCanMoveRight(true);
+
+	this->samus->setFall(true);
 }
 
 

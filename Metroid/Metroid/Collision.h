@@ -9,8 +9,7 @@ private:
 
 public:
 	static Collision * getInstance();
-	//TO DO: true if object is on ground
-	bool checkOnGround(MetroidRect obj);
+
 
 	//TO DO: true if one rectangle is colliding with another
 	bool isCollide(MetroidRect myRect, MetroidRect otherRect);
