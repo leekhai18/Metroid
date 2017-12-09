@@ -16,7 +16,7 @@ Samus::Samus(TextureManager* textureM,Graphics* graphics, Input* input) : BaseOb
 		throw GameError(GameErrorNS::FATAL_ERROR, "Can not init sprite Samus");
 	}
 
-	this->setPosition(VECTOR2(640, 1248));
+	this->setPosition(VECTOR2(640, 1267));
 	runningNormalAnimation = new Animation(this->sprite, IndexManager::getInstance()->samusYellowRunningRight, NUM_FRAMES_SAMUS_RUNNING, 0.05f);
 	runningUpAnimation = new Animation(this->sprite, IndexManager::getInstance()->samusYellowRunningUpRight, NUM_FRAMES_SAMUS_RUNNING, 0.05f);
 	runningHittingRightAnimation = new Animation(this->sprite, IndexManager::getInstance()->samusYellowHittingAndRunningRight, NUM_FRAMES_SAMUS_RUNNING, 0.05f);
@@ -64,24 +64,24 @@ void Samus::handleInput(float dt)
 		SamusStateManager::getInstance()->getCurrentState()->handleInput(dt);
 
 #pragma region handle camera
-	//if (!Camera::getInstance()->moveWhenSamusOnPort() && Camera::getInstance()->getNumPort() < 2)
-	//{
-	//	if (!Camera::getInstance()->canFolowVertical())
-	//	{
-	//		if ((input->isKeyUp(VK_LEFT) && input->isKeyUp(VK_RIGHT)) || (input->isKeyDown(VK_LEFT) && input->isKeyDown(VK_RIGHT)) || this->isInStatus(eStatus::STANDING))
-	//			Camera::getInstance()->setVelocity(VECTOR2(0, 0));
-	//	}
-	//}
-	//Camera::getInstance()->setNumPort(0);
+	if (!Camera::getInstance()->moveWhenSamusOnPort() && Camera::getInstance()->getNumPort() < 2)
+	{
+		if (!Camera::getInstance()->canFolowVertical())
+		{
+			if ((input->isKeyUp(VK_LEFT) && input->isKeyUp(VK_RIGHT)) || (input->isKeyDown(VK_LEFT) && input->isKeyDown(VK_RIGHT)) || this->isInStatus(eStatus::STANDING))
+				Camera::getInstance()->setVelocity(VECTOR2(0, 0));
+		}
+	}
+	Camera::getInstance()->setNumPort(0);
 
-	if (input->isKeyDown(VK_LEFT))
-		Camera::getInstance()->setVelocity(VECTOR2(-150, 0));	
-	if (input->isKeyDown(VK_RIGHT))
-		Camera::getInstance()->setVelocity(VECTOR2(150, 0));
-	if (input->isKeyDown(VK_UP))
-		Camera::getInstance()->setVelocity(VECTOR2(0, 150));
-	if (input->isKeyDown(VK_DOWN))
-		Camera::getInstance()->setVelocity(VECTOR2(0, -150));
+	//if (input->isKeyDown(VK_LEFT))
+	//	Camera::getInstance()->setVelocity(VECTOR2(-150, 0));	
+	//if (input->isKeyDown(VK_RIGHT))
+	//	Camera::getInstance()->setVelocity(VECTOR2(150, 0));
+	//if (input->isKeyDown(VK_UP))
+	//	Camera::getInstance()->setVelocity(VECTOR2(0, 150));
+	//if (input->isKeyDown(VK_DOWN))
+	//	Camera::getInstance()->setVelocity(VECTOR2(0, -150));
 
 #pragma endregion
 }
@@ -111,33 +111,33 @@ void Samus::update(float dt)
 {
 
 #pragma region handle camera
-	//if (!Camera::getInstance()->moveWhenSamusOnPort() && Camera::getInstance()->getNumPort() < 2)
-	//{
-	//	if (!Camera::getInstance()->canFolowVertical())
-	//	{
-	//		if (Camera::getInstance()->canFolowOnLeft())
-	//		{
-	//			if (this->getPosition().x < Camera::getInstance()->getActiveArea().left)
-	//			{
-	//				Camera::getInstance()->setVelocity(VECTOR2(this->getVelocity().x, 0));
-	//			}
-	//		}
+	if (!Camera::getInstance()->moveWhenSamusOnPort() && Camera::getInstance()->getNumPort() < 2)
+	{
+		if (!Camera::getInstance()->canFolowVertical())
+		{
+			if (Camera::getInstance()->canFolowOnLeft())
+			{
+				if (this->getPosition().x < Camera::getInstance()->getActiveArea().left)
+				{
+					Camera::getInstance()->setVelocity(VECTOR2(this->getVelocity().x, 0));
+				}
+			}
 
-	//		if (Camera::getInstance()->canFolowOnRight())
-	//		{
-	//			if (this->getPosition().x > Camera::getInstance()->getActiveArea().right)
-	//			{
-	//				Camera::getInstance()->setVelocity(VECTOR2(this->getVelocity().x, 0));
-	//			}
-	//		}
-	//	}
-	//	else
-	//	{
-	//		if ((this->getPosition().y > Camera::getInstance()->getActiveArea().top) ||
-	//			(this->getPosition().y < Camera::getInstance()->getActiveArea().bottom))
-	//			Camera::getInstance()->setVelocity(VECTOR2(0, this->getVelocity().y));
-	//	}
-	//}
+			if (Camera::getInstance()->canFolowOnRight())
+			{
+				if (this->getPosition().x > Camera::getInstance()->getActiveArea().right)
+				{
+					Camera::getInstance()->setVelocity(VECTOR2(this->getVelocity().x, 0));
+				}
+			}
+		}
+		else
+		{
+			if ((this->getPosition().y > Camera::getInstance()->getActiveArea().top) ||
+				(this->getPosition().y < Camera::getInstance()->getActiveArea().bottom))
+				Camera::getInstance()->setVelocity(VECTOR2(0, this->getVelocity().y));
+		}
+	}
 #pragma endregion
 
 	if (isCollidingPort)

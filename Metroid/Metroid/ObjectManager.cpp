@@ -27,7 +27,7 @@
 #include "rapidjson-master\include\rapidjson\writer.h"
 #include "rapidjson-master\include\rapidjson\ostreamwrapper.h"
 
-#define TIME_RETRIEVE 0.4f
+#define TIME_RETRIEVE 0.2f
 
 ObjectManager* ObjectManager::instance = nullptr;
 ObjectManager * ObjectManager::getInstance()
@@ -157,7 +157,7 @@ bool ObjectManager::load_list(const char * filename)
 				BaseObject *wall = new BaseObject(eID::WALL);
 
 				x = listWall[i]["x"].GetFloat();
-				y = listWall[i]["y"].GetFloat() - 32; // Bị lệch 32bit giữa 2 layer WALL and map
+				y = listWall[i]["y"].GetFloat(); // Bị lệch 32bit giữa 2 layer WALL and map
 				height = listWall[i]["height"].GetFloat();
 				width = listWall[i]["width"].GetFloat();
 

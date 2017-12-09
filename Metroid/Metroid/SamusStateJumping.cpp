@@ -18,23 +18,13 @@ SamusStateJumping::~SamusStateJumping()
 void SamusStateJumping::setBoundCollision()
 {
 	MetroidRect rect;
-	if (this->samus->getDirection() == eDirection::right)
-	{
-		VECTOR2 position(this->samus->getPosition().x, samus->getPosition().y);
-		rect.left = position.x - (WIDTH_COLLISION)+1;
-		rect.right = position.x - 1;
-		rect.top = position.y + 1;
-		rect.bottom = position.y + (JUMP_HEIGHT)-1;
+	VECTOR2 position(this->samus->getPosition().x, samus->getPosition().y - OFFSET_COLLISION_Y + 1);
+	rect.left = position.x - JUMP_WIDTH*0.5f;
+	rect.right = position.x + JUMP_WIDTH*0.5f;
+	rect.top = position.y + JUMP_HEIGHT*0.5f;
+	rect.bottom = position.y - JUMP_HEIGHT*0.5f;
 
-	}
-	else
-	{
-		VECTOR2 position(this->samus->getPosition().x, samus->getPosition().y);
-		rect.left = position.x + 1;
-		rect.right = position.x + (WIDTH_COLLISION)-1;
-		rect.top = position.y + 1;
-		rect.bottom = position.y + (JUMP_HEIGHT)-1;
-	}
+
 	samus->setBoundCollision(rect);
 }
 void SamusStateJumping::init()
@@ -45,15 +35,7 @@ void SamusStateJumping::init()
 		this->samus->setVelocityY(SAMUS_MAX_SPEED_Y);
 		velocity_frame = SAMUS_MAX_SPEED_Y;
 	}
-	// Set Data for sprite
-	if (samus->getDirection() == eDirection::left)
-	{
-		this->samus->setOrigin(VECTOR2(0, 0));
-	}
-	else
-	{
-		this->samus->setOrigin(VECTOR2(1, 0));
-	}
+	
 	this->samus->getSprite()->setData(IndexManager::getInstance()->samusYellowJumpRight);
 	setBoundCollision();
 }
@@ -68,33 +50,7 @@ void SamusStateJumping::handleInput(float dt)
 		if (this->samus->isInDirection(eDirection::left))
 		{
 			this->samus->setFlipX(false);
-
-			if (this->animation == nullptr)
-			{
-				//When change side boundCollision not change
-				MetroidRect bound = samus->getBoundCollision();
-				//  Hand of samus   BoundCollision
-				//	  	 /    _____/
-				//	   _/___ /_			     ___ _
-				//	  |_|	|  |		    |	|_|
-				//	1	|	|  |	-> 		|	|  2
-				//		|___|  |			|___|
-				//pos__________|____orgin
-				//	  |_ ___ _	 
-				// 2    |	|_|	
-				//		|	|  		
-				//		|___| 
-				//       
-				// Note: 1 left, 2 right
-				//when side of samus is right, set position.x = bound.left - 1
-
-				this->samus->setPositionX(bound.right + 1);
-				this->samus->setOrigin(VECTOR2(1, 0));
-				//change to orgin (0,1)
-
-				this->samus->setDirection(eDirection::right);
-			}
-
+			this->samus->setDirection(eDirection::right);
 			this->samus->setVelocityX(0);
 
 		}
@@ -115,41 +71,9 @@ void SamusStateJumping::handleInput(float dt)
 		{
 			this->samus->setFlipX(true);
 
-			if (this->animation == nullptr)
-			{
-				//When change side boundCollision not change
-				MetroidRect bound = samus->getBoundCollision();
-				//BoundCollision  Hand of samus
-				//	  \			/
-				//	  _\ ___ _ /	   _ ___
-				//	 |  |	|_|		  |_|	|
-				//	1|	|	|	-> 		|	| 2
-				//	 |	|___|			|___|
-				//Pos|___________ Orgin
-				//	   _ ___ ___/
-				// 2  |_|	|	
-				//		|	|  		
-				//		|___|
-				//
-				// Note: 1 right, 2 left
-				//Position of samus 2 is on bottom right because we flipX samus 1 with orgin( 0, 1). 
-				//And then we change to orgin(0,1) 
-				//
-				//FlipX with orgin(0,1) when samus side is right
-				//After FlipX     Before flipX
-				//		   \_ __ __ _/
-				//		   |_|	|  |_|
-				//			 |	|  |
-				//			 |__|__|
-				//				|
-				//   		position	
-				//so to not change boundCollision when side of samus is left, set position.x = bound.right +1
-				this->samus->setPositionX(bound.left - 1);
-				//change orgin to (1,1)
-				this->samus->setOrigin(VECTOR2(0, 0));
-				//set direction to left
-				this->samus->setDirection(eDirection::left);
-			}
+				
+			this->samus->setDirection(eDirection::left);
+
 			this->samus->setVelocityX(0);
 		}
 
@@ -359,16 +283,8 @@ void SamusStateJumping::update(float dt)
 		{
 		case eStatus::STANDING:
 
-			this->samus->setPositionY(positionCollide);
-			//we add 
-			if (this->samus->isInDirection(eDirection::right))
-			{
-				this->samus->setPositionX(this->samus->getPosition().x + OFFSET_RUN);
-			}
-			else
-			{
-				this->samus->setPositionX(this->samus->getPosition().x - OFFSET_RUN);
-			}
+			this->samus->setPositionY(positionCollide +  OFFSET_STAND);
+
 			break;
 		case eStatus::ACROBAT:
 			if (this->samus->isInDirection(eDirection::right))

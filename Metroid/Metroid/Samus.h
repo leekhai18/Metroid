@@ -10,7 +10,7 @@
 #include "BulletPool.h"
 #include <list>
 
-#define SAMUS_MIN_SPEED_Y 50
+#define SAMUS_MIN_SPEED_Y 70
 #define SAMUS_VERLOCITY_X 100
 #define SAMUS_MAX_SPEED_Y 150
 
@@ -19,7 +19,6 @@
 
 #define TIME_SHOOTING 0.1f
 
-#define WIDTH_COLLISION 12
 #define MAX_HEIHT 32
 
 #define WIDTH_RUN 20
@@ -32,7 +31,7 @@
 #define ROLL_HEIGHT 12
 
 #define JUMP_HEIGHT 24
-#define JUMP_WIDTH 12
+#define JUMP_WIDTH 10
 
 #define ACCELERATE_Y -140.0f
 #define ACCELERATE_X 50.0f
@@ -40,11 +39,15 @@
 #define OFFSET_JUMP 4
 #define OFFSET_RUN 5
 #define OFFSET_UP 5
-#define OFFSET_STAND 3
 #define OFFSET_ACROBAT 2
-#define OFFSET_COLLISION_X 2
+
 #define TIME_TO_ACROBAT 0.1f
 
+#define OFFSET_STAND 19
+#define WIDTH_COLLISION 10
+#define HEIGHT_COLLISION 30
+#define OFFSET_COLLISION_X 0
+#define OFFSET_COLLISION_Y 4
 
 class Samus: public BaseObject
 {
