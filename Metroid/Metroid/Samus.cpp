@@ -110,7 +110,18 @@ void Samus::setCanMoveToFrontGate(bool flag)
 void Samus::update(float dt)
 {
 
+	SamusStateManager::getInstance()->getCurrentState()->update(dt);
+
+	
+	if (status == eStatus::ACROBAT)
+	{
+		if (velocity.x>0)
+		{
+			int temp = 0;
+		}
+	}
 #pragma region handle camera
+	float testVelocity;
 	if (!Camera::getInstance()->moveWhenSamusOnPort() && Camera::getInstance()->getNumPort() < 2)
 	{
 		if (!Camera::getInstance()->canFolowVertical())
@@ -120,14 +131,16 @@ void Samus::update(float dt)
 				if (this->getPosition().x < Camera::getInstance()->getActiveArea().left)
 				{
 					Camera::getInstance()->setVelocity(VECTOR2(this->getVelocity().x, 0));
+					testVelocity = Camera::getInstance()->getVelocity().x;
+					
 				}
 			}
-
 			if (Camera::getInstance()->canFolowOnRight())
 			{
 				if (this->getPosition().x > Camera::getInstance()->getActiveArea().right)
 				{
 					Camera::getInstance()->setVelocity(VECTOR2(this->getVelocity().x, 0));
+					testVelocity = Camera::getInstance()->getVelocity().x;
 				}
 			}
 		}
@@ -138,7 +151,6 @@ void Samus::update(float dt)
 				Camera::getInstance()->setVelocity(VECTOR2(0, this->getVelocity().y));
 		}
 	}
-#pragma endregion
 
 	if (isCollidingPort)
 		this->setVelocityX(Camera::getInstance()->getVelocity().x);
@@ -147,7 +159,7 @@ void Samus::update(float dt)
 	{
 		float dis = dt * SAMUS_VERLOCITY_X;
 		this->distance += dis;
-		
+
 		if (this->distance < DISTANCE_MOVE_FRONT_GATE)
 			this->setPositionX(this->getPosition().x + dis*this->getDirection());
 		else
@@ -157,8 +169,7 @@ void Samus::update(float dt)
 			this->setStatus(eStatus::STANDING);
 		}
 	}
-
-	SamusStateManager::getInstance()->getCurrentState()->update(dt);
+#pragma endregion
 
 	this->timerShoot += dt;
 	for (unsigned i = 0; i < this->bulletPool->getListUsing().size(); i++)

@@ -66,7 +66,6 @@ void SamusStateRunning::handleInput(float dt)
 
 
 #pragma endregion
-
 	if (input->isKeyUp(VK_X) == true)
 	{
 		this->samus->setJump(true);
@@ -75,7 +74,6 @@ void SamusStateRunning::handleInput(float dt)
 	if (input->isKeyDown(VK_X) && this->samus->isJump() == true)
 	{
 		//reset velocity
-		this->samus->setVelocityX(0);
 		this->samus->setFall(false);
 		this->samus->setAcrobat(true);
 		this->samus->setStatus(eStatus::JUMPING);
@@ -137,20 +135,7 @@ void SamusStateRunning::handleInput(float dt)
 
 
 
-	if (input->isKeyUp(VK_X) == true)
-	{
-		this->samus->setJump(true);
-	}
-	//When we press jump key, change state to jump
-	if (input->isKeyDown(VK_X) && this->samus->isJump() == true)
-	{
-		//reset velocity
-		this->samus->setVelocityX(0);
-		this->samus->setFall(false);
-		this->samus->setAcrobat(true);
-		this->samus->setStatus(eStatus::JUMPING);
-		return;
-	}
+
 
 	//when we press up button hand of samus will raise to sky
 	if (input->isKeyDown(VK_UP))
@@ -235,7 +220,7 @@ void SamusStateRunning::onCollision()
 			}
 			break;
 
-		/*case eID::PORT:
+		case eID::PORT:
 			switch (i->direction)
 			{
 			case LEFT:
@@ -308,7 +293,7 @@ void SamusStateRunning::onCollision()
 		case eID::SKREE:
 			GAMELOG("VA CHAM SKREE");
 			break;
-*/
+
 #pragma endregion
 		default:
 			break;
@@ -329,7 +314,6 @@ void SamusStateRunning::update(float dt)
 	if (this->samus->isFaling())
 	{
 		this->samus->setAcrobat(false);
-		this->samus->setVelocityX(0);
 		this->samus->setFall(true);
 		this->samus->setStatus(eStatus::JUMPING);
 	}

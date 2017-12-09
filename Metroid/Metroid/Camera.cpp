@@ -2,8 +2,8 @@
 #include "Constants.h"
 #include <cmath>
 
-#define ACTIVE_AREA_WIDTH 32
-#define ACTIVE_AREA_HEIGHT 32
+#define ACTIVE_AREA_WIDTH 64
+#define ACTIVE_AREA_HEIGHT 64
 
 
 Camera* Camera::instance = nullptr;
@@ -83,13 +83,13 @@ void Camera::setVelocity(D3DXVECTOR2 vec)
 	this->velocity = vec;
 }
 
-RECT Camera::getActiveArea()
+MetroidRect Camera::getActiveArea()
 {
-	RECT area;
-	area.left = (LONG) (this->position.x - ACTIVE_AREA_WIDTH*0.5f);
-	area.right =(LONG) (area.left + ACTIVE_AREA_WIDTH);
-	area.top =  (LONG) (this->position.y + ACTIVE_AREA_HEIGHT*0.5f);
-	area.bottom=(LONG) (area.top - ACTIVE_AREA_HEIGHT);
+	MetroidRect area;
+	area.left = (this->position.x - ACTIVE_AREA_WIDTH*0.5f);
+	area.right =(area.left + ACTIVE_AREA_WIDTH);
+	area.top =  (this->position.y + ACTIVE_AREA_HEIGHT*0.5f);
+	area.bottom= (area.top - ACTIVE_AREA_HEIGHT);
 
 	return area;
 }

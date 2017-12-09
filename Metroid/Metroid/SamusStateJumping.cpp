@@ -18,7 +18,7 @@ SamusStateJumping::~SamusStateJumping()
 void SamusStateJumping::setBoundCollision()
 {
 	MetroidRect rect;
-	VECTOR2 position(this->samus->getPosition().x, samus->getPosition().y - OFFSET_COLLISION_Y + 1);
+	VECTOR2 position(this->samus->getPosition().x, samus->getPosition().y );
 	rect.left = position.x - JUMP_WIDTH*0.5f;
 	rect.right = position.x + JUMP_WIDTH*0.5f;
 	rect.top = position.y + JUMP_HEIGHT*0.5f;
@@ -56,11 +56,12 @@ void SamusStateJumping::handleInput(float dt)
 		}
 		//set velocity to move right
 
-		this->samus->setVelocityX(this->samus->getVelocity().x + ACCELERATE_X*dt);
+		/*this->samus->setVelocityX(this->samus->getVelocity().x + ACCELERATE_X*dt);
 		if (this->samus->getVelocity().x > SAMUS_VERLOCITY_X)
 		{
-			this->samus->setVelocityX(SAMUS_VERLOCITY_X);
-		}
+			
+		}*/
+		this->samus->setVelocityX(SAMUS_VELOCITY_JUMP_X);
 	}
 
 	if (input->isKeyDown(VK_LEFT) && input->isKeyUp(VK_RIGHT))
@@ -78,11 +79,12 @@ void SamusStateJumping::handleInput(float dt)
 		}
 
 		//set velocity to move left
-		this->samus->setVelocityX(this->samus->getVelocity().x - ACCELERATE_X*dt);
+		/*this->samus->setVelocityX(this->samus->getVelocity().x - ACCELERATE_X*dt);
 		if (-this->samus->getVelocity().x > SAMUS_VERLOCITY_X)
 		{
-			this->samus->setVelocityX(-SAMUS_VERLOCITY_X);
-		}
+			
+		}*/
+		this->samus->setVelocityX(-SAMUS_VELOCITY_JUMP_X);
 	}
 
 	// Handle horizontal
@@ -243,11 +245,7 @@ void SamusStateJumping::onCollision()
 				addY = i->positionCollision;
 				this->samus->setVelocityY(0);
 
-				if (animation != NULL)
-				{
-					addY = addY + HEIGHT_RUN*0.5f;
-				}
-				this->samus->setPositionY(addY);
+				this->samus->setPositionY(addY - OFFSET_JUMP);
 				break;
 			}
 			break;
@@ -287,14 +285,7 @@ void SamusStateJumping::update(float dt)
 
 			break;
 		case eStatus::ACROBAT:
-			if (this->samus->isInDirection(eDirection::right))
-			{
-				this->samus->setPosition(VECTOR2(this->samus->getPosition().x - WIDTH_JUMP*0.5f + OFFSET_ACROBAT, this->samus->getPosition().y + HEIGHT_JUMP*0.5f));
-			}
-			else
-			{
-				this->samus->setPosition(VECTOR2(this->samus->getPosition().x + WIDTH_JUMP*0.5f - OFFSET_ACROBAT, this->samus->getPosition().y + HEIGHT_JUMP*0.5f));
-			}
+			this->samus->setVelocityX(0);
 			break;
 		default:
 			break;
