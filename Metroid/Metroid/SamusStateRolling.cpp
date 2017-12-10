@@ -59,7 +59,6 @@ void SamusStateRolling::handleInput(float dt)
 		{
 			this->samus->setVelocityX(-SAMUS_VERLOCITY_X);
 		}
-
 	}
 
 	//handle press right button
@@ -80,22 +79,16 @@ void SamusStateRolling::handleInput(float dt)
 			this->samus->setVelocityX(SAMUS_VERLOCITY_X);
 		}
 	}
+
 	if ((input->isKeyUp(VK_RIGHT) && input->isKeyUp(VK_LEFT)) || (input->isKeyDown(VK_LEFT) && input->isKeyDown(VK_RIGHT)))
 	{
-
-	}
-	// Handle horizontal
-	if (input->isKeyDown(VK_LEFT) && input->isKeyDown(VK_RIGHT))
-	{
+		this->samus->setVelocityX(0);
 	}
 
 	if (input->isKeyDown(VK_UP) || input->isKeyDown(VK_X))
 	{
 		this->samus->setStatus(eStatus::STANDING);
 	}
-
-
-
 }
 void SamusStateRolling::onCollision()
 {
@@ -168,11 +161,6 @@ void SamusStateRolling::update(float dt)
 	this->samus->setCanMoveLeft(true);
 	this->samus->setCanMoveRight(true);
 
-	//if(reset_fall)
-	//{
-	//	
-	//	reset_fall = false;
-	//}
 	move_to_fall = true;
 	this->samus->setVelocity(VECTOR2(0, -SAMUS_MIN_SPEED_Y));
 }

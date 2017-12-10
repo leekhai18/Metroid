@@ -56,7 +56,10 @@
     <ClCompile Include="WinMain.cpp" />
     <ClCompile Include="Zeb.cpp" />
     <ClCompile Include="Zommer.cpp" />
+<<<<<<< HEAD
     <ClCompile Include="SamusStateFallRolling.cpp" />
+=======
+>>>>>>> develop
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AlienBig.h" />
@@ -116,7 +119,10 @@
     <ClInclude Include="Waver.h" />
     <ClInclude Include="Zeb.h" />
     <ClInclude Include="Zommer.h" />
+<<<<<<< HEAD
     <ClInclude Include="SamusStateFallRolling.h" />
+=======
+>>>>>>> develop
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Metroid.rc" />

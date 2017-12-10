@@ -122,7 +122,6 @@ void Metroid::render()
 	ObjectManager::getInstance()->draw();
 	mapBrinstar->draw();
 
-
 	// END
 	this->getGraphics()->spriteEnd();
 

@@ -30,8 +30,9 @@ bool Collision::checkCollision(BaseObject * myEntity, BaseObject * otherEntity, 
 	MetroidRect   otherRect = otherEntity->getBoundCollision();
 	CollisionReturn data;
 
-	MetroidRect   broadphaseRect = getSweptBroadphaseRect(myEntity, frametime);	// là bound của object được mở rộng ra thêm một phần bằng với vận tốc (dự đoán trước bound)
-	if (!isCollide(broadphaseRect, otherRect))				// kiểm tra tính chồng lắp của 2 hcn
+	MetroidRect   broadphaseOtherRect = getSweptBroadphaseRect(otherEntity, frametime);	// là bound của object được mở rộng ra thêm một phần bằng với vận tốc (dự đoán trước bound)
+	MetroidRect   broadphaseMyRect = getSweptBroadphaseRect(myEntity, frametime);	// là bound của object được mở rộng ra thêm một phần bằng với vận tốc (dự đoán trước bound)
+	if (!isCollide(broadphaseMyRect, broadphaseOtherRect))				// kiểm tra tính chồng lắp của 2 hcn
 	{
 		return false;
 	}
@@ -44,7 +45,7 @@ bool Collision::checkCollision(BaseObject * myEntity, BaseObject * otherEntity, 
 
 	if (otherVeloc != VECTOR2(0, 0))
 	{
-		velocity = otherVeloc - myVelocity;
+		velocity = myVelocity - otherVeloc ;
 	}
 	// tìm khoảng cách giữa cạnh gần nhất, xa nhất 2 object dx, dy
 	// dx

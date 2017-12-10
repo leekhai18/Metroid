@@ -1,6 +1,6 @@
 #include "SkreeEffectDeath.h"
 #define NUM_PART 4
-#define DISTANCE 70
+#define DISTANCE 50
 
 SkreeEffectDeath::SkreeEffectDeath(TextureManager * textureM, Graphics * graphics)
 {
@@ -35,7 +35,7 @@ void SkreeEffectDeath::update(float dt)
 
 			if (this->list[i]->isInStatus(eStatus::JUMPING))
 			{
-				this->list[i]->release();
+				//this->list[i]->release();
 				this->list[i]->setStatus(eStatus::ENDING);
 			}
 		}
@@ -59,10 +59,10 @@ void SkreeEffectDeath::init(VECTOR2 position)
 
 		VECTOR2 target[NUM_PART];
 		target[0] = VECTOR2(position.x + DISTANCE, position.y);
-		target[1] = VECTOR2((float) ( (target[0].x - position.x)*cos(D3DXToRadian(-60)) - (target[0].y - position.y)*sin(D3DXToRadian(-60)) + position.x  ),
-							(float)	( (target[0].x - position.x)*sin(D3DXToRadian(-60)) + (target[0].y - position.y)*cos(D3DXToRadian(-60)) + position.y ));
-		target[2] = VECTOR2((float) ( (target[0].x - position.x)*cos(D3DXToRadian(-120)) - (target[0].y - position.y)*sin(D3DXToRadian(-120)) + position.x  ),
-							(float) ( (target[0].x - position.x)*sin(D3DXToRadian(-120)) + (target[0].y - position.y)*cos(D3DXToRadian(-120)) + position.y ));
+		target[1] = VECTOR2((float) ( (target[0].x - position.x)*cos(D3DXToRadian(60)) - (target[0].y - position.y)*sin(D3DXToRadian(60)) + position.x  ),
+							(float)	( (target[0].x - position.x)*sin(D3DXToRadian(60)) + (target[0].y - position.y)*cos(D3DXToRadian(60)) + position.y ));
+		target[2] = VECTOR2((float) ( (target[0].x - position.x)*cos(D3DXToRadian(120)) - (target[0].y - position.y)*sin(D3DXToRadian(120)) + position.x  ),
+							(float) ( (target[0].x - position.x)*sin(D3DXToRadian(120)) + (target[0].y - position.y)*cos(D3DXToRadian(120)) + position.y ));
 		target[3] = VECTOR2(position.x - DISTANCE, position.y);
 
 		for (int i = 0; i < NUM_PART; i++)
@@ -78,4 +78,14 @@ bool SkreeEffectDeath::isInit()
 		return true;
 
 	return false;
+}
+
+void SkreeEffectDeath::setPosition(VECTOR2 pos)
+{
+	this->position = pos;
+}
+
+VECTOR2 SkreeEffectDeath::getPosition()
+{
+	return this->position;
 }

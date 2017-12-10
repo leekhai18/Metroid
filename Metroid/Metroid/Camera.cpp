@@ -2,9 +2,8 @@
 #include "Constants.h"
 #include <cmath>
 
-#define ACTIVE_AREA_WIDTH 64
-#define ACTIVE_AREA_HEIGHT 64
-
+#define ACTIVE_AREA_WIDTH 32
+#define ACTIVE_AREA_HEIGHT 40
 
 Camera* Camera::instance = nullptr;
 Camera * Camera::getInstance()
@@ -26,7 +25,8 @@ Camera::Camera(int width, int height)
     this->height = height ;
     this->position = D3DXVECTOR3(0, 0, 0);
 	this->velocity = D3DXVECTOR2(0, 0);
-	this->canFollowVetical = false;
+	this->canFollowToUp = false;
+	this->canFollowToDown = false;
 	this->canFollowOnLeft = true;
 	this->canFollowOnRight = true;
 	this->isOnPort = false;
@@ -111,14 +111,24 @@ void Camera::update(float dt)
 	}
 }
 
-void Camera::setCanFoLLowVertical(bool flag)
+void Camera::setCanFollowToUp(bool flag)
 {
-	this->canFollowVetical = flag;
+	this->canFollowToUp = flag;
 }
 
-bool Camera::canFolowVertical()
+bool Camera::canFolowUp()
 {
-	return this->canFollowVetical;
+	return this->canFollowToUp;
+}
+
+void Camera::setCanFollowToDown(bool flag)
+{
+	this->canFollowToDown = flag;
+}
+
+bool Camera::canFolowDown()
+{
+	return this->canFollowToDown;
 }
 
 void Camera::setCanFollowOnRight(bool flag)

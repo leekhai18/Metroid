@@ -1,6 +1,6 @@
 #include "SamusStateJumping.h"
 #include "SamusStateManager.h"
-
+#include "GameLog.h"
 
 SamusStateJumping::SamusStateJumping()
 {
@@ -23,8 +23,6 @@ void SamusStateJumping::setBoundCollision()
 	rect.right = position.x + JUMP_WIDTH*0.5f;
 	rect.top = position.y + JUMP_HEIGHT*0.5f;
 	rect.bottom = position.y - JUMP_HEIGHT*0.5f;
-
-
 	samus->setBoundCollision(rect);
 }
 void SamusStateJumping::init()
@@ -54,13 +52,7 @@ void SamusStateJumping::handleInput(float dt)
 			this->samus->setVelocityX(0);
 
 		}
-		//set velocity to move right
 
-		/*this->samus->setVelocityX(this->samus->getVelocity().x + ACCELERATE_X*dt);
-		if (this->samus->getVelocity().x > SAMUS_VERLOCITY_X)
-		{
-			
-		}*/
 		this->samus->setVelocityX(SAMUS_VELOCITY_JUMP_X);
 	}
 
@@ -78,36 +70,22 @@ void SamusStateJumping::handleInput(float dt)
 			this->samus->setVelocityX(0);
 		}
 
-		//set velocity to move left
-		/*this->samus->setVelocityX(this->samus->getVelocity().x - ACCELERATE_X*dt);
-		if (-this->samus->getVelocity().x > SAMUS_VERLOCITY_X)
-		{
-			
-		}*/
 		this->samus->setVelocityX(-SAMUS_VELOCITY_JUMP_X);
 	}
 
-	// Handle horizontal
-	//if (input->isKeyDown(VK_LEFT) && input->isKeyDown(VK_RIGHT))
-	//{
-	//	//this->samus->updateHorizontal(dt);
-	//	//this->samus->setVelocityX(-SAMUS_VERLOCITY_X);
-	//}
 #pragma endregion
 
 #pragma region Vertical
 	// Handle vertical
 	if (this->samus->isFaling() == false)
 	{
-		//assign velocity for samus to change velocity
-		//initial velocity(V_0)
+
 		this->samus->setVelocityY(velocity_frame);
 
 		//set velocity.y to jump up
 		//V= V_0 + a*dt;
 		//a: accelerate is the rate of change of velocity of an object with respect to time
 		//so if a increase V also increase
-
 
 		//calculate velocity after dt(s) (V)
 		velocity_frame = velocity_frame + ACCELERATE_Y*dt;
@@ -116,7 +94,6 @@ void SamusStateJumping::handleInput(float dt)
 		//samus.velocity.y= (V + V_0)/2
 		this->samus->setVelocityY((velocity_frame + this->samus->getVelocity().y) / 2);
 
-		//distance = V*dt
 		float distance = this->samus->getVelocity().y*dt;
 		jumpDistance += distance;
 		time += dt;
@@ -134,24 +111,28 @@ void SamusStateJumping::handleInput(float dt)
 		else
 		{
 			jumpDistance = 0;
-			this->samus->setFall(true);
+			if (this->samus->isFaling() == false)
+			{
+				this->samus->setFall(true);
+				this->samus->setVelocityY(SAMUS_V0_FALL_Y);
+			}
 
-			this->samus->setVelocityY(this->samus->getVelocity().y*-1.0f);
-
-			this->samus->setVelocityY(this->samus->getVelocity().y + ACCELERATE_Y*dt);
+			this->samus->setVelocityY(this->samus->getVelocity().y*-1.0f + ACCELERATE_Y*dt);
 		}
 		//if we release jump button, samus will jump to MIN_JUMP
 		if (input->isKeyUp(VK_X))
 		{
 			if (jumpDistance >= MIN_JUMP)
 			{
-				this->samus->setFall(true);
-				this->samus->setVelocityY(this->samus->getVelocity().y*-1.0f);
+				if (this->samus->isFaling() == false)
+				{
+					this->samus->setFall(true);
+					this->samus->setVelocityY(SAMUS_V0_FALL_Y);
+				}
 
-				this->samus->setVelocityY(this->samus->getVelocity().y + ACCELERATE_Y*dt);
+				this->samus->setVelocityY(this->samus->getVelocity().y*-1.0f + ACCELERATE_Y*dt);
 			}
 		}
-
 	}
 	else
 	{
@@ -250,6 +231,10 @@ void SamusStateJumping::onCollision()
 			}
 			break;
 			//another object
+		case eID::SKREE:
+			GAMELOG("VA CHAM SKREE");
+			break;
+
 		default:
 			break;
 		}
@@ -322,29 +307,15 @@ void SamusStateJumping::fire()
 	VECTOR2 stP;
 	Bullet* bullet = BulletPool::getInstance()->getBullet();
 
-
 	if (isUp)
 	{
-		if (this->samus->isInDirection(eDirection::right))
-			stP = VECTOR2(this->samus->getPosition().x + this->samus->getSprite()->getWidth()*0.7f, this->samus->getPosition().y - this->samus->getSprite()->getHeight()*0.9f);
-		else if (this->samus->isInDirection(eDirection::left))
-			stP = VECTOR2(this->samus->getPosition().x - this->samus->getSprite()->getWidth()*0.7f, this->samus->getPosition().y - this->samus->getSprite()->getHeight()*0.9f);
-
-		bullet->setVelocity(VECTOR2(0, -VELOCITY));
+		stP = VECTOR2(this->samus->getPosition().x + this->samus->getDirection(), this->samus->getPosition().y + this->samus->getSprite()->getHeight()*0.5f);
+		bullet->setVelocity(VECTOR2(0, VELOCITY));
 	}
 	else
 	{
-		if (this->samus->isInDirection(eDirection::right))
-		{
-			stP = VECTOR2(this->samus->getPosition().x + this->samus->getSprite()->getWidth()*0.8f, this->samus->getPosition().y - this->samus->getSprite()->getHeight()*0.7f);
-			bullet->setVelocity(VECTOR2(VELOCITY, 0));
-		}
-
-		else if (this->samus->isInDirection(eDirection::left))
-		{
-			stP = VECTOR2(this->samus->getPosition().x - this->samus->getSprite()->getWidth()*0.8f, this->samus->getPosition().y - this->samus->getSprite()->getHeight()*0.7f);
-			bullet->setVelocity(VECTOR2(-VELOCITY, 0));
-		}
+		stP = VECTOR2(this->samus->getPosition().x + this->samus->getDirection()*this->samus->getSprite()->getWidth()*0.3f, this->samus->getPosition().y + 2);
+		bullet->setVelocity(VECTOR2((float)VELOCITY*this->samus->getDirection(), 0));
 	}
 
 	bullet->init(stP);
