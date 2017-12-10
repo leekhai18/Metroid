@@ -179,6 +179,23 @@ void SamusStateStanding::handleInput(float dt)
 	}
 }
 
+
+void SamusStateStanding::onCollision()
+{
+	for (auto i = this->samus->getListCollide()->begin(); i != this->samus->getListCollide()->end(); i++)
+	{
+		switch (i->object->getId())
+		{
+		case eID::SKREE:
+			GAMELOG("VA CHAM SKREE");
+			break;
+
+		default:
+			break;
+		}
+	}
+}
+
 void SamusStateStanding::update(float dt)
 {
 
@@ -214,21 +231,6 @@ void SamusStateStanding::onExit()
 
 }
 
-void SamusStateStanding::onCollision()
-{
-	for (auto i = this->samus->getListCollide()->begin(); i != this->samus->getListCollide()->end(); i++)
-	{
-		switch (i->object->getId())
-		{
-		case eID::SKREE:
-			GAMELOG("VA CHAM SKREE");
-			break;
-
-		default:
-			break;
-		}
-	}
-}
 
 void SamusStateStanding::fire()
 {

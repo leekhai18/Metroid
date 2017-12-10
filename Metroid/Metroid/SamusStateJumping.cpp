@@ -1,6 +1,6 @@
 #include "SamusStateJumping.h"
 #include "SamusStateManager.h"
-
+#include "GameLog.h"
 
 SamusStateJumping::SamusStateJumping()
 {
@@ -250,6 +250,10 @@ void SamusStateJumping::onCollision()
 			}
 			break;
 			//another object
+		case eID::SKREE:
+			GAMELOG("VA CHAM SKREE");
+			break;
+
 		default:
 			break;
 		}

@@ -57,13 +57,13 @@ void Animation::setValueOfCurrentFrame(int index)
 	if (currentFrame > totalFrames - 1)
 		currentFrame = startFrame;
 
-	// Get data of sprite
-	this->sprite->setData(this->listFrames[currentFrame]);
-
-	if (!isloop && currentFrame == totalFrames - 1)
-	{
+	//Finshed
+	if (!isloop && currentFrame == startFrame)
 		this->stop();
-	}
+
+	// Get data of sprite
+	if (!isFinish)
+		this->sprite->setData(this->listFrames[currentFrame]);
 }
 
 int Animation::getCurrentFrame()

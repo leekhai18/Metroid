@@ -1,12 +1,14 @@
 #include "Skree.h"
 #include "ObjectManager.h"
 #include "Collision.h"
+#include "Camera.h"
+
 #define TIME_FRAME_DELAY 0.15f
 #define AREA_ACTIVE_X 40
 #define TIME_FRAME_DELAY_FALLING 0.05f
 #define EFFECT_DEATH_TIME 1.5f
 #define VELOCITY_X 80
-#define VELOCITY_Y -3
+#define VELOCITY_Y 130
 
 
 Skree::Skree(TextureManager * textureM, Graphics * graphics, EnemyColors color) : BaseObject(eID::SKREE)
@@ -41,6 +43,8 @@ Skree::Skree(TextureManager * textureM, Graphics * graphics, EnemyColors color) 
 	animationRotate->start();
 
 	target = VECTOR2ZERO;
+
+	isActivity = false;
 }
 
 Skree::Skree()
@@ -51,66 +55,70 @@ Skree::Skree()
 Skree::~Skree()
 {
 	delete this->effectDeath;
+	release();
 }
 
 void Skree::update(float dt)
 {
-	if (this->animationRotate != nullptr)
+	if (isActivity)
 	{
-
-		MetroidRect r;
-		r.left = this->getPosition().x - this->getSprite()->getWidth()*0.5f;
-		r.top = this->getPosition().y - this->getSprite()->getWidth();
-		r.right = r.left + this->getSprite()->getWidth();
-		r.bottom = r.top + this->getSprite()->getHeight();
-		this->setBoundCollision(r);
-
-		this->animationRotate->update(dt);
-	}
-
-	if (this->target != VECTOR2ZERO && this->isInStatus(eStatus::START)) // check init
-	{
-		this->setStatus(eStatus::FALLING);
-		this->animationRotate->setTimeFrameDelay(TIME_FRAME_DELAY_FALLING);
-		this->setVelocityY(VELOCITY_Y);
-	}
-
-	if (this->isInStatus(eStatus::FALLING))
-	{
-		if (this->getPosition().y < target.y)
-		{
-			this->setPosition(this->getPosition().x + this->getVelocity().x*dt, this->getPosition().y + this->getVelocity().y);
-		}
-		else 
-		{
-			this->setStatus(eStatus::ENDING);
-		}
-	}
-
-	if (this->isInStatus(eStatus::ENDING))
-	{
+		// Set boundCollision
 		if (timerDeath < EFFECT_DEATH_TIME)
-			timerDeath += dt;
-		else
 		{
-			if (this->animationRotate != nullptr)
-			{
-				this->effectDeath->init(this->getPosition());
-				this->release();
-			}
+			setBoundCollision();
+			this->animationRotate->update(dt);
+		}
 
-			this->effectDeath->update(dt);
+		if (this->target != VECTOR2ZERO && this->isInStatus(eStatus::START)) // check init
+		{
+			this->setStatus(eStatus::FALLING);
+			this->animationRotate->setTimeFrameDelay(TIME_FRAME_DELAY_FALLING);
+			this->setVelocityY(-VELOCITY_Y);
+		}
+
+		if (this->isInStatus(eStatus::FALLING))
+		{
+			if (this->getPosition().y > target.y) // check collision with wall
+			{
+				this->setPosition(this->getPosition().x + this->getVelocity().x*dt, this->getPosition().y + this->getVelocity().y*dt);
+			}
+			else
+			{
+				this->setStatus(eStatus::ENDING);
+			}
+		}
+
+		if (this->isInStatus(eStatus::ENDING))
+		{
+			if (timerDeath < EFFECT_DEATH_TIME)
+				timerDeath += dt;
+			else
+			{
+				if (this->getPosition() != VECTOR2ZERO)
+				{
+					this->effectDeath->init(this->getPosition());
+					BaseObject::setBoundCollision(MetroidRect(0, 0, 0, 0));
+					this->setPosition(VECTOR2ZERO);
+				}
+
+				this->effectDeath->update(dt);
+
+				if (initPosition.x < Camera::getInstance()->getBound().left - 20 || initPosition.x > Camera::getInstance()->getBound().right + 20)
+					reInit();
+			}
 		}
 	}
 }
 
 void Skree::draw()
 {
-		if (this->sprite != nullptr)
-			this->sprite->draw();
+	if (isActivity)
+	{
+		this->sprite->draw();
 
 		if (this->effectDeath->isInit())
 			this->effectDeath->draw();
+	}
 }
 
 
@@ -130,18 +138,58 @@ VECTOR2 Skree::getTarget()
 
 void Skree::setTarget(VECTOR2 target)
 {
-	if (!this->isInStatus(eStatus::ENDING))
+	if (isActivity)
 	{
-		this->setVelocityX(0);
-
-		if (this->target != target && abs(target.x - this->getPosition().x) < AREA_ACTIVE_X)
+		if (!this->isInStatus(eStatus::ENDING))
 		{
-			this->target = target;
+			this->setVelocityX(0);
 
-			if (target.x > this->getPosition().x) // on right side
-				this->setVelocityX(VELOCITY_X);
-			else
-				this->setVelocityX(-VELOCITY_X);
+			if (this->target != target && abs(target.x - this->getPosition().x) < AREA_ACTIVE_X)
+			{
+				this->target = target;
+
+				if (target.x > this->getPosition().x) // on right side
+					this->setVelocityX(VELOCITY_X);
+				else
+					this->setVelocityX(-VELOCITY_X);
+			}
 		}
 	}
+}
+
+void Skree::setBoundCollision()
+{
+	boundCollision.left = this->getPosition().x - this->getSprite()->getWidth()*0.5f;
+	boundCollision.top = this->getPosition().y;
+	boundCollision.right = boundCollision.left + this->getSprite()->getWidth();
+	boundCollision.bottom = boundCollision.top - this->getSprite()->getHeight();
+}
+
+void Skree::setInitPosition(VECTOR2 pos)
+{
+	this->initPosition = pos;
+	this->setPosition(pos);
+}
+
+void Skree::reInit()
+{
+	isActivity = false;
+	this->setPosition(initPosition);
+	setBoundCollision();
+	this->setStatus(eStatus::START);
+	this->target = VECTOR2ZERO;
+	timerDeath = 0;
+	this->animationRotate->setTimeFrameDelay(TIME_FRAME_DELAY);
+	this->effectDeath->setPosition(VECTOR2ZERO);
+	this->velocity = VECTOR2ONE;
+}
+
+void Skree::setActivity(bool flag)
+{
+	this->isActivity = flag;
+}
+
+bool Skree::isActivitied()
+{
+	return this->isActivity;
 }
