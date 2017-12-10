@@ -1,4 +1,4 @@
-#include "Metroid.h"
+﻿#include "Metroid.h"
 #include "Sound.h"
 #include "ObjectManager.h"
 #include "Collision.h"
@@ -119,16 +119,16 @@ void Metroid::render()
 	this->getGraphics()->spriteBegin();
 
 	samus->draw();
-	mapBrinstar->draw();
 	ObjectManager::getInstance()->draw();
+	mapBrinstar->draw();
 
 
 	// END
 	this->getGraphics()->spriteEnd();
 
 
-	// to test
-	//GameDebug::getInstance()->draw();
+	// bound line
+	//GameDebug::getInstance()->draw(); // ko chỉ transform là đc.. cần flip nữa
 
 	fpsText->setText("FPS: " + std::to_string((int)this->fps));
 	fpsText->draw();

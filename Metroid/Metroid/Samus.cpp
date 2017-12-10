@@ -16,7 +16,7 @@ Samus::Samus(TextureManager* textureM,Graphics* graphics, Input* input) : BaseOb
 		throw GameError(GameErrorNS::FATAL_ERROR, "Can not init sprite Samus");
 	}
 
-	this->setPosition(VECTOR2(640, 3312));
+	this->setPosition(VECTOR2(640, 1267));
 	runningNormalAnimation = new Animation(this->sprite, IndexManager::getInstance()->samusYellowRunningRight, NUM_FRAMES_SAMUS_RUNNING, 0.05f);
 	runningUpAnimation = new Animation(this->sprite, IndexManager::getInstance()->samusYellowRunningUpRight, NUM_FRAMES_SAMUS_RUNNING, 0.05f);
 	runningHittingRightAnimation = new Animation(this->sprite, IndexManager::getInstance()->samusYellowHittingAndRunningRight, NUM_FRAMES_SAMUS_RUNNING, 0.05f);
@@ -56,6 +56,7 @@ void Samus::draw()
 		this->bulletPool->getListUsing().at(i)->draw();
 
 	this->sprite->draw();
+
 }
 
 void Samus::handleInput(float dt)
@@ -73,6 +74,16 @@ void Samus::handleInput(float dt)
 		}
 	}
 	Camera::getInstance()->setNumPort(0);
+
+	//if (input->isKeyDown(VK_LEFT))
+	//	Camera::getInstance()->setVelocity(VECTOR2(-150, 0));	
+	//if (input->isKeyDown(VK_RIGHT))
+	//	Camera::getInstance()->setVelocity(VECTOR2(150, 0));
+	//if (input->isKeyDown(VK_UP))
+	//	Camera::getInstance()->setVelocity(VECTOR2(0, 150));
+	//if (input->isKeyDown(VK_DOWN))
+	//	Camera::getInstance()->setVelocity(VECTOR2(0, -150));
+
 #pragma endregion
 }
 
@@ -100,7 +111,18 @@ void Samus::setCanMoveToFrontGate(bool flag)
 void Samus::update(float dt)
 {
 
+	SamusStateManager::getInstance()->getCurrentState()->update(dt);
+
+	
+	if (status == eStatus::ACROBAT)
+	{
+		if (velocity.x>0)
+		{
+			int temp = 0;
+		}
+	}
 #pragma region handle camera
+	float testVelocity;
 	if (!Camera::getInstance()->moveWhenSamusOnPort() && Camera::getInstance()->getNumPort() < 2)
 	{
 		if (!Camera::getInstance()->canFolowVertical())
@@ -110,14 +132,16 @@ void Samus::update(float dt)
 				if (this->getPosition().x < Camera::getInstance()->getActiveArea().left)
 				{
 					Camera::getInstance()->setVelocity(VECTOR2(this->getVelocity().x, 0));
+					testVelocity = Camera::getInstance()->getVelocity().x;
+					
 				}
 			}
-
 			if (Camera::getInstance()->canFolowOnRight())
 			{
 				if (this->getPosition().x > Camera::getInstance()->getActiveArea().right)
 				{
 					Camera::getInstance()->setVelocity(VECTOR2(this->getVelocity().x, 0));
+					testVelocity = Camera::getInstance()->getVelocity().x;
 				}
 			}
 		}
@@ -128,7 +152,6 @@ void Samus::update(float dt)
 				Camera::getInstance()->setVelocity(VECTOR2(0, this->getVelocity().y));
 		}
 	}
-#pragma endregion
 
 	if (isCollidingPort)
 		this->setVelocityX(Camera::getInstance()->getVelocity().x);
@@ -137,7 +160,7 @@ void Samus::update(float dt)
 	{
 		float dis = dt * SAMUS_VERLOCITY_X;
 		this->distance += dis;
-		
+
 		if (this->distance < DISTANCE_MOVE_FRONT_GATE)
 			this->setPositionX(this->getPosition().x + dis*this->getDirection());
 		else
@@ -147,8 +170,7 @@ void Samus::update(float dt)
 			this->setStatus(eStatus::STANDING);
 		}
 	}
-
-	SamusStateManager::getInstance()->getCurrentState()->update(dt);
+#pragma endregion
 
 	this->timerShoot += dt;
 	for (unsigned i = 0; i < this->bulletPool->getListUsing().size(); i++)
@@ -239,10 +261,10 @@ void Samus::setBoundCollision(MetroidRect rect)
 void Samus::setActiveBound()
 {
 	// Can 1 con so hop ly
-	this->activeBound.top = this->boundCollision.top - 50;
+	this->activeBound.top = this->boundCollision.top + 50;
 	this->activeBound.left = this->boundCollision.left - 50;
 	this->activeBound.right = this->boundCollision.right + 50;
-	this->activeBound.bottom = this->boundCollision.bottom + 50;
+	this->activeBound.bottom = this->boundCollision.bottom - 50;
 }
 
 void Samus::setAcrobat(bool acrobat)

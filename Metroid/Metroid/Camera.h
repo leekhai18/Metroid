@@ -1,9 +1,9 @@
 #pragma once
 #include <d3dx9.h>
 #include <d3d9.h>
+#include "Constants.h"
 #define CAM_POS_X 640
-#define CAM_POS_Y 3240
-
+#define CAM_POS_Y 1320
 class Camera
 {
 private:
@@ -43,7 +43,7 @@ public:
 	D3DXVECTOR2 getVelocity();
 	void setVelocity(D3DXVECTOR2 vec);
 
-	RECT getActiveArea();
+	MetroidRect getActiveArea();
 
 	void update(float dt);
 

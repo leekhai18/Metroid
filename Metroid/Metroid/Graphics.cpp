@@ -252,7 +252,7 @@ void Graphics::drawSprite(const SpriteData &spriteData, COLOR_ARGB color)
 
 
 	// Transform Camera
-	VECTOR2 trans = VECTOR2(Camera::getInstance()->getWidth()*0.5f - Camera::getInstance()->getPosition().x, Camera::getInstance()->getHeight()*0.5f - Camera::getInstance()->getPosition().y);
+	//VECTOR2 trans = VECTOR2(Camera::getInstance()->getWidth()*0.5f - Camera::getInstance()->getPosition().x, Camera::getInstance()->getHeight()*0.5f - Camera::getInstance()->getPosition().y);
 
 	//calculate scale position
 	VECTOR3 center = VECTOR3(spriteData.width * spriteData.origin.x, spriteData.height * spriteData.origin.y, 0);
@@ -282,33 +282,33 @@ void Graphics::drawSprite(const SpriteData &spriteData, COLOR_ARGB color)
 		}
 	}
 
-	//D3DXMATRIX mt;
-	//D3DXVECTOR4 posViewport;
+	D3DXMATRIX mt;
+	D3DXVECTOR4 posViewport;
 
-	//D3DXMatrixIdentity(&mt);
-	//mt._22 = 1.0f;
-	//mt._41 = (-1) * Camera::getInstance()->getBound().left;
-	//mt._42 = (-1) * Camera::getInstance()->getBound().top;
+	D3DXMatrixIdentity(&mt);
+	mt._22 = -1.0f;
+	mt._41 = (float) (-1) * Camera::getInstance()->getBound().left;
+	mt._42 = (float)        Camera::getInstance()->getBound().top;
 
-	//D3DXVec3Transform(&posViewport, &VECTOR3(position.x, position.y, 0), &mt);
+	D3DXVec3Transform(&posViewport, &VECTOR3(position.x, position.y, 0), &mt);
 
 	sprite->GetTransform(&matOld);
 
 	D3DXMatrixTransformation2D(
 		&matTransformed,
-		&position,
+		&VECTOR2(posViewport.x, posViewport.y),
 		0.0f,
 		&scale,
-		&position,
+		&VECTOR2(posViewport.x, posViewport.y),
 		D3DXToRadian(spriteData.rotate),
-		&trans
+		0
 	);
 
 	//set matrix transformed
 	sprite->SetTransform(&matTransformed);
 
 	// Draw the sprite
-	sprite->Draw(spriteData.texture, &spriteData.rect, &center, &VECTOR3(position.x, position.y, 0), color);
+	sprite->Draw(spriteData.texture, &spriteData.rect, &center, &VECTOR3(posViewport.x, posViewport.y, 0), color);
 
 	// Magic... TO use only this sprite or you can know as to refesh to old
 	sprite->SetTransform(&matOld);

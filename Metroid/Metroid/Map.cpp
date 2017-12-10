@@ -2,16 +2,6 @@
 #include "Camera.h"
 
 
-bool Map::isContain(RECT rect1, RECT rect2)
-{
-	if (rect1.left > rect2.right || rect1.right < rect2.left || rect1.top > rect2.bottom || rect1.bottom < rect2.top)
-	{
-		return false;
-	}
-
-	return true;
-}
-
 Map::Map()
 {
 }
@@ -42,15 +32,13 @@ void Map::draw()
 	RECT viewport = Camera::getInstance()->getBound();
 	int columnBegin = viewport.left / tileW;
 	int columnEnd = columnBegin + Camera::getInstance()->getWidth() / tileW + 1;
-	int rowBegin = viewport.top / tileH;
+	int rowBegin = (MAP_HEIGHT - viewport.top) / tileH;
 	int rowEnd = rowBegin + Camera::getInstance()->getHeight() / tileH + 1;
 
 	// set Follow direction for camera
 	if (mapCell[rowBegin - 1][columnBegin].rect == NULL)
 	{
 		Camera::getInstance()->setCanFoLLowVertical(false);
-		//Camera::getInstance()->setCanFollowOnLeft(true);
-		//Camera::getInstance()->setCanFollowOnRight(true);
 	}
 	else
 	{
@@ -72,7 +60,7 @@ void Map::draw()
 			spriteData.rotate = 0;
 			spriteData.texture = this->texture->getTexture();
 			spriteData.position.x = (float)col*tileW;
-			spriteData.position.y = (float)row*tileH;
+			spriteData.position.y = MAP_HEIGHT - (float)row*tileH;
 			spriteData.scale = VECTOR2(1.0f, 1.0f);
 			spriteData.origin = VECTOR2(0, 0);
 			spriteData.rect = *(mapCell[row][col].rect);

@@ -120,6 +120,7 @@ enum eStatus {
 	STANDING,
 	FALLING,
 	FOLLOW,
+	FALLING_ROLLING,
 };
 
 // direction

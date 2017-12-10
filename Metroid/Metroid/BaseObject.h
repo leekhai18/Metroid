@@ -80,4 +80,9 @@ struct CollisionReturn
 	float positionCollision;
 
 	BaseObject* object;
+
+	bool operator<(const CollisionReturn& collisionReturn) const
+	{
+		return this->entryTime < collisionReturn.entryTime;
+	}
 };

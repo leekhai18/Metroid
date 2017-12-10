@@ -1,20 +1,16 @@
 #pragma once
 #include "BaseState.h"
 
-class SamusStateRolling : public BaseState
+class SamusStateFallRolling:public BaseState
 {
 private:
 	float remain_time;
-	float positionCollide;
-	float time;
 	//this is V(velocity.y) that is calculate every frame
 	float velocity_frame;
-	bool reset_fall;
-	bool move_to_fall;
 public:
-	SamusStateRolling();
-	SamusStateRolling(Samus* samus, Input* input);
-	~SamusStateRolling();
+	SamusStateFallRolling();
+	SamusStateFallRolling(Samus* samus, Input* input);
+	~SamusStateFallRolling();
 
 
 	void init();

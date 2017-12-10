@@ -11,33 +11,11 @@ Collision* Collision::getInstance()
 	}
 	return instance;
 }
-bool Collision::checkOnGround(MetroidRect obj)
-{
-	MetroidRect sweptRect;
-	sweptRect.top = obj.top;
-	sweptRect.bottom = obj.bottom + 1;
-	sweptRect.left = obj.left;
-	sweptRect.right = obj.right;
 
-	list<BaseObject*>::iterator begin = ObjectManager::getInstance()->getListWallOnViewPort()->begin();
-	list<BaseObject*>::iterator end = ObjectManager::getInstance()->getListWallOnViewPort()->end();
-
-	for (list<BaseObject*>::iterator i = begin; i != end; ++i)
-	{
-		if ((*i)->getBoundCollision().top == sweptRect.bottom)
-		{
-			if (isCollide((*i)->getBoundCollision(), sweptRect))
-			{
-				return true;
-			}
-		}
-	}
-	return false;
-}
 
 bool Collision::isCollide(MetroidRect myRect, MetroidRect otherRect)
 {
-	if (myRect.right >= otherRect.left&&myRect.left <= otherRect.right&&myRect.bottom >= otherRect.top&&myRect.top <= otherRect.bottom)
+	if (myRect.right >= otherRect.left&&myRect.left <= otherRect.right&&myRect.bottom <= otherRect.top&&myRect.top >= otherRect.bottom)
 	{
 		return true;
 	}
@@ -83,7 +61,7 @@ bool Collision::checkCollision(BaseObject * myEntity, BaseObject * otherEntity, 
 	}
 
 	// dy
-	if (velocity.y > 0)
+	if (velocity.y < 0)
 	{
 		_dyEntry = otherRect.top - myRect.bottom;
 		_dyExit = otherRect.bottom - myRect.top;
@@ -152,12 +130,12 @@ bool Collision::checkCollision(BaseObject * myEntity, BaseObject * otherEntity, 
 		// xét y
 		if (_dyEntry < 0.0f)
 		{
-			data.direction = CollideDirection::BOTTOM;
+			data.direction = CollideDirection::TOP;
 
 		}
 		else
 		{
-			data.direction = CollideDirection::TOP;
+			data.direction = CollideDirection::BOTTOM;
 		}
 	}
 
@@ -225,8 +203,8 @@ MetroidRect Collision::getSweptBroadphaseRect(BaseObject * obj, float frametime)
 	MetroidRect myRect = obj->getBoundCollision();
 
 	MetroidRect   rect;
-	rect.top = velocity.y > 0 ? myRect.top : myRect.top + velocity.y;
-	rect.bottom = velocity.y > 0 ? myRect.bottom + velocity.y : myRect.bottom;
+	rect.top = velocity.y > 0 ? myRect.top + velocity.y : myRect.top;
+	rect.bottom = velocity.y > 0 ? myRect.bottom :  myRect.bottom + velocity.y;
 	rect.left = velocity.x > 0 ? myRect.left : myRect.left + velocity.x;
 	rect.right = velocity.x > 0 ? myRect.right + velocity.x : myRect.right;
 

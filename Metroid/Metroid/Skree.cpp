@@ -6,7 +6,7 @@
 #define TIME_FRAME_DELAY_FALLING 0.05f
 #define EFFECT_DEATH_TIME 1.5f
 #define VELOCITY_X 80
-#define VELOCITY_Y 3
+#define VELOCITY_Y -3
 
 
 Skree::Skree(TextureManager * textureM, Graphics * graphics, EnemyColors color) : BaseObject(eID::SKREE)
@@ -16,7 +16,7 @@ Skree::Skree(TextureManager * textureM, Graphics * graphics, EnemyColors color) 
 	{
 		throw GameError(GameErrorNS::FATAL_ERROR, "Can not init sprite Skree");
 	}
-	this->sprite->setOrigin(VECTOR2(0.5f, 1));
+	this->sprite->setOrigin(VECTOR2(0.5f, 0));
 
 	effectDeath = new SkreeEffectDeath(textureM, graphics);
 

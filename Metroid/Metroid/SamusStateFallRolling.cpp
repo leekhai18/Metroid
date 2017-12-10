@@ -1,48 +1,45 @@
-#include "SamusStateRolling.h"
+#include "SamusStateFallRolling.h"
 #include "SamusStateManager.h"
 
 
-SamusStateRolling::SamusStateRolling()
+SamusStateFallRolling::SamusStateFallRolling()
 {
 }
 
-SamusStateRolling::SamusStateRolling(Samus * samus, Input * input) : BaseState(samus, input)
-{
-
-}
-
-
-SamusStateRolling::~SamusStateRolling()
+SamusStateFallRolling::SamusStateFallRolling(Samus * samus, Input * input) : BaseState(samus, input)
 {
 
 }
 
-void SamusStateRolling::setBoundCollision()
+
+SamusStateFallRolling::~SamusStateFallRolling()
+{
+
+}
+
+void SamusStateFallRolling::setBoundCollision()
 {
 	MetroidRect rect;
-	VECTOR2 position(this->samus->getPosition().x, samus->getPosition().y );
+	VECTOR2 position(this->samus->getPosition().x, samus->getPosition().y);
 	rect.left = position.x - WIDTH_COLLISION*0.5f;
 	rect.right = position.x + WIDTH_COLLISION*0.5f;
-	rect.top = position.y + ROLL_HEIGHT*0.5f;
-	rect.bottom = position.y - ROLL_HEIGHT*0.5f;
+	rect.top = position.y + JUMP_HEIGHT*0.5f;
+	rect.bottom = position.y - JUMP_HEIGHT*0.5f;
 
 
 	samus->setBoundCollision(rect);
 }
 
-void SamusStateRolling::init()
+void SamusStateFallRolling::init()
 {
 	this->animation = samus->getRollingAnim();
 
-	setBoundCollision();
+	this->samus->setVelocityY(-50);
 
-	this->samus->setVelocityY(-SAMUS_MIN_SPEED_Y);
-
-
-	move_to_fall = true;
+	velocity_frame = -50;
 }
 
-void SamusStateRolling::handleInput(float dt)
+void SamusStateFallRolling::handleInput(float dt)
 {
 	//handle press left button
 	if (input->isKeyDown(VK_LEFT) && input->isKeyUp(VK_RIGHT))
@@ -53,7 +50,6 @@ void SamusStateRolling::handleInput(float dt)
 			//set direction to left
 			this->samus->setDirection(eDirection::left);
 		}
-
 		//check if moveLeft = false, it means samus is colliding with other object in right side
 		if (this->samus->canMoveLeft() == true)
 		{
@@ -68,7 +64,7 @@ void SamusStateRolling::handleInput(float dt)
 
 		if (this->samus->isInDirection(eDirection::left))
 		{
-			
+
 			this->samus->setFlipX(false);
 			this->samus->setDirection(eDirection::right);
 
@@ -87,6 +83,7 @@ void SamusStateRolling::handleInput(float dt)
 	// Handle horizontal
 	if (input->isKeyDown(VK_LEFT) && input->isKeyDown(VK_RIGHT))
 	{
+
 	}
 
 	if (input->isKeyDown(VK_UP) || input->isKeyDown(VK_X))
@@ -94,10 +91,14 @@ void SamusStateRolling::handleInput(float dt)
 		this->samus->setStatus(eStatus::STANDING);
 	}
 
+	if (this->samus->getVelocity().y > -SAMUS_MAX_SPEED_Y)
+	{
+		velocity_frame = velocity_frame + ACCELERATE_Y*dt;
 
-
+		this->samus->setVelocityY((velocity_frame + this->samus->getVelocity().y) / 2);
+	}
 }
-void SamusStateRolling::onCollision()
+void SamusStateFallRolling::onCollision()
 {
 
 	for (auto i = this->samus->getListCollide()->begin(); i != this->samus->getListCollide()->end(); i++)
@@ -118,12 +119,12 @@ void SamusStateRolling::onCollision()
 				this->samus->setCanMoveLeft(false);
 				break;
 			case CollideDirection::TOP:
+				//remain_time = 1.0f - i->entryTime;
 				this->samus->setVelocityY(0);
 
 				this->samus->setPositionY(i->positionCollision + OFFSET_ROLLING);
+				this->samus->setStatus(eStatus::ROLLING);
 
-				reset_fall = true;
-				move_to_fall = false;
 				break;
 			}
 			break;
@@ -132,58 +133,47 @@ void SamusStateRolling::onCollision()
 		}
 
 	}
-	
+
 }
-void SamusStateRolling::update(float dt)
+void SamusStateFallRolling::update(float dt)
 {
 	this->animation->update(dt);
-
 	if (this->samus->canMoveLeft() || this->samus->canMoveRight())
 	{
 		this->samus->updateHorizontal(dt);
 	}
 	this->samus->updateVertical(dt);
-
-	
 	setBoundCollision();
 
-	if(move_to_fall&&!this->samus->isInStatus(eStatus::STANDING))
-	{
-		this->samus->setStatus(eStatus::FALLING_ROLLING);
-	}
-	if (this->samus->getStatus() != eStatus::ROLLING)
+	if (this->samus->getStatus() != eStatus::FALLING_ROLLING)
 	{
 		switch (this->samus->getStatus())
 		{
 		case eStatus::STANDING:
-			this->samus->setPositionY(this->samus->getPosition().y  + OFFSET_STAND );
-			
+			this->samus->setPositionY(this->samus->getPosition().y + OFFSET_STAND);
+			break;
+		case eStatus::ROLLING:
+
 			break;
 		default:
 			break;
 		}
 		SamusStateManager::getInstance()->changeStateTo(this->samus->getStatus());
-		return;
 	}
 	this->samus->setCanMoveLeft(true);
 	this->samus->setCanMoveRight(true);
 
-	//if(reset_fall)
-	//{
-	//	
-	//	reset_fall = false;
-	//}
-	move_to_fall = true;
-	this->samus->setVelocity(VECTOR2(0, -SAMUS_MIN_SPEED_Y));
+	
+
 }
 
 
-void SamusStateRolling::onStart()
+void SamusStateFallRolling::onStart()
 {
 	this->animation->start();
 }
 
-void SamusStateRolling::onExit()
+void SamusStateFallRolling::onExit()
 {
 	this->animation->stop();
 }
