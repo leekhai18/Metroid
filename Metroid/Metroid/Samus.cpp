@@ -133,24 +133,21 @@ void Samus::update(float dt)
 			}
 		}
 
-		if (this->isInStatus(eStatus::ACROBAT) || this->isInStatus(eStatus::JUMPING))
+		if (Camera::getInstance()->canFolowUp() && this->getVelocity().y > 0)
 		{
-			if (Camera::getInstance()->canFolowUp())
+			if (this->getPosition().y > Camera::getInstance()->getActiveArea().top)
 			{
-				if (this->getPosition().y > Camera::getInstance()->getActiveArea().top)
-				{
-					Camera::getInstance()->setVelocity(VECTOR2(0, this->getVelocity().y));
-					isCameraMoving = true;
-				}
+				Camera::getInstance()->setVelocity(VECTOR2(0, this->getVelocity().y));
+				isCameraMoving = true;
 			}
+		}
 
-			if (Camera::getInstance()->canFolowDown())
+		if (Camera::getInstance()->canFolowDown() && this->getVelocity().y < 0)
+		{
+			if (this->getPosition().y < Camera::getInstance()->getActiveArea().bottom)
 			{
-				if (this->getPosition().y < Camera::getInstance()->getActiveArea().bottom)
-				{
-					Camera::getInstance()->setVelocity(VECTOR2(0, this->getVelocity().y));
-					isCameraMoving = true;
-				}
+				Camera::getInstance()->setVelocity(VECTOR2(0, this->getVelocity().y));
+				isCameraMoving = true;
 			}
 		}
 
@@ -226,12 +223,12 @@ bool Samus::canMoveRight()
 	return this->moveRight;
 }
 
-bool Samus::isJump()
+bool Samus::canJump()
 {
 	return this->jump;
 }
 
-void Samus::setJump(bool jump)
+void Samus::setCanJump(bool jump)
 {
 	this->jump = jump;
 }
@@ -253,7 +250,7 @@ void Samus::setFall(bool isFall)
 void Samus::setBoundCollision(MetroidRect rect)
 {
 	this->boundCollision = rect;
-	GameDebug::getInstance()->setVertices(rect);
+	//GameDebug::getInstance()->setVertices(rect);
 	this->setActiveBound();
 }
 

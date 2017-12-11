@@ -66,10 +66,10 @@ void SamusStateRunning::handleInput(float dt)
 #pragma endregion
 	if (input->isKeyUp(VK_X) == true)
 	{
-		this->samus->setJump(true);
+		this->samus->setCanJump(true);
 	}
 	//When we press jump key, change state to jump
-	if (input->isKeyDown(VK_X) && this->samus->isJump() == true)
+	if (input->isKeyDown(VK_X) && this->samus->canJump() == true)
 	{
 		//reset velocity
 		this->samus->setFall(false);

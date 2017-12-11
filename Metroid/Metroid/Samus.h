@@ -14,11 +14,11 @@
 #define SAMUS_MIN_SPEED_Y 70
 #define SAMUS_VERLOCITY_X 100
 #define SAMUS_MAX_SPEED_Y 170
-#define SAMUS_V0_FALL_Y 40
-#define SAMUS_VELOCITY_JUMP_X 50
+#define SAMUS_V0_FALL_Y -60
+#define SAMUS_VELOCITY_JUMP_X 70
 
 #define MIN_JUMP  32.0f
-#define MAX_JUMP 84.0f
+#define MAX_JUMP 80.0f
 
 #define TIME_SHOOTING 0.15f
 
@@ -36,7 +36,7 @@
 #define JUMP_HEIGHT 24
 #define JUMP_WIDTH 10
 
-#define ACCELERATE_Y -170.0f
+#define ACCELERATE_Y -140.0f
 #define ACCELERATE_X 50.0f
 
 #define OFFSET_JUMP 11
@@ -101,9 +101,9 @@ public:
 	bool isAcrobat();
 	bool canMoveLeft();
 	bool canMoveRight();
-	bool isJump();
+	bool canJump();
 
-	void setJump(bool jump);
+	void setCanJump(bool jump);
 	void setCanMoveLeft(bool moveLeft);
 	void setCanMoveRight(bool moveRight);
 	void setFall(bool isFall);

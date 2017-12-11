@@ -32,7 +32,7 @@ Metroid::~Metroid()
 
 	ObjectManager::getInstance()->release();
 	Collision::getInstance()->release();
-	GameDebug::getInstance()->release();
+	//GameDebug::getInstance()->release();
 }
 
 Metroid* Metroid::instance = nullptr;
@@ -84,8 +84,8 @@ void Metroid::initialize(HWND hwnd)
 		throw GameError(GameErrorNS::FATAL_ERROR, "Can not load object layer brinstar json");
 	}
 
-	GameDebug::getInstance()->initialize(graphics);
-	GameDebug::getInstance()->setCount(5);
+	//GameDebug::getInstance()->initialize(graphics);
+	//GameDebug::getInstance()->setCount(5);
 
 	fpsText = new Text("FPS: 0", eFont::body, 8, VECTOR2(VIEWPORT_WIDTH - 70, 5), GraphicsNS::WHITE, false, true);
 	fpsText->initialize(graphics);

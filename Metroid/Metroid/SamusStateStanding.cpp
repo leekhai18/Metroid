@@ -29,16 +29,18 @@ SamusStateStanding::~SamusStateStanding()
 
 void SamusStateStanding::init()
 {
-	this->samus->setVelocityY(-SAMUS_MIN_SPEED_Y);
+	if (this->samus->isFaling())
+		this->samus->setVelocityY(SAMUS_V0_FALL_Y);
+	else
+		this->samus->setVelocityY(-SAMUS_MIN_SPEED_Y);
+
 	setBoundCollision();
 	timerToRunning = 0;
 	if (input->isKeyDown(VK_UP))
 	{
 		isUp = true;
-
 		// Set Data for sprite
 		this->samus->getSprite()->setData(IndexManager::getInstance()->samusYellowTurnUp);
-
 		return;
 	}
 
@@ -71,7 +73,7 @@ void SamusStateStanding::handleInput(float dt)
 				//change state to runnings
 				this->samus->setStatus(eStatus::RUNNING);
 				//we set jump to false, when we realease jump button it will change true
-				this->samus->setJump(false);
+				this->samus->setCanJump(false);
 				//reset timer
 				timerToRunning = 0;
 				return;
@@ -99,7 +101,7 @@ void SamusStateStanding::handleInput(float dt)
 			if (timerToRunning > TIME_TO_RUNNING)
 			{
 				//we set jump to false, when we realease jump button it will change true
-				this->samus->setJump(false);
+				this->samus->setCanJump(false);
 				//change state to runnings
 				this->samus->setStatus(eStatus::RUNNING);
 				//reset timer
@@ -112,10 +114,10 @@ void SamusStateStanding::handleInput(float dt)
 	//reset jump when user release jump button
 	if (input->isKeyUp(VK_X))
 	{
-		this->samus->setJump(true);
+		this->samus->setCanJump(true);
 	}
 
-	if (input->isKeyDown(VK_X) && this->samus->isJump() == true)
+	if (input->isKeyDown(VK_X) && this->samus->canJump() == true)
 	{
 		this->samus->setFall(false);
 		this->samus->setAcrobat(false);
@@ -176,6 +178,7 @@ void SamusStateStanding::handleInput(float dt)
 		}
 	}
 }
+
 void SamusStateStanding::onCollision()
 {
 	for (auto i = this->samus->getListCollide()->begin(); i != this->samus->getListCollide()->end(); i++)
@@ -188,6 +191,7 @@ void SamusStateStanding::onCollision()
 			case CollideDirection::TOP:
 				this->samus->setVelocityY(0);
 				this->samus->setPositionY(i->positionCollision + OFFSET_STAND);
+				this->samus->setFall(false);
 				break;
 			}
 			break;
@@ -208,23 +212,17 @@ void SamusStateStanding::update(float dt)
 
 	if (this->samus->getStatus() != eStatus::STANDING)
 	{
-		switch (this->samus->getStatus())
-		{
-		case eStatus::JUMPING:
-			break;
-		case eStatus::RUNNING:
-			break;
-		case eStatus::ROLLING:
-			break;
-		default:
-			break;
-		}
-
 		SamusStateManager::getInstance()->changeStateTo(this->samus->getStatus());
 		return;
 	}
 
-	this->samus->setVelocityY(-SAMUS_MIN_SPEED_Y);
+	if (this->samus->isFaling())
+	{
+		if (this->samus->getVelocity().y > -SAMUS_MAX_SPEED_Y)
+			this->samus->setVelocityY(this->samus->getVelocity().y + ACCELERATE_Y*dt);
+	}
+	else
+		this->samus->setVelocityY(-SAMUS_MIN_SPEED_Y);
 }
 
 void SamusStateStanding::onStart()

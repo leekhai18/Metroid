@@ -27,7 +27,6 @@ void SamusStateAcrobat::setBoundCollision()
 }
 void SamusStateAcrobat::init()
 {
-
 	this->animation = samus->getJumpingAnim();
 	time = 0;
 	this->position_to_jump = this->samus->getPosition().y;
@@ -36,7 +35,6 @@ void SamusStateAcrobat::init()
 
 void SamusStateAcrobat::handleInput(float dt)
 {
-
 #pragma region Horizontal
 	if (input->isKeyDown(VK_RIGHT) && input->isKeyUp(VK_LEFT))
 	{
@@ -45,71 +43,36 @@ void SamusStateAcrobat::handleInput(float dt)
 		{
 			this->samus->setFlipX(false);
 			this->samus->setDirection(eDirection::right);
-			this->samus->setVelocityX(0);
-
 		}
 		this->samus->setVelocityX(SAMUS_VELOCITY_JUMP_X);
 	}
 
 	if (input->isKeyDown(VK_LEFT) && input->isKeyUp(VK_RIGHT))
 	{
-
-		// Handle direction	
 		if (this->samus->isInDirection(eDirection::right))
 		{
 			this->samus->setFlipX(true);
-			//set direction to left
 			this->samus->setDirection(eDirection::left);
-			
-			this->samus->setVelocityX(0);
 		}
+
 		this->samus->setVelocityX(-SAMUS_VELOCITY_JUMP_X);
+	}
+
+	if ((input->isKeyUp(VK_RIGHT) && input->isKeyUp(VK_LEFT)) || (input->isKeyDown(VK_LEFT) && input->isKeyDown(VK_RIGHT)))
+	{
+		this->samus->setVelocityX(0);
 	}
 #pragma endregion
 
 #pragma region Vertical
 	// Handle vertical
-	if (this->samus->isFaling() == false)
+	if (this->samus->isFaling() == false) // is going up
 	{	
-		//if we release jump button, samus will jump to MIN_JUMP
-		if (input->isKeyUp(VK_X))
-		{
-			if (jumpDistance >= MIN_JUMP)
-			{
-				if (this->samus->isFaling() == false)
-				{
-					this->samus->setFall(true);
-					this->samus->setVelocityY(SAMUS_V0_FALL_Y);
-				}
+		//samus.velocity.y= V + at
+		this->samus->setVelocityY(this->samus->getVelocity().y + ACCELERATE_Y*dt);
 
-				this->samus->setVelocityY(this->samus->getVelocity().y*-1.0f + ACCELERATE_Y*dt);
-
-				return;
-			}
-		}
-		//assign velocity for samus to change velocity
-		//initial velocity(V_0)
-		this->samus->setVelocityY(velocity_frame);
-
-		//set velocity.y to jump up
-		//V= V_0 + a*dt;
-		//a: accelerate is the rate of change of velocity of an object with respect to time
-		//so if a increase V also increase
-
-
-		//calculate velocity after dt(s) (V)
-		velocity_frame = velocity_frame + ACCELERATE_Y*dt;
-
-		//and then set average velocity.y 
-		//samus.velocity.y= (V + V_0)/2
-		this->samus->setVelocityY((velocity_frame + this->samus->getVelocity().y) / 2);
-
-		//distance = V*dt
-		float distance = this->samus->getVelocity().y*dt;
-		jumpDistance += distance;
+		jumpDistance += this->samus->getVelocity().y*dt;
 		time += dt;
-
-		//if acrobat and time enough to change acrobat state
 		
 		if (jumpDistance < MAX_JUMP)
 		{
@@ -118,28 +81,28 @@ void SamusStateAcrobat::handleInput(float dt)
 		else
 		{
 			jumpDistance = 0;
-			if (this->samus->isFaling() == false)
-			{
-				this->samus->setFall(true);
-				this->samus->setVelocityY(SAMUS_V0_FALL_Y);
-			}
+			this->samus->setFall(true);
+			this->samus->setVelocityY(SAMUS_V0_FALL_Y);
+		}
 
-			this->samus->setVelocityY(this->samus->getVelocity().y*-1.0f + ACCELERATE_Y*dt);
+		//if we release jump button, samus will jump to MIN_JUMP
+		if (input->isKeyUp(VK_X))
+		{
+			this->samus->setFall(true);
+			this->samus->setVelocityY(SAMUS_V0_FALL_Y);		
 		}
 	}
-	else
+	else //Falling
 	{
-		this->samus->setVelocityY(this->samus->getVelocity().y + ACCELERATE_Y*dt);
+		if (this->samus->getVelocity().y > -SAMUS_MAX_SPEED_Y)
+			this->samus->setVelocityY(this->samus->getVelocity().y + ACCELERATE_Y*dt);
 
-	if(this->samus->getPosition().y <= position_to_jump)
-		{
+		if(this->samus->getPosition().y <= position_to_jump)
 			this->samus->setStatus(eStatus::JUMPING);
-		}
 	}
 #pragma endregion
-
-
 }
+
 #pragma region Collision
 void SamusStateAcrobat::onCollision()
 {
@@ -166,7 +129,7 @@ void SamusStateAcrobat::onCollision()
 			case CollideDirection::TOP:
 				jumpDistance = 0;
 				//set jump = false, when user release jump button set to true
-				this->samus->setJump(false);
+				this->samus->setCanJump(false);
 				//set fall to false
 				this->samus->setFall(false);
 				//reset velocity

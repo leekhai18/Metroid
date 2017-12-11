@@ -35,7 +35,7 @@ void Port::draw()
 					Camera::getInstance()->setCanFollowOnRight(false);
 					Camera::getInstance()->setCanFollowOnLeft(true);
 
-					Camera::getInstance()->setVelocity(VECTOR2(0, 0));
+					Camera::getInstance()->setVelocity(VECTOR2(0, Camera::getInstance()->getVelocity().y));
 				}
 				else
 				{
@@ -49,7 +49,7 @@ void Port::draw()
 					Camera::getInstance()->setCanFollowOnLeft(false);
 					Camera::getInstance()->setCanFollowOnRight(true);
 
-					Camera::getInstance()->setVelocity(VECTOR2(0, 0));
+					Camera::getInstance()->setVelocity(VECTOR2(0, Camera::getInstance()->getVelocity().y));
 				}
 				else
 				{

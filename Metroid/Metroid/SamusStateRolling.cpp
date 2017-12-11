@@ -8,7 +8,7 @@ SamusStateRolling::SamusStateRolling()
 
 SamusStateRolling::SamusStateRolling(Samus * samus, Input * input) : BaseState(samus, input)
 {
-
+	timer = 0;
 }
 
 
@@ -25,8 +25,6 @@ void SamusStateRolling::setBoundCollision()
 	rect.right = position.x + WIDTH_COLLISION*0.5f;
 	rect.top = position.y + ROLL_HEIGHT*0.5f;
 	rect.bottom = position.y - ROLL_HEIGHT*0.5f;
-
-
 	samus->setBoundCollision(rect);
 }
 
@@ -38,8 +36,7 @@ void SamusStateRolling::init()
 
 	this->samus->setVelocityY(-SAMUS_MIN_SPEED_Y);
 
-
-	move_to_fall = true;
+	isFall = true;
 }
 
 void SamusStateRolling::handleInput(float dt)
@@ -50,7 +47,6 @@ void SamusStateRolling::handleInput(float dt)
 		if (this->samus->isInDirection(eDirection::right))
 		{
 			this->samus->setFlipX(true);
-			//set direction to left
 			this->samus->setDirection(eDirection::left);
 		}
 
@@ -67,10 +63,8 @@ void SamusStateRolling::handleInput(float dt)
 
 		if (this->samus->isInDirection(eDirection::left))
 		{
-			
 			this->samus->setFlipX(false);
 			this->samus->setDirection(eDirection::right);
-
 		}
 
 		//check if moveRight = false, it means samus is colliding with other object in left side
@@ -90,9 +84,9 @@ void SamusStateRolling::handleInput(float dt)
 		this->samus->setStatus(eStatus::STANDING);
 	}
 }
+
 void SamusStateRolling::onCollision()
 {
-
 	for (auto i = this->samus->getListCollide()->begin(); i != this->samus->getListCollide()->end(); i++)
 	{
 		switch (i->object->getId())
@@ -115,8 +109,7 @@ void SamusStateRolling::onCollision()
 
 				this->samus->setPositionY(i->positionCollision + OFFSET_ROLLING);
 
-				reset_fall = true;
-				move_to_fall = false;
+				isFall = false;
 				break;
 			}
 			break;
@@ -137,32 +130,39 @@ void SamusStateRolling::update(float dt)
 	}
 	this->samus->updateVertical(dt);
 
-	
 	setBoundCollision();
 
-	if(move_to_fall&&!this->samus->isInStatus(eStatus::STANDING))
+	timer += dt;
+	if (timer < 0.03f)
+	{
+		if (flagUpDown)
+			this->samus->setPositionY(this->samus->getPosition().y - ACCELERATE_Y*dt);
+	}
+	else
+	{
+		flagUpDown = !flagUpDown;
+		timer = 0;
+	}
+
+	if(isFall && !this->samus->isInStatus(eStatus::STANDING))
 	{
 		this->samus->setStatus(eStatus::FALLING_ROLLING);
 	}
-	if (this->samus->getStatus() != eStatus::ROLLING)
+
+	if (!this->samus->isInStatus(eStatus::ROLLING))
 	{
 		switch (this->samus->getStatus())
 		{
 		case eStatus::STANDING:
-			this->samus->setPositionY(this->samus->getPosition().y  + OFFSET_STAND );
-			
+			this->samus->setPositionY(this->samus->getPosition().y + OFFSET_STAND);
 			break;
 		default:
 			break;
 		}
+
 		SamusStateManager::getInstance()->changeStateTo(this->samus->getStatus());
 		return;
 	}
-	this->samus->setCanMoveLeft(true);
-	this->samus->setCanMoveRight(true);
-
-	move_to_fall = true;
-	this->samus->setVelocity(VECTOR2(0, -SAMUS_MIN_SPEED_Y));
 }
 
 
