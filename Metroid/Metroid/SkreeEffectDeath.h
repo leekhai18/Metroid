@@ -5,7 +5,6 @@ class SkreeEffectDeath
 {
 private:
 	SkreeEffectDeathPart** list;
-
 	VECTOR2 position;
 
 public:
@@ -17,9 +16,10 @@ public:
 	void draw();
 
 	void init(VECTOR2 position);
-	bool isInit();
 
 	void setPosition(VECTOR2 pos);
 	VECTOR2 getPosition();
+
+	bool isFinished();
 };
 

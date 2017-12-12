@@ -124,9 +124,11 @@ void Quadtree::retrieve(list<BaseObject*>* return_objects_list, list<BaseObject*
 	{
 		for (auto i = objects_list.begin(); i != objects_list.end(); i++)
 		{
-			bool found = (std::find(return_objects_list->begin(), return_objects_list->end(), *i) != return_objects_list->end());
+			bool found1 = (std::find(return_objects_list->begin(), return_objects_list->end(), *i) != return_objects_list->end());
+			bool found2 = (std::find(list_wall->begin(), list_wall->end(), *i) != list_wall->end());
+			bool found3 = (std::find(list_not_wall->begin(), list_not_wall->end(), *i) != list_not_wall->end());
 
-			if (!found)
+			if (!found1)
 			{
 				if (Collision::getInstance()->isCollide(samus->getActiveBound(), (*i)->getActiveBound()))
 				{
@@ -135,16 +137,23 @@ void Quadtree::retrieve(list<BaseObject*>* return_objects_list, list<BaseObject*
 					if ((*i)->getId() == eID::WALL)
 						list_wall->push_back(*i);
 				}
+			}
 
+			if (!found2)
+			{
+				if (Collision::getInstance()->isCollide(samus->getActiveBound(), (*i)->getActiveBound()))
+				{
+					if ((*i)->getId() == eID::WALL)
+						list_wall->push_back(*i);
+				}
+			}
+
+			if (!found3)
+			{
 				if (Collision::getInstance()->isCollide(rect, (*i)->getActiveBound()))
 				{
 					if ((*i)->getId() != eID::WALL)
-					{
 						list_not_wall->push_back(*i);
-
-					}
-						
-
 				}
 			}
 		}

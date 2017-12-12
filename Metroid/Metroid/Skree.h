@@ -37,8 +37,9 @@ public:
 	// set init
 	void setInitPosition(VECTOR2 pos);
 
-	// reinit
 	void reInit();
+
+	void finish();
 
 	void setActivity(bool flag);
 	bool isActivitied();

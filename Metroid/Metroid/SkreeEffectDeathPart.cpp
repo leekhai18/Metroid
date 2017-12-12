@@ -1,5 +1,8 @@
 #include "SkreeEffectDeathPart.h"
-#define RATE_BEZIER 4
+
+#define WIDTH_HALF 1
+#define HEIGHT_HALF 1
+#define TIME_RUN 0.25f
 
 
 SkreeEffectDeathPart::SkreeEffectDeathPart(TextureManager * textureM, Graphics * graphics) : BaseObject()
@@ -7,14 +10,13 @@ SkreeEffectDeathPart::SkreeEffectDeathPart(TextureManager * textureM, Graphics *
 	this->sprite = new Sprite();
 	if (!this->sprite->initialize(graphics, textureM, SpriteManager::getInstance()))
 	{
-		throw GameError(GameErrorNS::FATAL_ERROR, "Can not init sprite SkreeEffectDeath");
+		throw GameError(GameErrorNS::FATAL_ERROR, "Can not init sprite SkreeEffectDeathPart");
 	}
 
 	// Set Data for sprite
 	this->sprite->setData(IndexManager::getInstance()->skreeDeathEffect);
 	this->setOrigin(VECTOR2(0.5f, 0.5f));
-
-	t = 0;
+	timer = 0;
 }
 
 SkreeEffectDeathPart::SkreeEffectDeathPart()
@@ -23,6 +25,7 @@ SkreeEffectDeathPart::SkreeEffectDeathPart()
 
 SkreeEffectDeathPart::~SkreeEffectDeathPart()
 {
+	delete this->sprite;
 }
 
 void SkreeEffectDeathPart::init(VECTOR2 target, VECTOR2 startPosition)
@@ -30,30 +33,56 @@ void SkreeEffectDeathPart::init(VECTOR2 target, VECTOR2 startPosition)
 	this->target = target;
 	this->startPosition = startPosition;
 	this->setPosition(startPosition);
+	this->setVelocity(VECTOR2((target.x - startPosition.x)/TIME_RUN, (target.y - startPosition.y)/TIME_RUN));
+	this->isFinish = false;
+	timer = 0;
+}
+
+void SkreeEffectDeathPart::onCollision()
+{
 }
 
 void SkreeEffectDeathPart::update(float dt)
 {
-	if (this->isInStatus(eStatus::START))
+	if (!isFinish)
 	{
-		if (t < 1)
+		timer += dt;
+		if (timer < TIME_RUN)
 		{
-			t += dt * RATE_BEZIER;
-			this->setPosition((1 - t)*this->startPosition + t*this->target);
+			this->setPosition(this->getPosition().x + this->getVelocity().x * dt, this->getPosition().y + this->getVelocity().y * dt);
+			this->setBoundCollision();
 		}
 		else
-			this->setStatus(eStatus::JUMPING);
+		{
+			finish();
+		}
 	}
+
 }
 
 void SkreeEffectDeathPart::draw()
 {
-	this->sprite->draw();
+	if (!isFinish)
+		this->sprite->draw();
 }
 
-void SkreeEffectDeathPart::release()
+void SkreeEffectDeathPart::setBoundCollision()
 {
-	delete this->sprite;
-	this->sprite = nullptr;
+	this->boundCollision.top = this->getPosition().y + 1;
+	this->boundCollision.bottom = this->getPosition().y - 1;
+	this->boundCollision.left = this->getPosition().y - 1;
+	this->boundCollision.right = this->getPosition().y + 1;
 }
+
+bool SkreeEffectDeathPart::isFinished()
+{
+	return isFinish;
+}
+
+void SkreeEffectDeathPart::finish()
+{
+	BaseObject::setBoundCollision(MetroidRect(0, 0, 0, 0));
+	isFinish = true;
+}
+
 

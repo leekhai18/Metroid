@@ -99,6 +99,7 @@ void Metroid::update(float dt)
 	ObjectManager::getInstance()->update(dt);
 	samus->update(dt);
 	this->camera->update(dt);
+
 }
 
 void Metroid::handleInput(float dt)

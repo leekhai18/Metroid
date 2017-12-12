@@ -98,12 +98,10 @@ void ObjectManager::update(float dt)
 			if ((*i)->getId() == eID::SKREE)
 			{
 				Skree* skr = static_cast<Skree*>(*i);
-				if (skr->isActivitied() == false)
-					skr->setActivity(true);
 
 				skr->setTarget(samus->getPosition());
 			}
-
+			
 			(*i)->update(dt);
 		}
 	}
@@ -1293,7 +1291,7 @@ bool ObjectManager::load_list(const char * filename)
 				//writer.EndObject();
 
 
-				object_list->push_back(skb);
+				//object_list->push_back(skb);
 			}
 		}
 		//writer.EndArray();
