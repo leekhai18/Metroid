@@ -13,13 +13,14 @@
 
 #define SAMUS_MIN_SPEED_Y 70
 #define SAMUS_VERLOCITY_X 100
-#define SAMUS_MAX_SPEED_Y 150
+#define SAMUS_MAX_SPEED_Y 170
+#define SAMUS_V0_FALL_Y 40
 #define SAMUS_VELOCITY_JUMP_X 50
 
 #define MIN_JUMP  32.0f
-#define MAX_JUMP 80.0f
+#define MAX_JUMP 84.0f
 
-#define TIME_SHOOTING 0.1f
+#define TIME_SHOOTING 0.15f
 
 #define MAX_HEIHT 32
 
@@ -35,7 +36,7 @@
 #define JUMP_HEIGHT 24
 #define JUMP_WIDTH 10
 
-#define ACCELERATE_Y -140.0f
+#define ACCELERATE_Y -170.0f
 #define ACCELERATE_X 50.0f
 
 #define OFFSET_JUMP 11
@@ -51,6 +52,8 @@
 #define OFFSET_COLLISION_X 0
 #define OFFSET_COLLISION_Y 4
 #define OFFSET_ROLLING 6.5f
+
+
 class Samus: public BaseObject
 {
 private:
@@ -70,7 +73,6 @@ private:
 	bool jump;
 	bool moveHorizontal;
 	bool moveVertical;
-	float totalHeightWasJumped;
 
 	bool isCollidingPort;
 	bool moveToFontGate;

@@ -35,17 +35,34 @@ void Map::draw()
 	int rowBegin = (MAP_HEIGHT - viewport.top) / tileH;
 	int rowEnd = rowBegin + Camera::getInstance()->getHeight() / tileH + 1;
 
-	// set Follow direction for camera
-	if (mapCell[rowBegin - 1][columnBegin].rect == NULL)
+#pragma region set direction for following of camera
+	if (mapCell[rowEnd][columnBegin].rect == NULL && mapCell[rowBegin - 1][columnBegin].rect != NULL)
 	{
-		Camera::getInstance()->setCanFoLLowVertical(false);
-	}
-	else
-	{
-		Camera::getInstance()->setCanFoLLowVertical(true);
+		Camera::getInstance()->setCanFollowToUp(true);
+		Camera::getInstance()->setCanFollowToDown(false);
 		Camera::getInstance()->setCanFollowOnLeft(false);
 		Camera::getInstance()->setCanFollowOnRight(false);
 	}
+	else if (mapCell[rowBegin - 1][columnBegin].rect == NULL && mapCell[rowEnd][columnBegin].rect != NULL)
+	{
+		Camera::getInstance()->setCanFollowToUp(false);
+		Camera::getInstance()->setCanFollowToDown(true);
+		Camera::getInstance()->setCanFollowOnLeft(false);
+		Camera::getInstance()->setCanFollowOnRight(false);
+	}
+	else if (mapCell[rowEnd][columnBegin].rect != NULL && mapCell[rowBegin - 1][columnBegin].rect != NULL)
+	{
+		Camera::getInstance()->setCanFollowToUp(true);
+		Camera::getInstance()->setCanFollowToDown(true);
+		Camera::getInstance()->setCanFollowOnLeft(false);
+		Camera::getInstance()->setCanFollowOnRight(false);
+	}
+	else
+	{
+		Camera::getInstance()->setCanFollowToUp(false);
+		Camera::getInstance()->setCanFollowToDown(false);
+	}
+#pragma endregion
 
 	SpriteData spriteData;
 	for (int col = columnBegin; col < columnEnd; col++)

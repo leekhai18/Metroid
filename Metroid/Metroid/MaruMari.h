@@ -6,6 +6,7 @@ class MaruMari : public BaseObject
 {
 private:
 	Animation *anim;
+	Animation *explosion;
 
 public:
 	MaruMari();
@@ -14,5 +15,7 @@ public:
 
 	void update(float dt);
 	void draw();
+
+	void startExplosion();
 };
 

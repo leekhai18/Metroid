@@ -23,8 +23,6 @@ void SamusStateAcrobat::setBoundCollision()
 	rect.right = position.x + WIDTH_COLLISION*0.5f;
 	rect.top = position.y + JUMP_HEIGHT*0.5f;
 	rect.bottom = position.y - JUMP_HEIGHT*0.5f;
-
-
 	samus->setBoundCollision(rect);
 }
 void SamusStateAcrobat::init()
@@ -33,8 +31,6 @@ void SamusStateAcrobat::init()
 	this->animation = samus->getJumpingAnim();
 	time = 0;
 	this->position_to_jump = this->samus->getPosition().y;
-	//this->samus->setVelocityY(-SAMUS_MAX_SPEED_Y);
-	//velocity = -SAMUS_MAX_SPEED_Y;
 	setBoundCollision();
 }
 
@@ -52,13 +48,6 @@ void SamusStateAcrobat::handleInput(float dt)
 			this->samus->setVelocityX(0);
 
 		}
-		//set velocity to move right
-
-		/*this->samus->setVelocityX(this->samus->getVelocity().x + ACCELERATE_X*dt);
-		if (this->samus->getVelocity().x > SAMUS_VERLOCITY_X)
-		{
-			
-		}*/
 		this->samus->setVelocityX(SAMUS_VELOCITY_JUMP_X);
 	}
 
@@ -74,22 +63,8 @@ void SamusStateAcrobat::handleInput(float dt)
 			
 			this->samus->setVelocityX(0);
 		}
-
-		//set velocity to move left
-		/*this->samus->setVelocityX(this->samus->getVelocity().x - ACCELERATE_X*dt);
-		if (-this->samus->getVelocity().x > SAMUS_VERLOCITY_X)
-		{
-			
-		}*/
 		this->samus->setVelocityX(-SAMUS_VELOCITY_JUMP_X);
 	}
-
-	// Handle horizontal
-	//if (input->isKeyDown(VK_LEFT) && input->isKeyDown(VK_RIGHT))
-	//{
-	//	//this->samus->updateHorizontal(dt);
-	//	//this->samus->setVelocityX(-SAMUS_VERLOCITY_X);
-	//}
 #pragma endregion
 
 #pragma region Vertical
@@ -101,11 +76,13 @@ void SamusStateAcrobat::handleInput(float dt)
 		{
 			if (jumpDistance >= MIN_JUMP)
 			{
-				this->samus->setFall(true);
+				if (this->samus->isFaling() == false)
+				{
+					this->samus->setFall(true);
+					this->samus->setVelocityY(SAMUS_V0_FALL_Y);
+				}
 
-				this->samus->setVelocityY(this->samus->getVelocity().y*-1.0f);
-
-				this->samus->setVelocityY(this->samus->getVelocity().y - ACCELERATE_Y*dt);
+				this->samus->setVelocityY(this->samus->getVelocity().y*-1.0f + ACCELERATE_Y*dt);
 
 				return;
 			}
@@ -141,14 +118,14 @@ void SamusStateAcrobat::handleInput(float dt)
 		else
 		{
 			jumpDistance = 0;
-			this->samus->setFall(true);
+			if (this->samus->isFaling() == false)
+			{
+				this->samus->setFall(true);
+				this->samus->setVelocityY(SAMUS_V0_FALL_Y);
+			}
 
-			this->samus->setVelocityY(this->samus->getVelocity().y*-1.0f);
-
-			this->samus->setVelocityY(this->samus->getVelocity().y - ACCELERATE_Y*dt);
+			this->samus->setVelocityY(this->samus->getVelocity().y*-1.0f + ACCELERATE_Y*dt);
 		}
-	
-
 	}
 	else
 	{

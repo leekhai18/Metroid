@@ -29,7 +29,6 @@ Samus::Samus(TextureManager* textureM,Graphics* graphics, Input* input) : BaseOb
 	this->isFalling = false;
 	this->acrobat = false;
 	this->moveHorizontal = true;
-	this->totalHeightWasJumped = 0;
 	this->moveLeft = true;
 	this->moveRight = true;
 	this->jump = true;
@@ -67,7 +66,7 @@ void Samus::handleInput(float dt)
 #pragma region handle camera
 	if (!Camera::getInstance()->moveWhenSamusOnPort() && Camera::getInstance()->getNumPort() < 2)
 	{
-		if (!Camera::getInstance()->canFolowVertical())
+		if (Camera::getInstance()->canFolowOnLeft() || Camera::getInstance()->canFolowOnRight())
 		{
 			if ((input->isKeyUp(VK_LEFT) && input->isKeyUp(VK_RIGHT)) || (input->isKeyDown(VK_LEFT) && input->isKeyDown(VK_RIGHT)) || this->isInStatus(eStatus::STANDING))
 				Camera::getInstance()->setVelocity(VECTOR2(0, 0));
@@ -110,47 +109,53 @@ void Samus::setCanMoveToFrontGate(bool flag)
 
 void Samus::update(float dt)
 {
-
 	SamusStateManager::getInstance()->getCurrentState()->update(dt);
 
-	
-	if (status == eStatus::ACROBAT)
-	{
-		if (velocity.x>0)
-		{
-			int temp = 0;
-		}
-	}
 #pragma region handle camera
-	float testVelocity;
-	if (!Camera::getInstance()->moveWhenSamusOnPort() && Camera::getInstance()->getNumPort() < 2)
+	bool isCameraMoving = false;
+	if (!Camera::getInstance()->moveWhenSamusOnPort())
 	{
-		if (!Camera::getInstance()->canFolowVertical())
+		if (Camera::getInstance()->canFolowOnLeft())
 		{
-			if (Camera::getInstance()->canFolowOnLeft())
+			if (this->getPosition().x < Camera::getInstance()->getActiveArea().left)
 			{
-				if (this->getPosition().x < Camera::getInstance()->getActiveArea().left)
+				Camera::getInstance()->setVelocity(VECTOR2(this->getVelocity().x, 0));
+				isCameraMoving = true;
+			}
+		}
+
+		if (Camera::getInstance()->canFolowOnRight())
+		{
+			if (this->getPosition().x > Camera::getInstance()->getActiveArea().right)
+			{
+				Camera::getInstance()->setVelocity(VECTOR2(this->getVelocity().x, 0));
+				isCameraMoving = true;
+			}
+		}
+
+		if (this->isInStatus(eStatus::ACROBAT) || this->isInStatus(eStatus::JUMPING))
+		{
+			if (Camera::getInstance()->canFolowUp())
+			{
+				if (this->getPosition().y > Camera::getInstance()->getActiveArea().top)
 				{
-					Camera::getInstance()->setVelocity(VECTOR2(this->getVelocity().x, 0));
-					testVelocity = Camera::getInstance()->getVelocity().x;
-					
+					Camera::getInstance()->setVelocity(VECTOR2(0, this->getVelocity().y));
+					isCameraMoving = true;
 				}
 			}
-			if (Camera::getInstance()->canFolowOnRight())
+
+			if (Camera::getInstance()->canFolowDown())
 			{
-				if (this->getPosition().x > Camera::getInstance()->getActiveArea().right)
+				if (this->getPosition().y < Camera::getInstance()->getActiveArea().bottom)
 				{
-					Camera::getInstance()->setVelocity(VECTOR2(this->getVelocity().x, 0));
-					testVelocity = Camera::getInstance()->getVelocity().x;
+					Camera::getInstance()->setVelocity(VECTOR2(0, this->getVelocity().y));
+					isCameraMoving = true;
 				}
 			}
 		}
-		else
-		{
-			if ((this->getPosition().y > Camera::getInstance()->getActiveArea().top) ||
-				(this->getPosition().y < Camera::getInstance()->getActiveArea().bottom))
-				Camera::getInstance()->setVelocity(VECTOR2(0, this->getVelocity().y));
-		}
+
+		if (!isCameraMoving)
+			Camera::getInstance()->setVelocity(VECTOR2(0, 0));
 	}
 
 	if (isCollidingPort)
@@ -243,13 +248,7 @@ void Samus::setCanMoveRight(bool moveRight)
 
 void Samus::setFall(bool isFall)
 {
-	if (this->isFalling != isFall)
-	{
-		this->isFalling = isFall;
-		
-		if (this->isFalling == false)
-			this->totalHeightWasJumped = 0;
-	}
+	this->isFalling = isFall;
 }
 void Samus::setBoundCollision(MetroidRect rect)
 {

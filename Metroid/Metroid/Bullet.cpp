@@ -2,9 +2,11 @@
 #include "BulletPool.h"
 #include "Collision.h"
 #include "GateBlue.h"
+#include "MaruMari.h"
+#include "GameLog.h"
 
-#define WIDTH_BULLET_HALF 3
-#define HEIGHT_BULLET_HALF 3
+#define WIDTH_BULLET_HALF 1
+#define HEIGHT_BULLET_HALF 1
 
 Bullet::Bullet(TextureManager * textureM, Graphics * graphics) : BaseObject(eID::BULLET)
 {
@@ -21,7 +23,8 @@ Bullet::Bullet(TextureManager * textureM, Graphics * graphics) : BaseObject(eID:
 	this->setPosition(VECTOR2ZERO);
 
 	this->distance = 0;
-
+	this->isCollided = false;
+	this->timer = 0;
 	this->listCollide = new list<CollisionReturn>();
 }
 
@@ -38,27 +41,6 @@ Bullet::~Bullet()
 	delete this->listCollide;
 }
 
-
-void Bullet::update(float dt)
-{
-	if (this->distance < DISTANCE_SHOOT)
-	{
-		this->distance += VELOCITY*dt;
-		this->setPosition(this->getPosition().x + this->getVelocity().x*dt, this->getPosition().y + this->getVelocity().y*dt);
-		setBoundCollision();
-	}
-	else
-	{
-		this->setStatus(eStatus::ENDING);
-		BulletPool::getInstance()->returnPool(this);
-	}
-}
-
-void Bullet::draw()
-{
-	this->sprite->draw();
-}
-
 void Bullet::onCollision()
 {
 	for (auto i = this->listCollide->begin(); i != this->listCollide->end(); i++)
@@ -66,16 +48,53 @@ void Bullet::onCollision()
 		switch (i->object->getId())
 		{
 		case eID::WALL:
-			BulletPool::getInstance()->returnPool(this);
+			this->sprite->setData(IndexManager::getInstance()->samusYellowBulletNormalColliding);
+			this->isCollided = true;
+			
+			switch (i->direction)
+			{
+			case CollideDirection::LEFT : case CollideDirection::RIGHT:
+				this->setPositionX(i->positionCollision);
+				break;
+			case CollideDirection::TOP:
+				this->setPositionY(i->positionCollision);
+				break;
+			default:
+				break;
+			}
+
 			break;
 
 		case eID::GATEBLUE:
 		{
-			BulletPool::getInstance()->returnPool(this);
+			this->sprite->setData(IndexManager::getInstance()->samusYellowBulletNormalColliding);
+			this->isCollided = true;
+
 			GateBlue* gate = static_cast<GateBlue*>(i->object);
 			gate->setHit(true);
+
+			switch (i->direction)
+			{
+			case CollideDirection::LEFT: case CollideDirection::RIGHT:
+				this->setPositionX(i->positionCollision);
+				break;
+			default:
+				break;
+			}
 			break;
 		}
+
+		case eID::MARUMARI:
+		{
+			MaruMari* mm = static_cast<MaruMari*>(i->object);
+			mm->startExplosion();
+			break;
+		}
+
+		case eID::SKREE:
+			GAMELOG("VA CHAM SKREE");
+			break;
+
 
 		default:
 			break;
@@ -85,16 +104,44 @@ void Bullet::onCollision()
 	this->listCollide->clear();
 }
 
+
+void Bullet::update(float dt)
+{
+	if (!this->isCollided)
+	{
+		if (this->distance < DISTANCE_SHOOT)
+		{
+			this->distance += VELOCITY*dt;
+			this->setPosition(this->getPosition().x + this->getVelocity().x*dt, this->getPosition().y + this->getVelocity().y*dt);
+			setBoundCollision();
+		}
+		else
+		{
+			this->setStatus(eStatus::ENDING);
+			BulletPool::getInstance()->returnPool(this);
+		}
+	}
+	else
+	{
+		timer += dt;
+		if (timer > 0.1)
+		{
+			BulletPool::getInstance()->returnPool(this);
+		}
+	}
+}
+
+void Bullet::draw()
+{
+	this->sprite->draw();
+}
+
 void Bullet::setBoundCollision()
 {
-	MetroidRect rect;
-
-	rect.left = getPosition().x - WIDTH_BULLET_HALF;
-	rect.right = getPosition().x + WIDTH_BULLET_HALF;
-	rect.top = getPosition().y - HEIGHT_BULLET_HALF;
-	rect.bottom = getPosition().y + HEIGHT_BULLET_HALF;
-
-	boundCollision = rect;
+	boundCollision.left = getPosition().x - WIDTH_BULLET_HALF;
+	boundCollision.right = getPosition().x + WIDTH_BULLET_HALF;
+	boundCollision.top = getPosition().y + HEIGHT_BULLET_HALF;
+	boundCollision.bottom = getPosition().y - HEIGHT_BULLET_HALF;
 }
 
 void Bullet::init(VECTOR2 stPosition)
@@ -108,9 +155,10 @@ void Bullet::init(VECTOR2 stPosition)
 void Bullet::returnPool()
 {
 	this->setPosition(VECTOR2ZERO);
+	this->sprite->setData(IndexManager::getInstance()->samusYellowBulletNormal);
+	isCollided = false;
+	this->timer = 0;
 }
-
-
 
 list<CollisionReturn>* Bullet::getListCollide()
 {

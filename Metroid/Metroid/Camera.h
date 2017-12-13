@@ -4,6 +4,7 @@
 #include "Constants.h"
 #define CAM_POS_X 640
 #define CAM_POS_Y 1320
+
 class Camera
 {
 private:
@@ -16,7 +17,8 @@ private:
 
 	D3DXVECTOR2		velocity;
 
-	bool			canFollowVetical;
+	bool			canFollowToUp;
+	bool			canFollowToDown;
 	bool			canFollowOnRight;
 	bool			canFollowOnLeft;
 	bool			isOnPort;
@@ -47,8 +49,11 @@ public:
 
 	void update(float dt);
 
-	void setCanFoLLowVertical(bool flag);
-	bool canFolowVertical();
+	void setCanFollowToUp(bool flag);
+	bool canFolowUp();
+
+	void setCanFollowToDown(bool flag);
+	bool canFolowDown();
 
 	void setCanFollowOnRight(bool flag);
 	bool canFolowOnRight();

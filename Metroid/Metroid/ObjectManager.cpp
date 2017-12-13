@@ -27,6 +27,7 @@
 #include "rapidjson-master\include\rapidjson\writer.h"
 #include "rapidjson-master\include\rapidjson\ostreamwrapper.h"
 
+
 #define TIME_RETRIEVE 0.2f
 
 ObjectManager* ObjectManager::instance = nullptr;
@@ -103,13 +104,16 @@ void ObjectManager::update(float dt)
 	{
 		for (list<BaseObject*>::iterator i = listObjectNotWallOnViewPort->begin(); i != listObjectNotWallOnViewPort->end(); ++i)
 		{
-			(*i)->update(dt);
-
-			/*if ((*i)->getId() == eID::SKREE)
+			if ((*i)->getId() == eID::SKREE)
 			{
 				Skree* skr = static_cast<Skree*>(*i);
+				if (skr->isActivitied() == false)
+					skr->setActivity(true);
+
 				skr->setTarget(samus->getPosition());
-			}*/
+			}
+
+			(*i)->update(dt);
 		}
 	}
 }
@@ -299,6 +303,8 @@ bool ObjectManager::load_list(const char * filename)
 				id = listBrickSecretBlue[i]["id"].GetInt();
 				x = listBrickSecretBlue[i]["x"].GetFloat();
 				y = listBrickSecretBlue[i]["y"].GetFloat();
+				bsb->setPosition(VECTOR2(x, y));
+
 
 				//writer.StartObject();
 				//writer.Key("x");
@@ -306,8 +312,6 @@ bool ObjectManager::load_list(const char * filename)
 				//writer.Key("y");
 				//writer.Double(y);
 				//writer.EndObject();
-
-				bsb->setPosition(VECTOR2(x, y));
 
 				bound.left = x;
 				bound.top = y;
@@ -337,6 +341,7 @@ bool ObjectManager::load_list(const char * filename)
 				id = listBrickSerectGreen[i]["id"].GetInt();
 				x = listBrickSerectGreen[i]["x"].GetFloat();
 				y = listBrickSerectGreen[i]["y"].GetFloat();
+				bsg->setPosition(VECTOR2(x, y));
 
 				//writer.StartObject();
 				//writer.Key("x");
@@ -344,8 +349,6 @@ bool ObjectManager::load_list(const char * filename)
 				//writer.Key("y");
 				//writer.Double(y);
 				//writer.EndObject();
-
-				bsg->setPosition(VECTOR2(x, y));
 
 				bound.left = x;
 				bound.top = y;
@@ -1396,13 +1399,7 @@ bool ObjectManager::load_list(const char * filename)
 				id = listSkreeYellow[i]["id"].GetInt();
 				x = listSkreeYellow[i]["x"].GetFloat();
 				y = listSkreeYellow[i]["y"].GetFloat();
-				sky->setPosition(VECTOR2(x + sky->getSprite()->getWidth()*0.5f, y));
-
-				bound.left = x;
-				bound.top = y;
-				bound.right = bound.left + sky->getSprite()->getWidth();
-				bound.bottom = bound.top - sky->getSprite()->getHeight();
-				sky->setBoundCollision(bound);
+				sky->setInitPosition(VECTOR2(x + sky->getSprite()->getWidth()*0.5f, y));
 
 				bound.bottom = listSkreeYellow[i]["bottomA"].GetFloat();
 				bound.top = listSkreeYellow[i]["topA"].GetFloat();
@@ -1446,13 +1443,7 @@ bool ObjectManager::load_list(const char * filename)
 				id = listSkreeBrown[i]["id"].GetInt();
 				x = listSkreeBrown[i]["x"].GetFloat();
 				y = listSkreeBrown[i]["y"].GetFloat();
-				skb->setPosition(VECTOR2(x + skb->getSprite()->getWidth()*0.5f, y));
-
-				bound.left = x;
-				bound.top = y;
-				bound.right = bound.left + skb->getSprite()->getWidth();
-				bound.bottom = bound.top - skb->getSprite()->getHeight();
-				skb->setBoundCollision(bound);
+				skb->setInitPosition(VECTOR2(x + skb->getSprite()->getWidth()*0.5f, y));
 
 				bound.bottom = listSkreeBrown[i]["bottomA"].GetFloat();
 				bound.top = listSkreeBrown[i]["topA"].GetFloat();
