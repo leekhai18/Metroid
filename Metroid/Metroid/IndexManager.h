@@ -1,7 +1,7 @@
 #pragma once
 // Class used to manage Index Sprites in Texture
 
-#define MAX_INDEX 192
+#define MAX_INDEX 199
 
 // Define NUM_FRAMES
 #define NUM_FRAMES_ZOOMER 2
@@ -20,6 +20,7 @@
 #define NUM_FRAMES_SAMUS_BOMB 3
 #define NUM_FRAMES_EXPLOSION 2
 #define NUM_FRAMES_BOSS_KRAID 2
+#define NUM_FRAMES_GATE_ANIM 5
 
 
 
@@ -142,6 +143,10 @@ public:
 	const int brickSecretGreen = 191;
 	const int bossDragonL = 186;
 	const int gateBlueR = 187;
+	const int gateBlueROpen[5] = { 187, 193, 194, 195, 199 };
+	const int gateBlueRClose[5] = { 199, 195, 194, 193, 187 };
 	const int gateRedR = 188;
+	const int gateRedROpen[5] = { 188, 196, 197, 198, 199 };
+	const int gateRedRClose[5] = { 199, 198, 197, 196, 188 };
 	const int bossKraidR[2] = { 189,190 };
 };

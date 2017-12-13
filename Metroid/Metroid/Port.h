@@ -3,6 +3,9 @@
 
 class Port : public BaseObject
 {
+private:
+	bool isSetUpPosition;
+
 public:
 	Port();
 	~Port();

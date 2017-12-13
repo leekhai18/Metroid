@@ -64,7 +64,7 @@ void Samus::handleInput(float dt)
 		SamusStateManager::getInstance()->getCurrentState()->handleInput(dt);
 
 #pragma region handle camera
-	if (!Camera::getInstance()->moveWhenSamusOnPort() && Camera::getInstance()->getNumPort() < 2)
+	if (!Camera::getInstance()->moveWhenSamusOnPort())
 	{
 		if (Camera::getInstance()->canFolowOnLeft() || Camera::getInstance()->canFolowOnRight())
 		{
@@ -72,8 +72,6 @@ void Samus::handleInput(float dt)
 				Camera::getInstance()->setVelocity(VECTOR2(0, 0));
 		}
 	}
-	Camera::getInstance()->setNumPort(0);
-
 	//if (input->isKeyDown(VK_LEFT))
 	//	Camera::getInstance()->setVelocity(VECTOR2(-150, 0));	
 	//if (input->isKeyDown(VK_RIGHT))
@@ -82,6 +80,8 @@ void Samus::handleInput(float dt)
 	//	Camera::getInstance()->setVelocity(VECTOR2(0, 150));
 	//if (input->isKeyDown(VK_DOWN))
 	//	Camera::getInstance()->setVelocity(VECTOR2(0, -150));
+
+	Camera::getInstance()->setNumPort(0);
 
 #pragma endregion
 }

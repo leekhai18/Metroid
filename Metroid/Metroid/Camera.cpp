@@ -3,7 +3,7 @@
 #include <cmath>
 
 #define ACTIVE_AREA_WIDTH 32
-#define ACTIVE_AREA_HEIGHT 40
+#define ACTIVE_AREA_HEIGHT 32
 
 Camera* Camera::instance = nullptr;
 Camera * Camera::getInstance()
@@ -61,14 +61,14 @@ D3DXVECTOR3 Camera::getPosition()
     return this->position;
 }
 
-RECT Camera::getBound()
+MetroidRect Camera::getBound()
 {
-    RECT bound; 
+	MetroidRect bound;
 
-    bound.left = (LONG) (position.x - width * 0.5f);
-    bound.right =(LONG) (bound.left + width);
-    bound.top =  (LONG) (position.y + height * 0.5f);
-    bound.bottom=(LONG) (bound.top - height);
+    bound.left =  (position.x - width * 0.5f);
+    bound.right = (bound.left + width);
+    bound.top =   (position.y + height * 0.5f);
+    bound.bottom= (bound.top - height);
 
     return bound;
 }
@@ -88,8 +88,8 @@ MetroidRect Camera::getActiveArea()
 	MetroidRect area;
 	area.left = (this->position.x - ACTIVE_AREA_WIDTH*0.5f);
 	area.right =(area.left + ACTIVE_AREA_WIDTH);
-	area.top =  (this->position.y + ACTIVE_AREA_HEIGHT*0.5f);
-	area.bottom= (area.top - ACTIVE_AREA_HEIGHT);
+	area.top =  (this->position.y + ACTIVE_AREA_HEIGHT);
+	area.bottom= (area.top - ACTIVE_AREA_HEIGHT) - 8;
 
 	return area;
 }
@@ -107,6 +107,7 @@ void Camera::update(float dt)
 			this->velocity.x = 0;
 			this->distanceMoveWhenThoughtPort = 0;
 			this->isOnPort = false;
+			this->position = D3DXVECTOR3((int)(this->position.x), (int)this->position.y, 0);
 		}
 	}
 }

@@ -28,7 +28,7 @@
 #include "rapidjson-master\include\rapidjson\ostreamwrapper.h"
 
 
-#define TIME_RETRIEVE 0.4f
+#define TIME_RETRIEVE -1
 
 ObjectManager* ObjectManager::instance = nullptr;
 ObjectManager * ObjectManager::getInstance()
@@ -53,9 +53,9 @@ void ObjectManager::onCheckCollision(float dt)
 		listObjectNotWallOnViewPort->clear();
 		listWallCanCollideSamus->clear();
 
-		RECT r = Camera::getInstance()->getBound();
+		MetroidRect r = Camera::getInstance()->getBound();
 		//Get all objects that can collide with current obj
-		quadtree->retrieve(listCanCollideSamus, listObjectNotWallOnViewPort, listWallCanCollideSamus, MetroidRect((float)r.top, (float)r.bottom, (float)r.left, (float)r.right), samus);
+		quadtree->retrieve(listCanCollideSamus, listObjectNotWallOnViewPort, listWallCanCollideSamus, MetroidRect(r.top, r.bottom, r.left, r.right), samus);
 	}
 
 	// Get listCollide

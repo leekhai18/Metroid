@@ -94,13 +94,6 @@ void Metroid::initialize(HWND hwnd)
 	opsText->initialize(graphics);
 }
 
-void Metroid::update(float dt)
-{	
-	ObjectManager::getInstance()->update(dt);
-	samus->update(dt);
-	this->camera->update(dt);
-
-}
 
 void Metroid::handleInput(float dt)
 {
@@ -110,6 +103,13 @@ void Metroid::handleInput(float dt)
 void Metroid::collisions(float dt)
 {
 	ObjectManager::getInstance()->onCheckCollision(dt);
+}
+
+void Metroid::update(float dt)
+{
+	ObjectManager::getInstance()->update(dt);
+	samus->update(dt);
+	this->camera->update(dt);
 }
 
 void Metroid::render()
@@ -122,6 +122,7 @@ void Metroid::render()
 	samus->draw();
 	ObjectManager::getInstance()->draw();
 	mapBrinstar->draw();
+
 
 	// END
 	this->getGraphics()->spriteEnd();

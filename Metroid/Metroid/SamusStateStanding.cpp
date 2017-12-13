@@ -50,133 +50,133 @@ void SamusStateStanding::init()
 
 void SamusStateStanding::handleInput(float dt)
 {
-		if (input->isKeyUp(VK_LEFT) && input->isKeyUp(VK_RIGHT))
-			timerToRunning = 0;
+	if (input->isKeyUp(VK_LEFT) && input->isKeyUp(VK_RIGHT))
+		timerToRunning = 0;
 
-		//handle press left button
-		if (input->isKeyDown(VK_LEFT) && input->isKeyUp(VK_RIGHT))
+	//handle press left button
+	if (input->isKeyDown(VK_LEFT) && input->isKeyUp(VK_RIGHT))
+	{
+		if (this->samus->isInDirection(eDirection::right))
 		{
-			if (this->samus->isInDirection(eDirection::right))
-			{
-				this->samus->setFlipX(true);
-				//set direction to left
-				this->samus->setDirection(eDirection::left);
-			}
-
-			//check if moveLeft = false, it means samus is colliding with other object in right side
-			if (this->samus->canMoveLeft() == true)
-			{
-				timerToRunning += dt;
-				//when timeToRunning enough, we change to running state
-				if (timerToRunning > TIME_TO_RUNNING)
-				{
-					//change state to runnings
-					this->samus->setStatus(eStatus::RUNNING);
-					//we set jump to false, when we realease jump button it will change true
-					this->samus->setCanJump(false);
-					//reset timer
-					timerToRunning = 0;
-					return;
-				}
-			}
+			this->samus->setFlipX(true);
+			//set direction to left
+			this->samus->setDirection(eDirection::left);
 		}
 
-		//handle press right button
-		if (input->isKeyDown(VK_RIGHT) && input->isKeyUp(VK_LEFT))
+		//check if moveLeft = false, it means samus is colliding with other object in right side
+		if (this->samus->canMoveLeft() == true)
 		{
-
-			if (this->samus->isInDirection(eDirection::left))
+			timerToRunning += dt;
+			//when timeToRunning enough, we change to running state
+			if (timerToRunning > TIME_TO_RUNNING)
 			{
-				//flipX change to false to turn right
-				this->samus->setFlipX(false);
-				this->samus->setDirection(eDirection::right);
-
-			}
-
-			//check if moveRight = false, it means samus is colliding with other object in left side
-			if (this->samus->canMoveRight() == true)
-			{
-				timerToRunning += dt;
-				//when timeToRunning enough, we change to running state
-				if (timerToRunning > TIME_TO_RUNNING)
-				{
-					//we set jump to false, when we realease jump button it will change true
-					this->samus->setCanJump(false);
-					//change state to runnings
-					this->samus->setStatus(eStatus::RUNNING);
-					//reset timer
-					timerToRunning = 0;
-					return;
-				}
+				//change state to runnings
+				this->samus->setStatus(eStatus::RUNNING);
+				//we set jump to false, when we realease jump button it will change true
+				this->samus->setCanJump(false);
+				//reset timer
+				timerToRunning = 0;
+				return;
 			}
 		}
+	}
 
-		//reset jump when user release jump button
-		if (input->isKeyUp(VK_X))
+	//handle press right button
+	if (input->isKeyDown(VK_RIGHT) && input->isKeyUp(VK_LEFT))
+	{
+
+		if (this->samus->isInDirection(eDirection::left))
 		{
-			this->samus->setCanJump(true);
+			//flipX change to false to turn right
+			this->samus->setFlipX(false);
+			this->samus->setDirection(eDirection::right);
+
 		}
 
-		if (input->isKeyDown(VK_X) && this->samus->canJump() == true)
+		//check if moveRight = false, it means samus is colliding with other object in left side
+		if (this->samus->canMoveRight() == true)
 		{
-			this->samus->setFall(false);
-			this->samus->setAcrobat(false);
-			this->samus->setVelocityX(0);
-			this->samus->setStatus(eStatus::JUMPING);
-			return;
+			timerToRunning += dt;
+			//when timeToRunning enough, we change to running state
+			if (timerToRunning > TIME_TO_RUNNING)
+			{
+				//we set jump to false, when we realease jump button it will change true
+				this->samus->setCanJump(false);
+				//change state to runnings
+				this->samus->setStatus(eStatus::RUNNING);
+				//reset timer
+				timerToRunning = 0;
+				return;
+			}
 		}
+	}
 
-		if (input->isKeyDown(VK_UP))
+	//reset jump when user release jump button
+	if (input->isKeyUp(VK_X))
+	{
+		this->samus->setCanJump(true);
+	}
+
+	if (input->isKeyDown(VK_X) && this->samus->canJump() == true)
+	{
+		this->samus->setFall(false);
+		this->samus->setAcrobat(false);
+		this->samus->setVelocityX(0);
+		this->samus->setStatus(eStatus::JUMPING);
+		return;
+	}
+
+	if (input->isKeyDown(VK_UP))
+	{
+		isUp = true;
+
+		// Set Data for sprite
+		this->samus->getSprite()->setData(IndexManager::getInstance()->samusYellowTurnUp);
+	}
+
+	if (isUp && input->isKeyUp(VK_UP))
+	{
+		isUp = false;
+
+		// Set Data for sprite
+		this->samus->getSprite()->setData(IndexManager::getInstance()->samusYellowTurnRight);
+	}
+
+	if (input->isKeyDown(VK_DOWN))
+	{
+		this->samus->setVelocityX(0);
+		this->samus->setStatus(eStatus::ROLLING);
+		return;
+	}
+
+	if (!isUp && input->isKeyUp(VK_Z) && isShoot)
+	{
+		// Set Data for sprite
+		this->samus->getSprite()->setData(IndexManager::getInstance()->samusYellowTurnRight);
+		isShoot = false;
+	}
+
+	if (input->isKeyDown(VK_Z))
+	{
+		// Set up sprite Shooting
+		if (isUp)
 		{
-			isUp = true;
-
 			// Set Data for sprite
-			this->samus->getSprite()->setData(IndexManager::getInstance()->samusYellowTurnUp);
+			this->samus->getSprite()->setData(IndexManager::getInstance()->samusYellowHittingUp);
 		}
-
-		if (isUp && input->isKeyUp(VK_UP))
-		{
-			isUp = false;
-
-			// Set Data for sprite
-			this->samus->getSprite()->setData(IndexManager::getInstance()->samusYellowTurnRight);
-		}
-
-		if (input->isKeyDown(VK_DOWN))
-		{
-			this->samus->setVelocityX(0);
-			this->samus->setStatus(eStatus::ROLLING);
-			return;
-		}
-
-		if (!isUp && input->isKeyUp(VK_Z) && isShoot)
+		else
 		{
 			// Set Data for sprite
-			this->samus->getSprite()->setData(IndexManager::getInstance()->samusYellowTurnRight);
-			isShoot = false;
+			this->samus->getSprite()->setData(IndexManager::getInstance()->samusYellowHittingRight);
 		}
 
-		if (input->isKeyDown(VK_Z))
+		if (this->samus->timerShoot > TIME_SHOOTING)
 		{
-			// Set up sprite Shooting
-			if (isUp)
-			{
-				// Set Data for sprite
-				this->samus->getSprite()->setData(IndexManager::getInstance()->samusYellowHittingUp);
-			}
-			else
-			{
-				// Set Data for sprite
-				this->samus->getSprite()->setData(IndexManager::getInstance()->samusYellowHittingRight);
-			}
-
-			if (this->samus->timerShoot > TIME_SHOOTING)
-			{
-				this->fire();
-				this->samus->timerShoot = 0;
-				this->isShoot = true;
-			}
+			this->fire();
+			this->samus->timerShoot = 0;
+			this->isShoot = true;
 		}
+	}
 	
 }
 
@@ -186,7 +186,7 @@ void SamusStateStanding::onCollision()
 	{
 		switch (i->object->getId())
 		{
-		case eID::WALL:
+		case eID::WALL : case eID::BRICK:
 			switch (i->direction)
 			{
 			case CollideDirection::TOP:

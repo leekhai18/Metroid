@@ -18,7 +18,7 @@
 #define SAMUS_VELOCITY_JUMP_X 70
 
 #define MIN_JUMP  32.0f
-#define MAX_JUMP 80.0f
+#define MAX_JUMP 90.0f
 
 #define TIME_SHOOTING 0.15f
 

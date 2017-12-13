@@ -2,6 +2,8 @@
 #include "Camera.h"
 
 #define PORT_WIDTH_HALF 16
+#define OFFSET_Y_CAM 40
+#define OFFSET_X_CAM 3
 
 Port::Port() : BaseObject(eID::PORT)
 {
@@ -30,34 +32,54 @@ void Port::draw()
 		{
 			if (Camera::getInstance()->getPosition().x < this->boundCollision.left) // port ben phai
 			{
-				if (this->boundCollision.left + PORT_WIDTH_HALF <= Camera::getInstance()->getBound().right)
+				if (this->boundCollision.left + PORT_WIDTH_HALF - OFFSET_X_CAM < Camera::getInstance()->getBound().right &&
+						this->boundCollision.left + PORT_WIDTH_HALF + OFFSET_X_CAM > Camera::getInstance()->getBound().right)
 				{
 					Camera::getInstance()->setCanFollowOnRight(false);
 					Camera::getInstance()->setCanFollowOnLeft(true);
 
-					Camera::getInstance()->setVelocity(VECTOR2(0, Camera::getInstance()->getVelocity().y));
+					if (!isSetUpPosition)
+					{
+						Camera::getInstance()->setPosition(VECTOR2(this->boundCollision.left + PORT_WIDTH_HALF - VIEWPORT_WIDTH*0.5f,
+							Camera::getInstance()->getPosition().y));
+						isSetUpPosition = true;
+					}
 				}
 				else
 				{
 					Camera::getInstance()->setCanFollowOnRight(true);
+					isSetUpPosition = false;
 				}
 			}
 			else // port ben trai
 			{
-				if (this->boundCollision.right - PORT_WIDTH_HALF >= Camera::getInstance()->getBound().left)
+				if (this->boundCollision.right - PORT_WIDTH_HALF + OFFSET_X_CAM > Camera::getInstance()->getBound().left &&
+						this->boundCollision.right - PORT_WIDTH_HALF - OFFSET_X_CAM < Camera::getInstance()->getBound().left)
 				{
 					Camera::getInstance()->setCanFollowOnLeft(false);
 					Camera::getInstance()->setCanFollowOnRight(true);
 
-					Camera::getInstance()->setVelocity(VECTOR2(0, Camera::getInstance()->getVelocity().y));
+					if (!isSetUpPosition)
+					{
+						Camera::getInstance()->setPosition(VECTOR2(this->boundCollision.right - PORT_WIDTH_HALF + VIEWPORT_WIDTH*0.5f,
+							Camera::getInstance()->getPosition().y));
+						isSetUpPosition = true;
+					}
 				}
 				else
 				{
 					Camera::getInstance()->setCanFollowOnLeft(true);
+					isSetUpPosition = false;
 				}
 
 			}
 		}
+	}
+
+	if (Camera::getInstance()->moveWhenSamusOnPort())
+	{
+		Camera::getInstance()->setPosition(VECTOR2(Camera::getInstance()->getPosition().x, this->boundCollision.top - OFFSET_Y_CAM));
+		isSetUpPosition = false;
 	}
 #pragma endregion
 }
