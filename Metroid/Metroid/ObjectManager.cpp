@@ -70,6 +70,7 @@ void ObjectManager::onCheckCollision(float dt)
 	// Get listCollide
 	for (auto x = listCanCollideSamus->begin(); x != listCanCollideSamus->end(); x++)
 	{
+		samus->setListCanCollide(*listCanCollideSamus);
 		Collision::getInstance()->checkCollision(samus, *x, dt);
 
 		for (unsigned i = 0; i < BulletPool::getInstance()->getListUsing().size(); i++)

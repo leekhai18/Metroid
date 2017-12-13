@@ -15,9 +15,10 @@ public:
 
 	void init();
 	void handleInput(float dt);
+	void onCollision();
 	void update(float dt);
 	void setBoundCollision();
-	void onCollision();
+
 	void onStart();
 	void onExit();
 };

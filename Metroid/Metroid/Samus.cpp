@@ -107,6 +107,11 @@ void Samus::setCanMoveToFrontGate(bool flag)
 	this->moveToFontGate = flag;
 }
 
+void Samus::setListCanCollide(list<BaseObject*> list)
+{
+	this->listCanCollide = list;
+}
+
 void Samus::update(float dt)
 {
 	SamusStateManager::getInstance()->getCurrentState()->update(dt);
@@ -269,6 +274,12 @@ void Samus::setActiveBound()
 void Samus::setAcrobat(bool acrobat)
 {
 	this->acrobat = acrobat;
+}
+
+list<BaseObject*>& Samus::getListCanCollide()
+{
+	return this->listCanCollide;
+
 }
 
 Animation * Samus::getStartingAnim()

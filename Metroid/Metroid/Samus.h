@@ -83,6 +83,8 @@ private:
 
 	list<CollisionReturn> *listCollide;
 
+	list<BaseObject*> listCanCollide;
+
 public:
 	float timerShoot;
 
@@ -92,6 +94,7 @@ public:
 
 	void draw();
 	void handleInput(float dt);
+	void onCollision();
 	void update(float dt);
 	void release();
 
@@ -113,12 +116,14 @@ public:
 	void setBoundCollision(MetroidRect rect);
 	void setActiveBound();
 
-	void onCollision();
+
 
 	void setIsCollidingPort(bool flag);
 	bool isColliedPort();
 	void setCanMoveToFrontGate(bool flag);
+	void setListCanCollide(list<BaseObject*> list);
 
+	list<BaseObject*>& getListCanCollide();
 	Animation* getStartingAnim();
 	Animation* getRunningNormalAnim();
 	Animation* getRunningUpAnim();

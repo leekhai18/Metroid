@@ -100,7 +100,22 @@ void SamusStateFallRolling::handleInput(float dt)
 }
 void SamusStateFallRolling::onCollision()
 {
-
+	if (this->samus->isInStatus(eStatus::STANDING))
+	{
+		MetroidRect bound;
+		VECTOR2 position(this->samus->getPosition().x, samus->getPosition().y - OFFSET_COLLISION_Y + 1 + OFFSET_STAND);
+		bound.left = position.x - WIDTH_COLLISION*0.5f;
+		bound.right = position.x + WIDTH_COLLISION*0.5f;
+		bound.top = position.y + HEIGHT_COLLISION*0.5f;
+		bound.bottom = position.y - HEIGHT_COLLISION*0.5f;
+		for (auto i = this->samus->getListCanCollide().begin(); i != this->samus->getListCanCollide().end(); i++)
+		{
+			if (Collision::getInstance()->isCollide((*i)->getBoundCollision(), bound))
+			{
+				this->samus->setStatus(eStatus::FALLING_ROLLING);
+			}
+		}
+	}
 	for (auto i = this->samus->getListCollide()->begin(); i != this->samus->getListCollide()->end(); i++)
 	{
 		switch (i->object->getId())
