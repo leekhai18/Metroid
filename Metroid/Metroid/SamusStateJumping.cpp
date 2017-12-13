@@ -196,7 +196,7 @@ void SamusStateJumping::onCollision()
 		switch (i->object->getId())
 		{
 			//handle collision with wall
-		case eID::WALL:
+		case eID::WALL: case eID::BRICK:
 			switch (i->direction)
 			{
 			case CollideDirection::LEFT:

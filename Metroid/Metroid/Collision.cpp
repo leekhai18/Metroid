@@ -117,13 +117,31 @@ bool Collision::checkCollision(BaseObject * myEntity, BaseObject * otherEntity, 
 	{
 		// xét x
 		// khoảng cách gần nhất mà nhỏ hơn 0 nghĩa là thằng kia đang nằm bên trái object này => va chạm bên phải nó
+		myVelocity = VECTOR2(myEntity->getVelocity().x, myEntity->getVelocity().y + SAMUS_MIN_SPEED_Y);
 		if (_dxEntry < 0.0f)
 		{
-			data.direction = CollideDirection::RIGHT;
+			
+				//otherVeloc = VECTOR2()
+				
+			if(isCollide(getSweptBroadphaseRect(myEntity->getBoundCollision(), myVelocity, frametime), otherRect))
+			{
+				data.direction = CollideDirection::RIGHT;
+			}
+			else
+			{
+				return false;
+			}
 		}
 		else
 		{
-			data.direction = CollideDirection::LEFT;
+			if (isCollide(getSweptBroadphaseRect(myEntity->getBoundCollision(), myVelocity, frametime), otherRect))
+			{
+				data.direction = CollideDirection::LEFT;
+			}
+			else
+			{
+				return false;
+			}
 		}
 	}
 	else
@@ -197,7 +215,19 @@ MetroidRect Collision::CalculateCollisionRect(MetroidRect rect1, MetroidRect rec
 
 	return result;
 }
+MetroidRect Collision::getSweptBroadphaseRect(MetroidRect myRect,VECTOR2 myVelocity, float frametime)
+{
+	VECTOR2 distance = VECTOR2(myVelocity.x * frametime, myVelocity.y * frametime);
 
+
+	MetroidRect   rect;
+	rect.top = distance.y > 0 ? myRect.top + distance.y : myRect.top;
+	rect.bottom = distance.y > 0 ? myRect.bottom : myRect.bottom + distance.y;
+	rect.left = distance.x > 0 ? myRect.left : myRect.left + distance.x;
+	rect.right = distance.x > 0 ? myRect.right + distance.x : myRect.right;
+
+	return rect;
+}
 MetroidRect Collision::getSweptBroadphaseRect(BaseObject * obj, float frametime)
 {
 	VECTOR2 velocity = VECTOR2(obj->getVelocity().x * frametime, obj->getVelocity().y * frametime);

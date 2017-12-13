@@ -150,7 +150,7 @@ void SamusStateAcrobat::onCollision()
 		switch (i->object->getId())
 		{
 #pragma region Wall
-		case eID::WALL:
+		case eID::WALL: case eID::BRICK:
 			switch (i->direction)
 			{
 			case CollideDirection::LEFT:

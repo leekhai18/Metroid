@@ -20,6 +20,10 @@ public:
 	//TO DO: calculate collision rect
 	MetroidRect   CalculateCollisionRect(MetroidRect   rect1, MetroidRect   rect2);
 
+	MetroidRect getSweptBroadphaseRect(MetroidRect myRect, VECTOR2 myVelocity, float frametime);
+
+
+
 	//TO DO: return collide area
 	MetroidRect   getSweptBroadphaseRect(BaseObject* entity, float frametime);
 

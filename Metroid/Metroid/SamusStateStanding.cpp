@@ -183,7 +183,7 @@ void SamusStateStanding::onCollision()
 	{
 		switch (i->object->getId())
 		{
-		case eID::WALL:
+		case eID::WALL:case eID::BRICK:
 			switch (i->direction)
 			{
 			case CollideDirection::TOP:
