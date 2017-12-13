@@ -24,6 +24,7 @@ private:
 
 	// Player
 	Samus *samus;
+	Zommer *zommer;
 
 	Camera *camera;
 

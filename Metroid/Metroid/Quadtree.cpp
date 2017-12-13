@@ -139,7 +139,13 @@ void Quadtree::retrieve(list<BaseObject*>* return_objects_list, list<BaseObject*
 				if (Collision::getInstance()->isCollide(rect, (*i)->getActiveBound()))
 				{
 					if ((*i)->getId() != eID::WALL)
+					{
 						list_not_wall->push_back(*i);
+
+					}
+					if ((*i)->getId() == eID::WALL)
+						list_wall->push_back(*i);
+
 				}
 			}
 		}

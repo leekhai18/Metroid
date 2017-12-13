@@ -173,6 +173,12 @@ bool Collision::checkCollision(BaseObject * myEntity, BaseObject * otherEntity, 
 			bullet->getListCollide()->push_back(data);
 			break;
 		}
+		case eID::ZOMMER: 
+		{
+			Zommer* zommer = static_cast<Zommer*>(myEntity);
+			zommer->getListCollide()->push_back(data);
+			break;
+		}
 		default:
 			break;
 		}

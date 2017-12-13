@@ -9,6 +9,7 @@
 #include "Graphics.h"
 #include "Constants.h"
 #include "Quadtree.h"
+#include "Zommer.h"
 #include "Samus.h"
 
 #define QUADTREE_W 7680
@@ -29,6 +30,8 @@ private:
 	Quadtree* quadtree;
 
 	Samus* samus;
+	Zommer* zommer;
+
 	list<BaseObject*>* object_list;
 
 	int totalObjectsPerFrame;

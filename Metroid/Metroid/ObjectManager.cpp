@@ -57,6 +57,34 @@ void ObjectManager::onCheckCollision(float dt)
 		quadtree->retrieve(listCanCollideSamus, listObjectNotWallOnViewPort, listWallCanCollideSamus, MetroidRect((float)r.top, (float)r.bottom, (float)r.left, (float)r.right), samus);
 	}
 
+	//Get list can collide with zommer
+	/*for (list<BaseObject*>::iterator i = listObjectNotWallOnViewPort->begin(); i != listObjectNotWallOnViewPort->end(); ++i)
+	{
+		if ((*i)->getId() == eID::ZOMMER)
+		{
+			Zommer* zommer = static_cast<Zommer*>(*i);
+			MetroidRect rectZommer = zommer->getActiveBound();
+
+			for (auto x = listWallCanCollideSamus->begin(); x != listWallCanCollideSamus->end(); x++)
+			{
+				MetroidRect rectWall = (*x)->getActiveBound();
+				if (Collision::getInstance()->isCollide(rectWall, rectZommer) == true)
+				{
+					zommer->getListWallCanCollide()->push_back(*x);
+				}
+			}
+		}
+	}*/
+
+	//for (list<BaseObject*>::iterator i = listObjectNotWallOnViewPort->begin(); i != listObjectNotWallOnViewPort->end(); ++i)
+	//{
+
+	//	if ((*i)->getId() == eID::ZOMMER)
+	//	{
+	//		Zommer* zommer = static_cast<Zommer*>(*i);
+	//		zommer->onCollision(dt);
+	//	}
+	//}
 	// Get listCollide
 	for (auto x = listCanCollideSamus->begin(); x != listCanCollideSamus->end(); x++)
 	{
@@ -850,11 +878,8 @@ bool ObjectManager::load_list(const char * filename)
 				y = listZommerYellow[i]["y"].GetFloat();
 				zmy->setPosition(VECTOR2(x, y));
 
-				bound.left = x;
-				bound.top = y;
-				bound.right = bound.left + zmy->getSprite()->getWidth();
-				bound.bottom = bound.top - zmy->getSprite()->getHeight();
-				zmy->setBoundCollision(bound);
+				
+				zmy->setBoundCollision();
 
 				bound.bottom = listZommerYellow[i]["bottomA"].GetFloat();
 				bound.top = listZommerYellow[i]["topA"].GetFloat();
@@ -878,7 +903,7 @@ bool ObjectManager::load_list(const char * filename)
 				//writer.EndObject();
 
 
-				object_list->push_back(zmy);
+				//object_list->push_back(zmy);
 			}
 		}
 		//writer.EndArray();
@@ -897,11 +922,8 @@ bool ObjectManager::load_list(const char * filename)
 				y = listZommerBrown[i]["y"].GetFloat();
 				zmb->setPosition(VECTOR2(x, y));
 
-				bound.left = x;
-				bound.top = y;
-				bound.right = bound.left + zmb->getSprite()->getWidth();
-				bound.bottom = bound.top - zmb->getSprite()->getHeight();
-				zmb->setBoundCollision(bound);
+
+				zmb->setBoundCollision();
 
 				bound.bottom = listZommerBrown[i]["bottomA"].GetFloat();
 				bound.top = listZommerBrown[i]["topA"].GetFloat();
@@ -925,7 +947,7 @@ bool ObjectManager::load_list(const char * filename)
 				//writer.EndObject();
 
 
-				object_list->push_back(zmb);
+				//object_list->push_back(zmb);
 			}
 		}
 		//writer.EndArray();
@@ -944,11 +966,7 @@ bool ObjectManager::load_list(const char * filename)
 				y = listZommerRed[i]["y"].GetFloat();
 				zmr->setPosition(VECTOR2(x, y));
 
-				bound.left = x;
-				bound.top = y;
-				bound.right = bound.left + zmr->getSprite()->getWidth();
-				bound.bottom = bound.top - zmr->getSprite()->getHeight();
-				zmr->setBoundCollision(bound);
+				zmr->setBoundCollision();
 
 				bound.bottom = listZommerRed[i]["bottomA"].GetFloat();
 				bound.top = listZommerRed[i]["topA"].GetFloat();
@@ -972,7 +990,7 @@ bool ObjectManager::load_list(const char * filename)
 				//writer.EndObject();
 
 
-				object_list->push_back(zmr);
+				//object_list->push_back(zmr);
 			}
 		}
 		//writer.EndArray();
