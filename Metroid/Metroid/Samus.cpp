@@ -257,10 +257,10 @@ void Samus::setBoundCollision(MetroidRect rect)
 void Samus::setActiveBound()
 {
 	// Can 1 con so hop ly
-	this->activeBound.top = this->boundCollision.top + 50;
-	this->activeBound.left = this->boundCollision.left - 50;
-	this->activeBound.right = this->boundCollision.right + 50;
-	this->activeBound.bottom = this->boundCollision.bottom - 50;
+	this->activeBound.top = this->boundCollision.top + 80;
+	this->activeBound.left = this->boundCollision.left - 80;
+	this->activeBound.right = this->boundCollision.right + 80;
+	this->activeBound.bottom = this->boundCollision.bottom - 80;
 }
 
 void Samus::setAcrobat(bool acrobat)

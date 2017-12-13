@@ -1,11 +1,12 @@
 #include "SkreeEffectDeathPart.h"
+#include "Collision.h"
 
-#define WIDTH_HALF 1
-#define HEIGHT_HALF 1
-#define TIME_RUN 0.25f
+#define WIDTH_SKREE_BULLET_HALF 1
+#define HEIGHT_SKREE_BULLET_HALF 1
+#define TIME_RUN 0.3f
 
 
-SkreeEffectDeathPart::SkreeEffectDeathPart(TextureManager * textureM, Graphics * graphics) : BaseObject()
+SkreeEffectDeathPart::SkreeEffectDeathPart(TextureManager * textureM, Graphics * graphics) : BaseObject(eID::SKREE)
 {
 	this->sprite = new Sprite();
 	if (!this->sprite->initialize(graphics, textureM, SpriteManager::getInstance()))
@@ -33,14 +34,18 @@ void SkreeEffectDeathPart::init(VECTOR2 target, VECTOR2 startPosition)
 	this->target = target;
 	this->startPosition = startPosition;
 	this->setPosition(startPosition);
+	this->setBoundCollision();
 	this->setVelocity(VECTOR2((target.x - startPosition.x)/TIME_RUN, (target.y - startPosition.y)/TIME_RUN));
 	this->isFinish = false;
 	timer = 0;
 }
 
-void SkreeEffectDeathPart::onCollision()
+bool SkreeEffectDeathPart::checkCollision(Samus * sam, float dt)
 {
+	return Collision::getInstance()->checkCollision(this, sam, dt);
 }
+
+
 
 void SkreeEffectDeathPart::update(float dt)
 {
@@ -68,10 +73,15 @@ void SkreeEffectDeathPart::draw()
 
 void SkreeEffectDeathPart::setBoundCollision()
 {
-	this->boundCollision.top = this->getPosition().y + 1;
-	this->boundCollision.bottom = this->getPosition().y - 1;
-	this->boundCollision.left = this->getPosition().y - 1;
-	this->boundCollision.right = this->getPosition().y + 1;
+	this->boundCollision.top = this->getPosition().y + HEIGHT_SKREE_BULLET_HALF;
+	this->boundCollision.bottom = this->getPosition().y - HEIGHT_SKREE_BULLET_HALF;
+	this->boundCollision.left = this->getPosition().x - WIDTH_SKREE_BULLET_HALF;
+	this->boundCollision.right = this->getPosition().x + WIDTH_SKREE_BULLET_HALF;
+}
+
+MetroidRect SkreeEffectDeathPart::getBoundCollision()
+{
+	return this->boundCollision;
 }
 
 bool SkreeEffectDeathPart::isFinished()

@@ -1,5 +1,6 @@
 #pragma once
 #include "SkreeEffectDeathPart.h"
+#include "Samus.h"
 
 class SkreeEffectDeath
 {
@@ -11,6 +12,8 @@ public:
 	SkreeEffectDeath(TextureManager* textureM, Graphics* graphics);
 	SkreeEffectDeath();
 	~SkreeEffectDeath();
+
+	bool checkCollision(Samus* sam, float dt);
 
 	void update(float dt);
 	void draw();

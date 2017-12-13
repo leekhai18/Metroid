@@ -103,18 +103,18 @@ void Quadtree::insert(BaseObject * obj)
 	}
 }
 
-void Quadtree::retrieve(list<BaseObject*>* return_objects_list, list<BaseObject*>* list_not_wall, list<BaseObject*>* list_wall, MetroidRect rect, BaseObject* samus)
+void Quadtree::retrieve(list<BaseObject*>* listCanCollideSamus, list<BaseObject*>* listObjectNotWallOnViewPort, list<BaseObject*>* listWallCanCollideSamus, MetroidRect rect, BaseObject* samus)
 {
 	if (nodes)
 	{
 		if (nodes[0]->isContain(rect))
-			nodes[0]->retrieve(return_objects_list, list_not_wall, list_wall, rect, samus);
+			nodes[0]->retrieve(listCanCollideSamus, listObjectNotWallOnViewPort, listWallCanCollideSamus, rect, samus);
 		if (nodes[1]->isContain(rect))
-			nodes[1]->retrieve(return_objects_list, list_not_wall, list_wall, rect, samus);
+			nodes[1]->retrieve(listCanCollideSamus, listObjectNotWallOnViewPort, listWallCanCollideSamus, rect, samus);
 		if (nodes[2]->isContain(rect))
-			nodes[2]->retrieve(return_objects_list, list_not_wall, list_wall, rect, samus);
+			nodes[2]->retrieve(listCanCollideSamus, listObjectNotWallOnViewPort, listWallCanCollideSamus, rect, samus);
 		if (nodes[3]->isContain(rect))
-		    nodes[3]->retrieve(return_objects_list, list_not_wall, list_wall, rect, samus);
+		    nodes[3]->retrieve(listCanCollideSamus, listObjectNotWallOnViewPort, listWallCanCollideSamus, rect, samus);
 
 		return; // Return here to ignore rest.
 	}
@@ -124,18 +124,15 @@ void Quadtree::retrieve(list<BaseObject*>* return_objects_list, list<BaseObject*
 	{
 		for (auto i = objects_list.begin(); i != objects_list.end(); i++)
 		{
-			bool found1 = (std::find(return_objects_list->begin(), return_objects_list->end(), *i) != return_objects_list->end());
-			bool found2 = (std::find(list_wall->begin(), list_wall->end(), *i) != list_wall->end());
-			bool found3 = (std::find(list_not_wall->begin(), list_not_wall->end(), *i) != list_not_wall->end());
+			bool found1 = (std::find(listCanCollideSamus->begin(), listCanCollideSamus->end(), *i) != listCanCollideSamus->end());
+			bool found2 = (std::find(listWallCanCollideSamus->begin(), listWallCanCollideSamus->end(), *i) != listWallCanCollideSamus->end());
+			bool found3 = (std::find(listObjectNotWallOnViewPort->begin(), listObjectNotWallOnViewPort->end(), *i) != listObjectNotWallOnViewPort->end());
 
 			if (!found1)
 			{
 				if (Collision::getInstance()->isCollide(samus->getActiveBound(), (*i)->getActiveBound()))
 				{
-					return_objects_list->push_back(*i);
-
-					if ((*i)->getId() == eID::WALL)
-						list_wall->push_back(*i);
+					listCanCollideSamus->push_back(*i);
 				}
 			}
 
@@ -144,7 +141,7 @@ void Quadtree::retrieve(list<BaseObject*>* return_objects_list, list<BaseObject*
 				if (Collision::getInstance()->isCollide(samus->getActiveBound(), (*i)->getActiveBound()))
 				{
 					if ((*i)->getId() == eID::WALL)
-						list_wall->push_back(*i);
+						listWallCanCollideSamus->push_back(*i);
 				}
 			}
 
@@ -153,7 +150,7 @@ void Quadtree::retrieve(list<BaseObject*>* return_objects_list, list<BaseObject*
 				if (Collision::getInstance()->isCollide(rect, (*i)->getActiveBound()))
 				{
 					if ((*i)->getId() != eID::WALL)
-						list_not_wall->push_back(*i);
+						listObjectNotWallOnViewPort->push_back(*i);
 				}
 			}
 		}

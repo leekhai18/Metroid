@@ -1,5 +1,6 @@
 #pragma once
 #include "BaseObject.h"
+#include "Samus.h"
 
 class SkreeEffectDeathPart : public BaseObject
 {
@@ -9,19 +10,22 @@ private:
 	float timer;
 	bool isFinish;
 
-	float d;
-	float d2;
 public:
 	SkreeEffectDeathPart(TextureManager* textureM, Graphics* graphics);
 	SkreeEffectDeathPart();
 	~SkreeEffectDeathPart();
 
 	void init(VECTOR2 target, VECTOR2 startPosition);
-	void onCollision();
+
+
+	bool checkCollision(Samus* sam, float dt);
+
 	void update(float dt);
 	void draw();
 
 	void setBoundCollision();
+	MetroidRect getBoundCollision();
+
 
 	bool isFinished();
 

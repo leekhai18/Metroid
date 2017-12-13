@@ -31,6 +31,7 @@ public:
 	void setPause(bool pause);
 	bool isPausing();
 
+	void reInit();
 	bool isFinished();
 
 	void setTimeFrameDelay(float time);

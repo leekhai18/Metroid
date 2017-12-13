@@ -2,8 +2,9 @@
 #include "BaseObject.h"
 #include <list>
 
-#define DISTANCE_SHOOT 48.0f
+#define DISTANCE_SHOOT 48
 #define VELOCITY 180
+#define EXPLOSION_TIME_FRAME_DELAY 0.1f
 
 class Bullet : public BaseObject
 {
@@ -13,6 +14,8 @@ private:
 	list<CollisionReturn> *listCollide;
 	bool isCollided;
 	float timer;
+
+	float dame;
 
 public:
 	Bullet(TextureManager* textureM, Graphics* graphics);

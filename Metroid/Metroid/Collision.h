@@ -1,6 +1,7 @@
 #pragma once
 #include "Constants.h"
 #include "BaseObject.h"
+#include "Samus.h"
 
 class Collision
 {
@@ -16,6 +17,8 @@ public:
 
 	//TO DO: true if one object will collide with another
 	bool checkCollision(BaseObject* myObj, BaseObject* otherObj, float dt);
+
+	bool checkCollision(BaseObject* myObj, Samus* samus, float dt);
 
 	//TO DO: calculate collision rect
 	MetroidRect   CalculateCollisionRect(MetroidRect   rect1, MetroidRect   rect2);

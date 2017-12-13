@@ -1,6 +1,6 @@
 #include "SkreeEffectDeath.h"
 #define NUM_PART 4
-#define DISTANCE 50
+#define DISTANCE 48
 
 SkreeEffectDeath::SkreeEffectDeath(TextureManager * textureM, Graphics * graphics)
 {
@@ -24,6 +24,23 @@ SkreeEffectDeath::~SkreeEffectDeath()
 
 	delete[] list;
 }
+
+bool SkreeEffectDeath::checkCollision(Samus * sam, float dt)
+{
+	if (this->position != VECTOR2ZERO)
+	{
+		for (int i = 0; i < NUM_PART; i++)
+		{
+			if (this->list[i]->checkCollision(sam, dt))
+			{
+				return true;
+			}
+		}
+	}
+
+	return false;
+}
+
 
 void SkreeEffectDeath::update(float dt)
 {
@@ -53,10 +70,10 @@ void SkreeEffectDeath::init(VECTOR2 position)
 
 	VECTOR2 target[NUM_PART];
 	target[0] = VECTOR2(position.x + DISTANCE, position.y);
-	target[1] = VECTOR2((float)((target[0].x - position.x)*cos(D3DXToRadian(60)) - (target[0].y - position.y)*sin(D3DXToRadian(60)) + position.x),
-		(float)((target[0].x - position.x)*sin(D3DXToRadian(60)) + (target[0].y - position.y)*cos(D3DXToRadian(60)) + position.y));
-	target[2] = VECTOR2((float)((target[0].x - position.x)*cos(D3DXToRadian(120)) - (target[0].y - position.y)*sin(D3DXToRadian(120)) + position.x),
-		(float)((target[0].x - position.x)*sin(D3DXToRadian(120)) + (target[0].y - position.y)*cos(D3DXToRadian(120)) + position.y));
+	target[1] = VECTOR2((float)((target[0].x - position.x)*cos(D3DXToRadian(70)) - (target[0].y - position.y)*sin(D3DXToRadian(70)) + position.x),
+		(float)((target[0].x - position.x)*sin(D3DXToRadian(70)) + (target[0].y - position.y)*cos(D3DXToRadian(70)) + position.y));
+	target[2] = VECTOR2((float)((target[0].x - position.x)*cos(D3DXToRadian(110)) - (target[0].y - position.y)*sin(D3DXToRadian(110)) + position.x),
+		(float)((target[0].x - position.x)*sin(D3DXToRadian(110)) + (target[0].y - position.y)*cos(D3DXToRadian(110)) + position.y));
 	target[3] = VECTOR2(position.x - DISTANCE, position.y);
 
 	for (int i = 0; i < NUM_PART; i++)

@@ -54,6 +54,7 @@
 #define OFFSET_ROLLING 6.5f
 
 
+
 class Samus: public BaseObject
 {
 private:

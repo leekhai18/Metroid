@@ -28,7 +28,7 @@
 #include "rapidjson-master\include\rapidjson\ostreamwrapper.h"
 
 
-#define TIME_RETRIEVE 0.2f
+#define TIME_RETRIEVE 0.4f
 
 ObjectManager* ObjectManager::instance = nullptr;
 ObjectManager * ObjectManager::getInstance()
@@ -65,13 +65,22 @@ void ObjectManager::onCheckCollision(float dt)
 
 		for (unsigned i = 0; i < BulletPool::getInstance()->getListUsing().size(); i++)
 			Collision::getInstance()->checkCollision(BulletPool::getInstance()->getListUsing().at(i), *x, dt);
+
+		if ((*x)->getId() == eID::SKREE)
+		{
+			Skree* skr = static_cast<Skree*>(*x);
+
+			if (skr->checkCollision(samus, dt))
+			{
+				skr->onCollision(samus);
+			}
+		}
 	}
 
 	// handle on listCollide
 	samus->onCollision();
 	for (unsigned i = 0; i < BulletPool::getInstance()->getListUsing().size(); i++)
 		BulletPool::getInstance()->getListUsing().at(i)->onCollision();
-
 }
 
 void ObjectManager::onCheckCollision(BaseObject * obj, float frametime)
