@@ -11,6 +11,8 @@ private:
 	float velocity_frame;
 	bool reset_fall;
 	bool move_to_fall;
+
+	bool canStanding;
 public:
 	SamusStateRolling();
 	SamusStateRolling(Samus* samus, Input* input);

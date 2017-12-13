@@ -30,6 +30,7 @@
 #define TIME_RETRIEVE 0.2f
 
 ObjectManager* ObjectManager::instance = nullptr;
+
 ObjectManager * ObjectManager::getInstance()
 {
 	if(instance==NULL)
@@ -43,7 +44,7 @@ ObjectManager * ObjectManager::getInstance()
 void ObjectManager::onCheckCollision(float dt)
 {
 	timer += dt;
-
+	
 	if (timer > TIME_RETRIEVE)
 	{
 		timer = 0;
@@ -54,7 +55,15 @@ void ObjectManager::onCheckCollision(float dt)
 
 		RECT r = Camera::getInstance()->getBound();
 		//Get all objects that can collide with current obj
-		quadtree->retrieve(listCanCollideSamus, listObjectNotWallOnViewPort, listWallCanCollideSamus, MetroidRect((float)r.top, (float)r.bottom, (float)r.left, (float)r.right), samus);
+		try
+		{
+			quadtree->retrieve(listCanCollideSamus, listObjectNotWallOnViewPort, listWallCanCollideSamus, MetroidRect((float)r.top, (float)r.bottom, (float)r.left, (float)r.right), samus);
+
+		}
+		catch (const std::exception&)
+		{
+			int test = 0;
+		}
 	}
 
 	// Get listCollide
@@ -115,6 +124,89 @@ void ObjectManager::draw()
 		}
 	}
 }
+void ObjectManager::insertQuadTreeNode(const Value & value, Quadtree* quadtree)
+{
+	const Value& levelValue = value["Level"];
+	const Value& regionValue = value["Region"];
+	const Value& objectList = value["ObjectList"];
+	const Value& nodes = value["Nodes"];
+	int  level = levelValue.GetInt();
+
+	MetroidRect region;
+	region.top = regionValue["Top"].GetFloat();
+	region.left = regionValue["Left"].GetFloat();
+	region.right = regionValue["Right"].GetFloat();
+	region.bottom = regionValue["Bottom"].GetFloat();
+
+
+	Quadtree* node = new Quadtree(level, region);
+	
+	for (SizeType i = 0; i < objectList.Size(); i++)
+	{
+		int id = objectList[i]["Id"].GetInt();
+		BaseObject* obj = (*map_object.find(id)).second;
+		node->getObjectList().push_back(obj);
+	}
+	if(!nodes.IsNull())
+	{
+		
+		node->getNodes() = new list<Quadtree*>();
+		for (SizeType i = 0; i < nodes.Size(); i++)
+		{
+			insertQuadTreeNode(nodes[i], node);
+		}
+	}
+	//quadtree->getNodes() = new list<Quadtree*>();
+	quadtree->getNodes()->push_back(node);
+
+}
+bool ObjectManager::load_quatree(const char * filename)
+{
+	try
+	{
+		ifstream ifs(filename);
+		IStreamWrapper isw(ifs);
+		Document jSon;
+		jSon.ParseStream(isw);
+
+		//quadtree =new Quadtree()
+
+
+		const Value& levelValue = jSon["Level"];
+		const Value& regionValue = jSon["Region"];
+		const Value& objectList = jSon["ObjectList"];
+
+		const Value& nodes = jSon["Nodes"];
+
+		int  level = levelValue.GetInt();
+
+		MetroidRect region;
+		region.top = regionValue["Top"].GetFloat();
+		region.left = regionValue["Left"].GetFloat();
+		region.right = regionValue["Right"].GetFloat();
+		region.bottom = regionValue["Bottom"].GetFloat();
+
+
+		quadtree = new Quadtree(level, region);
+		quadtree->getNodes() = new list<Quadtree*>();
+		if(!nodes.IsNull())
+		{
+			for (SizeType i = 0; i < nodes.Size(); i++)
+			{
+				insertQuadTreeNode(nodes[i], quadtree);
+			}
+
+		}
+		
+		
+	}
+	catch (const std::exception&)
+	{
+		return false;
+	}
+	return true;
+}
+
 
 void ObjectManager::init(TextureManager * textureM, Graphics * graphics, Samus* samus)
 {
@@ -132,6 +224,7 @@ bool ObjectManager::load_list(const char * filename)
 		Document jSon;
 		jSon.ParseStream(isw);
 		float x, y, height, width;
+		int id;
 		MetroidRect bound;
 
 		// write json file
@@ -156,6 +249,8 @@ bool ObjectManager::load_list(const char * filename)
 			{
 				BaseObject *wall = new BaseObject(eID::WALL);
 
+				
+				id = listWall[i]["id"].GetInt();
 				x = listWall[i]["x"].GetFloat();
 				y = listWall[i]["y"].GetFloat(); // Bị lệch 32bit giữa 2 layer WALL and map
 				height = listWall[i]["height"].GetFloat();
@@ -181,6 +276,8 @@ bool ObjectManager::load_list(const char * filename)
 				wall->setActiveBound(bound);
 
 				object_list->push_back(wall);
+
+				map_object.insert(std::pair<int, BaseObject*>(id,wall));
 			}
 		}
 
@@ -199,6 +296,7 @@ bool ObjectManager::load_list(const char * filename)
 			{
 				Brick *bsb = new Brick(this->textureManager, this->graphics, BrickStyle::BrickSecretBlue);
 
+				id = listBrickSecretBlue[i]["id"].GetInt();
 				x = listBrickSecretBlue[i]["x"].GetFloat();
 				y = listBrickSecretBlue[i]["y"].GetFloat();
 
@@ -220,6 +318,8 @@ bool ObjectManager::load_list(const char * filename)
 				bsb->setActiveBound(bound);
 
 				object_list->push_back(bsb);
+
+				map_object.insert(std::pair<int, BaseObject*>(id, bsb));
 			}
 		}
 		//writer.EndArray();
@@ -234,6 +334,7 @@ bool ObjectManager::load_list(const char * filename)
 			{
 				Brick *bsg = new Brick(this->textureManager, this->graphics, BrickStyle::BrickSerectGreen);
 
+				id = listBrickSerectGreen[i]["id"].GetInt();
 				x = listBrickSerectGreen[i]["x"].GetFloat();
 				y = listBrickSerectGreen[i]["y"].GetFloat();
 
@@ -255,6 +356,8 @@ bool ObjectManager::load_list(const char * filename)
 				bsg->setActiveBound(bound);
 
 				object_list->push_back(bsg);
+
+				map_object.insert(std::pair<int, BaseObject*>(id, bsg));
 			}
 		}
 		//writer.EndArray();
@@ -269,6 +372,7 @@ bool ObjectManager::load_list(const char * filename)
 			for (SizeType i = 0; i < listBrickGreen.Size(); i++)
 			{
 				Brick *bg = new Brick(this->textureManager, this->graphics, BrickStyle::BrickGreen);
+				id = listBrickGreen[i]["id"].GetInt();
 
 				x = listBrickGreen[i]["x"].GetFloat();
 				y = listBrickGreen[i]["y"].GetFloat();
@@ -290,6 +394,8 @@ bool ObjectManager::load_list(const char * filename)
 				bg->setActiveBound(bound);
 
 				object_list->push_back(bg);
+
+				map_object.insert(std::pair<int, BaseObject*>(id, bg));
 			}
 		}
 		//writer.EndArray();
@@ -307,6 +413,7 @@ bool ObjectManager::load_list(const char * filename)
 			{
 				Brick *bb = new Brick(this->textureManager, this->graphics, BrickStyle::BrickBlue);
 
+				id = listBrickBlue[i]["id"].GetInt();
 				x = listBrickBlue[i]["x"].GetFloat();
 				y = listBrickBlue[i]["y"].GetFloat();
 				bb->setPosition(VECTOR2(x, y));
@@ -332,6 +439,7 @@ bool ObjectManager::load_list(const char * filename)
 				bb->setActiveBound(bound);
 
 				object_list->push_back(bb);
+				map_object.insert(std::pair<int, BaseObject*>(id, bb));
 			}
 		}
 		//writer.EndArray();
@@ -346,6 +454,7 @@ bool ObjectManager::load_list(const char * filename)
 			{
 				Brick *br = new Brick(this->textureManager, this->graphics, BrickStyle::BrickRed);
 
+				id = listBrickRed[i]["id"].GetInt();
 				x = listBrickRed[i]["x"].GetFloat();
 				y = listBrickRed[i]["y"].GetFloat();
 				br->setPosition(VECTOR2(x, y));
@@ -366,6 +475,7 @@ bool ObjectManager::load_list(const char * filename)
 				br->setActiveBound(bound);
 
 				object_list->push_back(br);
+				map_object.insert(std::pair<int, BaseObject*>(id, br));
 			}
 		}
 		//writer.EndArray();
@@ -383,6 +493,7 @@ bool ObjectManager::load_list(const char * filename)
 			{
 				GateBlue *gateBlueR = new GateBlue(this->textureManager, this->graphics);
 
+				id = listGateBlueR[i]["id"].GetInt();
 				x = listGateBlueR[i]["x"].GetFloat();
 				y = listGateBlueR[i]["y"].GetFloat();
 				gateBlueR->setPosition(VECTOR2(x, y));
@@ -403,6 +514,7 @@ bool ObjectManager::load_list(const char * filename)
 				gateBlueR->setActiveBound(bound);
 
 				object_list->push_back(gateBlueR);
+				map_object.insert(std::pair<int, BaseObject*>(id, gateBlueR));
 			}
 		}
 		//writer.EndArray();
@@ -418,6 +530,7 @@ bool ObjectManager::load_list(const char * filename)
 				GateBlue *gateBlueL = new GateBlue(this->textureManager, this->graphics);
 				gateBlueL->setFlipX(true);
 
+				id = listGateBlueL[i]["id"].GetInt();
 				x = listGateBlueL[i]["x"].GetFloat();
 				y = listGateBlueL[i]["y"].GetFloat();
 				gateBlueL->setPosition(VECTOR2(x, y));
@@ -438,6 +551,7 @@ bool ObjectManager::load_list(const char * filename)
 				gateBlueL->setActiveBound(bound);
 
 				object_list->push_back(gateBlueL);
+				map_object.insert(std::pair<int, BaseObject*>(id, gateBlueL));
 			}
 		}
 		//writer.EndArray();
@@ -452,6 +566,7 @@ bool ObjectManager::load_list(const char * filename)
 			{
 				GateRed *gateRedR = new GateRed(this->textureManager, this->graphics);
 
+				id = listGateRedR[i]["id"].GetInt();
 				x = listGateRedR[i]["x"].GetFloat();
 				y = listGateRedR[i]["y"].GetFloat();
 				gateRedR->setPosition(VECTOR2(x, y));
@@ -472,6 +587,7 @@ bool ObjectManager::load_list(const char * filename)
 				gateRedR->setActiveBound(bound);
 
 				object_list->push_back(gateRedR);
+				map_object.insert(std::pair<int, BaseObject*>(id, gateRedR));
 			}
 		}
 		//writer.EndArray();
@@ -487,6 +603,7 @@ bool ObjectManager::load_list(const char * filename)
 				GateRed *gateRedL = new GateRed(this->textureManager, this->graphics);
 				gateRedL->setFlipX(true);
 
+				id = listGateRedL[i]["id"].GetInt();
 				x = listGateRedL[i]["x"].GetFloat();
 				y = listGateRedL[i]["y"].GetFloat();
 				gateRedL->setPosition(VECTOR2(x, y));
@@ -507,6 +624,7 @@ bool ObjectManager::load_list(const char * filename)
 				gateRedL->setActiveBound(bound);
 
 				object_list->push_back(gateRedL);
+				map_object.insert(std::pair<int, BaseObject*>(id, gateRedL));
 			}
 		}
 		//writer.EndArray();
@@ -523,6 +641,7 @@ bool ObjectManager::load_list(const char * filename)
 			{
 				Port *port = new Port();
 
+				id = listPort[i]["id"].GetInt();
 				x = listPort[i]["x"].GetFloat();
 				y = listPort[i]["y"].GetFloat();
 				height = listPort[i]["height"].GetFloat();
@@ -548,6 +667,7 @@ bool ObjectManager::load_list(const char * filename)
 				port->setActiveBound(bound);
 
 				object_list->push_back(port);
+				map_object.insert(std::pair<int, BaseObject*>(id, port));
 			}
 		}
 		//writer.EndArray();
@@ -562,6 +682,7 @@ bool ObjectManager::load_list(const char * filename)
 		{
 			MaruMari *mm = new MaruMari(this->textureManager, this->graphics);
 
+			id = maruMari["id"].GetInt();
 			x = maruMari["x"].GetFloat();
 			y = maruMari["y"].GetFloat();
 			mm->setPosition(VECTOR2(x + 2, y));
@@ -583,6 +704,7 @@ bool ObjectManager::load_list(const char * filename)
 			mm->setActiveBound(bound);
 
 			object_list->push_back(mm);
+			map_object.insert(std::pair<int, BaseObject*>(id, mm));
 		}
 
 		// create ice beam
@@ -591,6 +713,7 @@ bool ObjectManager::load_list(const char * filename)
 		{
 			IceBeam *ib = new IceBeam(this->textureManager, this->graphics);
 
+			id = iceBeam["id"].GetInt();
 			x = iceBeam["x"].GetFloat();
 			y = iceBeam["y"].GetFloat();
 			ib->setPosition(VECTOR2(x, y));
@@ -612,6 +735,8 @@ bool ObjectManager::load_list(const char * filename)
 			ib->setActiveBound(bound);
 
 			object_list->push_back(ib);
+
+			map_object.insert(std::pair<int, BaseObject*>(id, ib));
 		}
 
 		// create Bomb
@@ -620,6 +745,7 @@ bool ObjectManager::load_list(const char * filename)
 		{
 			Bomb *bm = new Bomb(this->textureManager, this->graphics);
 
+			id = bomb["id"].GetInt();
 			x = bomb["x"].GetFloat();
 			y = bomb["y"].GetFloat();
 			bm->setPosition(VECTOR2(x, y));
@@ -642,6 +768,8 @@ bool ObjectManager::load_list(const char * filename)
 			bm->setActiveBound(bound);
 
 			object_list->push_back(bm);
+
+			map_object.insert(std::pair<int, BaseObject*>(id, bm));
 		}
 
 		// create EnergyTank, 3
@@ -655,6 +783,7 @@ bool ObjectManager::load_list(const char * filename)
 				
 				EnergyTank *energyT = new EnergyTank(this->textureManager, this->graphics);
 
+				id = listEnergyTank[i]["id"].GetInt();
 				x = listEnergyTank[i]["x"].GetFloat();
 				y = listEnergyTank[i]["y"].GetFloat();
 				energyT->setPosition(VECTOR2(x, y));
@@ -675,6 +804,8 @@ bool ObjectManager::load_list(const char * filename)
 				energyT->setActiveBound(bound);
 
 				object_list->push_back(energyT);
+
+				map_object.insert(std::pair<int, BaseObject*>(id, energyT));
 			}
 		}
 		//writer.EndArray();
@@ -685,6 +816,7 @@ bool ObjectManager::load_list(const char * filename)
 		{
 			LongBeam *lb = new LongBeam(this->textureManager, this->graphics);
 
+			id = longBeam["id"].GetInt();
 			x = longBeam["x"].GetFloat();
 			y = longBeam["y"].GetFloat();
 			lb->setPosition(VECTOR2(x, y));
@@ -707,6 +839,8 @@ bool ObjectManager::load_list(const char * filename)
 			lb->setActiveBound(bound);
 
 			object_list->push_back(lb);
+
+			map_object.insert(std::pair<int, BaseObject*>(id, lb));
 		}
 
 		// create MissileRocket
@@ -720,6 +854,7 @@ bool ObjectManager::load_list(const char * filename)
 			{
 				MissileRocket *rocket = new MissileRocket(this->textureManager, this->graphics);
 
+				id = listRocket[i]["id"].GetInt();
 				x = listRocket[i]["x"].GetFloat();
 				y = listRocket[i]["y"].GetFloat();
 				rocket->setPosition(VECTOR2(x, y));
@@ -741,6 +876,8 @@ bool ObjectManager::load_list(const char * filename)
 				rocket->setActiveBound(bound);
 
 				object_list->push_back(rocket);
+
+				map_object.insert(std::pair<int, BaseObject*>(id, rocket));
 			}
 		}
 		//writer.EndArray();
@@ -751,6 +888,7 @@ bool ObjectManager::load_list(const char * filename)
 		{
 			Varia *va = new Varia(this->textureManager, this->graphics);
 
+			id = varia["id"].GetInt();
 			x = varia["x"].GetFloat();
 			y = varia["y"].GetFloat();
 			va->setPosition(VECTOR2(x, y));
@@ -773,6 +911,8 @@ bool ObjectManager::load_list(const char * filename)
 			va->setActiveBound(bound);
 
 			object_list->push_back(va);
+
+			map_object.insert(std::pair<int, BaseObject*>(id, va));
 		}
 
 #pragma endregion
@@ -784,6 +924,7 @@ bool ObjectManager::load_list(const char * filename)
 		{
 			AlienBig *alienB = new AlienBig(this->textureManager, this->graphics);
 
+			id = alienBig["id"].GetInt();
 			x = alienBig["x"].GetFloat();
 			y = alienBig["y"].GetFloat();
 			alienB->setPosition(VECTOR2(x, y));
@@ -805,6 +946,8 @@ bool ObjectManager::load_list(const char * filename)
 			alienB->setActiveBound(bound);
 
 			object_list->push_back(alienB);
+
+			map_object.insert(std::pair<int, BaseObject*>(id, alienB));
 		}
 
 		// create AlienSmall
@@ -813,6 +956,7 @@ bool ObjectManager::load_list(const char * filename)
 		{
 			AlienSmall *alienS = new AlienSmall(this->textureManager, this->graphics);
 
+			id = alienSmall["id"].GetInt();
 			x = alienSmall["x"].GetFloat();
 			y = alienSmall["y"].GetFloat();
 			alienS->setPosition(VECTOR2(x, y));
@@ -834,6 +978,8 @@ bool ObjectManager::load_list(const char * filename)
 			alienS->setActiveBound(bound);
 
 			object_list->push_back(alienS);
+
+			map_object.insert(std::pair<int, BaseObject*>(id, alienS));
 		}
 
 		// create ZommerYellow
@@ -846,6 +992,7 @@ bool ObjectManager::load_list(const char * filename)
 			{
 				Zommer *zmy = new Zommer(this->textureManager, this->graphics, EnemyColors::Yellow);
 
+				id = listZommerYellow[i]["id"].GetInt();
 				x = listZommerYellow[i]["x"].GetFloat();
 				y = listZommerYellow[i]["y"].GetFloat();
 				zmy->setPosition(VECTOR2(x, y));
@@ -879,6 +1026,8 @@ bool ObjectManager::load_list(const char * filename)
 
 
 				object_list->push_back(zmy);
+
+				map_object.insert(std::pair<int, BaseObject*>(id, zmy));
 			}
 		}
 		//writer.EndArray();
@@ -893,6 +1042,7 @@ bool ObjectManager::load_list(const char * filename)
 			{
 				Zommer *zmb = new Zommer(this->textureManager, this->graphics, EnemyColors::Brown);
 
+				id = listZommerBrown[i]["id"].GetInt();
 				x = listZommerBrown[i]["x"].GetFloat();
 				y = listZommerBrown[i]["y"].GetFloat();
 				zmb->setPosition(VECTOR2(x, y));
@@ -926,6 +1076,8 @@ bool ObjectManager::load_list(const char * filename)
 
 
 				object_list->push_back(zmb);
+
+				map_object.insert(std::pair<int, BaseObject*>(id, zmb));
 			}
 		}
 		//writer.EndArray();
@@ -940,6 +1092,7 @@ bool ObjectManager::load_list(const char * filename)
 			{
 				Zommer *zmr = new Zommer(this->textureManager, this->graphics, EnemyColors::Red);
 
+				id = listZommerRed[i]["id"].GetInt();
 				x = listZommerRed[i]["x"].GetFloat();
 				y = listZommerRed[i]["y"].GetFloat();
 				zmr->setPosition(VECTOR2(x, y));
@@ -973,6 +1126,8 @@ bool ObjectManager::load_list(const char * filename)
 
 
 				object_list->push_back(zmr);
+
+				map_object.insert(std::pair<int, BaseObject*>(id, zmr));
 			}
 		}
 		//writer.EndArray();
@@ -987,6 +1142,7 @@ bool ObjectManager::load_list(const char * filename)
 			{
 				Zeb *zby = new Zeb(this->textureManager, this->graphics, EnemyColors::Yellow);
 
+				id = listZebYellow[i]["id"].GetInt();
 				x = listZebYellow[i]["x"].GetFloat();
 				y = listZebYellow[i]["y"].GetFloat();
 				zby->setPosition(VECTOR2(x, y));
@@ -1020,6 +1176,8 @@ bool ObjectManager::load_list(const char * filename)
 
 
 				object_list->push_back(zby);
+
+				map_object.insert(std::pair<int, BaseObject*>(id, zby));
 			}
 		}
 		//writer.EndArray();
@@ -1034,6 +1192,7 @@ bool ObjectManager::load_list(const char * filename)
 			{
 				Zeb *zbb = new Zeb(this->textureManager, this->graphics, EnemyColors::Brown);
 
+				id = listZebBrown[i]["id"].GetInt();
 				x = listZebBrown[i]["x"].GetFloat();
 				y = listZebBrown[i]["y"].GetFloat();
 				zbb->setPosition(VECTOR2(x, y));
@@ -1067,6 +1226,8 @@ bool ObjectManager::load_list(const char * filename)
 
 
 				object_list->push_back(zbb);
+
+				map_object.insert(std::pair<int, BaseObject*>(id, zbb));
 			}
 		}
 		//writer.EndArray();
@@ -1081,6 +1242,7 @@ bool ObjectManager::load_list(const char * filename)
 			{
 				Zeb *zbr = new Zeb(this->textureManager, this->graphics, EnemyColors::Red);
 
+				id = listZebRed[i]["id"].GetInt();
 				x = listZebRed[i]["x"].GetFloat();
 				y = listZebRed[i]["y"].GetFloat();
 				zbr->setPosition(VECTOR2(x, y));
@@ -1114,6 +1276,8 @@ bool ObjectManager::load_list(const char * filename)
 
 
 				object_list->push_back(zbr);
+
+				map_object.insert(std::pair<int, BaseObject*>(id, zbr));
 			}
 		}
 		//writer.EndArray();
@@ -1128,6 +1292,7 @@ bool ObjectManager::load_list(const char * filename)
 			{
 				Waver *wvb = new Waver(this->textureManager, this->graphics, EnemyColors::Brown);
 
+				id = listWaverBrown[i]["id"].GetInt();
 				x = listWaverBrown[i]["x"].GetFloat();
 				y = listWaverBrown[i]["y"].GetFloat();
 				wvb->setPosition(VECTOR2(x, y));
@@ -1162,6 +1327,8 @@ bool ObjectManager::load_list(const char * filename)
 
 
 				object_list->push_back(wvb);
+
+				map_object.insert(std::pair<int, BaseObject*>(id, wvb));
 			}
 		}
 		//writer.EndArray();
@@ -1176,6 +1343,7 @@ bool ObjectManager::load_list(const char * filename)
 			{
 				Waver *wvr = new Waver(this->textureManager, this->graphics, EnemyColors::Red);
 
+				id = listWaverRed[i]["id"].GetInt();
 				x = listWaverRed[i]["x"].GetFloat();
 				y = listWaverRed[i]["y"].GetFloat();
 				wvr->setPosition(VECTOR2(x, y));
@@ -1209,6 +1377,8 @@ bool ObjectManager::load_list(const char * filename)
 
 
 				object_list->push_back(wvr);
+
+				map_object.insert(std::pair<int, BaseObject*>(id, wvr));
 			}
 		}
 		//writer.EndArray();
@@ -1223,6 +1393,7 @@ bool ObjectManager::load_list(const char * filename)
 			{
 				Skree *sky = new Skree(this->textureManager, this->graphics, EnemyColors::Yellow);
 
+				id = listSkreeYellow[i]["id"].GetInt();
 				x = listSkreeYellow[i]["x"].GetFloat();
 				y = listSkreeYellow[i]["y"].GetFloat();
 				sky->setPosition(VECTOR2(x + sky->getSprite()->getWidth()*0.5f, y));
@@ -1256,6 +1427,8 @@ bool ObjectManager::load_list(const char * filename)
 
 
 				object_list->push_back(sky);
+
+				map_object.insert(std::pair<int, BaseObject*>(id, sky));
 			}
 		}
 		//writer.EndArray();
@@ -1270,6 +1443,7 @@ bool ObjectManager::load_list(const char * filename)
 			{
 				Skree *skb = new Skree(this->textureManager, this->graphics, EnemyColors::Brown);
 
+				id = listSkreeBrown[i]["id"].GetInt();
 				x = listSkreeBrown[i]["x"].GetFloat();
 				y = listSkreeBrown[i]["y"].GetFloat();
 				skb->setPosition(VECTOR2(x + skb->getSprite()->getWidth()*0.5f, y));
@@ -1303,6 +1477,8 @@ bool ObjectManager::load_list(const char * filename)
 
 
 				object_list->push_back(skb);
+
+				map_object.insert(std::pair<int, BaseObject*>(id, skb));
 			}
 		}
 		//writer.EndArray();
@@ -1317,6 +1493,7 @@ bool ObjectManager::load_list(const char * filename)
 			{
 				Ripper *rpy = new Ripper(this->textureManager, this->graphics, EnemyColors::Yellow);
 
+				id = listRipperYellow[i]["id"].GetInt();
 				x = listRipperYellow[i]["x"].GetFloat();
 				y = listRipperYellow[i]["y"].GetFloat();
 				rpy->setPosition(VECTOR2(x, y));
@@ -1350,6 +1527,8 @@ bool ObjectManager::load_list(const char * filename)
 
 
 				object_list->push_back(rpy);
+
+				map_object.insert(std::pair<int, BaseObject*>(id, rpy));
 			}
 		}
 		//writer.EndArray();
@@ -1364,6 +1543,7 @@ bool ObjectManager::load_list(const char * filename)
 			{
 				Ripper *rpb = new Ripper(this->textureManager, this->graphics, EnemyColors::Brown);
 
+				id = listRipperBrown[i]["id"].GetInt();
 				x = listRipperBrown[i]["x"].GetFloat();
 				y = listRipperBrown[i]["y"].GetFloat();
 				rpb->setPosition(VECTOR2(x, y));
@@ -1397,6 +1577,8 @@ bool ObjectManager::load_list(const char * filename)
 
 
 				object_list->push_back(rpb);
+
+				map_object.insert(std::pair<int, BaseObject*>(id, rpb));
 			}
 		}
 		//writer.EndArray();
@@ -1411,6 +1593,7 @@ bool ObjectManager::load_list(const char * filename)
 			{
 				Ripper *rpr = new Ripper(this->textureManager, this->graphics, EnemyColors::Red);
 
+				id = listRipperRed[i]["id"].GetInt();
 				x = listRipperRed[i]["x"].GetFloat();
 				y = listRipperRed[i]["y"].GetFloat();
 				rpr->setPosition(VECTOR2(x, y));
@@ -1444,6 +1627,8 @@ bool ObjectManager::load_list(const char * filename)
 
 
 				object_list->push_back(rpr);
+
+				map_object.insert(std::pair<int, BaseObject*>(id, rpr));
 			}
 		}
 		//writer.EndArray();
@@ -1458,6 +1643,7 @@ bool ObjectManager::load_list(const char * filename)
 			{
 				Rio *roy = new Rio(this->textureManager, this->graphics, EnemyColors::Yellow);
 
+				id = listRioYellow[i]["id"].GetInt();
 				x = listRioYellow[i]["x"].GetFloat();
 				y = listRioYellow[i]["y"].GetFloat();
 				roy->initPositions(VECTOR2(x, y));
@@ -1491,6 +1677,8 @@ bool ObjectManager::load_list(const char * filename)
 
 
 				object_list->push_back(roy);
+
+				map_object.insert(std::pair<int, BaseObject*>(id, roy));
 			}
 		}
 		//writer.EndArray();
@@ -1505,6 +1693,7 @@ bool ObjectManager::load_list(const char * filename)
 			{
 				Rio *rob = new Rio(this->textureManager, this->graphics, EnemyColors::Brown);
 
+				id = listRioBrown[i]["id"].GetInt();
 				x = listRioBrown[i]["x"].GetFloat();
 				y = listRioBrown[i]["y"].GetFloat();
 				rob->initPositions(VECTOR2(x, y));
@@ -1538,6 +1727,8 @@ bool ObjectManager::load_list(const char * filename)
 
 
 				object_list->push_back(rob);
+
+				map_object.insert(std::pair<int, BaseObject*>(id, rob));
 			}
 		}
 		//writer.EndArray();
@@ -1552,6 +1743,7 @@ bool ObjectManager::load_list(const char * filename)
 			{
 				Rio *ror = new Rio(this->textureManager, this->graphics, EnemyColors::Red);
 
+				id = listRioRed[i]["id"].GetInt();
 				x = listRioRed[i]["x"].GetFloat();
 				y = listRioRed[i]["y"].GetFloat();
 				ror->initPositions(VECTOR2(x, y));
@@ -1585,6 +1777,8 @@ bool ObjectManager::load_list(const char * filename)
 
 
 				object_list->push_back(ror);
+
+				map_object.insert(std::pair<int, BaseObject*>(id, ror));
 			}
 		}
 		//writer.EndArray();
@@ -1605,6 +1799,7 @@ bool ObjectManager::load_list(const char * filename)
 			{
 				BossKraid *kraid = new BossKraid(this->textureManager, this->graphics);
 
+				id = listKraid[i]["id"].GetInt();
 				x = listKraid[i]["x"].GetFloat();
 				y = listKraid[i]["y"].GetFloat();
 				kraid->setPosition(VECTOR2(x, y));
@@ -1626,6 +1821,7 @@ bool ObjectManager::load_list(const char * filename)
 				kraid->setActiveBound(bound);
 
 				object_list->push_back(kraid);
+				map_object.insert(std::pair<int, BaseObject*>(id, kraid));
 			}
 		}
 		//writer.EndArray();
@@ -1636,6 +1832,7 @@ bool ObjectManager::load_list(const char * filename)
 		{
 			BossDragon *dg = new BossDragon(this->textureManager, this->graphics);
 
+			id = dragon["id"].GetInt();
 			x = dragon["x"].GetFloat();
 			y = dragon["y"].GetFloat();
 			dg->setPosition(VECTOR2(x, y));
@@ -1657,6 +1854,8 @@ bool ObjectManager::load_list(const char * filename)
 			dg->setActiveBound(bound);
 
 			object_list->push_back(dg);
+
+			map_object.insert(std::pair<int, BaseObject*>(id, dg));
 		}
 
 #pragma endregion
@@ -1665,8 +1864,8 @@ bool ObjectManager::load_list(const char * filename)
 
 
 		// Create QuadTree
-		MetroidRect rect(QUADTREE_H, 0, 0, QUADTREE_W);
-		quadtree = Quadtree::createQuadTree(rect, this->object_list);
+		//MetroidRect rect(QUADTREE_H, 0, 0, QUADTREE_W);
+		//quadtree = Quadtree::createQuadTree(rect, this->object_list);
 
 		return true;
 	}
@@ -1693,6 +1892,8 @@ ObjectManager::ObjectManager()
 ObjectManager::~ObjectManager()
 {
 }
+
+
 
 void ObjectManager::release()
 {

@@ -14,19 +14,40 @@ bool Quadtree::isContain(MetroidRect bound)
 
 void Quadtree::split()
 {
-    nodes = new Quadtree*[4];
+    nodes = new list<Quadtree*>();
 
-	nodes[0] = new Quadtree(level + 1, MetroidRect(region.top, region.top / 2, region.left, region.right / 2));
+	nodes->push_back(new Quadtree(level + 1, MetroidRect(region.top, region.top / 2, region.left, region.right / 2)));
 
-	nodes[1] = new Quadtree(level + 1, MetroidRect(region.top, region.top / 2, region.right / 2, region.right));
+	nodes->push_back(new Quadtree(level + 1, MetroidRect(region.top, region.top / 2, region.right / 2, region.right)));
 
-	nodes[2] = new Quadtree(level + 1, MetroidRect(region.top / 2, region.bottom, region.left, region.right / 2));
+	nodes->push_back(new Quadtree(level + 1, MetroidRect(region.top / 2, region.bottom, region.left, region.right / 2)));
 
-	nodes[3] = new Quadtree(level + 1, MetroidRect(region.top / 2, region.bottom, region.right / 2, region.right));
+	nodes->push_back(new Quadtree(level + 1, MetroidRect(region.top / 2, region.bottom, region.right / 2, region.right)));
+
 }
 
 Quadtree::Quadtree()
 {
+}
+
+list<BaseObject*>& Quadtree::getObjectList()
+{
+	return this->objects_list;
+}
+
+list<Quadtree*>*& Quadtree::getNodes()
+{
+	return this->nodes;
+}
+
+MetroidRect Quadtree::getRegion()
+{
+	return this->region;
+}
+
+int Quadtree::getLevel()
+{
+	return this->level;
 }
 
 Quadtree::Quadtree(int level, MetroidRect region)
@@ -47,12 +68,12 @@ void Quadtree::clear()
 	//Clear all nodes
 	if (nodes)
 	{
-		for (int i = 0; i < 4; i++)
+
+		for (auto node = nodes->begin(); node != nodes->end(); ++node)
 		{
-			nodes[i]->clear();
-			delete nodes[i];
+			(*node)->clear();
 		}
-		delete[] nodes;
+		delete nodes;
 	}
 
 	//Clear current quadtree
@@ -64,14 +85,14 @@ void Quadtree::insert(BaseObject * obj)
 	//insert obj into corresponding nodes
 	if (nodes)
 	{
-		if (nodes[0]->isContain(obj->getActiveBound()))
-			nodes[0]->insert(obj);
-		if (nodes[1]->isContain(obj->getActiveBound()))
-			nodes[1]->insert(obj);
-		if (nodes[2]->isContain(obj->getActiveBound()))
-			nodes[2]->insert(obj);
-		if (nodes[3]->isContain(obj->getActiveBound()))
-			nodes[3]->insert(obj);
+		for (auto node = nodes->begin(); node != nodes->end(); ++node)
+		{
+			if((*node)->isContain(obj->getActiveBound()))
+			{
+				(*node)->insert(obj);
+			}
+		}
+
 
 		return; // Return here to ignore rest.
 	}
@@ -89,15 +110,14 @@ void Quadtree::insert(BaseObject * obj)
 
 		while (!objects_list.empty())
 		{
-			if (nodes[0]->isContain(objects_list.back()->getActiveBound()))
-				nodes[0]->insert(objects_list.back());
-			if (nodes[1]->isContain(objects_list.back()->getActiveBound()))
-				nodes[1]->insert(objects_list.back());
-			if (nodes[2]->isContain(objects_list.back()->getActiveBound()))
-				nodes[2]->insert(objects_list.back());
-			if (nodes[3]->isContain(objects_list.back()->getActiveBound()))
-				nodes[3]->insert(objects_list.back());
 
+			for (auto node = nodes->begin(); node != nodes->end(); ++node)
+			{
+				if ((*node)->isContain(objects_list.back()->getActiveBound()))
+				{
+					(*node)->insert(objects_list.back());
+				}
+			}
 			objects_list.pop_back();
 		}
 	}
@@ -107,14 +127,13 @@ void Quadtree::retrieve(list<BaseObject*>* return_objects_list, list<BaseObject*
 {
 	if (nodes)
 	{
-		if (nodes[0]->isContain(rect))
-			nodes[0]->retrieve(return_objects_list, list_not_wall, list_wall, rect, samus);
-		if (nodes[1]->isContain(rect))
-			nodes[1]->retrieve(return_objects_list, list_not_wall, list_wall, rect, samus);
-		if (nodes[2]->isContain(rect))
-			nodes[2]->retrieve(return_objects_list, list_not_wall, list_wall, rect, samus);
-		if (nodes[3]->isContain(rect))
-		    nodes[3]->retrieve(return_objects_list, list_not_wall, list_wall, rect, samus);
+		for (auto node = nodes->begin(); node != nodes->end(); ++node)
+		{
+			if ((*node)->isContain(rect))
+			{
+				(*node)->retrieve(return_objects_list, list_not_wall, list_wall, rect, samus);
+			}
+		}
 
 		return; // Return here to ignore rest.
 	}

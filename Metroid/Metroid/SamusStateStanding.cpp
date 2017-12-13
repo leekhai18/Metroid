@@ -45,7 +45,7 @@ void SamusStateStanding::init()
 	}
 	// Set Data for sprite
 	this->samus->getSprite()->setData(IndexManager::getInstance()->samusYellowTurnRight);
-
+	canRolling = false;
 }
 
 void SamusStateStanding::handleInput(float dt)
@@ -194,6 +194,7 @@ void SamusStateStanding::onCollision()
 
 				this->samus->setPositionY(i->positionCollision + OFFSET_STAND);
 
+				canRolling = true;
 				break;
 			}
 			break;
@@ -219,24 +220,28 @@ void SamusStateStanding::update(float dt)
 		case eStatus::JUMPING:
 		
 			//this->samus->setPositionX(this->samus->getPosition().x )
+			SamusStateManager::getInstance()->changeStateTo(this->samus->getStatus());
 			break;
 		case eStatus::RUNNING:
-			
+			SamusStateManager::getInstance()->changeStateTo(this->samus->getStatus());
 			break;
 		case eStatus::ROLLING:
-			if(this->samus->getPosition().y != 1267)
+			if(canRolling)
 			{
-				int test = 0;
-			}
+				SamusStateManager::getInstance()->changeStateTo(this->samus->getStatus());
+			}			
 			break;
 		default:
 			break;
 		}
-		SamusStateManager::getInstance()->changeStateTo(this->samus->getStatus());
+
+		//SamusStateManager::getInstance()->changeStateTo(this->samus->getStatus());
 		return;
 	}
 
 	this->samus->setVelocityY(-SAMUS_MIN_SPEED_Y);
+
+	canRolling = false;
 }
 
 

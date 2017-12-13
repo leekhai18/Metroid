@@ -14,15 +14,23 @@ private:
 	int            level;
 	MetroidRect   region;
 	list<BaseObject*>   objects_list;
-	Quadtree**     nodes;
+	list<Quadtree*>*     nodes;
 	bool           isContain(MetroidRect bound);
 	void           split();
 public:
 	Quadtree();
+
+	list<BaseObject*>&  getObjectList();
+	list<Quadtree*>*& getNodes();
+	MetroidRect getRegion();
+	int getLevel();
+
 	Quadtree(int level, MetroidRect region);
 	~Quadtree();
 	void clear();
 	void insert(BaseObject* entity);
 	void retrieve(list<BaseObject*>* return_objects_list, list<BaseObject*>* list_not_wall, list<BaseObject*>* list_wall, MetroidRect rect, BaseObject* samus);
 	static Quadtree*  createQuadTree(MetroidRect rect , list<BaseObject*>* object_list);
+
+	
 };

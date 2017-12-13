@@ -88,7 +88,7 @@ void SamusStateFallRolling::handleInput(float dt)
 
 	if (input->isKeyDown(VK_UP) || input->isKeyDown(VK_X))
 	{
-		this->samus->setStatus(eStatus::STANDING);
+		//this->samus->setStatus(eStatus::STANDING);
 	}
 
 	if (this->samus->getVelocity().y > -SAMUS_MAX_SPEED_Y)
@@ -163,6 +163,7 @@ void SamusStateFallRolling::update(float dt)
 	this->samus->setCanMoveLeft(true);
 	this->samus->setCanMoveRight(true);
 
+	this->samus->setVelocityX(0);
 	
 
 }

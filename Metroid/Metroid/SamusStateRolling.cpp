@@ -40,6 +40,7 @@ void SamusStateRolling::init()
 
 
 	move_to_fall = true;
+	canStanding = false;
 }
 
 void SamusStateRolling::handleInput(float dt)
@@ -121,7 +122,7 @@ void SamusStateRolling::onCollision()
 				this->samus->setVelocityY(0);
 
 				this->samus->setPositionY(i->positionCollision + OFFSET_ROLLING);
-
+				canStanding = true;
 				reset_fall = true;
 				move_to_fall = false;
 				break;
@@ -156,13 +157,20 @@ void SamusStateRolling::update(float dt)
 		switch (this->samus->getStatus())
 		{
 		case eStatus::STANDING:
-			this->samus->setPositionY(this->samus->getPosition().y  + OFFSET_STAND );
-			
+			if(canStanding)
+			{
+				this->samus->setPositionY(this->samus->getPosition().y + OFFSET_STAND);
+				SamusStateManager::getInstance()->changeStateTo(this->samus->getStatus());
+			}
+			break;
+		case eStatus::FALLING_ROLLING:
+			SamusStateManager::getInstance()->changeStateTo(this->samus->getStatus());
 			break;
 		default:
+
 			break;
 		}
-		SamusStateManager::getInstance()->changeStateTo(this->samus->getStatus());
+		//SamusStateManager::getInstance()->changeStateTo(this->samus->getStatus());
 		return;
 	}
 	this->samus->setCanMoveLeft(true);
@@ -175,6 +183,7 @@ void SamusStateRolling::update(float dt)
 	//}
 	move_to_fall = true;
 	this->samus->setVelocity(VECTOR2(0, -SAMUS_MIN_SPEED_Y));
+	canStanding = false;
 }
 
 

@@ -73,6 +73,7 @@ void Metroid::initialize(HWND hwnd)
 		throw GameError(GameErrorNS::FATAL_ERROR, "Can not initalize map brinstar");
 	}
 
+
 	camera = new Camera(VIEWPORT_WIDTH, VIEWPORT_HEIGHT);
 	camera->setPosition(VECTOR2(CAM_POS_X, CAM_POS_Y));
 
@@ -83,7 +84,10 @@ void Metroid::initialize(HWND hwnd)
 	{
 		throw GameError(GameErrorNS::FATAL_ERROR, "Can not load object layer brinstar json");
 	}
-
+	if (!ObjectManager::getInstance()->load_quatree(QUADTREE))
+	{
+		throw GameError(GameErrorNS::FATAL_ERROR, "Can not load object layer brinstar json");
+	}
 	GameDebug::getInstance()->initialize(graphics);
 	GameDebug::getInstance()->setCount(5);
 

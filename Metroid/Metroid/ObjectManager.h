@@ -10,7 +10,7 @@
 #include "Constants.h"
 #include "Quadtree.h"
 #include "Samus.h"
-
+#include <map>
 #define QUADTREE_W 7680
 #define QUADTREE_H 7680
 
@@ -36,8 +36,11 @@ private:
 	list<BaseObject*>* listObjectNotWallOnViewPort;
 	list<BaseObject*>* listWallCanCollideSamus;
 
+	map<int, BaseObject*> map_object;
+
 	float timer;
 
+	void insertQuadTreeNode(const Value& value,Quadtree* quadtree);
 public:
 	static ObjectManager* getInstance();
 
@@ -45,6 +48,8 @@ public:
 
 	void init(TextureManager* textureM, Graphics* graphics, Samus* samus);
 	bool load_list(const char *filename);
+
+	bool load_quatree(const char *filename);
 	void release();
 
 	void onCheckCollision(float frametime);
@@ -55,6 +60,8 @@ public:
 
 	void update(float dt);
 	void draw();
+
+
 
 	ObjectManager();
 	~ObjectManager();
