@@ -70,18 +70,20 @@ void Zommer::onCollision(float dt)
 	}
 	for (auto x = this->getListCollide()->begin(); x != this->getListCollide()->end(); x++)
 	{
+		bound = x->object->getBoundCollision();
 		switch (x->direction)
 		{
+		
 		case CollideDirection::LEFT:
-			this->setVelocityX(60);
-			this->setVelocityY(60);
+			this->setVelocityX(70);
+			this->setVelocityY(70);
 			this->x = -(this->velocity.x*dt);
 			this->y = 0;
 			isCollide = true;
 			flag = true;
 			break;
 		case CollideDirection::RIGHT:
-			this->setVelocityX(-60);
+			this->setVelocityX(-70);
 			this->setVelocityY(-60);
 			this->x = -(this->velocity.x*dt);
 			this->y = 0;
@@ -114,7 +116,7 @@ void Zommer::update(float dt)
 		this->setVelocityX(60);
 		this->setVelocityY(-60);
 		this->x = 0;
-		this->y = -(this->velocity.y*dt);
+		this->y = -2*(this->velocity.y*dt);
 		flag = true;
 	}
 	//if not collide top-right
@@ -122,7 +124,7 @@ void Zommer::update(float dt)
 	{
 		this->setVelocityX(-60);
 		this->setVelocityY(-60);
-		this->x = -(this->velocity.x*dt);
+		this->x = -2*(this->velocity.x*dt);
 		this->y = 0;
 		flag = true;
 	}
@@ -132,7 +134,7 @@ void Zommer::update(float dt)
 		this->setVelocityX(-60);
 		this->setVelocityY(60);
 		this->x = 0;
-		this->y = -(this->velocity.y*dt);
+		this->y = -2*(this->velocity.y*dt);
 		flag = true;
 
 	}
@@ -141,10 +143,9 @@ void Zommer::update(float dt)
 	{
 		this->setVelocityX(60);
 		this->setVelocityY(60);
-		this->x = -(this->velocity.x*dt);
+		this->x = -2*(this->velocity.x*dt);
 		this->y = 0;
 		flag = true;
-
 	}
 	
 	this->anim->update(dt);

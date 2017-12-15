@@ -63,7 +63,7 @@ void Map::draw()
 			spriteData.position.y = MAP_HEIGHT - (float)row*tileH;
 			spriteData.scale = VECTOR2(1.0f, 1.0f);
 			spriteData.origin = VECTOR2(0, 0);
-			spriteData.rect = *(mapCell[row][col].rect);
+ 			spriteData.rect = *(mapCell[row][col].rect);
 			spriteData.width = tileW;
 			spriteData.height = tileH;
 			spriteData.flipVertical = false;

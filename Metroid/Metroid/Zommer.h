@@ -15,7 +15,8 @@ private:
 	bool isCollide = false;
 	float x = 0;
 	float y = 0;
-
+	MetroidRect bound;
+	int direction;
 	int health;
 	list<BaseObject*> *listWallCanCollide;
 	list<CollisionReturn> *listCollide;
