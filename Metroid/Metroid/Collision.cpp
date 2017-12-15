@@ -117,31 +117,16 @@ bool Collision::checkCollision(BaseObject * myEntity, BaseObject * otherEntity, 
 	{
 		// xét x
 		// khoảng cách gần nhất mà nhỏ hơn 0 nghĩa là thằng kia đang nằm bên trái object này => va chạm bên phải nó
-		myVelocity = VECTOR2(myEntity->getVelocity().x, myEntity->getVelocity().y + SAMUS_MIN_SPEED_Y);
+
 		if (_dxEntry < 0.0f)
 		{
-			
-				//otherVeloc = VECTOR2()
-				
-			if(isCollide(getSweptBroadphaseRect(myEntity->getBoundCollision(), myVelocity, frametime), otherRect))
-			{
 				data.direction = CollideDirection::RIGHT;
-			}
-			else
-			{
-				return false;
-			}
 		}
 		else
 		{
-			if (isCollide(getSweptBroadphaseRect(myEntity->getBoundCollision(), myVelocity, frametime), otherRect))
-			{
-				data.direction = CollideDirection::LEFT;
-			}
-			else
-			{
-				return false;
-			}
+
+			data.direction = CollideDirection::LEFT;
+
 		}
 	}
 	else

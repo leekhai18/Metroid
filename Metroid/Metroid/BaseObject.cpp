@@ -116,6 +116,16 @@ void BaseObject::setScaleY(float scaleY)
 	this->sprite->setScaleY(scaleY);
 }
 
+void BaseObject::setAccelerate(VECTOR2 accelerate)
+{
+	this->accelerate = accelerate;
+}
+
+VECTOR2 BaseObject::getAccelerate()
+{
+	return accelerate;
+}
+
 VECTOR2 BaseObject::getOrigin()
 {
 	return this->sprite->getOrigin();

@@ -85,6 +85,8 @@ private:
 
 	list<BaseObject*> listCanCollide;
 
+	
+
 public:
 	float timerShoot;
 

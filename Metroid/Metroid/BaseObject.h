@@ -15,6 +15,7 @@ protected:
 	MetroidRect activeBound;
 	MetroidRect boundCollision;
 	VECTOR2 velocity;
+	VECTOR2 accelerate;
 public:
 	BaseObject(eID id);
 	BaseObject();
@@ -42,13 +43,14 @@ public:
 	virtual void setScale(VECTOR2 scale);
 	virtual void setScaleX(float scaleX);
 	virtual void setScaleY(float scaleY);
-
+	virtual void setAccelerate(VECTOR2 accelerate);
+	virtual VECTOR2 getAccelerate();
 	virtual VECTOR2 getOrigin();
 	virtual void setOrigin(VECTOR2 origin);
 
 	virtual float getRotate();
 	virtual void setRotate(float rotate);
-
+	
 	Sprite* getSprite();
 
 	//TO DO: update position, velocity... if this object collide with another object(call before update() )
