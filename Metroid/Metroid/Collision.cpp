@@ -21,7 +21,19 @@ bool Collision::isCollide(MetroidRect myRect, MetroidRect otherRect)
 	}
 	return false;
 }
+MetroidRect Collision::getSweptBroadphaseRect(MetroidRect myRect, VECTOR2 myVelocity, float frametime)
+{
+	VECTOR2 distance = VECTOR2(myVelocity.x * frametime, myVelocity.y * frametime);
 
+
+	MetroidRect   rect;
+	rect.top = distance.y > 0 ? myRect.top + distance.y : myRect.top;
+	rect.bottom = distance.y > 0 ? myRect.bottom : myRect.bottom + distance.y;
+	rect.left = distance.x > 0 ? myRect.left : myRect.left + distance.x;
+	rect.right = distance.x > 0 ? myRect.right + distance.x : myRect.right;
+
+	return rect;
+}
 bool Collision::checkCollision(BaseObject * myEntity, BaseObject * otherEntity, float frametime)
 {
 	float _dxEntry, _dyEntry, _dxExit, _dyExit;
@@ -33,6 +45,16 @@ bool Collision::checkCollision(BaseObject * myEntity, BaseObject * otherEntity, 
 	MetroidRect   broadphaseRect = getSweptBroadphaseRect(myEntity, frametime);	// là bound của object được mở rộng ra thêm một phần bằng với vận tốc (dự đoán trước bound)
 	if (!isCollide(broadphaseRect, otherRect))				// kiểm tra tính chồng lắp của 2 hcn
 	{
+		/*if(myEntity->getId()==eID::ZOMMER)
+		{
+			Zommer* zommer = static_cast<Zommer*>(myEntity);
+			if(zommer->getGravity()==GRAVITY_RIGHT&&otherRect.top!=1392)
+			{
+				int test = 0;
+				broadphaseRect = getSweptBroadphaseRect(myEntity, frametime);
+			}
+			
+		}*/
 		return false;
 	}
 

@@ -83,7 +83,7 @@ void Metroid::initialize(HWND hwnd)
 
 	samus = new Samus(textureManager, graphics, input);
 	zommer = new Zommer(textureManager, graphics, Red);
-	zommer->setPosition(VECTOR2(671, 1377));
+	
 	MetroidRect rect1;
 	rect1.top = 1360;
 	rect1.left = 672;
