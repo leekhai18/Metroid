@@ -151,6 +151,31 @@ void SamusStateAcrobat::onCollision()
 #pragma endregion
 
 			//another object
+		case eID::ZOMMER:
+			switch (i->direction)
+			{
+			case CollideDirection::LEFT:
+				this->samus->setVelocityX(0);
+				//not allow move left
+				//this->samus->setCanMoveRight(false);
+				break;
+			case CollideDirection::RIGHT:
+				this->samus->setVelocityX(0);
+				//not allow move right
+				//this->samus->setCanMoveLeft(false);
+				break;
+			case CollideDirection::TOP:
+				this->samus->setVelocityY(0);
+				break;
+			case CollideDirection::BOTTOM:
+				this->samus->setVelocityY(0);
+				break;
+			}
+			//this->samus->setVelocity(VECTOR2(0, 0));
+			SamusStateManager::getInstance()->setOldStatus(eStatus::ACROBAT);
+			SamusStateManager::getInstance()->setOldState(this);
+			this->samus->setStatus(eStatus::INJURING);
+			break;
 		default:
 			break;
 		}

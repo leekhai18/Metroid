@@ -2,8 +2,8 @@
 #include "SamusStateInjuring.h"
 #include "SamusStateManager.h"
 
-#define TIME_ANIMATION 0.2f
-#define TIME_TO_STANDING 1.0f
+#define TIME_ANIMATION 0.1f
+#define TIME_TO_STANDING 0.6f
 SamusStateInjuring::SamusStateInjuring()
 {
 }
