@@ -31,6 +31,10 @@ private:
 	Text* fpsText;
 	Text* opsText;
 
+	// support when collect items
+	bool justCollect;
+	float timerEffectCollectItem;
+
 public:
 	Metroid();
 	~Metroid();
@@ -46,5 +50,7 @@ public:
 	void resetAll();
 
 	HWND getCurrentHWND();
+
+	void setJustCollectItem(bool flag);
 };
 

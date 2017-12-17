@@ -143,7 +143,7 @@ void SamusStateStanding::handleInput(float dt)
 		this->samus->getSprite()->setData(IndexManager::getInstance()->samusYellowTurnRight);
 	}
 
-	if (input->isKeyDown(VK_DOWN))
+	if (input->isKeyDown(VK_DOWN) && this->samus->isHaveMariMaru())
 	{
 		this->samus->setVelocityX(0);
 		this->samus->setStatus(eStatus::ROLLING);

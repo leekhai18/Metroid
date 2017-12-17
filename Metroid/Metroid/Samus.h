@@ -19,7 +19,7 @@
 #define SAMUS_VELOCITY_JUMP_X 70
 
 #define MIN_JUMP  32.0f
-#define MAX_JUMP 90.0f
+#define MAX_JUMP 84.0f
 
 #define TIME_SHOOTING 0.15f
 
@@ -60,6 +60,8 @@ class Samus: public BaseObject
 {
 private:
 	Input* input;
+	TextureManager* textureManager;
+	Graphics* graphics;
 
 	Animation	*runningNormalAnimation,
 				*runningUpAnimation,
@@ -87,6 +89,13 @@ private:
 	list<BaseObject*> listCanCollide;
 
 	
+#pragma region items
+	bool isMariMaru;
+	int numLives;
+	list<Sprite*> *listNumLives;
+#pragma endregion
+
+
 
 public:
 	float timerShoot;
@@ -95,10 +104,11 @@ public:
 	Samus();
 	~Samus();
 
-	void draw();
 	void handleInput(float dt);
 	void onCollision();
 	void update(float dt);
+	void draw();
+	void drawInFrontMap();
 	void release();
 
 	void updateHorizontal(float dt);
@@ -124,9 +134,10 @@ public:
 	void setIsCollidingPort(bool flag);
 	bool isColliedPort();
 	void setCanMoveToFrontGate(bool flag);
-	void setListCanCollide(list<BaseObject*> list);
 
+	void setListCanCollide(list<BaseObject*> list);
 	list<BaseObject*>& getListCanCollide();
+
 	Animation* getStartingAnim();
 	Animation* getRunningNormalAnim();
 	Animation* getRunningUpAnim();
@@ -135,5 +146,14 @@ public:
 	Animation* getJumpingAnim();
 
 	list<CollisionReturn> *getListCollide();
+
+#pragma region items
+	bool isHaveMariMaru();
+	void setMariMaru(bool flag);
+
+	int getNumLive();
+	void setNumLive(int num);
+#pragma endregion
+
 };
 

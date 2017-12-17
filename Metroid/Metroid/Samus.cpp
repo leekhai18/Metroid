@@ -5,18 +5,27 @@
 
 
 #define DISTANCE_MOVE_FRONT_GATE 20
+//#define SAMUS_POS_X 640
+//#define SAMUS_POS_Y 1267
 
+#define SAMUS_POS_X 6144
+#define SAMUS_POS_Y 2992
 
 Samus::Samus(TextureManager* textureM,Graphics* graphics, Input* input) : BaseObject(eID::SAMUS)
 {
 	this->input = input;
+	this->textureManager = textureM;
+	this->graphics = graphics;
+
 	this->sprite = new Sprite();
 	if (! this->sprite->initialize(graphics, textureM, SpriteManager::getInstance()))
 	{
 		throw GameError(GameErrorNS::FATAL_ERROR, "Can not init sprite Samus");
 	}
 
-	this->setPosition(VECTOR2(2755, 1315));
+	//this->setPosition(VECTOR2(2755, 1315)); // in the cylinder
+	this->setPosition(VECTOR2(SAMUS_POS_X, SAMUS_POS_Y));
+
 	runningNormalAnimation = new Animation(this->sprite, IndexManager::getInstance()->samusYellowRunningRight, NUM_FRAMES_SAMUS_RUNNING, 0.05f);
 	runningUpAnimation = new Animation(this->sprite, IndexManager::getInstance()->samusYellowRunningUpRight, NUM_FRAMES_SAMUS_RUNNING, 0.05f);
 	runningHittingRightAnimation = new Animation(this->sprite, IndexManager::getInstance()->samusYellowHittingAndRunningRight, NUM_FRAMES_SAMUS_RUNNING, 0.05f);
@@ -37,11 +46,13 @@ Samus::Samus(TextureManager* textureM,Graphics* graphics, Input* input) : BaseOb
 	this->timerShoot = 0;
 	bulletPool = new BulletPool(textureM, graphics, 20);
 	this->listCollide = new list<CollisionReturn>();
+
+	this->numLives = 0;
+	this->listNumLives = new list<Sprite*>();
 }
 
 Samus::Samus()
 {
-	this->sprite = new Sprite();
 }
 
 Samus::~Samus()
@@ -49,14 +60,6 @@ Samus::~Samus()
 	this->release();
 }
 
-void Samus::draw()
-{
-	for (unsigned i = 0; i < this->bulletPool->getListUsing().size(); i++)
-		this->bulletPool->getListUsing().at(i)->draw();
-
-	this->sprite->draw();
-
-}
 
 void Samus::handleInput(float dt)
 {
@@ -90,26 +93,6 @@ void Samus::onCollision()
 {
 	SamusStateManager::getInstance()->getCurrentState()->onCollision();
 	this->listCollide->clear();
-}
-
-void Samus::setIsCollidingPort(bool flag)
-{
-	this->isCollidingPort = flag;
-}
-
-bool Samus::isColliedPort()
-{
-	return isCollidingPort;
-}
-
-void Samus::setCanMoveToFrontGate(bool flag)
-{
-	this->moveToFontGate = flag;
-}
-
-void Samus::setListCanCollide(list<BaseObject*> list)
-{
-	this->listCanCollide = list;
 }
 
 void Samus::update(float dt)
@@ -184,6 +167,42 @@ void Samus::update(float dt)
 		this->bulletPool->getListUsing().at(i)->update(dt);
 }
 
+void Samus::draw()
+{
+	for (unsigned i = 0; i < this->bulletPool->getListUsing().size(); i++)
+		this->bulletPool->getListUsing().at(i)->draw();
+
+	this->sprite->draw();
+}
+
+void Samus::drawInFrontMap()
+{
+	for (list<Sprite*>::iterator i = listNumLives->begin(); i != listNumLives->end(); ++i)
+	{
+		(*i)->draw(false);
+	}
+}
+
+void Samus::setIsCollidingPort(bool flag)
+{
+	this->isCollidingPort = flag;
+}
+
+bool Samus::isColliedPort()
+{
+	return isCollidingPort;
+}
+
+void Samus::setCanMoveToFrontGate(bool flag)
+{
+	this->moveToFontGate = flag;
+}
+
+void Samus::setListCanCollide(list<BaseObject*> list)
+{
+	this->listCanCollide = list;
+}
+
 void Samus::release()
 {
 	delete this->sprite;
@@ -196,6 +215,13 @@ void Samus::release()
 	delete bulletPool;
 	this->listCollide->clear();
 	delete this->listCollide;
+
+	for (list<Sprite*>::iterator i = listNumLives->begin(); i != listNumLives->end(); ++i)
+	{
+		delete *i;
+	}
+	listNumLives->clear();
+	delete listNumLives;
 }
 
 void Samus::updateHorizontal(float dt)
@@ -313,4 +339,42 @@ list<CollisionReturn>* Samus::getListCollide()
 {
 	return this->listCollide;
 }
+
+bool Samus::isHaveMariMaru()
+{
+	return isMariMaru;
+}
+
+void Samus::setMariMaru(bool flag)
+{
+	this->isMariMaru = flag;
+}
+
+int Samus::getNumLive()
+{
+	return this->numLives;
+}
+
+void Samus::setNumLive(int num)
+{
+	if (this->numLives < num) // ++
+	{
+		Sprite *live = new Sprite();
+		if (!live->initialize(this->graphics, this->textureManager, SpriteManager::getInstance()))
+		{
+			throw GameError(GameErrorNS::FATAL_ERROR, "Can not init sprite live");
+		}
+		live->setData(IndexManager::getInstance()->energyTank[1]);
+
+		this->listNumLives->push_back(live);
+	}
+	else // --
+	{
+		this->listNumLives->pop_back();
+	}
+
+	this->numLives = num;
+}
+
+
 

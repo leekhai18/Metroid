@@ -1,6 +1,7 @@
 #include "SamusStateAcrobat.h"
 #include "SamusStateManager.h"
-
+#include "GameLog.h"
+#include "MaruMari.h"
 
 SamusStateAcrobat::SamusStateAcrobat()
 {
@@ -150,7 +151,16 @@ void SamusStateAcrobat::onCollision()
 			break;
 #pragma endregion
 
-			//another object
+		case eID::MARUMARI:
+		{
+			this->samus->setMariMaru(true);
+
+			MaruMari* mm = static_cast<MaruMari*>(i->object);
+			mm->setActivity(false);
+
+			break;
+		}
+
 		default:
 			break;
 		}

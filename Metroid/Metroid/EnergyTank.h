@@ -7,6 +7,8 @@ class EnergyTank : public BaseObject
 private:
 	Animation *anim;
 
+	bool isActivity;
+
 public:
 	EnergyTank();
 	EnergyTank(TextureManager* textureM, Graphics* graphics);
@@ -14,5 +16,8 @@ public:
 
 	void update(float dt);
 	void draw();
+
+	void setActivity(bool flag);
+	bool getActivity();
 };
 
