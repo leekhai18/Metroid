@@ -1718,6 +1718,10 @@ bool ObjectManager::load_list(const char * filename)
 				id = listRioYellow[i]["id"].GetInt();
 				x = listRioYellow[i]["x"].GetFloat();
 				y = listRioYellow[i]["y"].GetFloat();
+
+				y = y - 16 + roy->getSprite()->getHeight()*0.5f;
+				x = x + roy->getSprite()->getWidth()*0.5f;
+
 				roy->initPositions(VECTOR2(x, y));
 
 
@@ -1765,6 +1769,9 @@ bool ObjectManager::load_list(const char * filename)
 				id = listRioBrown[i]["id"].GetInt();
 				x = listRioBrown[i]["x"].GetFloat();
 				y = listRioBrown[i]["y"].GetFloat();
+
+				y = y - 16 + rob->getSprite()->getHeight()*0.5f;
+				x = x + rob->getSprite()->getWidth()*0.5f;
 				rob->initPositions(VECTOR2(x, y));
 
 				rob->setBoundCollision();
@@ -1811,6 +1818,9 @@ bool ObjectManager::load_list(const char * filename)
 				id = listRioRed[i]["id"].GetInt();
 				x = listRioRed[i]["x"].GetFloat();
 				y = listRioRed[i]["y"].GetFloat();
+
+				y = y - 16 + ror->getSprite()->getHeight()*0.5f;
+				x = x + ror->getSprite()->getWidth()*0.5f;
 				ror->initPositions(VECTOR2(x, y));
 
 				ror->setBoundCollision();
