@@ -21,6 +21,7 @@ private:
 	float t;
 	float t1;
 	int flag = 1;
+	bool start = false;
 
 	int health;
 
@@ -31,6 +32,7 @@ public:
 
 	void update(float dt);
 	void draw();
+	void setBoundCollision();
 
 	VECTOR2 getTarget();
 	void setTarget(VECTOR2 target);

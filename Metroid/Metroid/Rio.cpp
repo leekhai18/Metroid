@@ -1,8 +1,8 @@
 #include "Rio.h"
 #define RATE_BEZIER 0.3f
 #define TIME_FRAME_DELAY 0.15f
-#define WIDTH_AREA_ACTIVE 120
-#define HEIGHT_AREA_ACTIVE 50
+#define WIDTH_AREA_ACTIVE 100
+#define HEIGHT_AREA_ACTIVE 110
 Rio::Rio(TextureManager * textureM, Graphics * graphics, EnemyColors color) : BaseObject(eID::RIO)
 {
 	this->sprite = new Sprite();
@@ -59,8 +59,9 @@ void Rio::update(float dt)
 		{
 			flag = 0;
 			this->setStatus(eStatus::FALLING);
+			start = true;
 		}
-		if (P3.x < target.x && target.x < P5.x)
+		if (start == true && P3.x < target.x && target.x < P5.x + 20)
 		{
 			flag = 1;
 			this->setStatus(eStatus::FALLING);
@@ -74,9 +75,11 @@ void Rio::update(float dt)
 		{
 			if (t < 1)
 			{
-				t += dt * RATE_BEZIER;
+				t += dt * RATE_BEZIER* 1.5;
 				this->P2 = VECTOR2((this->P1.x + this->P3.x) / 2, target.y - HEIGHT_AREA_ACTIVE);
 				this->setPosition((1 - t)*(1 - t)*P1 + 2 * (1 - t)*t*P2 + t*t*P3);
+				this->setVelocityX(60);
+				this->setVelocityY(-60);
 				if (P3.x < target.x && target.x < P5.x && this->getPosition().x > P3.x - 1) {
 					flag = 1;
 					t = 0;
@@ -86,9 +89,11 @@ void Rio::update(float dt)
 			else
 			{
 				if (t1 < 1) {
-					t1 += dt * RATE_BEZIER;
+					t1 += dt * RATE_BEZIER * 1.5;
 					this->P2 = VECTOR2((this->P3.x + this->P1.x) / 2, target.y - HEIGHT_AREA_ACTIVE);
 					this->setPosition((1 - t1)*(1 - t1)*P3 + 2 * (1 - t1)*t1*P2 + t1*t1*P1);
+					this->setVelocityX(-60);
+					this->setVelocityY(-60);
 				}
 				else {
 					t = 0;
@@ -99,17 +104,21 @@ void Rio::update(float dt)
 		{
 			if (t < 1)
 			{
-				t += dt * RATE_BEZIER;
+				t += dt * RATE_BEZIER * 1.5;
 				this->P4 = VECTOR2((this->P3.x + this->P5.x) / 2, target.y - HEIGHT_AREA_ACTIVE);
-				this->setPosition((1 - t)*(1 - t)*P3 + 2 * (1 - t)*t*P2 + t*t*P5);
+				this->setPosition((1 - t)*(1 - t)*P3 + 2 * (1 - t)*t*P4 + t*t*P5);
+				this->setVelocityX(60);
+				this->setVelocityY(-60);
 				t1 = 0;
 			}
 			else
 			{
 				if (t1 < 1) {
-					t1 += dt * RATE_BEZIER;
-					this->P2 = VECTOR2((this->P3.x + this->P5.x) / 2, target.y - HEIGHT_AREA_ACTIVE);
-					this->setPosition((1 - t1)*(1 - t1)*P5 + 2 * (1 - t1)*t1*P2 + t1*t1*P3);
+					t1 += dt * RATE_BEZIER * 1.5;
+					this->P4 = VECTOR2((this->P3.x + this->P5.x) / 2, target.y - HEIGHT_AREA_ACTIVE);
+					this->setPosition((1 - t1)*(1 - t1)*P5 + 2 * (1 - t1)*t1*P4 + t1*t1*P3);
+					this->setVelocityX(-60);
+					this->setVelocityY(-60);
 					if (P1.x < target.x && target.x < P3.x && this->getPosition().x < P3.x + 1) {
 						flag = 0;
 						t1 = 0;
@@ -123,6 +132,18 @@ void Rio::update(float dt)
 		
 	}
 	
+}
+
+void Rio::setBoundCollision()
+{
+	MetroidRect rect;
+	VECTOR2 position(this->getPosition().x, this->getPosition().y);
+	rect.left = position.x - this->getSprite()->getWidth() *0.5f;
+	rect.right = position.x + this->getSprite()->getWidth() *0.5f;
+	rect.top = position.y + this->getSprite()->getHeight() *0.5f;
+	rect.bottom = position.y - this->getSprite()->getHeight() *0.5f;
+
+	this->boundCollision = rect;
 }
 
 void Rio::draw()
@@ -144,8 +165,8 @@ void Rio::initPositions(VECTOR2 stP)
 {
 	this->startPosition = stP;
 	this->P1 = this->startPosition;
-	this->P3 = VECTOR2(P1.x + WIDTH_AREA_ACTIVE, startPosition.y);
-	this->P5 = VECTOR2(P3.x + WIDTH_AREA_ACTIVE, startPosition.y);
+	this->P3 = VECTOR2(P1.x + WIDTH_AREA_ACTIVE, startPosition.y + 17);
+	this->P5 = VECTOR2(P3.x + WIDTH_AREA_ACTIVE, startPosition.y + 16);
 
 	this->setPosition(stP);
 	this->target = VECTOR2ZERO;

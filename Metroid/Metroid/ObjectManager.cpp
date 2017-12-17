@@ -1720,11 +1720,8 @@ bool ObjectManager::load_list(const char * filename)
 				y = listRioYellow[i]["y"].GetFloat();
 				roy->initPositions(VECTOR2(x, y));
 
-				bound.left = x;
-				bound.top = y;
-				bound.right = bound.left + roy->getSprite()->getWidth();
-				bound.bottom = bound.top - roy->getSprite()->getHeight();
-				roy->setBoundCollision(bound);
+
+				roy->setBoundCollision();
 
 				bound.bottom = listRioYellow[i]["bottomA"].GetFloat();
 				bound.top = listRioYellow[i]["topA"].GetFloat();
@@ -1770,11 +1767,7 @@ bool ObjectManager::load_list(const char * filename)
 				y = listRioBrown[i]["y"].GetFloat();
 				rob->initPositions(VECTOR2(x, y));
 
-				bound.left = x;
-				bound.top = y;
-				bound.right = bound.left + rob->getSprite()->getWidth();
-				bound.bottom = bound.top - rob->getSprite()->getHeight();
-				rob->setBoundCollision(bound);
+				rob->setBoundCollision();
 
 				bound.bottom = listRioBrown[i]["bottomA"].GetFloat();
 				bound.top = listRioBrown[i]["topA"].GetFloat();
@@ -1820,11 +1813,7 @@ bool ObjectManager::load_list(const char * filename)
 				y = listRioRed[i]["y"].GetFloat();
 				ror->initPositions(VECTOR2(x, y));
 
-				bound.left = x;
-				bound.top = y;
-				bound.right = bound.left + ror->getSprite()->getWidth();
-				bound.bottom = bound.top - ror->getSprite()->getHeight();
-				ror->setBoundCollision(bound);
+				ror->setBoundCollision();
 
 				bound.bottom = listRioRed[i]["bottomA"].GetFloat();
 				bound.top = listRioRed[i]["topA"].GetFloat();
