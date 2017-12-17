@@ -29,6 +29,8 @@ private:
 	VECTOR2 leftSide;
 	VECTOR2 rightSide;
 	VECTOR2 bottomSide;
+	bool ok;
+	float pos;
 
 	MetroidRect boundOfWall;
 	MetroidRect positionCollide;

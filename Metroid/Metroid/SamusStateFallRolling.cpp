@@ -91,7 +91,7 @@ void SamusStateFallRolling::handleInput(float dt)
 	}
 }
 
-void SamusStateFallRolling::onCollision()
+void SamusStateFallRolling::onCollision(float dt)
 {
 	if (this->samus->isInStatus(eStatus::STANDING))
 	{

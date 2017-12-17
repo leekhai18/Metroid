@@ -104,7 +104,7 @@ void SamusStateAcrobat::handleInput(float dt)
 }
 
 #pragma region Collision
-void SamusStateAcrobat::onCollision()
+void SamusStateAcrobat::onCollision(float dt)
 {
 	float addX = 0, addY = 0;
 

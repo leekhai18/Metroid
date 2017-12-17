@@ -181,7 +181,7 @@ void SamusStateStanding::handleInput(float dt)
 	
 }
 
-void SamusStateStanding::onCollision()
+void SamusStateStanding::onCollision(float dt)
 {
 	for (auto i = this->samus->getListCollide()->begin(); i != this->samus->getListCollide()->end(); i++)
 	{

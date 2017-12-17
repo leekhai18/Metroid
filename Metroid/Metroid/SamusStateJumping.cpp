@@ -157,7 +157,7 @@ void SamusStateJumping::handleInput(float dt)
 #pragma endregion
 }
 
-void SamusStateJumping::onCollision()
+void SamusStateJumping::onCollision(float dt)
 {
 	float addX = 0, addY = 0;
 

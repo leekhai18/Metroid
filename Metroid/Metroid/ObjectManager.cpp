@@ -95,7 +95,7 @@ void ObjectManager::onCheckCollision(float dt)
 	}
 
 	// handle on listCollide
-	samus->onCollision();
+	samus->onCollision(dt);
 	for (unsigned i = 0; i < BulletPool::getInstance()->getListUsing().size(); i++)
 		BulletPool::getInstance()->getListUsing().at(i)->onCollision();
 

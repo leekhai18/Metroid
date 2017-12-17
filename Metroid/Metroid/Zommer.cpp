@@ -1,8 +1,8 @@
 #include "Zommer.h"
 
 #define TIME_FRAME_DELAY 0.15f
-#define ZOMMER_VELOCITY_X 40
-#define ZOMMER_VELOCITY_Y 40
+#define ZOMMER_VELOCITY_X 45
+#define ZOMMER_VELOCITY_Y 45
 #define ZOMMER_OFFSET_COLLISION 0.1f
 Zommer::Zommer(TextureManager * textureM, Graphics * graphics, EnemyColors color) : BaseObject(eID::ZOMMER),IFreezable(IndexManager::getInstance()->zoomerBlue)
 {
@@ -176,8 +176,9 @@ void Zommer::onCollision(float dt)
 						gravity = ZommerGravity::GRAVITY_RIGHT;
 
 						zommer_direction = ZommerDirection::BOTTOM_DIRECTION;
+						this->sprite->setRotate(270);
 					}
-					
+
 					break;
 				}
 				gravity_bool[gravity] = true;
@@ -217,8 +218,10 @@ void Zommer::onCollision(float dt)
 						gravity = ZommerGravity::GRAVITY_LEFT;
 
 						zommer_direction = ZommerDirection::BOTTOM_DIRECTION;
+						this->sprite->setRotate(90);
+
 					}
-					
+
 					break;
 				}
 				gravity_bool[gravity] = true;
@@ -226,62 +229,76 @@ void Zommer::onCollision(float dt)
 
 			break;
 		case CollideDirection::TOP:
-			positionCollide = x->object->getBoundCollision();
+			bound = Collision::getInstance()->getSweptBroadphaseRect(this->boundCollision, VECTOR2(0, velocity.y), dt);
 
-			this->velocity.y = 0;
-
-
-			switch (gravity)
+			if (Collision::getInstance()->isCollide(bound, x->object->getBoundCollision()))
 			{
-			case ZommerGravity::GRAVITY_RIGHT:
-				if (!this->gravity_bool[ZommerGravity::GRAVITY_BOTTOM] && zommer_direction == ZommerDirection::BOTTOM_DIRECTION)
-				{
-					gravity = ZommerGravity::GRAVITY_BOTTOM;
+				positionCollide = x->object->getBoundCollision();
 
-					zommer_direction = ZommerDirection::LEFT_DIRECTION;
-					this->sprite->setRotate(0);
-				}
-				
-				break;
-			case ZommerGravity::GRAVITY_LEFT:
-				if (!this->gravity_bool[ZommerGravity::GRAVITY_BOTTOM] && zommer_direction == ZommerDirection::BOTTOM_DIRECTION)
-				{
-					gravity = ZommerGravity::GRAVITY_BOTTOM;
+				this->velocity.y = 0;
 
-					zommer_direction = ZommerDirection::RIGHT_DIRECTION;
-					this->sprite->setRotate(0);
+
+				switch (gravity)
+				{
+				case ZommerGravity::GRAVITY_RIGHT:
+					if (!this->gravity_bool[ZommerGravity::GRAVITY_BOTTOM] && zommer_direction == ZommerDirection::BOTTOM_DIRECTION)
+					{
+						gravity = ZommerGravity::GRAVITY_BOTTOM;
+
+						zommer_direction = ZommerDirection::LEFT_DIRECTION;
+						this->sprite->setRotate(0);
+					}
+
+					break;
+				case ZommerGravity::GRAVITY_LEFT:
+					if (!this->gravity_bool[ZommerGravity::GRAVITY_BOTTOM] && zommer_direction == ZommerDirection::BOTTOM_DIRECTION)
+					{
+						gravity = ZommerGravity::GRAVITY_BOTTOM;
+
+						zommer_direction = ZommerDirection::RIGHT_DIRECTION;
+						this->sprite->setRotate(0);
+					}
+
+					break;
 				}
-				
-				break;
+				gravity_bool[gravity] = true;
 			}
-			gravity_bool[gravity] = true;
 			break;
 		case CollideDirection::BOTTOM:
-			this->velocity.y = 0;
-			positionCollide = x->object->getBoundCollision();
+			bound = Collision::getInstance()->getSweptBroadphaseRect(this->boundCollision, VECTOR2(0, velocity.y), dt);
 
-
-			switch (gravity)
+			if (Collision::getInstance()->isCollide(bound, x->object->getBoundCollision()))
 			{
-			case ZommerGravity::GRAVITY_RIGHT:
-				if (!this->gravity_bool[ZommerGravity::GRAVITY_TOP] && zommer_direction == ZommerDirection::TOP_DIRECTION)
-				{
-					gravity = ZommerGravity::GRAVITY_TOP;
+				this->velocity.y = 0;
+				positionCollide = x->object->getBoundCollision();
 
-					zommer_direction = ZommerDirection::LEFT_DIRECTION;
+
+				switch (gravity)
+				{
+				case ZommerGravity::GRAVITY_RIGHT:
+					if (!this->gravity_bool[ZommerGravity::GRAVITY_TOP] && zommer_direction == ZommerDirection::TOP_DIRECTION)
+					{
+						gravity = ZommerGravity::GRAVITY_TOP;
+
+						zommer_direction = ZommerDirection::LEFT_DIRECTION;
+
+						this->sprite->setRotate(180);
+					}
+
+					break;
+				case ZommerGravity::GRAVITY_LEFT:
+					if (!this->gravity_bool[ZommerGravity::GRAVITY_TOP] && zommer_direction == ZommerDirection::TOP_DIRECTION)
+					{
+						gravity = ZommerGravity::GRAVITY_TOP;
+
+						zommer_direction = ZommerDirection::RIGHT_DIRECTION;
+
+						this->sprite->setRotate(180);
+					}
+					break;
 				}
-				
-				break;
-			case ZommerGravity::GRAVITY_LEFT:
-				if (!this->gravity_bool[ZommerGravity::GRAVITY_TOP] && zommer_direction == ZommerDirection::TOP_DIRECTION)
-				{
-					gravity = ZommerGravity::GRAVITY_TOP;
-
-					zommer_direction = ZommerDirection::RIGHT_DIRECTION;
-				}			
-				break;
+				gravity_bool[gravity] = true;
 			}
-			gravity_bool[gravity] = true;
 			break;
 		}
 	}
@@ -301,6 +318,16 @@ void Zommer::update(float dt)
 	{
 		this->anim->setPause(false);
 	}
+	if(pos == (positionCollide.left - ZOMMER_COLLISION *0.5f)&&ok == true)
+	{
+		ok = false;
+	}
+	else
+	{
+		pos = 0;
+		ok = false;
+	}
+	
 	if (!gravity_bool[gravity])
 	{
 		isUpdate = false;
@@ -313,9 +340,12 @@ void Zommer::update(float dt)
 				gravity = ZommerGravity::GRAVITY_BOTTOM;
 				this->sprite->setRotate(0);
 				this->setPositionY(positionCollide.top + ZOMMER_COLLISION *0.5f);
+
+				
 			}
 			else
 			{
+				
 				gravity = ZommerGravity::GRAVITY_TOP;
 				this->sprite->setRotate(180);
 				this->setPositionY(positionCollide.bottom - ZOMMER_COLLISION *0.5f);
@@ -327,7 +357,8 @@ void Zommer::update(float dt)
 			this->setPosition(VECTOR2(positionCollide.left - ZOMMER_COLLISION *0.5f + 1, this->getPosition().y + this->velocity.y*dt));
 			if (zommer_direction == ZommerDirection::TOP_DIRECTION)
 			{
-
+				
+				pos = positionCollide.top + ZOMMER_COLLISION *0.5f;
 				gravity = ZommerGravity::GRAVITY_BOTTOM;
 				this->sprite->setRotate(0);
 				this->setPositionY(positionCollide.top + ZOMMER_COLLISION *0.5f);
@@ -351,6 +382,11 @@ void Zommer::update(float dt)
 			else
 			{
 				gravity = ZommerGravity::GRAVITY_RIGHT;
+				if (pos == (positionCollide.left - ZOMMER_COLLISION *0.5f) && !ok)
+				{
+					int test = 0;
+				}
+				ok = true;
 				this->sprite->setRotate(270);
 				this->setPositionX(positionCollide.left - ZOMMER_COLLISION *0.5f);
 			}
@@ -439,6 +475,7 @@ void Zommer::update(float dt)
 		gravity_bool[i] = false;
 	}
 
+	
 	this->anim->update(dt);
 	isUpdate = true;
 }

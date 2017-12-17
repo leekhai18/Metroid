@@ -5,7 +5,8 @@
 
 
 #define DISTANCE_MOVE_FRONT_GATE 20
-
+#define SAMUS_POS_X 1505.27942
+#define SAMUS_POS_Y 1331.00000
 
 Samus::Samus(TextureManager* textureM,Graphics* graphics, Input* input) : BaseObject(eID::SAMUS)
 {
@@ -16,7 +17,7 @@ Samus::Samus(TextureManager* textureM,Graphics* graphics, Input* input) : BaseOb
 		throw GameError(GameErrorNS::FATAL_ERROR, "Can not init sprite Samus");
 	}
 
-	this->setPosition(VECTOR2(2755, 1315));
+	this->setPosition(VECTOR2(SAMUS_POS_X, SAMUS_POS_Y));
 	runningNormalAnimation = new Animation(this->sprite, IndexManager::getInstance()->samusYellowRunningRight, NUM_FRAMES_SAMUS_RUNNING, 0.05f);
 	runningUpAnimation = new Animation(this->sprite, IndexManager::getInstance()->samusYellowRunningUpRight, NUM_FRAMES_SAMUS_RUNNING, 0.05f);
 	runningHittingRightAnimation = new Animation(this->sprite, IndexManager::getInstance()->samusYellowHittingAndRunningRight, NUM_FRAMES_SAMUS_RUNNING, 0.05f);
@@ -92,9 +93,9 @@ void Samus::handleInput(float dt)
 #pragma endregion
 }
 
-void Samus::onCollision()
+void Samus::onCollision(float dt)
 {
-	SamusStateManager::getInstance()->getCurrentState()->onCollision();
+	SamusStateManager::getInstance()->getCurrentState()->onCollision(dt);
 	this->listCollide->clear();
 }
 

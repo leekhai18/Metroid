@@ -87,7 +87,7 @@ void SamusStateRolling::handleInput(float dt)
 	}
 }
 
-void SamusStateRolling::onCollision()
+void SamusStateRolling::onCollision(float dt)
 {
 	if(this->samus->isInStatus(eStatus::STANDING))
 	{
@@ -105,7 +105,7 @@ void SamusStateRolling::onCollision()
 			}
 		}
 	}
-	
+	MetroidRect bound;
 	for (auto i = this->samus->getListCollide()->begin(); i != this->samus->getListCollide()->end(); i++)
 	{
 		switch (i->object->getId())
@@ -114,14 +114,23 @@ void SamusStateRolling::onCollision()
 			switch (i->direction)
 			{
 			case CollideDirection::LEFT:
-				this->samus->setVelocityX(0);
-				//not allow move left
-				this->samus->setCanMoveRight(false);
+				bound = Collision::getInstance()->getSweptBroadphaseRect(this->samus->getBoundCollision(), VECTOR2(this->samus->getVelocity().x, 0), dt);
+				if (Collision::getInstance()->isCollide(bound, i->object->getBoundCollision()))
+				{
+					this->samus->setVelocityX(0);
+					//not allow move left
+					this->samus->setCanMoveRight(false);
+				}
+
 				break;
 			case CollideDirection::RIGHT:
-				this->samus->setVelocityX(0);
-				//not allow move right
-				this->samus->setCanMoveLeft(false);
+				bound = Collision::getInstance()->getSweptBroadphaseRect(this->samus->getBoundCollision(), VECTOR2(this->samus->getVelocity().x, 0), dt);
+				if (Collision::getInstance()->isCollide(bound, i->object->getBoundCollision()))
+				{
+					this->samus->setVelocityX(0);
+					//not allow move right
+					this->samus->setCanMoveLeft(false);
+				}
 				break;
 			case CollideDirection::TOP:
 				this->samus->setVelocityY(0);

@@ -9,7 +9,7 @@ private:
 public:
 	void init();
 	void handleInput(float dt);
-	void onCollision();
+	void onCollision(float dt);
 	void update(float dt);
 	void onStart();
 	void onExit();

@@ -22,7 +22,7 @@ void BaseState::setBoundCollision()
 {
 }
 
-void BaseState::onCollision()
+void BaseState::onCollision(float dt)
 {
 }
 

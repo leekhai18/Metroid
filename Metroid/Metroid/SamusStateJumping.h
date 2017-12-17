@@ -18,7 +18,7 @@ public:
 	void update(float dt);
 
 	void setBoundCollision();
-	void onCollision();
+	void onCollision(float dt);
 
 	void onStart();
 	void onExit();
