@@ -1,6 +1,7 @@
 #include "SamusStateAcrobat.h"
 #include "SamusStateManager.h"
-
+#include "GameLog.h"
+#include "MaruMari.h"
 
 SamusStateAcrobat::SamusStateAcrobat()
 {
@@ -150,8 +151,10 @@ void SamusStateAcrobat::onCollision(float dt)
 			break;
 #pragma endregion
 
+#pragma region Zommer
 			//another object
 		case eID::ZOMMER:
+		{
 			switch (i->direction)
 			{
 			case CollideDirection::LEFT:
@@ -175,7 +178,23 @@ void SamusStateAcrobat::onCollision(float dt)
 			SamusStateManager::getInstance()->setOldStatus(eStatus::ACROBAT);
 			SamusStateManager::getInstance()->setOldState(this);
 			this->samus->setStatus(eStatus::INJURING);
+
 			break;
+		}
+#pragma endregion
+
+#pragma region Items
+		case eID::MARUMARI:
+		{
+			this->samus->setMariMaru(true);
+
+			MaruMari* mm = static_cast<MaruMari*>(i->object);
+			mm->setActivity(false);
+
+			break;
+		}
+#pragma endregion
+
 		default:
 			break;
 		}

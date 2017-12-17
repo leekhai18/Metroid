@@ -161,6 +161,9 @@ public:
 	// Draw Image using color as filter. Default color is WHITE.
 	virtual void draw(COLOR_ARGB color = GraphicsNS::WHITE);
 
+	// draw not transform
+	virtual void draw(bool isTransform, COLOR_ARGB color = GraphicsNS::WHITE);
+
 	// Update the animation. frameTime is used to regulate the speed.
 	virtual void update(float dt);
 };

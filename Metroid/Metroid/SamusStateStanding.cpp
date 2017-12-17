@@ -143,7 +143,7 @@ void SamusStateStanding::handleInput(float dt)
 		this->samus->getSprite()->setData(IndexManager::getInstance()->samusYellowTurnRight);
 	}
 
-	if (input->isKeyDown(VK_DOWN))
+	if (input->isKeyDown(VK_DOWN) && this->samus->isHaveMariMaru())
 	{
 		this->samus->setVelocityX(0);
 		this->samus->setStatus(eStatus::ROLLING);
@@ -202,7 +202,11 @@ void SamusStateStanding::onCollision(float dt)
 
 		case eID::SKREE:
 			GAMELOG("VA CHAM SKREE");
+			SamusStateManager::getInstance()->setOldStatus(eStatus::RUNNING);
+			this->samus->setStatus(eStatus::INJURING);
+			SamusStateManager::getInstance()->setOldState(this);
 			break;
+
 		case eID::ZOMMER:
 			switch (i->direction)
 			{

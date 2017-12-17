@@ -4,6 +4,8 @@
 #include "Collision.h"
 #include "GameDebug.h"
 
+#define TIME_DELAY_WHEN_COLLECT_ITEM 1
+
 Metroid::Metroid()
 {
 	this->spriteManger = SpriteManager::getInstance();
@@ -111,9 +113,23 @@ void Metroid::collisions(float dt)
 
 void Metroid::update(float dt)
 {
-	ObjectManager::getInstance()->update(dt);
-	samus->update(dt);
-	this->camera->update(dt);
+	if (this->justCollect == true)
+	{
+		timerEffectCollectItem += dt;
+
+		if (timerEffectCollectItem > TIME_DELAY_WHEN_COLLECT_ITEM)
+		{
+			timerEffectCollectItem = 0;
+			this->justCollect = false;
+		}
+	}
+
+	if (this->justCollect == false)
+	{
+		ObjectManager::getInstance()->update(dt);
+		samus->update(dt);
+		this->camera->update(dt);
+	}
 }
 
 void Metroid::render()
@@ -127,8 +143,11 @@ void Metroid::render()
 	ObjectManager::getInstance()->draw();
 	mapBrinstar->draw();
 
-
 	// END
+	this->getGraphics()->spriteEnd();
+
+	this->getGraphics()->spriteBegin();
+	samus->drawInFrontMap();
 	this->getGraphics()->spriteEnd();
 
 
@@ -156,4 +175,9 @@ void Metroid::resetAll()
 HWND Metroid::getCurrentHWND()
 {
 	return this->hwnd;
+}
+
+void Metroid::setJustCollectItem(bool flag)
+{
+	this->justCollect = flag;
 }

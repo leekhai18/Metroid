@@ -28,6 +28,8 @@ GateBlue::GateBlue(TextureManager * textureM, Graphics * graphics) : BaseObject(
 GateBlue::~GateBlue()
 {
 	delete this->sprite;
+	delete this->closeAnim;
+	delete this->openAnim;
 }
 
 void GateBlue::update(float dt)

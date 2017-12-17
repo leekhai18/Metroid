@@ -50,13 +50,13 @@ void ObjectManager::onCheckCollision(float dt)
 	{
 		timer = 0;
 
-		listCanCollideSamus->clear();
+		listNotWallCanCollideSamus->clear();
 		listObjectNotWallOnViewPort->clear();
 		listWallCanCollideSamus->clear();
 
 		MetroidRect r = Camera::getInstance()->getBound();
 		//Get all objects that can collide with current obj
-		quadtree->retrieve(listCanCollideSamus, listObjectNotWallOnViewPort, listWallCanCollideSamus, MetroidRect(r.top, r.bottom, r.left, r.right), samus);
+		quadtree->retrieve(listNotWallCanCollideSamus, listObjectNotWallOnViewPort, listWallCanCollideSamus, MetroidRect(r.top, r.bottom, r.left, r.right), samus);
 	}
 
 	if (listObjectNotWallOnViewPort)
@@ -66,6 +66,8 @@ void ObjectManager::onCheckCollision(float dt)
 			(*i)->onCollision(dt);
 		}
 	}
+
+#pragma region handle Wall
 	for (auto x = listWallCanCollideSamus->begin(); x != listWallCanCollideSamus->end(); x++)
 	{
 		samus->setListCanCollide(*listWallCanCollideSamus);
@@ -74,31 +76,39 @@ void ObjectManager::onCheckCollision(float dt)
 		for (unsigned i = 0; i < BulletPool::getInstance()->getListUsing().size(); i++)
 			Collision::getInstance()->checkCollision(BulletPool::getInstance()->getListUsing().at(i), *x, dt);
 	}
+	// handle on listCollide
+	samus->onCollision(dt);
+	for (unsigned i = 0; i < BulletPool::getInstance()->getListUsing().size(); i++)
+		BulletPool::getInstance()->getListUsing().at(i)->onCollision();
+#pragma endregion
+
+
+#pragma region handle Other wall
 	// Get listCollide
-	for (auto x = listCanCollideSamus->begin(); x != listCanCollideSamus->end(); x++)
+	for (auto x = listNotWallCanCollideSamus->begin(); x != listNotWallCanCollideSamus->end(); x++)
 	{
-		samus->setListCanCollide(*listCanCollideSamus);
+		samus->setListCanCollide(*listNotWallCanCollideSamus);
 		Collision::getInstance()->checkCollision(samus, *x, dt);
 
 		for (unsigned i = 0; i < BulletPool::getInstance()->getListUsing().size(); i++)
 			Collision::getInstance()->checkCollision(BulletPool::getInstance()->getListUsing().at(i), *x, dt);
 
-		//if ((*x)->getId() == eID::SKREE)
-		//{
-		//	Skree* skr = static_cast<Skree*>(*x);
+		if ((*x)->getId() == eID::SKREE)
+		{
+			Skree* skr = static_cast<Skree*>(*x);
 
-		//	if (skr->checkCollision(samus, dt))
-		//	{
-		//		skr->onCollision(samus);
-		//	}
-		//}
+			if (skr->checkCollision(samus, dt))
+			{
+				skr->onCollision(samus);
+			}
+		}
 	}
 
 	// handle on listCollide
 	samus->onCollision(dt);
 	for (unsigned i = 0; i < BulletPool::getInstance()->getListUsing().size(); i++)
 		BulletPool::getInstance()->getListUsing().at(i)->onCollision();
-
+#pragma endregion
 
 }
 
@@ -126,8 +136,13 @@ void ObjectManager::update(float dt)
 			if ((*i)->getId() == eID::SKREE)
 			{
 				Skree* skr = static_cast<Skree*>(*i);
-
 				skr->setTarget(samus->getPosition());
+			}
+
+			if ((*i)->getId() == eID::RIO)
+			{
+				Rio* rio = static_cast<Rio*>(*i);
+				rio->setTarget(samus->getPosition());
 			}
 			
 			(*i)->update(dt);
@@ -1017,19 +1032,15 @@ bool ObjectManager::load_list(const char * filename)
 				id = listZommerYellow[i]["id"].GetInt();
 				x = listZommerYellow[i]["x"].GetFloat() ;
 				y = listZommerYellow[i]["y"].GetFloat();
-				/*if (x== 1152)
-				{
-					int test = 0;
-				}*/
 				y = y- 16 +zmy->getSprite()->getHeight()*0.5f;
-				x += 8;
-				
+				x += zmy->getSprite()->getWidth()*0.5f;
+				zmy->setPosition(VECTOR2(x, y));
+
 				const Value& arrayWall = listZommerYellow[i]["ListCollideID"];
 				for (SizeType t = 0; t < arrayWall.Size(); t++)
 				{
 					zmy->getListWallCanCollide()->push_back(map_object.find(arrayWall[t].GetInt())->second);
 				}
-				zmy->setPosition(VECTOR2(x, y));
 
 				bound.left = x;
 				bound.top = y;
@@ -1444,13 +1455,15 @@ bool ObjectManager::load_list(const char * filename)
 				id = listSkreeYellow[i]["id"].GetInt();
 				x = listSkreeYellow[i]["x"].GetFloat();
 				y = listSkreeYellow[i]["y"].GetFloat();
+				sky->setInitPosition(VECTOR2(x + sky->getSprite()->getWidth()*0.5f, y));
+				
+				sky->setBoundCollision();
 
-				const Value& arrayWall = listZommerYellow[i]["ListCollideID"];
+				const Value& arrayWall = listSkreeYellow[i]["ListCollideID"];
 				for (SizeType t = 0; t < arrayWall.Size(); t++)
 				{
 					sky->getListWallCanCollide()->push_back(map_object.find(arrayWall[t].GetInt())->second);
 				}
-				sky->setInitPosition(VECTOR2(x + sky->getSprite()->getWidth()*0.5f, y));
 
 				bound.bottom = listSkreeYellow[i]["bottomA"].GetFloat();
 				bound.top = listSkreeYellow[i]["topA"].GetFloat();
@@ -1496,6 +1509,14 @@ bool ObjectManager::load_list(const char * filename)
 				y = listSkreeBrown[i]["y"].GetFloat();
 				skb->setInitPosition(VECTOR2(x + skb->getSprite()->getWidth()*0.5f, y));
 
+				skb->setBoundCollision();
+
+				const Value& arrayWall = listSkreeBrown[i]["ListCollideID"];
+				for (SizeType t = 0; t < arrayWall.Size(); t++)
+				{
+					skb->getListWallCanCollide()->push_back(map_object.find(arrayWall[t].GetInt())->second);
+				}
+
 				bound.bottom = listSkreeBrown[i]["bottomA"].GetFloat();
 				bound.top = listSkreeBrown[i]["topA"].GetFloat();
 				bound.left = listSkreeBrown[i]["leftA"].GetFloat();
@@ -1538,13 +1559,18 @@ bool ObjectManager::load_list(const char * filename)
 				id = listRipperYellow[i]["id"].GetInt();
 				x = listRipperYellow[i]["x"].GetFloat();
 				y = listRipperYellow[i]["y"].GetFloat();
+
+				y = y - 16 + rpy->getSprite()->getHeight()*0.5f;
+				x += rpy->getSprite()->getWidth()*0.5f;
 				rpy->setPosition(VECTOR2(x, y));
 
-				bound.left = x;
-				bound.top = y;
-				bound.right = bound.left + rpy->getSprite()->getWidth();
-				bound.bottom = bound.top - rpy->getSprite()->getHeight();
-				rpy->setBoundCollision(bound);
+				const Value& arrayWall = listRipperYellow[i]["ListCollideID"];
+				for (SizeType t = 0; t < arrayWall.Size(); t++)
+				{
+					rpy->getListWallCanCollide()->push_back(map_object.find(arrayWall[t].GetInt())->second);
+				}
+
+				rpy->setBoundCollision();
 
 				bound.bottom = listRipperYellow[i]["bottomA"].GetFloat();
 				bound.top = listRipperYellow[i]["topA"].GetFloat();
@@ -1552,11 +1578,7 @@ bool ObjectManager::load_list(const char * filename)
 				bound.right = listRipperYellow[i]["rightA"].GetFloat();
 				rpy->setActiveBound(bound);
 
-				const Value& arrayWall = listRipperYellow[i]["ListCollideID"];
-				for (SizeType t = 0; t < arrayWall.Size(); t++)
-				{
-					rpy->getListWallCanCollide()->push_back(map_object.find(arrayWall[t].GetInt())->second);
-				}
+				
 				//writer.StartObject();
 				//writer.Key("x");
 				//writer.Double(x);
@@ -1593,13 +1615,19 @@ bool ObjectManager::load_list(const char * filename)
 				id = listRipperBrown[i]["id"].GetInt();
 				x = listRipperBrown[i]["x"].GetFloat();
 				y = listRipperBrown[i]["y"].GetFloat();
+
+				y = y - 16 + rpb->getSprite()->getHeight()*0.5f;
+				x = x + rpb->getSprite()->getWidth()*0.5f;
 				rpb->setPosition(VECTOR2(x, y));
 
-				bound.left = x;
-				bound.top = y;
-				bound.right = bound.left + rpb->getSprite()->getWidth();
-				bound.bottom = bound.top - rpb->getSprite()->getHeight();
-				rpb->setBoundCollision(bound);
+				const Value& arrayWall = listRipperBrown[i]["ListCollideID"];
+				for (SizeType t = 0; t < arrayWall.Size(); t++)
+				{
+					rpb->getListWallCanCollide()->push_back(map_object.find(arrayWall[t].GetInt())->second);
+				}
+
+
+				rpb->setBoundCollision();
 
 				bound.bottom = listRipperBrown[i]["bottomA"].GetFloat();
 				bound.top = listRipperBrown[i]["topA"].GetFloat();
@@ -1643,13 +1671,18 @@ bool ObjectManager::load_list(const char * filename)
 				id = listRipperRed[i]["id"].GetInt();
 				x = listRipperRed[i]["x"].GetFloat();
 				y = listRipperRed[i]["y"].GetFloat();
+
+				y = y - 16 + rpr->getSprite()->getHeight()*0.5f;
+				x = x + rpr->getSprite()->getWidth()*0.5f;
 				rpr->setPosition(VECTOR2(x, y));
 
-				bound.left = x;
-				bound.top = y;
-				bound.right = bound.left + rpr->getSprite()->getWidth();
-				bound.bottom = bound.top - rpr->getSprite()->getHeight();
-				rpr->setBoundCollision(bound);
+				const Value& arrayWall = listRipperRed[i]["ListCollideID"];
+				for (SizeType t = 0; t < arrayWall.Size(); t++)
+				{
+					rpr->getListWallCanCollide()->push_back(map_object.find(arrayWall[t].GetInt())->second);
+				}
+
+				rpr->setBoundCollision();
 
 				bound.bottom = listRipperRed[i]["bottomA"].GetFloat();
 				bound.top = listRipperRed[i]["topA"].GetFloat();
@@ -1693,13 +1726,14 @@ bool ObjectManager::load_list(const char * filename)
 				id = listRioYellow[i]["id"].GetInt();
 				x = listRioYellow[i]["x"].GetFloat();
 				y = listRioYellow[i]["y"].GetFloat();
+
+				y = y - 16 + roy->getSprite()->getHeight()*0.5f;
+				x = x + roy->getSprite()->getWidth()*0.5f;
+
 				roy->initPositions(VECTOR2(x, y));
 
-				bound.left = x;
-				bound.top = y;
-				bound.right = bound.left + roy->getSprite()->getWidth();
-				bound.bottom = bound.top - roy->getSprite()->getHeight();
-				roy->setBoundCollision(bound);
+
+				roy->setBoundCollision();
 
 				bound.bottom = listRioYellow[i]["bottomA"].GetFloat();
 				bound.top = listRioYellow[i]["topA"].GetFloat();
@@ -1743,13 +1777,12 @@ bool ObjectManager::load_list(const char * filename)
 				id = listRioBrown[i]["id"].GetInt();
 				x = listRioBrown[i]["x"].GetFloat();
 				y = listRioBrown[i]["y"].GetFloat();
+
+				y = y - 16 + rob->getSprite()->getHeight()*0.5f;
+				x = x + rob->getSprite()->getWidth()*0.5f;
 				rob->initPositions(VECTOR2(x, y));
 
-				bound.left = x;
-				bound.top = y;
-				bound.right = bound.left + rob->getSprite()->getWidth();
-				bound.bottom = bound.top - rob->getSprite()->getHeight();
-				rob->setBoundCollision(bound);
+				rob->setBoundCollision();
 
 				bound.bottom = listRioBrown[i]["bottomA"].GetFloat();
 				bound.top = listRioBrown[i]["topA"].GetFloat();
@@ -1793,13 +1826,12 @@ bool ObjectManager::load_list(const char * filename)
 				id = listRioRed[i]["id"].GetInt();
 				x = listRioRed[i]["x"].GetFloat();
 				y = listRioRed[i]["y"].GetFloat();
+
+				y = y - 16 + ror->getSprite()->getHeight()*0.5f;
+				x = x + ror->getSprite()->getWidth()*0.5f;
 				ror->initPositions(VECTOR2(x, y));
 
-				bound.left = x;
-				bound.top = y;
-				bound.right = bound.left + ror->getSprite()->getWidth();
-				bound.bottom = bound.top - ror->getSprite()->getHeight();
-				ror->setBoundCollision(bound);
+				ror->setBoundCollision();
 
 				bound.bottom = listRioRed[i]["bottomA"].GetFloat();
 				bound.top = listRioRed[i]["topA"].GetFloat();
@@ -1927,7 +1959,7 @@ bool ObjectManager::load_list(const char * filename)
 ObjectManager::ObjectManager()
 {
 	this->object_list = new list<BaseObject*>();
-	this->listCanCollideSamus = new list<BaseObject*>();
+	this->listNotWallCanCollideSamus = new list<BaseObject*>();
 	this->listObjectNotWallOnViewPort = new list<BaseObject*>();
 	this->listWallCanCollideSamus = new list<BaseObject*>();
 
@@ -1951,7 +1983,7 @@ void ObjectManager::release()
 	object_list->clear();
 	delete object_list;
 
-	delete listCanCollideSamus;
+	delete listNotWallCanCollideSamus;
 	delete listObjectNotWallOnViewPort;
 	delete listWallCanCollideSamus;
 

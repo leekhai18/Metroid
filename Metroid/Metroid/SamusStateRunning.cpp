@@ -296,10 +296,15 @@ void SamusStateRunning::onCollision(float dt)
 			break;
 #pragma endregion
 
-#pragma region SKREE
+#pragma region Enemies
 		case eID::SKREE:
 			GAMELOG("VA CHAM SKREE");
+			SamusStateManager::getInstance()->setOldStatus(eStatus::RUNNING);
+			this->samus->setStatus(eStatus::INJURING);
+			SamusStateManager::getInstance()->setOldState(this);
+
 			break;
+
 		case eID::ZOMMER:
 			switch (i->direction)
 			{
@@ -320,6 +325,9 @@ void SamusStateRunning::onCollision(float dt)
 			SamusStateManager::getInstance()->setOldStatus(eStatus::RUNNING);
 			this->samus->setStatus(eStatus::INJURING);
 			SamusStateManager::getInstance()->setOldState(this);
+
+		case eID::RIO:
+			GAMELOG("VA CHAM RIO");
 			break;
 
 #pragma endregion

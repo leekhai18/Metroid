@@ -32,7 +32,7 @@ private:
 	list<BaseObject*>* object_list;
 
 	int totalObjectsPerFrame;
-	list<BaseObject*>* listCanCollideSamus;
+	list<BaseObject*>* listNotWallCanCollideSamus;
 	list<BaseObject*>* listObjectNotWallOnViewPort;
 	list<BaseObject*>* listWallCanCollideSamus;
 

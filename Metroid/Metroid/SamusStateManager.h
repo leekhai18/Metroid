@@ -39,6 +39,6 @@ public:
 
 	void changeStateTo(eStatus eStatus);
 
-
+	void release();
 };
 

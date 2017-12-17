@@ -312,6 +312,42 @@ void Graphics::drawSprite(const SpriteData &spriteData, COLOR_ARGB color)
 
 	ObjectManager::getInstance()->setTotalObjectPerFrame(ObjectManager::getInstance()->getTotalObjectsPerFrame() + 1);
 }
+
+void Graphics::drawSprite(bool isTransform, const SpriteData & spriteData, COLOR_ARGB color)
+{
+	if (isTransform)
+	{
+		this->drawSprite(spriteData, color);
+	}
+	else
+	{
+		if (spriteData.texture == NULL)      // if no texture
+			return;
+
+		D3DXMATRIX matTransformed;
+
+		//calculate scale position
+		VECTOR3 center = VECTOR3(spriteData.width * spriteData.origin.x, spriteData.height * spriteData.origin.y, 0);
+
+
+		D3DXMatrixTransformation2D(
+			&matTransformed,
+			&spriteData.position,
+			0.0f,
+			&spriteData.scale,
+			&spriteData.position,
+			D3DXToRadian(spriteData.rotate),
+			0
+		);
+
+		//set matrix transformed
+		sprite->SetTransform(&matTransformed);
+
+		// Draw the sprite
+		sprite->Draw(spriteData.texture, &spriteData.rect, &center, &VECTOR3(spriteData.position.x, spriteData.position.y, 0), color);
+	}
+}
+
 void Graphics::drawLine(const VECTOR3* vertices, int count, COLOR_ARGB color)
 {
 	// Transform Camera
