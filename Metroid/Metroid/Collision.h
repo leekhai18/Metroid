@@ -14,6 +14,8 @@ public:
 	//TO DO: true if one rectangle is colliding with another
 	bool isCollide(MetroidRect myRect, MetroidRect otherRect);
 
+	MetroidRect getSweptBroadphaseRect(MetroidRect myRect, VECTOR2 myVelocity, float frametime);
+
 	//TO DO: true if one object will collide with another
 	bool checkCollision(BaseObject* myObj, BaseObject* otherObj, float dt);
 
