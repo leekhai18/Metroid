@@ -45,7 +45,8 @@ Skree::Skree(TextureManager * textureM, Graphics * graphics, EnemyColors color) 
 	default:
 		break;
 	}
-
+	this->listWallCanCollide = new list<BaseObject*>();
+	this->listCollide = new list<CollisionReturn>();
 	animationRotate->start();
 
 	target = VECTOR2ZERO;
@@ -75,6 +76,36 @@ void Skree::onCollision(Samus* sam)
 {
 	// handle in here
 	GAMELOG("Skree's bullets hit");
+
+}
+
+void Skree::onCollision(float dt)
+{
+	for (auto i = this->getListWallCanCollide()->begin(); i != this->getListWallCanCollide()->end(); i++)
+	{
+		Collision::getInstance()->checkCollision(this, *i, dt);
+	}
+	for (auto x = this->listCollide->begin(); x != this->listCollide->end(); x++)
+	{
+
+		switch (x->direction)
+		{
+		case CollideDirection::LEFT:
+
+			break;
+		case CollideDirection::RIGHT:
+
+			break;
+		case CollideDirection::TOP:
+			
+			break;
+		case CollideDirection::BOTTOM:
+		
+			break;
+		}
+	}
+
+	this->listCollide->clear();
 }
 
 void Skree::update(float dt)
@@ -253,4 +284,14 @@ void Skree::setBeHit(bool flag)
 void Skree::decreaseHealth(float dame)
 {
 	this->health = this->health - dame;
+}
+
+list<BaseObject*>* Skree::getListWallCanCollide()
+{
+	return this->listWallCanCollide;
+}
+
+list<CollisionReturn>* Skree::getListCollide()
+{
+	return this->listCollide;
 }

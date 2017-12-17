@@ -146,6 +146,7 @@
     <ClInclude Include="GateRed.h" />
     <ClInclude Include="Graphics.h" />
     <ClInclude Include="IceBeam.h" />
+    <ClInclude Include="IFreezable.h" />
     <ClInclude Include="IndexManager.h" />
     <ClInclude Include="Input.h" />
     <ClInclude Include="LongBeam.h" />
@@ -204,6 +205,7 @@
     <ClCompile Include="GateRed.cpp" />
     <ClCompile Include="Graphics.cpp" />
     <ClCompile Include="IceBeam.cpp" />
+    <ClCompile Include="IFreezable.cpp" />
     <ClCompile Include="IndexManager.cpp" />
     <ClCompile Include="Input.cpp" />
     <ClCompile Include="LongBeam.cpp" />

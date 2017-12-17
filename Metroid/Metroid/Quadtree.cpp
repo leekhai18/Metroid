@@ -131,7 +131,7 @@ void Quadtree::retrieve(list<BaseObject*>* listCanCollideSamus, list<BaseObject*
 		{
 			if ((*node)->isContain(rect))
 			{
-				(*node)->retrieve(return_objects_list, list_not_wall, list_wall, rect, samus);
+				(*node)->retrieve(listCanCollideSamus, listObjectNotWallOnViewPort, listWallCanCollideSamus, rect, samus);
 			}
 		}
 
@@ -149,16 +149,36 @@ void Quadtree::retrieve(list<BaseObject*>* listCanCollideSamus, list<BaseObject*
 
 			if (!found1)
 			{
-				if (Collision::getInstance()->isCollide(samus->getActiveBound(), (*i)->getActiveBound()))
+				MetroidRect objectActive = (*i)->getBoundCollision();
+				objectActive.top = objectActive.top + 20;
+				objectActive.left = objectActive.left - 20;
+				objectActive.right = objectActive.right + 20;
+				objectActive.bottom = objectActive.bottom - 20;
+				if (Collision::getInstance()->isCollide(samus->getActiveBound(), (*i)->getBoundCollision()))
 				{
-					listCanCollideSamus->push_back(*i);
+					if ((*i)->getId() != eID::WALL)
+					{
+						listCanCollideSamus->push_back(*i);
+					}
+					
 				}
 			}
 
 			if (!found2)
 			{
-				if (Collision::getInstance()->isCollide(samus->getActiveBound(), (*i)->getActiveBound()))
+				
+
+				MetroidRect objectActive = (*i)->getBoundCollision();
+				objectActive.top = objectActive.top + 4;
+				objectActive.left = objectActive.left - 4;
+				objectActive.right = objectActive.right + 4;
+				objectActive.bottom = objectActive.bottom - 4;
+				if (Collision::getInstance()->isCollide(samus->getActiveBound(), (*i)->getBoundCollision()))
 				{
+					if (this->level == 6&& (*i)->getBoundCollision().bottom==2976.0f)
+					{
+						int test = 0;
+					}
 					if ((*i)->getId() == eID::WALL)
 						listWallCanCollideSamus->push_back(*i);
 				}
@@ -166,8 +186,20 @@ void Quadtree::retrieve(list<BaseObject*>* listCanCollideSamus, list<BaseObject*
 
 			if (!found3)
 			{
-				if (Collision::getInstance()->isCollide(rect, (*i)->getActiveBound()))
+				/*if ((*i)->getId() != eID::WALL)
 				{
+					if ((*i)->getPosition().x == 600)
+					{
+						int test = 0;
+					}
+				}*/
+				
+				if (Collision::getInstance()->isCollide(rect, (*i)->getBoundCollision()))
+				{
+					/*if((*i)->getBoundCollision().left== 1153.09998f)
+					{
+						int test = 0;
+					}*/
 					if ((*i)->getId() != eID::WALL)
 						listObjectNotWallOnViewPort->push_back(*i);
 				}

@@ -13,6 +13,11 @@ private:
 	bool move_to_fall;
 
 	bool canStanding;
+
+	//bool isFall;
+
+	//bool flagUpDown;
+	//float timer;
 public:
 	SamusStateRolling();
 	SamusStateRolling(Samus* samus, Input* input);

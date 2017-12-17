@@ -56,6 +56,8 @@ public:
 	//TO DO: update position, velocity... if this object collide with another object(call before update() )
 	virtual void onCollision();
 
+	virtual void onCollision(float dt);
+
 	virtual void setBoundCollision(MetroidRect rect);
 	virtual MetroidRect getBoundCollision();
 

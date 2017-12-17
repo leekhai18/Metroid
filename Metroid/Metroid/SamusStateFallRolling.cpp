@@ -169,7 +169,7 @@ void SamusStateFallRolling::update(float dt)
 	this->samus->setCanMoveLeft(true);
 	this->samus->setCanMoveRight(true);
 
-	this->samus->setVelocityX(0);
+	//this->samus->setVelocityX(0);
 	
 
 }

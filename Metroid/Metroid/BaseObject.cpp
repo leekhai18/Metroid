@@ -157,6 +157,11 @@ void BaseObject::onCollision()
 
 }
 
+void BaseObject::onCollision(float dt)
+{
+
+}
+
 void BaseObject::setBoundCollision(MetroidRect rect)
 {
 	this->boundCollision = rect;

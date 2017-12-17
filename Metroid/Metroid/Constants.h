@@ -153,3 +153,17 @@ enum EnemyColors
 	Brown,
 	Red
 };
+enum ZommerDirection
+{
+	LEFT_DIRECTION,
+	RIGHT_DIRECTION,
+	TOP_DIRECTION,
+	BOTTOM_DIRECTION
+};
+enum ZommerGravity
+{
+	GRAVITY_LEFT,
+	GRAVITY_RIGHT,
+	GRAVITY_TOP,
+	GRAVITY_BOTTOM
+};

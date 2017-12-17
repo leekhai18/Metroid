@@ -8,7 +8,7 @@ SamusStateRolling::SamusStateRolling()
 
 SamusStateRolling::SamusStateRolling(Samus * samus, Input * input) : BaseState(samus, input)
 {
-	timer = 0;
+	
 }
 
 
@@ -152,7 +152,7 @@ void SamusStateRolling::update(float dt)
 
 	setBoundCollision();
 
-	timer += dt;
+	/*timer += dt;
 	if (timer < 0.03f)
 	{
 		if (flagUpDown)
@@ -162,9 +162,9 @@ void SamusStateRolling::update(float dt)
 	{
 		flagUpDown = !flagUpDown;
 		timer = 0;
-	}
+	}*/
 
-	if(isFall && !this->samus->isInStatus(eStatus::STANDING))
+	if (move_to_fall && !this->samus->isInStatus(eStatus::STANDING))
 	{
 		this->samus->setStatus(eStatus::FALLING_ROLLING);
 	}
@@ -194,7 +194,7 @@ void SamusStateRolling::update(float dt)
 	this->samus->setCanMoveRight(true);
 
 	move_to_fall = true;
-	this->samus->setVelocity(VECTOR2(0, -SAMUS_MIN_SPEED_Y));
+	this->samus->setVelocity(VECTOR2(this->samus->getVelocity().x, -SAMUS_MIN_SPEED_Y));
 	canStanding = false;
 }
 

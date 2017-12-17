@@ -5,7 +5,7 @@
 #include "MaruMari.h"
 #include "GameLog.h"
 #include "Skree.h"
-
+#include "Zommer.h"
 #define WIDTH_BULLET_HALF 1
 #define HEIGHT_BULLET_HALF 1
 
@@ -102,7 +102,9 @@ void Bullet::onCollision()
 		}
 
 
-		default:
+		case eID::ZOMMER:
+			Zommer* zommer = static_cast<Zommer*>((*i).object);
+			zommer->setCold(true);
 			break;
 		}
 	}

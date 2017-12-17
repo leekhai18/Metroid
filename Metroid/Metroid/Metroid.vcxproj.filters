@@ -37,6 +37,7 @@
     <ClCompile Include="Ripper.cpp" />
     <ClCompile Include="Samus.cpp" />
     <ClCompile Include="SamusStateAcrobat.cpp" />
+    <ClCompile Include="SamusStateFallRolling.cpp" />
     <ClCompile Include="SamusStateJumping.cpp" />
     <ClCompile Include="SamusStateManager.cpp" />
     <ClCompile Include="SamusStateRolling.cpp" />
@@ -56,10 +57,7 @@
     <ClCompile Include="WinMain.cpp" />
     <ClCompile Include="Zeb.cpp" />
     <ClCompile Include="Zommer.cpp" />
-<<<<<<< HEAD
-    <ClCompile Include="SamusStateFallRolling.cpp" />
-=======
->>>>>>> develop
+    <ClCompile Include="IFreezable.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AlienBig.h" />
@@ -101,6 +99,7 @@
     <ClInclude Include="Ripper.h" />
     <ClInclude Include="Samus.h" />
     <ClInclude Include="SamusStateAcrobat.h" />
+    <ClInclude Include="SamusStateFallRolling.h" />
     <ClInclude Include="SamusStateJumping.h" />
     <ClInclude Include="SamusStateManager.h" />
     <ClInclude Include="SamusStateRolling.h" />
@@ -119,10 +118,7 @@
     <ClInclude Include="Waver.h" />
     <ClInclude Include="Zeb.h" />
     <ClInclude Include="Zommer.h" />
-<<<<<<< HEAD
-    <ClInclude Include="SamusStateFallRolling.h" />
-=======
->>>>>>> develop
+    <ClInclude Include="IFreezable.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Metroid.rc" />

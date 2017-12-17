@@ -29,13 +29,24 @@ Ripper::Ripper(TextureManager * textureM, Graphics * graphics, EnemyColors color
 	default:
 		break;
 	}
-
+	this->listWallCanCollide = new list<BaseObject*>();
+	this->listCollide = new list<CollisionReturn>();
 }
 
 
 Ripper::~Ripper()
 {
 	delete this->sprite;
+}
+
+list<BaseObject*>* Ripper::getListWallCanCollide()
+{
+	return this->listWallCanCollide;
+}
+
+list<CollisionReturn>* Ripper::getListCollide()
+{
+	return this->listCollide;
 }
 
 void Ripper::update(float dt)

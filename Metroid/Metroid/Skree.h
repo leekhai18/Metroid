@@ -21,7 +21,8 @@ private:
 	bool isActivity;
 	bool canDraw;
 
-
+	list<BaseObject*> *listWallCanCollide;
+	list<CollisionReturn> *listCollide;
 	bool beHit;
 	float timerHit;
 	float health;
@@ -34,6 +35,7 @@ public:
 	bool checkCollision(Samus* sam, float dt);
 	void onCollision(Samus* sam); // check collision skree's bullets with samus
 
+	void onCollision(float dt);
 	void update(float dt);
 	void draw();
 	void release();
@@ -55,5 +57,8 @@ public:
 
 	void setBeHit(bool flag);
 	void decreaseHealth(float dame);
+
+	list<BaseObject*>* getListWallCanCollide();
+	list<CollisionReturn> *getListCollide();
 };
 

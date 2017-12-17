@@ -28,7 +28,7 @@
 #include "rapidjson-master\include\rapidjson\ostreamwrapper.h"
 
 
-#define TIME_RETRIEVE -1
+#define TIME_RETRIEVE 0.0f
 
 ObjectManager* ObjectManager::instance = nullptr;
 
@@ -46,7 +46,7 @@ void ObjectManager::onCheckCollision(float dt)
 {
 	timer += dt;
 	
-	if (timer > TIME_RETRIEVE)
+	if (timer >= TIME_RETRIEVE)
 	{
 		timer = 0;
 
@@ -59,6 +59,21 @@ void ObjectManager::onCheckCollision(float dt)
 		quadtree->retrieve(listCanCollideSamus, listObjectNotWallOnViewPort, listWallCanCollideSamus, MetroidRect(r.top, r.bottom, r.left, r.right), samus);
 	}
 
+	if (listObjectNotWallOnViewPort)
+	{
+		for (list<BaseObject*>::iterator i = listObjectNotWallOnViewPort->begin(); i != listObjectNotWallOnViewPort->end(); ++i)
+		{
+			(*i)->onCollision(dt);
+		}
+	}
+	for (auto x = listWallCanCollideSamus->begin(); x != listWallCanCollideSamus->end(); x++)
+	{
+		samus->setListCanCollide(*listWallCanCollideSamus);
+		Collision::getInstance()->checkCollision(samus, *x, dt);
+
+		for (unsigned i = 0; i < BulletPool::getInstance()->getListUsing().size(); i++)
+			Collision::getInstance()->checkCollision(BulletPool::getInstance()->getListUsing().at(i), *x, dt);
+	}
 	// Get listCollide
 	for (auto x = listCanCollideSamus->begin(); x != listCanCollideSamus->end(); x++)
 	{
@@ -68,21 +83,23 @@ void ObjectManager::onCheckCollision(float dt)
 		for (unsigned i = 0; i < BulletPool::getInstance()->getListUsing().size(); i++)
 			Collision::getInstance()->checkCollision(BulletPool::getInstance()->getListUsing().at(i), *x, dt);
 
-		if ((*x)->getId() == eID::SKREE)
-		{
-			Skree* skr = static_cast<Skree*>(*x);
+		//if ((*x)->getId() == eID::SKREE)
+		//{
+		//	Skree* skr = static_cast<Skree*>(*x);
 
-			if (skr->checkCollision(samus, dt))
-			{
-				skr->onCollision(samus);
-			}
-		}
+		//	if (skr->checkCollision(samus, dt))
+		//	{
+		//		skr->onCollision(samus);
+		//	}
+		//}
 	}
 
 	// handle on listCollide
 	samus->onCollision();
 	for (unsigned i = 0; i < BulletPool::getInstance()->getListUsing().size(); i++)
 		BulletPool::getInstance()->getListUsing().at(i)->onCollision();
+
+
 }
 
 void ObjectManager::onCheckCollision(BaseObject * obj, float frametime)
@@ -231,21 +248,22 @@ bool ObjectManager::load_list(const char * filename)
 		int id;
 		MetroidRect bound;
 
-		// write json file
+		//// write json file
 		//Document d;
 		//d.Parse("json");
 		//ofstream ofs("json\\objects.json");
 		//OStreamWrapper osw(ofs);
 		//Writer<OStreamWrapper> writer(osw);
 
-		//writer.StartObject();
+		/*writer.StartObject();
 
-		//writer.Key("Wall");
-		//writer.StartArray();
-
+		writer.Key("Wall");
+		writer.StartArray();
+*/
 #pragma region Wall
 		// Load Wall POS , 650 
 		const Value& listWall = jSon["Wall"];
+	
 		if (listWall.IsArray())
 		{
 
@@ -253,23 +271,23 @@ bool ObjectManager::load_list(const char * filename)
 			{
 				BaseObject *wall = new BaseObject(eID::WALL);
 
-				
+			
 				id = listWall[i]["id"].GetInt();
 				x = listWall[i]["x"].GetFloat();
 				y = listWall[i]["y"].GetFloat(); // Bị lệch 32bit giữa 2 layer WALL and map
 				height = listWall[i]["height"].GetFloat();
 				width = listWall[i]["width"].GetFloat();
 
-				//writer.StartObject();
-				//writer.Key("x");
-				//writer.Double(x);
-				//writer.Key("y");
-				//writer.Double(y);
-				//writer.Key("height");
-				//writer.Double(height);
-				//writer.Key("width");
-				//writer.Double(width);
-				//writer.EndObject();
+				/*writer.StartObject();
+				writer.Key("x");
+				writer.Double(x);
+				writer.Key("y");
+				writer.Double(y);
+				writer.Key("height");
+				writer.Double(height);
+				writer.Key("width");
+				writer.Double(width);
+				writer.EndObject();*/
 
 				bound.left = x;
 				bound.top = y;
@@ -285,7 +303,8 @@ bool ObjectManager::load_list(const char * filename)
 			}
 		}
 
-		//writer.EndArray();
+	/*writer.EndArray();	
+	writer.EndObject();*/
 #pragma endregion
 
 
@@ -337,7 +356,7 @@ bool ObjectManager::load_list(const char * filename)
 			for (SizeType i = 0; i < listBrickSerectGreen.Size(); i++)
 			{
 				Brick *bsg = new Brick(this->textureManager, this->graphics, BrickStyle::BrickSerectGreen);
-
+					
 				id = listBrickSerectGreen[i]["id"].GetInt();
 				x = listBrickSerectGreen[i]["x"].GetFloat();
 				y = listBrickSerectGreen[i]["y"].GetFloat();
@@ -996,15 +1015,27 @@ bool ObjectManager::load_list(const char * filename)
 				Zommer *zmy = new Zommer(this->textureManager, this->graphics, EnemyColors::Yellow);
 
 				id = listZommerYellow[i]["id"].GetInt();
-				x = listZommerYellow[i]["x"].GetFloat();
+				x = listZommerYellow[i]["x"].GetFloat() ;
 				y = listZommerYellow[i]["y"].GetFloat();
+				/*if (x== 1152)
+				{
+					int test = 0;
+				}*/
+				y = y- 16 +zmy->getSprite()->getHeight()*0.5f;
+				x += 8;
+				
+				const Value& arrayWall = listZommerYellow[i]["ListCollideID"];
+				for (SizeType t = 0; t < arrayWall.Size(); t++)
+				{
+					zmy->getListWallCanCollide()->push_back(map_object.find(arrayWall[t].GetInt())->second);
+				}
 				zmy->setPosition(VECTOR2(x, y));
 
 				bound.left = x;
 				bound.top = y;
 				bound.right = bound.left + zmy->getSprite()->getWidth();
 				bound.bottom = bound.top - zmy->getSprite()->getHeight();
-				zmy->setBoundCollision(bound);
+				zmy->setBoundCollision();
 
 				bound.bottom = listZommerYellow[i]["bottomA"].GetFloat();
 				bound.top = listZommerYellow[i]["topA"].GetFloat();
@@ -1048,13 +1079,20 @@ bool ObjectManager::load_list(const char * filename)
 				id = listZommerBrown[i]["id"].GetInt();
 				x = listZommerBrown[i]["x"].GetFloat();
 				y = listZommerBrown[i]["y"].GetFloat();
+				y = y - 16 + zmb->getSprite()->getHeight()*0.5f;
+				x += 8;
 				zmb->setPosition(VECTOR2(x, y));
 
+				const Value& arrayWall = listZommerBrown[i]["ListCollideID"];
+				for (SizeType t = 0; t < arrayWall.Size(); t++)
+				{
+					zmb->getListWallCanCollide()->push_back(map_object.find(arrayWall[t].GetInt())->second);
+				}
 				bound.left = x;
 				bound.top = y;
 				bound.right = bound.left + zmb->getSprite()->getWidth();
 				bound.bottom = bound.top - zmb->getSprite()->getHeight();
-				zmb->setBoundCollision(bound);
+				zmb->setBoundCollision();
 
 				bound.bottom = listZommerBrown[i]["bottomA"].GetFloat();
 				bound.top = listZommerBrown[i]["topA"].GetFloat();
@@ -1098,13 +1136,20 @@ bool ObjectManager::load_list(const char * filename)
 				id = listZommerRed[i]["id"].GetInt();
 				x = listZommerRed[i]["x"].GetFloat();
 				y = listZommerRed[i]["y"].GetFloat();
+				y = y - 16 + zmr->getSprite()->getHeight()*0.5f;
+				x += 8;
 				zmr->setPosition(VECTOR2(x, y));
 
+				const Value& arrayWall = listZommerRed[i]["ListCollideID"];
+				for (SizeType t = 0; t < arrayWall.Size(); t++)
+				{
+					zmr->getListWallCanCollide()->push_back(map_object.find(arrayWall[t].GetInt())->second);
+				}
 				bound.left = x;
 				bound.top = y;
 				bound.right = bound.left + zmr->getSprite()->getWidth();
 				bound.bottom = bound.top - zmr->getSprite()->getHeight();
-				zmr->setBoundCollision(bound);
+				zmr->setBoundCollision();
 
 				bound.bottom = listZommerRed[i]["bottomA"].GetFloat();
 				bound.top = listZommerRed[i]["topA"].GetFloat();
@@ -1399,6 +1444,12 @@ bool ObjectManager::load_list(const char * filename)
 				id = listSkreeYellow[i]["id"].GetInt();
 				x = listSkreeYellow[i]["x"].GetFloat();
 				y = listSkreeYellow[i]["y"].GetFloat();
+
+				const Value& arrayWall = listZommerYellow[i]["ListCollideID"];
+				for (SizeType t = 0; t < arrayWall.Size(); t++)
+				{
+					sky->getListWallCanCollide()->push_back(map_object.find(arrayWall[t].GetInt())->second);
+				}
 				sky->setInitPosition(VECTOR2(x + sky->getSprite()->getWidth()*0.5f, y));
 
 				bound.bottom = listSkreeYellow[i]["bottomA"].GetFloat();
@@ -1501,6 +1552,11 @@ bool ObjectManager::load_list(const char * filename)
 				bound.right = listRipperYellow[i]["rightA"].GetFloat();
 				rpy->setActiveBound(bound);
 
+				const Value& arrayWall = listRipperYellow[i]["ListCollideID"];
+				for (SizeType t = 0; t < arrayWall.Size(); t++)
+				{
+					rpy->getListWallCanCollide()->push_back(map_object.find(arrayWall[t].GetInt())->second);
+				}
 				//writer.StartObject();
 				//writer.Key("x");
 				//writer.Double(x);

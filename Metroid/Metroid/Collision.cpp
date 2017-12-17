@@ -1,6 +1,6 @@
 #include "Collision.h"
 #include "ObjectManager.h"
-
+#include "Zommer.h"
 
 Collision* Collision::instance = nullptr;
 Collision* Collision::getInstance()
@@ -178,6 +178,12 @@ bool Collision::checkCollision(BaseObject * myEntity, BaseObject * otherEntity, 
 		{
 			Bullet* bullet = static_cast<Bullet*>(myEntity);
 			bullet->getListCollide()->push_back(data);
+			break;
+		}
+		case eID::ZOMMER:
+		{
+		    Zommer* zommer = static_cast<Zommer*>(myEntity);
+			zommer->getListCollide()->push_back(data);
 			break;
 		}
 		default:
