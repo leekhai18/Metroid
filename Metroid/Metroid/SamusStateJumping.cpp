@@ -1,6 +1,8 @@
 #include "SamusStateJumping.h"
 #include "SamusStateManager.h"
 #include "GameLog.h"
+#include "MaruMari.h"
+#include "EnergyTank.h"
 
 SamusStateJumping::SamusStateJumping()
 {
@@ -204,6 +206,26 @@ void SamusStateJumping::onCollision()
 		case eID::SKREE:
 			GAMELOG("VA CHAM SKREE");
 			break;
+
+		case eID::MARUMARI:
+		{
+			this->samus->setMariMaru(true);
+			MaruMari* mm = static_cast<MaruMari*>(i->object);
+			mm->setActivity(false);
+
+			break;
+		}
+
+		case eID::ENERGYTANK:
+		{
+			GAMELOG("VA CHAM ENERGYTANK");
+
+			this->samus->setNumLive(this->samus->getNumLive() + 1);
+			EnergyTank* energy = static_cast<EnergyTank*>(i->object);
+			energy->setActivity(false);
+
+			break;
+		}
 
 		default:
 			break;

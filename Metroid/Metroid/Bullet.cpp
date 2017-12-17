@@ -87,11 +87,6 @@ void Bullet::onCollision()
 			break;
 		}
 
-		case eID::MARUMARI:
-		{
-			break;
-		}
-
 		case eID::SKREE:
 		{
 			GAMELOG("HIT SKREE");

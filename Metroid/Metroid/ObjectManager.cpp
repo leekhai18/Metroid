@@ -50,13 +50,13 @@ void ObjectManager::onCheckCollision(float dt)
 	{
 		timer = 0;
 
-		listCanCollideSamus->clear();
+		listNotWallCanCollideSamus->clear();
 		listObjectNotWallOnViewPort->clear();
 		listWallCanCollideSamus->clear();
 
 		MetroidRect r = Camera::getInstance()->getBound();
 		//Get all objects that can collide with current obj
-		quadtree->retrieve(listCanCollideSamus, listObjectNotWallOnViewPort, listWallCanCollideSamus, MetroidRect(r.top, r.bottom, r.left, r.right), samus);
+		quadtree->retrieve(listNotWallCanCollideSamus, listObjectNotWallOnViewPort, listWallCanCollideSamus, MetroidRect(r.top, r.bottom, r.left, r.right), samus);
 	}
 
 	if (listObjectNotWallOnViewPort)
@@ -66,6 +66,8 @@ void ObjectManager::onCheckCollision(float dt)
 			(*i)->onCollision(dt);
 		}
 	}
+
+#pragma region handle Wall
 	for (auto x = listWallCanCollideSamus->begin(); x != listWallCanCollideSamus->end(); x++)
 	{
 		samus->setListCanCollide(*listWallCanCollideSamus);
@@ -74,10 +76,18 @@ void ObjectManager::onCheckCollision(float dt)
 		for (unsigned i = 0; i < BulletPool::getInstance()->getListUsing().size(); i++)
 			Collision::getInstance()->checkCollision(BulletPool::getInstance()->getListUsing().at(i), *x, dt);
 	}
+	// handle on listCollide
+	samus->onCollision();
+	for (unsigned i = 0; i < BulletPool::getInstance()->getListUsing().size(); i++)
+		BulletPool::getInstance()->getListUsing().at(i)->onCollision();
+#pragma endregion
+
+
+#pragma region handle Other wall
 	// Get listCollide
-	for (auto x = listCanCollideSamus->begin(); x != listCanCollideSamus->end(); x++)
+	for (auto x = listNotWallCanCollideSamus->begin(); x != listNotWallCanCollideSamus->end(); x++)
 	{
-		samus->setListCanCollide(*listCanCollideSamus);
+		samus->setListCanCollide(*listNotWallCanCollideSamus);
 		Collision::getInstance()->checkCollision(samus, *x, dt);
 
 		for (unsigned i = 0; i < BulletPool::getInstance()->getListUsing().size(); i++)
@@ -92,16 +102,13 @@ void ObjectManager::onCheckCollision(float dt)
 				skr->onCollision(samus);
 			}
 		}
-
-		
 	}
 
 	// handle on listCollide
 	samus->onCollision();
-
 	for (unsigned i = 0; i < BulletPool::getInstance()->getListUsing().size(); i++)
 		BulletPool::getInstance()->getListUsing().at(i)->onCollision();
-
+#pragma endregion
 
 }
 
@@ -1951,7 +1958,7 @@ bool ObjectManager::load_list(const char * filename)
 ObjectManager::ObjectManager()
 {
 	this->object_list = new list<BaseObject*>();
-	this->listCanCollideSamus = new list<BaseObject*>();
+	this->listNotWallCanCollideSamus = new list<BaseObject*>();
 	this->listObjectNotWallOnViewPort = new list<BaseObject*>();
 	this->listWallCanCollideSamus = new list<BaseObject*>();
 
@@ -1975,7 +1982,7 @@ void ObjectManager::release()
 	object_list->clear();
 	delete object_list;
 
-	delete listCanCollideSamus;
+	delete listNotWallCanCollideSamus;
 	delete listObjectNotWallOnViewPort;
 	delete listWallCanCollideSamus;
 

@@ -69,12 +69,29 @@ bool Sprite::initialize(Graphics *g, TextureManager *textureM, SpriteManager *sp
 //=============================================================================
 void Sprite::draw(COLOR_ARGB color)
 {
-
 	if (graphics == NULL)
 		return;
+
 	// get fresh texture incase onReset() was called
 	spriteData.texture = textureManager->getTexture();
 	graphics->drawSprite(spriteData, color);
+}
+
+void Sprite::draw(bool isTransform, COLOR_ARGB color)
+{
+	if (isTransform == true)
+	{
+		this->draw();
+	}
+	else
+	{
+		if (graphics == NULL)
+			return;
+
+		// get fresh texture incase onReset() was called
+		spriteData.texture = textureManager->getTexture();
+		graphics->drawSprite(isTransform, spriteData, color);
+	}
 }
 
 //=============================================================================

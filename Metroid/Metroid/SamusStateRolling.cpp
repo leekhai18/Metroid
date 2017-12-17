@@ -8,7 +8,7 @@ SamusStateRolling::SamusStateRolling()
 
 SamusStateRolling::SamusStateRolling(Samus * samus, Input * input) : BaseState(samus, input)
 {
-	
+	timer = 0;
 }
 
 
@@ -89,7 +89,7 @@ void SamusStateRolling::handleInput(float dt)
 
 void SamusStateRolling::onCollision()
 {
-	if(this->samus->isInStatus(eStatus::STANDING))
+	if(this->samus->isInStatus(eStatus::STANDING) && input->isKeyDown(VK_UP))
 	{
 		MetroidRect bound;
 		VECTOR2 position(this->samus->getPosition().x, samus->getPosition().y - OFFSET_COLLISION_Y + 1 + OFFSET_STAND);
@@ -128,7 +128,6 @@ void SamusStateRolling::onCollision()
 
 				this->samus->setPositionY(i->positionCollision + OFFSET_ROLLING);
 				canStanding = true;
-				reset_fall = true;
 				move_to_fall = false;
 				break;
 			}
@@ -152,7 +151,7 @@ void SamusStateRolling::update(float dt)
 
 	setBoundCollision();
 
-	/*timer += dt;
+	timer += dt;
 	if (timer < 0.03f)
 	{
 		if (flagUpDown)
@@ -162,7 +161,7 @@ void SamusStateRolling::update(float dt)
 	{
 		flagUpDown = !flagUpDown;
 		timer = 0;
-	}*/
+	}
 
 	if (move_to_fall && !this->samus->isInStatus(eStatus::STANDING))
 	{
