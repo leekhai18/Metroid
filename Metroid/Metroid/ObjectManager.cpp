@@ -1337,6 +1337,7 @@ bool ObjectManager::load_list(const char * filename)
 
 				x = listRipperYellow[i]["x"].GetFloat();
 				y = listRipperYellow[i]["y"].GetFloat();
+
 				rpy->setPosition(VECTOR2(x, y));
 
 				bound.left = x;

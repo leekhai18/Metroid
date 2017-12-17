@@ -6,6 +6,7 @@
 #include "Waver.h"
 #include "Rio.h"
 #include "Zommer.h"
+#include "Ripper.h"
 #include "Text.h"
 #include "Camera.h"
 #include "Map.h"
@@ -25,6 +26,7 @@ private:
 	// Player
 	Samus *samus;
 	Zommer *zommer;
+	Ripper *ripper;
 
 	Camera *camera;
 

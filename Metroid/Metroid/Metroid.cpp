@@ -83,6 +83,7 @@ void Metroid::initialize(HWND hwnd)
 
 	samus = new Samus(textureManager, graphics, input);
 	zommer = new Zommer(textureManager, graphics, Red);
+	ripper = new Ripper(textureManager, graphics, Red);
 
 	MetroidRect rect1;
 	rect1.top = 1360;
@@ -103,8 +104,6 @@ void Metroid::initialize(HWND hwnd)
 
 	zommer->getListWallCanCollide()->push_back(obj1);
 	zommer->getListWallCanCollide()->push_back(obj2);
-
-
 
 	ObjectManager::getInstance()->init(textureManager, graphics, samus);
 	if (!ObjectManager::getInstance()->load_list(OBJECT_LAYER_BRINSTAR_JSON))
@@ -129,6 +128,7 @@ void Metroid::update(float dt)
 	ObjectManager::getInstance()->update(dt);
 	samus->update(dt);
 	zommer->update(dt);
+	ripper->update(dt);
 	this->camera->update(dt);
 }
 
@@ -155,6 +155,7 @@ void Metroid::render()
 	ObjectManager::getInstance()->draw();
 	mapBrinstar->draw();
 	zommer->draw();
+	ripper->draw();
 
 	// END
 	this->getGraphics()->spriteEnd();
