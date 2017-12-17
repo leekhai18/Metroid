@@ -196,6 +196,7 @@ void SamusStateStanding::onCollision()
 
 				canRolling = true;
 				break;
+
 			}
 			break;
 

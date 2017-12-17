@@ -204,7 +204,11 @@ void SamusStateJumping::onCollision()
 		case eID::SKREE:
 			GAMELOG("VA CHAM SKREE");
 			break;
-
+		case eID::ZOMMER:
+			positionCollide = i->positionCollision;
+			this->samus->setVelocity(VECTOR2(0, 0));
+			this->samus->setStatus(eStatus::INJURING);
+			break;
 		default:
 			break;
 		}
@@ -239,6 +243,17 @@ void SamusStateJumping::update(float dt)
 			break;
 		case eStatus::ACROBAT:
 			this->samus->setVelocityX(0);
+			break;
+		case eStatus::INJURING:
+			/*if(this->samus->isFaling())
+			{
+				this->samus->setPositionY(positionCollide - OFFSET_STAND);
+			}
+			else
+			{
+				this->samus->setPositionY(positionCollide + OFFSET_STAND);
+			}*/
+			
 			break;
 		default:
 			break;

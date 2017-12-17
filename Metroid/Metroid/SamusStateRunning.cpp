@@ -291,6 +291,10 @@ void SamusStateRunning::onCollision()
 		case eID::SKREE:
 			GAMELOG("VA CHAM SKREE");
 			break;
+		case eID::ZOMMER:
+			this->samus->setVelocity(VECTOR2(0,0));
+			this->samus->setStatus(eStatus::INJURING);
+			break;
 
 #pragma endregion
 		default:
@@ -327,6 +331,9 @@ void SamusStateRunning::update(float dt)
 			break;
 		case eStatus::STANDING:
 			
+			break;
+		case eStatus::INJURING:
+
 			break;
 		default:
 			break;

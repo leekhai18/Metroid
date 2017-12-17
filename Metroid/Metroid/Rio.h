@@ -20,7 +20,8 @@ private:
 	float t;
 	float t1;
 	int flag = 0;
-	
+	//float position
+
 	bool isSamusRolling;
 
 	int health;

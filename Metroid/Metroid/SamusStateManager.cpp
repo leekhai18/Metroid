@@ -45,6 +45,7 @@ void SamusStateManager::init(Samus * samus, Input * input)
 	stateJumping = new SamusStateJumping(samus, input);
 	stateAcrobat = new SamusStateAcrobat(samus, input);
 	stateFallRolling = new SamusStateFallRolling(samus, input);
+	stateInjuring = new SamusStateInjuring(samus, input);
 
 	currentState = stateStart;
 }
@@ -94,6 +95,9 @@ void SamusStateManager::changeStateTo(eStatus eStatus)
 	}
 	case eStatus::FALLING_ROLLING:
 		currentState = stateFallRolling;
+		break;
+	case eStatus::INJURING:
+		currentState = stateInjuring;
 		break;
 	default:
 		break;

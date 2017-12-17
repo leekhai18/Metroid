@@ -37,6 +37,8 @@ Samus::Samus(TextureManager* textureM,Graphics* graphics, Input* input) : BaseOb
 	this->timerShoot = 0;
 	bulletPool = new BulletPool(textureM, graphics, 20);
 	this->listCollide = new list<CollisionReturn>();
+
+	visible = true;
 }
 
 Samus::Samus()
@@ -51,10 +53,14 @@ Samus::~Samus()
 
 void Samus::draw()
 {
-	for (unsigned i = 0; i < this->bulletPool->getListUsing().size(); i++)
-		this->bulletPool->getListUsing().at(i)->draw();
+	if(visible)
+	{
+		for (unsigned i = 0; i < this->bulletPool->getListUsing().size(); i++)
+			this->bulletPool->getListUsing().at(i)->draw();
 
-	this->sprite->draw();
+		this->sprite->draw();
+	}
+
 
 }
 
@@ -266,6 +272,16 @@ void Samus::setActiveBound()
 	this->activeBound.left = this->boundCollision.left - 80;
 	this->activeBound.right = this->boundCollision.right + 80;
 	this->activeBound.bottom = this->boundCollision.bottom - 80;
+}
+
+void Samus::setVisible(bool visible)
+{
+	this->visible = visible;
+}
+
+bool Samus::getVisible()
+{
+	return this->visible;
 }
 
 void Samus::setAcrobat(bool acrobat)

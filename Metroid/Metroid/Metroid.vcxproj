@@ -165,6 +165,7 @@
     <ClInclude Include="Samus.h" />
     <ClInclude Include="SamusStateAcrobat.h" />
     <ClInclude Include="SamusStateFallRolling.h" />
+    <ClInclude Include="SamusStateInjuring.h" />
     <ClInclude Include="SamusStateJumping.h" />
     <ClInclude Include="SamusStateManager.h" />
     <ClInclude Include="SamusStateRolling.h" />
@@ -223,6 +224,7 @@
     <ClCompile Include="Samus.cpp" />
     <ClCompile Include="SamusStateAcrobat.cpp" />
     <ClCompile Include="SamusStateFallRolling.cpp" />
+    <ClCompile Include="SamusStateInjuring.cpp" />
     <ClCompile Include="SamusStateJumping.cpp" />
     <ClCompile Include="SamusStateManager.cpp" />
     <ClCompile Include="SamusStateRolling.cpp" />

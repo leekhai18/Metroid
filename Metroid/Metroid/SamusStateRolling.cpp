@@ -128,10 +128,12 @@ void SamusStateRolling::onCollision()
 
 				this->samus->setPositionY(i->positionCollision + OFFSET_ROLLING);
 				canStanding = true;
-				reset_fall = true;
 				move_to_fall = false;
 				break;
 			}
+		case eID::ZOMMER:
+			this->samus->setVelocity(VECTOR2(0, 0));
+			this->samus->setStatus(eStatus::INJURING);
 			break;
 		default:
 			break;
@@ -183,6 +185,7 @@ void SamusStateRolling::update(float dt)
 		case eStatus::FALLING_ROLLING:
 			SamusStateManager::getInstance()->changeStateTo(this->samus->getStatus());
 			break;
+		
 		default:
 
 			break;

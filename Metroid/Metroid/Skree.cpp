@@ -135,10 +135,10 @@ void Skree::update(float dt)
 				this->setVelocityX(0);
 			
 
-			if (this->getPosition().y > target.y) // check collision with wall
-				this->setPosition(this->getPosition().x + this->getVelocity().x*dt, this->getPosition().y + this->getVelocity().y*dt);
-			else
-				this->setStatus(eStatus::ENDING);
+			//if (this->getPosition().y > target.y) // check collision with wall
+			//	this->setPosition(this->getPosition().x + this->getVelocity().x*dt, this->getPosition().y + this->getVelocity().y*dt);
+			//else
+			//	this->setStatus(eStatus::ENDING);
 
 		}
 

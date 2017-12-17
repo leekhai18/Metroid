@@ -86,7 +86,7 @@ private:
 
 	list<BaseObject*> listCanCollide;
 
-	
+	bool visible;
 
 public:
 	float timerShoot;
@@ -118,8 +118,8 @@ public:
 
 	void setBoundCollision(MetroidRect rect);
 	void setActiveBound();
-
-
+	void setVisible(bool visible);
+	bool getVisible();
 
 	void setIsCollidingPort(bool flag);
 	bool isColliedPort();
@@ -133,7 +133,7 @@ public:
 	Animation* getRunningHittingRightAnim();
 	Animation* getRollingAnim();
 	Animation* getJumpingAnim();
-
+	
 	list<CollisionReturn> *getListCollide();
 };
 
