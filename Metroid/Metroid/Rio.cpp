@@ -1,8 +1,10 @@
 #include "Rio.h"
-#define RATE_BEZIER 0.3f
+#define RATE_BEZIER 0.45f
 #define TIME_FRAME_DELAY 0.15f
 #define WIDTH_AREA_ACTIVE 100
 #define HEIGHT_AREA_ACTIVE 130
+#define VELOCITY_X 60
+
 Rio::Rio(TextureManager * textureM, Graphics * graphics, EnemyColors color) : BaseObject(eID::RIO)
 {
 	this->sprite = new Sprite();
@@ -35,8 +37,9 @@ Rio::Rio(TextureManager * textureM, Graphics * graphics, EnemyColors color) : Ba
 	default:
 		break;
 	}
+
 	this->setVelocityX(0);
-	this->setVelocityY(-60);
+	this->setVelocityY(-VELOCITY_X);
 	this->setOrigin(VECTOR2(0.5, 0.5));
 	anim->start();
 }
@@ -77,10 +80,10 @@ void Rio::update(float dt)
 		{
 			if (t < 1)
 			{
-				t += dt * RATE_BEZIER* 1.5;
+				t += dt * RATE_BEZIER;
 				this->P2 = VECTOR2((this->P1.x + this->P3.x) / 2, target.y - HEIGHT_AREA_ACTIVE);
 				this->setPosition((1 - t)*(1 - t)*P1 + 2 * (1 - t)*t*P2 + t*t*P3);
-				this->setVelocityX(60);
+				this->setVelocityX(VELOCITY_X);
 				if (P3.x < target.x && target.x < P5.x && this->getPosition().x > P3.x - 1) {
 					flag = 1;
 					t = 0;
@@ -90,10 +93,10 @@ void Rio::update(float dt)
 			else
 			{
 				if (t1 < 1) {
-					t1 += dt * RATE_BEZIER * 1.5;
+					t1 += dt * RATE_BEZIER;
 					this->P2 = VECTOR2((this->P3.x + this->P1.x) / 2, target.y - HEIGHT_AREA_ACTIVE);
 					this->setPosition((1 - t1)*(1 - t1)*P3 + 2 * (1 - t1)*t1*P2 + t1*t1*P1);
-					this->setVelocityX(-60);
+					this->setVelocityX(-VELOCITY_X);
 				}
 				else {
 					t = 0;
@@ -104,19 +107,19 @@ void Rio::update(float dt)
 		{
 			if (t < 1)
 			{
-				t += dt * RATE_BEZIER * 1.5;
+				t += dt * RATE_BEZIER;
 				this->P4 = VECTOR2((this->P3.x + this->P5.x) / 2, target.y - HEIGHT_AREA_ACTIVE);
 				this->setPosition((1 - t)*(1 - t)*P3 + 2 * (1 - t)*t*P4 + t*t*P5);
-				this->setVelocityX(60);
+				this->setVelocityX(VELOCITY_X);
 				t1 = 0;
 			}
 			else
 			{
 				if (t1 < 1) {
-					t1 += dt * RATE_BEZIER * 1.5;
+					t1 += dt * RATE_BEZIER;
 					this->P4 = VECTOR2((this->P3.x + this->P5.x) / 2, target.y - HEIGHT_AREA_ACTIVE);
 					this->setPosition((1 - t1)*(1 - t1)*P5 + 2 * (1 - t1)*t1*P4 + t1*t1*P3);
-					this->setVelocityX(-60);
+					this->setVelocityX(-VELOCITY_X);
 					if (P1.x < target.x && target.x < P3.x && this->getPosition().x < P3.x + 1) {
 						flag = 0;
 						t1 = 0;
