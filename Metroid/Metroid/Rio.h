@@ -1,6 +1,7 @@
 #pragma once
 #include "BaseObject.h"
 #include "Animation.h"
+#include "Samus.h"
 
 class Rio: public BaseObject
 {
@@ -19,9 +20,7 @@ private:
 	// Use Bézier curve
 	float t;
 	float t1;
-	int flag = 0;
-	
-	bool isSamusRolling;
+	int flag = 1;
 
 	int health;
 
@@ -34,7 +33,7 @@ public:
 	void draw();
 
 	VECTOR2 getTarget();
-	void setTarget(VECTOR2 target, bool statusTarget);
+	void setTarget(VECTOR2 target);
 
 	void initPositions(VECTOR2 stP);
 };

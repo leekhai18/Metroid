@@ -291,6 +291,9 @@ void SamusStateRunning::onCollision()
 		case eID::SKREE:
 			GAMELOG("VA CHAM SKREE");
 			break;
+		case eID::RIO:
+			GAMELOG("VA CHAM RIO");
+			break;
 
 #pragma endregion
 		default:

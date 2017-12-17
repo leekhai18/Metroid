@@ -83,19 +83,22 @@ void ObjectManager::onCheckCollision(float dt)
 		for (unsigned i = 0; i < BulletPool::getInstance()->getListUsing().size(); i++)
 			Collision::getInstance()->checkCollision(BulletPool::getInstance()->getListUsing().at(i), *x, dt);
 
-		//if ((*x)->getId() == eID::SKREE)
-		//{
-		//	Skree* skr = static_cast<Skree*>(*x);
+		if ((*x)->getId() == eID::SKREE)
+		{
+			Skree* skr = static_cast<Skree*>(*x);
 
-		//	if (skr->checkCollision(samus, dt))
-		//	{
-		//		skr->onCollision(samus);
-		//	}
-		//}
+			if (skr->checkCollision(samus, dt))
+			{
+				skr->onCollision(samus);
+			}
+		}
+
+		
 	}
 
 	// handle on listCollide
 	samus->onCollision();
+
 	for (unsigned i = 0; i < BulletPool::getInstance()->getListUsing().size(); i++)
 		BulletPool::getInstance()->getListUsing().at(i)->onCollision();
 
@@ -128,6 +131,12 @@ void ObjectManager::update(float dt)
 				Skree* skr = static_cast<Skree*>(*i);
 
 				skr->setTarget(samus->getPosition());
+			}
+
+			if ((*i)->getId() == eID::RIO)
+			{
+				Rio* rio = static_cast<Rio*>(*i);
+				rio->setTarget(samus->getPosition());
 			}
 			
 			(*i)->update(dt);
@@ -1022,7 +1031,7 @@ bool ObjectManager::load_list(const char * filename)
 					int test = 0;
 				}*/
 				y = y- 16 +zmy->getSprite()->getHeight()*0.5f;
-				x += 8;
+				x += zmy->getSprite()->getWidth()*0.5f;
 				
 				const Value& arrayWall = listZommerYellow[i]["ListCollideID"];
 				for (SizeType t = 0; t < arrayWall.Size(); t++)
@@ -1538,13 +1547,20 @@ bool ObjectManager::load_list(const char * filename)
 				id = listRipperYellow[i]["id"].GetInt();
 				x = listRipperYellow[i]["x"].GetFloat();
 				y = listRipperYellow[i]["y"].GetFloat();
+
+				y = y - 16 + rpy->getSprite()->getHeight()*0.5f;
+				x += rpy->getSprite()->getWidth()*0.5f;
+
+				const Value& arrayWall = listRipperYellow[i]["ListCollideID"];
+				for (SizeType t = 0; t < arrayWall.Size(); t++)
+				{
+					rpy->getListWallCanCollide()->push_back(map_object.find(arrayWall[t].GetInt())->second);
+				}
+
 				rpy->setPosition(VECTOR2(x, y));
 
-				bound.left = x;
-				bound.top = y;
-				bound.right = bound.left + rpy->getSprite()->getWidth();
-				bound.bottom = bound.top - rpy->getSprite()->getHeight();
-				rpy->setBoundCollision(bound);
+
+				rpy->setBoundCollision();
 
 				bound.bottom = listRipperYellow[i]["bottomA"].GetFloat();
 				bound.top = listRipperYellow[i]["topA"].GetFloat();
@@ -1552,11 +1568,7 @@ bool ObjectManager::load_list(const char * filename)
 				bound.right = listRipperYellow[i]["rightA"].GetFloat();
 				rpy->setActiveBound(bound);
 
-				const Value& arrayWall = listRipperYellow[i]["ListCollideID"];
-				for (SizeType t = 0; t < arrayWall.Size(); t++)
-				{
-					rpy->getListWallCanCollide()->push_back(map_object.find(arrayWall[t].GetInt())->second);
-				}
+				
 				//writer.StartObject();
 				//writer.Key("x");
 				//writer.Double(x);
@@ -1593,13 +1605,19 @@ bool ObjectManager::load_list(const char * filename)
 				id = listRipperBrown[i]["id"].GetInt();
 				x = listRipperBrown[i]["x"].GetFloat();
 				y = listRipperBrown[i]["y"].GetFloat();
+
+				y = y - 16 + rpb->getSprite()->getHeight()*0.5f;
+				x = x + rpb->getSprite()->getWidth()*0.5f;
+
+				const Value& arrayWall = listRipperBrown[i]["ListCollideID"];
+				for (SizeType t = 0; t < arrayWall.Size(); t++)
+				{
+					rpb->getListWallCanCollide()->push_back(map_object.find(arrayWall[t].GetInt())->second);
+				}
+
 				rpb->setPosition(VECTOR2(x, y));
 
-				bound.left = x;
-				bound.top = y;
-				bound.right = bound.left + rpb->getSprite()->getWidth();
-				bound.bottom = bound.top - rpb->getSprite()->getHeight();
-				rpb->setBoundCollision(bound);
+				rpb->setBoundCollision();
 
 				bound.bottom = listRipperBrown[i]["bottomA"].GetFloat();
 				bound.top = listRipperBrown[i]["topA"].GetFloat();
@@ -1643,13 +1661,20 @@ bool ObjectManager::load_list(const char * filename)
 				id = listRipperRed[i]["id"].GetInt();
 				x = listRipperRed[i]["x"].GetFloat();
 				y = listRipperRed[i]["y"].GetFloat();
+
+				y = y - 16 + rpr->getSprite()->getHeight()*0.5f;
+				x = x + rpr->getSprite()->getWidth()*0.5f;
+
+				const Value& arrayWall = listRipperRed[i]["ListCollideID"];
+				for (SizeType t = 0; t < arrayWall.Size(); t++)
+				{
+					rpr->getListWallCanCollide()->push_back(map_object.find(arrayWall[t].GetInt())->second);
+				}
+
 				rpr->setPosition(VECTOR2(x, y));
 
-				bound.left = x;
-				bound.top = y;
-				bound.right = bound.left + rpr->getSprite()->getWidth();
-				bound.bottom = bound.top - rpr->getSprite()->getHeight();
-				rpr->setBoundCollision(bound);
+
+				rpr->setBoundCollision();
 
 				bound.bottom = listRipperRed[i]["bottomA"].GetFloat();
 				bound.top = listRipperRed[i]["topA"].GetFloat();
