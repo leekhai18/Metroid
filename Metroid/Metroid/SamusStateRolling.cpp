@@ -127,12 +127,35 @@ void SamusStateRolling::onCollision()
 				this->samus->setVelocityY(0);
 
 				this->samus->setPositionY(i->positionCollision + OFFSET_ROLLING);
+				canStanding = true;	
+				move_to_fall = false;
+				break;
+			}
+			break;
+		case eID::ZOMMER:
+			switch (i->direction)
+			{
+			case CollideDirection::LEFT:
+				this->samus->setVelocityX(0);
+				//not allow move left
+				//this->samus->setCanMoveRight(false);
+				break;
+			case CollideDirection::RIGHT:
+				this->samus->setVelocityX(0);
+				//not allow move right
+				//this->samus->setCanMoveLeft(false);
+				break;
+			case CollideDirection::TOP:
+				this->samus->setVelocityY(0);
+
+				this->samus->setPositionY(i->positionCollision + OFFSET_ROLLING);
 				canStanding = true;
 				move_to_fall = false;
 				break;
 			}
-		case eID::ZOMMER:
-			this->samus->setVelocity(VECTOR2(0, 0));
+			//this->samus->setVelocity(VECTOR2(0, 0));
+			SamusStateManager::getInstance()->setOldStatus(eStatus::ROLLING);
+			SamusStateManager::getInstance()->setOldState(this);
 			this->samus->setStatus(eStatus::INJURING);
 			break;
 		default:
@@ -166,7 +189,7 @@ void SamusStateRolling::update(float dt)
 		timer = 0;
 	}*/
 
-	if (move_to_fall && !this->samus->isInStatus(eStatus::STANDING))
+	if (move_to_fall && !this->samus->isInStatus(eStatus::STANDING)&& !this->samus->isInStatus(eStatus::INJURING))
 	{
 		this->samus->setStatus(eStatus::FALLING_ROLLING);
 	}
@@ -185,7 +208,9 @@ void SamusStateRolling::update(float dt)
 		case eStatus::FALLING_ROLLING:
 			SamusStateManager::getInstance()->changeStateTo(this->samus->getStatus());
 			break;
-		
+		case eStatus::INJURING:
+			SamusStateManager::getInstance()->changeStateTo(this->samus->getStatus());
+			break;
 		default:
 
 			break;

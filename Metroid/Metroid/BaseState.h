@@ -25,5 +25,7 @@ public:
 	virtual void setBoundCollision();
 	virtual void onCollision();
 
+	virtual eStatus getName();
+
 };
 

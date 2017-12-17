@@ -203,7 +203,18 @@ void SamusStateStanding::onCollision()
 		case eID::SKREE:
 			GAMELOG("VA CHAM SKREE");
 			break;
-
+		case eID::ZOMMER:
+			switch (i->direction)
+			{
+			case CollideDirection::TOP:
+				this->samus->setVelocityY(0);
+				break;
+			}
+			//this->samus->setVelocity(VECTOR2(0, 0));
+			SamusStateManager::getInstance()->setOldStatus(eStatus::STANDING);
+			this->samus->setStatus(eStatus::INJURING);
+			SamusStateManager::getInstance()->setOldState(this);
+			break;
 		default:
 			break;
 		}

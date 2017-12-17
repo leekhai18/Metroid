@@ -22,15 +22,23 @@ private:
 	SamusStateInjuring* stateInjuring;
 	BaseState* currentState;
 
+	eStatus oldStatus;
+	BaseState* oldState;
 public:
 	static SamusStateManager* getInstance();
 
 	SamusStateManager();
 	~SamusStateManager();
 	void init(Samus* samus, Input* input);
+	void setOldStatus(eStatus status);
+	eStatus getOldStatus();
+	void setOldState(BaseState* state);
+	BaseState* getOldState();
 
 	BaseState* getCurrentState();
 
 	void changeStateTo(eStatus eStatus);
+
+
 };
 

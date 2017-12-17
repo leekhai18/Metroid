@@ -205,8 +205,28 @@ void SamusStateJumping::onCollision()
 			GAMELOG("VA CHAM SKREE");
 			break;
 		case eID::ZOMMER:
-			positionCollide = i->positionCollision;
-			this->samus->setVelocity(VECTOR2(0, 0));
+			switch (i->direction)
+			{
+			case CollideDirection::LEFT:
+				this->samus->setVelocityX(0);
+				//not allow move left
+				//this->samus->setCanMoveRight(false);
+				break;
+			case CollideDirection::RIGHT:
+				this->samus->setVelocityX(0);
+				//not allow move right
+				//this->samus->setCanMoveLeft(false);
+				break;
+			case CollideDirection::TOP:
+				this->samus->setVelocityY(0);
+				break;
+			case CollideDirection::BOTTOM:
+				this->samus->setVelocityY(0);
+				break;
+			}
+			//this->samus->setVelocity(VECTOR2(0, 0));
+			SamusStateManager::getInstance()->setOldStatus(eStatus::JUMPING);
+			SamusStateManager::getInstance()->setOldState(this);
 			this->samus->setStatus(eStatus::INJURING);
 			break;
 		default:

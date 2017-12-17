@@ -9,13 +9,7 @@ SamusStateInjuring::SamusStateInjuring()
 }
 void SamusStateInjuring::setBoundCollision()
 {
-	MetroidRect rect;
-	VECTOR2 position(this->samus->getPosition().x, samus->getPosition().y - OFFSET_COLLISION_Y + 1);
-	rect.left = position.x - WIDTH_COLLISION*0.5f;
-	rect.right = position.x + WIDTH_COLLISION*0.5f;
-	rect.top = position.y + HEIGHT_COLLISION*0.5f;
-	rect.bottom = position.y - HEIGHT_COLLISION*0.5f;
-	samus->setBoundCollision(rect);
+	SamusStateManager::getInstance()->getOldState()->setBoundCollision();
 }
 SamusStateInjuring::SamusStateInjuring(Samus * samus, Input * input) : BaseState(samus, input)
 {
@@ -128,10 +122,18 @@ void SamusStateInjuring::update(float dt)
 	if(time_to_stand >= TIME_TO_STANDING)
 	{
 		//if(this->)
-		this->samus->setStatus(eStatus::STANDING);
+		this->samus->setStatus(SamusStateManager::getInstance()->getOldStatus());
 	}
 	if (this->samus->getStatus() != eStatus::INJURING)
 	{
+		switch (this->samus->getStatus())
+		{
+		case eStatus::ROLLING:
+			this->samus->setVelocityX(0);
+			break;
+		default:
+			break;
+		}
 		this->samus->setVisible(true);
 		SamusStateManager::getInstance()->changeStateTo(this->samus->getStatus());
 		return;
@@ -147,6 +149,16 @@ void SamusStateInjuring::onStart()
 
 void SamusStateInjuring::onExit()
 {
+}
+
+void SamusStateInjuring::setOldStatus(eStatus status)
+{
+	this->oldStatus = status;
+}
+
+eStatus SamusStateInjuring::getOldStatus()
+{
+	return this->oldStatus;
 }
 
 

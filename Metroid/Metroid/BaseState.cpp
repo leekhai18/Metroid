@@ -26,3 +26,8 @@ void BaseState::onCollision()
 {
 }
 
+eStatus BaseState::getName()
+{
+	return this->samus->getStatus();
+}
+

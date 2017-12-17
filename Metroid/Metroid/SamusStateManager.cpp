@@ -50,6 +50,26 @@ void SamusStateManager::init(Samus * samus, Input * input)
 	currentState = stateStart;
 }
 
+void SamusStateManager::setOldStatus(eStatus status)
+{
+	this->oldStatus = status;
+}
+
+eStatus SamusStateManager::getOldStatus()
+{
+	return this->oldStatus;
+}
+
+void SamusStateManager::setOldState(BaseState * state)
+{
+	this->oldState = state;
+}
+
+BaseState * SamusStateManager::getOldState()
+{
+	return this->oldState;
+}
+
 BaseState * SamusStateManager::getCurrentState()
 {
 	return this->currentState;
@@ -97,6 +117,7 @@ void SamusStateManager::changeStateTo(eStatus eStatus)
 		currentState = stateFallRolling;
 		break;
 	case eStatus::INJURING:
+
 		currentState = stateInjuring;
 		break;
 	default:
