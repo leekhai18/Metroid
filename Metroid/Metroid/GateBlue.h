@@ -1,13 +1,17 @@
 #pragma once
 #include "BaseObject.h"
+#include "Animation.h"
 
 class GateBlue : public BaseObject
 {
 private:
 	bool isHit;
-	float timer;
 	MetroidRect baseBound;
 	bool isCollideSamusInPort;
+	float timer;
+
+	Animation *openAnim;
+	Animation *closeAnim;
 
 public:
 	GateBlue();
@@ -17,8 +21,8 @@ public:
 	void update(float dt);
 	void draw();
 
-	void effectDisappear();
-	void effectRespawn();
+	void effectOpen();
+	void effectClose();
 	
 	void setHit(bool flag);
 	void setIsCollideSamusInPort(bool flag);

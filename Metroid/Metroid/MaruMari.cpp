@@ -15,8 +15,6 @@ MaruMari::MaruMari(TextureManager * textureM, Graphics * graphics) : BaseObject(
 
 	this->anim = new Animation(this->sprite, IndexManager::getInstance()->maruMari, NUM_FRAMES_ITEM, TIME_FRAME_ITEM);
 	this->anim->start();
-
-	this->explosion = new Animation(this->sprite, IndexManager::getInstance()->samusYellowExplosion, 2, 0.1f, false);
 }
 
 
@@ -24,7 +22,7 @@ MaruMari::~MaruMari()
 {
 	delete this->anim;
 	delete this->sprite;
-	delete this->explosion;
+	this->sprite = nullptr;
 }
 
 void MaruMari::update(float dt)
@@ -32,12 +30,6 @@ void MaruMari::update(float dt)
 	if (sprite != nullptr)
 	{
 		this->anim->update(dt);
-		this->explosion->update(dt);
-		if (this->explosion->isFinished())
-		{
-			delete sprite;
-			sprite = nullptr;
-		}
 	}
 }
 
@@ -45,12 +37,4 @@ void MaruMari::draw()
 {
 	if (sprite != nullptr)
 		this->sprite->draw();
-}
-
-void MaruMari::startExplosion()
-{
-	this->anim->stop();
-	this->explosion->start();
-	this->setOrigin(VECTOR2(0.5f, 0.5f));
-	this->setPosition(getPosition().x + getSprite()->getWidth()*0.5f, getPosition().y - getSprite()->getHeight()*0.5f);
 }

@@ -1,9 +1,7 @@
 #include "GateBlue.h"
 #include "Camera.h"
 
-#define SCALE_PER_FRAME 0.1f
-#define TIME_RE_SPAWN 3
-#define TIME_O_C_GATE 0.2f
+#define TIME_RE_OPEN 3
 
 GateBlue::GateBlue()
 {
@@ -19,8 +17,11 @@ GateBlue::GateBlue(TextureManager * textureM, Graphics * graphics) : BaseObject(
 
 	this->sprite->setData(IndexManager::getInstance()->gateBlueR);
 
-	isHit = false;
 	timer = 0;
+	isHit = false;
+
+	closeAnim = new Animation(this->sprite, IndexManager::getInstance()->gateBlueRClose, NUM_FRAMES_GATE_ANIM, 0.1f, false);
+	openAnim = new Animation(this->sprite, IndexManager::getInstance()->gateBlueROpen, NUM_FRAMES_GATE_ANIM, 0.1f, false);
 }
 
 
@@ -33,29 +34,33 @@ void GateBlue::update(float dt)
 {
 	if (isHit)
 	{
+		effectOpen();
+
 		timer += dt;
-
-		if (timer > TIME_RE_SPAWN)
-			effectRespawn();
-		else
-			effectDisappear();
+		if (timer > TIME_RE_OPEN)
+		{
+			timer = 0;
+			effectClose();
+		}
 	}
-
 
 	if (isCollideSamusInPort && !Camera::getInstance()->moveWhenSamusOnPort())
 	{
-		timer += dt;
+		effectOpen();
 
-		if (timer > TIME_O_C_GATE)
-			effectRespawn();
-		else
-			effectDisappear();
+		if (openAnim->isFinished())
+		{
+			effectClose();
+		}
 	}
 
 	if (Camera::getInstance()->moveWhenSamusOnPort() && isHit)
 	{
-		effectRespawn();
+		effectClose();
 	}
+
+	openAnim->update(dt);
+	closeAnim->update(dt);
 }
 
 void GateBlue::draw()
@@ -63,29 +68,23 @@ void GateBlue::draw()
 	this->sprite->draw();
 }
 
-void GateBlue::effectDisappear()
+void GateBlue::effectOpen()
 {
-	float scaleX = this->getScale().x;
-
-	if (scaleX >= 0)
-		this->setScaleX(scaleX - SCALE_PER_FRAME);
-	else
+	if (!openAnim->isFinished())
+	{
+		openAnim->start();
+		closeAnim->reInit();
 		this->boundCollision = MetroidRect(0, 0, 0, 0);
+	}
 }
 
-void GateBlue::effectRespawn()
+void GateBlue::effectClose()
 {
-	float scaleX = this->getScale().x;
-
-	if (scaleX < 1)
-		this->setScaleX(scaleX + SCALE_PER_FRAME*1.5f);
-	else
-	{
-		timer = 0;
-		isHit = false;
-		isCollideSamusInPort = false;
-		this->boundCollision = this->baseBound;
-	}
+	closeAnim->start();
+	openAnim->reInit();
+	isHit = false;
+	isCollideSamusInPort = false;
+	this->boundCollision = this->baseBound;
 }
 
 void GateBlue::setHit(bool flag)

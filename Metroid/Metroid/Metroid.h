@@ -25,6 +25,7 @@ private:
 	// Player
 	Samus *samus;
 
+
 	Camera *camera;
 
 	Text* fpsText;

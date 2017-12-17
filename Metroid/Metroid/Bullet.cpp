@@ -4,6 +4,7 @@
 #include "GateBlue.h"
 #include "MaruMari.h"
 #include "GameLog.h"
+#include "Skree.h"
 
 #define WIDTH_BULLET_HALF 1
 #define HEIGHT_BULLET_HALF 1
@@ -26,6 +27,8 @@ Bullet::Bullet(TextureManager * textureM, Graphics * graphics) : BaseObject(eID:
 	this->isCollided = false;
 	this->timer = 0;
 	this->listCollide = new list<CollisionReturn>();
+
+	this->dame = 1; // se setup lai sau
 }
 
 Bullet::Bullet()
@@ -86,14 +89,17 @@ void Bullet::onCollision()
 
 		case eID::MARUMARI:
 		{
-			MaruMari* mm = static_cast<MaruMari*>(i->object);
-			mm->startExplosion();
 			break;
 		}
 
 		case eID::SKREE:
-			GAMELOG("VA CHAM SKREE");
+		{
+			GAMELOG("HIT SKREE");
+			Skree* skr = static_cast<Skree*>(i->object);
+			skr->setBeHit(true);
+			skr->decreaseHealth(this->dame);
 			break;
+		}
 
 
 		default:

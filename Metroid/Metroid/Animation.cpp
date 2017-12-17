@@ -114,6 +114,13 @@ bool Animation::isPausing()
 	return isPause;
 }
 
+void Animation::reInit()
+{
+	this->isFinish = false;
+	this->canAnimate = false;
+	this->currentFrame = 0;
+}
+
 bool Animation::isFinished()
 {
 	return isFinish;

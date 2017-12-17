@@ -5,8 +5,7 @@ class SamusStateFallRolling:public BaseState
 {
 private:
 	float remain_time;
-	//this is V(velocity.y) that is calculate every frame
-	float velocity_frame;
+
 public:
 	SamusStateFallRolling();
 	SamusStateFallRolling(Samus* samus, Input* input);

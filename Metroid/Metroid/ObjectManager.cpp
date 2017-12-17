@@ -28,7 +28,7 @@
 #include "rapidjson-master\include\rapidjson\ostreamwrapper.h"
 
 
-#define TIME_RETRIEVE 0.2f
+#define TIME_RETRIEVE -1
 
 ObjectManager* ObjectManager::instance = nullptr;
 
@@ -54,17 +54,9 @@ void ObjectManager::onCheckCollision(float dt)
 		listObjectNotWallOnViewPort->clear();
 		listWallCanCollideSamus->clear();
 
-		RECT r = Camera::getInstance()->getBound();
+		MetroidRect r = Camera::getInstance()->getBound();
 		//Get all objects that can collide with current obj
-		try
-		{
-			quadtree->retrieve(listCanCollideSamus, listObjectNotWallOnViewPort, listWallCanCollideSamus, MetroidRect((float)r.top, (float)r.bottom, (float)r.left, (float)r.right), samus);
-
-		}
-		catch (const std::exception&)
-		{
-			int test = 0;
-		}
+		quadtree->retrieve(listCanCollideSamus, listObjectNotWallOnViewPort, listWallCanCollideSamus, MetroidRect(r.top, r.bottom, r.left, r.right), samus);
 	}
 
 	// Get listCollide
@@ -75,13 +67,22 @@ void ObjectManager::onCheckCollision(float dt)
 
 		for (unsigned i = 0; i < BulletPool::getInstance()->getListUsing().size(); i++)
 			Collision::getInstance()->checkCollision(BulletPool::getInstance()->getListUsing().at(i), *x, dt);
+
+		if ((*x)->getId() == eID::SKREE)
+		{
+			Skree* skr = static_cast<Skree*>(*x);
+
+			if (skr->checkCollision(samus, dt))
+			{
+				skr->onCollision(samus);
+			}
+		}
 	}
 
 	// handle on listCollide
 	samus->onCollision();
 	for (unsigned i = 0; i < BulletPool::getInstance()->getListUsing().size(); i++)
 		BulletPool::getInstance()->getListUsing().at(i)->onCollision();
-
 }
 
 void ObjectManager::onCheckCollision(BaseObject * obj, float frametime)
@@ -108,12 +109,10 @@ void ObjectManager::update(float dt)
 			if ((*i)->getId() == eID::SKREE)
 			{
 				Skree* skr = static_cast<Skree*>(*i);
-				if (skr->isActivitied() == false)
-					skr->setActivity(true);
 
 				skr->setTarget(samus->getPosition());
 			}
-
+			
 			(*i)->update(dt);
 		}
 	}

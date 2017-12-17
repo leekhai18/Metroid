@@ -45,12 +45,15 @@ bool Collision::checkCollision(BaseObject * myEntity, BaseObject * otherEntity, 
 
 	if (otherVeloc != VECTOR2(0, 0))
 	{
-		velocity = myVelocity - otherVeloc ;
+		if (myEntity->getVelocity().y == -SAMUS_MIN_SPEED_Y)
+			myVelocity.y = 0;
+
+		velocity = myVelocity - otherVeloc;
 	}
+
 	// tìm khoảng cách giữa cạnh gần nhất, xa nhất 2 object dx, dy
 	// dx
 	if (velocity.x > 0)
-
 	{
 		_dxEntry = otherRect.left - myRect.right;
 		_dxExit = otherRect.right - myRect.left;
@@ -183,6 +186,93 @@ bool Collision::checkCollision(BaseObject * myEntity, BaseObject * otherEntity, 
 
 		return true;
 	}
+	return false;
+}
+
+bool Collision::checkCollision(BaseObject * myObj, Samus * samus, float dt)
+{
+	float _dxEntry, _dyEntry, _dxExit, _dyExit;
+	float _txEntry, _tyEntry, _txExit, _tyExit;
+	MetroidRect   myRect = samus->getBoundCollision();
+	MetroidRect   otherRect = myObj->getBoundCollision();
+
+	MetroidRect   broadphaseOtherRect = getSweptBroadphaseRect(myObj, dt);
+	MetroidRect   broadphaseMyRect = getSweptBroadphaseRect(samus, dt);
+	if (!isCollide(broadphaseMyRect, broadphaseOtherRect))				
+	{
+		return false;
+	}
+
+	VECTOR2 otherVeloc = VECTOR2(myObj->getVelocity().x * dt, myObj->getVelocity().y * dt);
+	VECTOR2 myVelocity = VECTOR2(samus->getVelocity().x * dt, samus->getVelocity().y * dt);
+
+	VECTOR2 velocity = myVelocity;
+
+	if (otherVeloc != VECTOR2(0, 0))
+	{
+		if (samus->getVelocity().y == -SAMUS_MIN_SPEED_Y)
+			myVelocity.y = 0;
+
+		velocity = myVelocity - otherVeloc;
+	}
+
+	if (velocity.x > 0)
+	{
+		_dxEntry = otherRect.left - myRect.right;
+		_dxExit = otherRect.right - myRect.left;
+	}
+	else
+	{
+		_dxEntry = otherRect.right - myRect.left;
+		_dxExit = otherRect.left - myRect.right;
+	}
+
+	if (velocity.y < 0)
+	{
+		_dyEntry = otherRect.top - myRect.bottom;
+		_dyExit = otherRect.bottom - myRect.top;
+	}
+	else
+	{
+		_dyEntry = otherRect.bottom - myRect.top;
+		_dyExit = otherRect.top - myRect.bottom;
+	}
+
+	if (velocity.x == 0)
+	{
+		_txEntry = -std::numeric_limits<float>::infinity();
+		_txExit = std::numeric_limits<float>::infinity();
+	}
+	else
+	{
+		_txEntry = _dxEntry / velocity.x;
+		_txExit = _dxExit / velocity.x;
+	}
+
+	if (velocity.y == 0)
+	{
+		_tyEntry = -std::numeric_limits<float>::infinity();
+		_tyExit = std::numeric_limits<float>::infinity();
+	}
+	else
+	{
+		_tyEntry = _dyEntry / velocity.y;
+		_tyExit = _dyExit / velocity.y;
+	}
+
+	float entryTime = max(_txEntry, _tyEntry);
+	float exitTime = min(_txExit, _tyExit);
+
+	if (entryTime > exitTime || _txEntry < 0.0f && _tyEntry < 0.0f || _txEntry > 1.0f || _tyEntry > 1.0f)
+	{
+		return false;
+	}
+
+	if (0<entryTime && entryTime<1.0f)
+	{
+		return true;
+	}
+
 	return false;
 }
 

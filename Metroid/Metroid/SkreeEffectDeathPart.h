@@ -1,14 +1,14 @@
 #pragma once
 #include "BaseObject.h"
+#include "Samus.h"
 
 class SkreeEffectDeathPart : public BaseObject
 {
 private:
 	VECTOR2 target;
 	VECTOR2 startPosition;
-
-	// Use Bézier curve
-	float t;
+	float timer;
+	bool isFinish;
 
 public:
 	SkreeEffectDeathPart(TextureManager* textureM, Graphics* graphics);
@@ -16,8 +16,19 @@ public:
 	~SkreeEffectDeathPart();
 
 	void init(VECTOR2 target, VECTOR2 startPosition);
+
+
+	bool checkCollision(Samus* sam, float dt);
+
 	void update(float dt);
 	void draw();
-	void release();
+
+	void setBoundCollision();
+	MetroidRect getBoundCollision();
+
+
+	bool isFinished();
+
+	void finish();
 };
 

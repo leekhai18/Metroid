@@ -89,7 +89,6 @@ void SamusStateManager::changeStateTo(eStatus eStatus)
 	case eStatus::ACROBAT:
 	{
 		currentState = stateAcrobat;
-		this->stateAcrobat->setVelocityFrame(this->stateJumping->getVelocity_Frame());
 		this->stateAcrobat->setJumpDistance(this->stateJumping->getJumpDistance());
 		break;
 	}

@@ -40,7 +40,7 @@ public:
     int getHeight();
 
 	D3DXVECTOR3 getPosition();
-    RECT getBound();
+	MetroidRect getBound();
 
 	D3DXVECTOR2 getVelocity();
 	void setVelocity(D3DXVECTOR2 vec);
