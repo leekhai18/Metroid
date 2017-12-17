@@ -114,8 +114,8 @@ void SamusStateRolling::onCollision(float dt)
 			switch (i->direction)
 			{
 			case CollideDirection::LEFT:
-				bound = Collision::getInstance()->getSweptBroadphaseRect(this->samus->getBoundCollision(), VECTOR2(this->samus->getVelocity().x, 0), dt);
-				if (Collision::getInstance()->isCollide(bound, i->object->getBoundCollision()))
+
+				if (this->samus->getBoundCollision().bottom< i->object->getBoundCollision().top)
 				{
 					this->samus->setVelocityX(0);
 					//not allow move left
@@ -124,8 +124,8 @@ void SamusStateRolling::onCollision(float dt)
 
 				break;
 			case CollideDirection::RIGHT:
-				bound = Collision::getInstance()->getSweptBroadphaseRect(this->samus->getBoundCollision(), VECTOR2(this->samus->getVelocity().x, 0), dt);
-				if (Collision::getInstance()->isCollide(bound, i->object->getBoundCollision()))
+
+				if (this->samus->getBoundCollision().bottom< i->object->getBoundCollision().top)
 				{
 					this->samus->setVelocityX(0);
 					//not allow move right

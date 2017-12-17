@@ -203,8 +203,8 @@ void SamusStateRunning::onCollision(float dt)
 			switch (i->direction)
 			{
 			case CollideDirection::LEFT:
-				bound = Collision::getInstance()->getSweptBroadphaseRect(this->samus->getBoundCollision(), VECTOR2(this->samus->getVelocity().x, 0), dt);
-				if (Collision::getInstance()->isCollide(bound, i->object->getBoundCollision()))
+				//bound = Collision::getInstance()->getSweptBroadphaseRect(this->samus->getBoundCollision(), VECTOR2(this->samus->getVelocity().x, 0), dt);
+				if (this->samus->getBoundCollision().bottom< i->object->getBoundCollision().top)
 				{
 					this->samus->setVelocityX(0);
 					this->samus->setCanMoveRight(false);
@@ -212,8 +212,8 @@ void SamusStateRunning::onCollision(float dt)
 				}
 				break;
 			case CollideDirection::RIGHT:
-				bound = Collision::getInstance()->getSweptBroadphaseRect(this->samus->getBoundCollision(), VECTOR2(this->samus->getVelocity().x, 0), dt);
-				if (Collision::getInstance()->isCollide(bound, i->object->getBoundCollision()))
+				
+				if (this->samus->getBoundCollision().bottom< i->object->getBoundCollision().top)
 				{
 					this->samus->setVelocityX(0);
 					this->samus->setCanMoveLeft(false);
