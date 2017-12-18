@@ -22,6 +22,11 @@ private:
 	float t1;
 	int flag = 1;
 	bool start = false;
+	float positionBeforeX;
+	float positionAfterX;
+
+	float positionBeforeY;
+	float positionAfterY;
 
 	int health;
 

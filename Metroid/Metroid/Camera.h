@@ -4,8 +4,8 @@
 #include "Constants.h"
 
 
-#define CAM_POS_X 640
-#define CAM_POS_Y 1320
+#define CAM_POS_X 5109
+#define CAM_POS_Y 4560-2507
 
 
 class Camera
