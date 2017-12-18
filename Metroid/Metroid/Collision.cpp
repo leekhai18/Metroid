@@ -311,14 +311,14 @@ MetroidRect Collision::getSweptBroadphaseRect(MetroidRect myRect,VECTOR2 myVeloc
 }
 MetroidRect Collision::getSweptBroadphaseRect(BaseObject * obj, float frametime)
 {
-	VECTOR2 velocity = VECTOR2(obj->getVelocity().x * frametime, obj->getVelocity().y * frametime);
+	VECTOR2 distance = VECTOR2(obj->getVelocity().x * frametime, obj->getVelocity().y * frametime);
 	MetroidRect myRect = obj->getBoundCollision();
 
 	MetroidRect   rect;
-	rect.top = velocity.y > 0 ? myRect.top + velocity.y : myRect.top;
-	rect.bottom = velocity.y > 0 ? myRect.bottom :  myRect.bottom + velocity.y;
-	rect.left = velocity.x > 0 ? myRect.left : myRect.left + velocity.x;
-	rect.right = velocity.x > 0 ? myRect.right + velocity.x : myRect.right;
+	rect.top = distance.y > 0 ? myRect.top + distance.y : myRect.top;
+	rect.bottom = distance.y > 0 ? myRect.bottom :  myRect.bottom + distance.y;
+	rect.left = distance.x > 0 ? myRect.left : myRect.left + distance.x;
+	rect.right = distance.x > 0 ? myRect.right + distance.x : myRect.right;
 
 	return rect;
 }

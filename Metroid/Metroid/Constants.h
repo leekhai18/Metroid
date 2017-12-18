@@ -19,7 +19,7 @@
 #define TRANSCOLOR  SETCOLOR_ARGB(0,255,0,255)  // transparent color (magenta)
 
 // Window
-const char CLASS_NAME[] = "Metroid";	
+const char CLASS_NAME[] = "Metroid";
 const char GAME_TITLE[] = "Metroid";
 const bool FULLSCREEN = false;              // windowed or fullscreen
 const UINT VIEWPORT_WIDTH = 256;               // width of game in pixels
@@ -36,9 +36,9 @@ const float MAX_FRAME_TIME = 1.0f / MIN_FRAME_RATE; // maximum time used in calc
 const float GRAVITY = 6.67428e-11f;             // gravitational constant
 
 
-// key mappings
-// In this game simple constants are used for key mappings. If variables were used
-// it would be possible to save and restore key mappings from a data file.
+												// key mappings
+												// In this game simple constants are used for key mappings. If variables were used
+												// it would be possible to save and restore key mappings from a data file.
 const UCHAR ESC_KEY = VK_ESCAPE;       // escape key
 const UCHAR ALT_KEY = VK_MENU;         // Alt key
 const UCHAR ENTER_KEY = VK_RETURN;       // Enter key
@@ -46,14 +46,14 @@ const UCHAR ENTER_KEY = VK_RETURN;       // Enter key
 #define VK_Z 0x5A
 
 
-// Source
+										 // Source
 const char SOURCE_IMAGE[] = "Resources\\SpriteSheets\\MetroidTexture.png";//character of game
 const char SOURCE_JSON[] = "json\\MetroidTexture.json"; //json file of metroid sprite
 const char MAP_BRINSTAR_JSON[] = "json\\MapBrinstar.json"; //json file of map brinstar
 const char TILESET_IMAGE[] = "Resources\\Tileset\\Tileset.png"; //tileset of map brinstar
 const char OBJECT_LAYER_BRINSTAR_JSON[] = "json\\ObjectLayerBrinstar.json"; //object layer json of Brinstar
 const char QUADTREE[] = "json\\QuadTree.json";
-																			//Rectangle of metroid
+//Rectangle of metroid
 struct MetroidRect
 {
 	float top, left, right, bottom;
@@ -130,6 +130,11 @@ enum eDirection {
 	right = 1,
 };
 
+enum WaverDirectionY
+{
+	up = 1,
+	down = -1,
+};
 // Text
 enum eFont {
 	body,

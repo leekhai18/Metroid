@@ -2,8 +2,8 @@
 #include <d3dx9.h>
 #include <d3d9.h>
 #include "Constants.h"
-#define CAM_POS_X 1406.00000//6144
-#define CAM_POS_Y 1320.00000//2992//
+#define CAM_POS_X 3648//6144
+#define CAM_POS_Y 2993//2992//
 
 class Camera
 {

@@ -318,15 +318,7 @@ void Zommer::update(float dt)
 	{
 		this->anim->setPause(false);
 	}
-	if(pos == (positionCollide.left - ZOMMER_COLLISION *0.5f)&&ok == true)
-	{
-		ok = false;
-	}
-	else
-	{
-		pos = 0;
-		ok = false;
-	}
+	
 	
 	if (!gravity_bool[gravity])
 	{
