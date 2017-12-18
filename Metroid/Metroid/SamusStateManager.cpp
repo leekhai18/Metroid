@@ -14,26 +14,12 @@ SamusStateManager::SamusStateManager()
 {
 	stateStart = new SamusStateStart();
 	currentState = stateStart;
+	instance = this;
 }
 
 
 SamusStateManager::~SamusStateManager()
 {
-	delete stateStart;
-	delete stateRolling;
-	delete stateRunning;
-	delete stateStanding;
-	delete stateJumping;
-	delete stateAcrobat;
-	delete stateFallRolling;
-	//delete currentState;
-
-	stateRunning = nullptr;
-	stateStart = nullptr;
-	stateStanding = nullptr;
-	stateRolling = nullptr;
-	stateJumping = nullptr;
-	currentState = nullptr;
 }
 
 void SamusStateManager::init(Samus * samus, Input * input)
@@ -127,4 +113,17 @@ void SamusStateManager::changeStateTo(eStatus eStatus)
 
 	currentState->init();
 	currentState->onStart();
+}
+
+void SamusStateManager::release()
+{
+	delete stateStart;
+	delete stateRolling;
+	delete stateRunning;
+	delete stateStanding;
+	delete stateJumping;
+	delete stateAcrobat;
+	delete stateFallRolling;
+
+	delete instance;
 }

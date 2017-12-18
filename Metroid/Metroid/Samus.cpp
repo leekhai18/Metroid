@@ -8,9 +8,16 @@
 #define SAMUS_POS_X 3648
 #define SAMUS_POS_Y 2993
 
+#define SAMUS_POS_X 640
+#define SAMUS_POS_Y 1267
+
+
 Samus::Samus(TextureManager* textureM,Graphics* graphics, Input* input) : BaseObject(eID::SAMUS)
 {
 	this->input = input;
+	this->textureManager = textureM;
+	this->graphics = graphics;
+
 	this->sprite = new Sprite();
 	if (! this->sprite->initialize(graphics, textureM, SpriteManager::getInstance()))
 	{
@@ -18,6 +25,7 @@ Samus::Samus(TextureManager* textureM,Graphics* graphics, Input* input) : BaseOb
 	}
 
 	this->setPosition(VECTOR2(SAMUS_POS_X, SAMUS_POS_Y));
+
 	runningNormalAnimation = new Animation(this->sprite, IndexManager::getInstance()->samusYellowRunningRight, NUM_FRAMES_SAMUS_RUNNING, 0.05f);
 	runningUpAnimation = new Animation(this->sprite, IndexManager::getInstance()->samusYellowRunningUpRight, NUM_FRAMES_SAMUS_RUNNING, 0.05f);
 	runningHittingRightAnimation = new Animation(this->sprite, IndexManager::getInstance()->samusYellowHittingAndRunningRight, NUM_FRAMES_SAMUS_RUNNING, 0.05f);
@@ -40,29 +48,31 @@ Samus::Samus(TextureManager* textureM,Graphics* graphics, Input* input) : BaseOb
 	this->listCollide = new list<CollisionReturn>();
 
 	visible = true;
+	this->numLives = 0;
+	this->listNumLives = new list<Sprite*>();
+
+	this->health = 30;
+	this->healthIcon = new Sprite();
+	if (!this->healthIcon->initialize(graphics, textureM, SpriteManager::getInstance()))
+	{
+		throw GameError(GameErrorNS::FATAL_ERROR, "Can not init sprite Health Icon");
+	}
+	this->healthIcon->setData(IndexManager::getInstance()->enIcon);
+	this->healthIcon->setPosition(VECTOR2(20, 20));
+	this->healthIcon->setScale(VECTOR2(1.2f, 1.2f));
+
+	this->healthText = new Text("30", eFont::body, 8, VECTOR2(45, 20), GraphicsNS::WHITE, false, true);
+	this->healthText->initialize(graphics);
 }
 
 Samus::Samus()
 {
-	this->sprite = new Sprite();
 }
 
 Samus::~Samus()
 {
 	this->release();
-}
-
-void Samus::draw()
-{
-	if(visible)
-	{
-		for (unsigned i = 0; i < this->bulletPool->getListUsing().size(); i++)
-			this->bulletPool->getListUsing().at(i)->draw();
-
-		this->sprite->draw();
-	}
-
-
+	SamusStateManager::getInstance()->release();
 }
 
 void Samus::handleInput(float dt)
@@ -97,26 +107,6 @@ void Samus::onCollision(float dt)
 {
 	SamusStateManager::getInstance()->getCurrentState()->onCollision(dt);
 	this->listCollide->clear();
-}
-
-void Samus::setIsCollidingPort(bool flag)
-{
-	this->isCollidingPort = flag;
-}
-
-bool Samus::isColliedPort()
-{
-	return isCollidingPort;
-}
-
-void Samus::setCanMoveToFrontGate(bool flag)
-{
-	this->moveToFontGate = flag;
-}
-
-void Samus::setListCanCollide(list<BaseObject*> list)
-{
-	this->listCanCollide = list;
 }
 
 void Samus::update(float dt)
@@ -191,6 +181,50 @@ void Samus::update(float dt)
 		this->bulletPool->getListUsing().at(i)->update(dt);
 }
 
+void Samus::draw()
+{
+	if (visible)
+	{
+		for (unsigned i = 0; i < this->bulletPool->getListUsing().size(); i++)
+			this->bulletPool->getListUsing().at(i)->draw();
+
+		this->sprite->draw();
+	}
+}
+
+void Samus::drawInFrontMap()
+{
+	for (list<Sprite*>::iterator i = listNumLives->begin(); i != listNumLives->end(); ++i)
+	{
+		(*i)->draw(false);
+	}
+
+	this->healthIcon->draw(false);
+	
+	this->healthText->setText(std::to_string(this->health));
+	this->healthText->draw();
+}
+
+void Samus::setIsCollidingPort(bool flag)
+{
+	this->isCollidingPort = flag;
+}
+
+bool Samus::isColliedPort()
+{
+	return isCollidingPort;
+}
+
+void Samus::setCanMoveToFrontGate(bool flag)
+{
+	this->moveToFontGate = flag;
+}
+
+void Samus::setListCanCollide(list<BaseObject*> list)
+{
+	this->listCanCollide = list;
+}
+
 void Samus::release()
 {
 	delete this->sprite;
@@ -203,6 +237,14 @@ void Samus::release()
 	delete bulletPool;
 	this->listCollide->clear();
 	delete this->listCollide;
+	delete this->healthIcon;
+
+	for (list<Sprite*>::iterator i = listNumLives->begin(); i != listNumLives->end(); ++i)
+	{
+		delete *i;
+	}
+	listNumLives->clear();
+	delete listNumLives;
 }
 
 void Samus::updateHorizontal(float dt)
@@ -285,6 +327,16 @@ bool Samus::getVisible()
 	return this->visible;
 }
 
+void Samus::setHealth(int heal)
+{
+	this->health = heal;
+}
+
+int Samus::getHealth()
+{
+	return this->health;
+}
+
 void Samus::setAcrobat(bool acrobat)
 {
 	this->acrobat = acrobat;
@@ -330,4 +382,42 @@ list<CollisionReturn>* Samus::getListCollide()
 {
 	return this->listCollide;
 }
+
+bool Samus::isHaveMariMaru()
+{
+	return isMariMaru;
+}
+
+void Samus::setMariMaru(bool flag)
+{
+	this->isMariMaru = flag;
+}
+
+int Samus::getNumLive()
+{
+	return this->numLives;
+}
+
+void Samus::setNumLive(int num)
+{
+	if (this->numLives < num) // ++
+	{
+		Sprite *live = new Sprite();
+		if (!live->initialize(this->graphics, this->textureManager, SpriteManager::getInstance()))
+		{
+			throw GameError(GameErrorNS::FATAL_ERROR, "Can not init sprite live");
+		}
+		live->setData(IndexManager::getInstance()->liveIcon);
+
+		this->listNumLives->push_back(live);
+	}
+	else // --
+	{
+		this->listNumLives->pop_back();
+	}
+
+	this->numLives = num;
+}
+
+
 

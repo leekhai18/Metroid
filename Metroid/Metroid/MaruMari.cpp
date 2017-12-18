@@ -1,4 +1,5 @@
 #include "MaruMari.h"
+#include "Metroid.h"
 
 MaruMari::MaruMari()
 {
@@ -15,6 +16,8 @@ MaruMari::MaruMari(TextureManager * textureM, Graphics * graphics) : BaseObject(
 
 	this->anim = new Animation(this->sprite, IndexManager::getInstance()->maruMari, NUM_FRAMES_ITEM, TIME_FRAME_ITEM);
 	this->anim->start();
+
+	this->isActivity = true;
 }
 
 
@@ -22,12 +25,11 @@ MaruMari::~MaruMari()
 {
 	delete this->anim;
 	delete this->sprite;
-	this->sprite = nullptr;
 }
 
 void MaruMari::update(float dt)
 {
-	if (sprite != nullptr)
+	if (isActivity)
 	{
 		this->anim->update(dt);
 	}
@@ -35,6 +37,40 @@ void MaruMari::update(float dt)
 
 void MaruMari::draw()
 {
-	if (sprite != nullptr)
+	if (isActivity)
+	{
 		this->sprite->draw();
+	}
+}
+
+void MaruMari::setActivity(bool flag)
+{
+	this->isActivity = flag;
+
+	if (this->isActivity == true)
+	{
+		MetroidRect bound;
+
+		bound.left = this->getPosition().x;
+		bound.top = this->getPosition().y;
+		bound.right = bound.left + this->getSprite()->getWidth();
+		bound.bottom = bound.top - this->getSprite()->getHeight();
+
+		this->setBoundCollision(bound);
+		this->setActiveBound(bound);
+	}
+	else
+	{
+		MetroidRect bound(0,0,0,0);
+
+		this->setBoundCollision(bound);
+		this->setActiveBound(bound);
+
+		Metroid::getInstance()->setJustCollectItem(true);
+	}
+}
+
+bool MaruMari::getActivity()
+{
+	return this->isActivity;
 }

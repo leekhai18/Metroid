@@ -3,6 +3,7 @@
 #include "Collision.h"
 #include "Camera.h"
 #include "GameLog.h"
+#include "SamusStateManager.h"
 
 #define TIME_FRAME_DELAY 0.15f
 #define AREA_ACTIVE_X 40
@@ -64,6 +65,8 @@ Skree::~Skree()
 {
 	delete this->effectDeath;
 	delete this->explosion;
+	delete listWallCanCollide;
+	delete listCollide;
 	release();
 }
 
@@ -74,9 +77,11 @@ bool Skree::checkCollision(Samus * sam, float dt)
 
 void Skree::onCollision(Samus* sam)
 {
-	// handle in here
-	GAMELOG("Skree's bullets hit");
+	SamusStateManager::getInstance()->setOldStatus(sam->getStatus());
+	sam->setStatus(eStatus::INJURING);
+	SamusStateManager::getInstance()->setOldState(SamusStateManager::getInstance()->getCurrentState());
 
+	GAMELOG("Skree's bullets hit");
 }
 
 void Skree::onCollision(float dt)
@@ -85,22 +90,14 @@ void Skree::onCollision(float dt)
 	{
 		Collision::getInstance()->checkCollision(this, *i, dt);
 	}
+
 	for (auto x = this->listCollide->begin(); x != this->listCollide->end(); x++)
 	{
 
 		switch (x->direction)
 		{
-		case CollideDirection::LEFT:
-
-			break;
-		case CollideDirection::RIGHT:
-
-			break;
 		case CollideDirection::TOP:
-			
-			break;
-		case CollideDirection::BOTTOM:
-		
+			this->setStatus(eStatus::ENDING);
 			break;
 		}
 	}
@@ -134,12 +131,7 @@ void Skree::update(float dt)
 			if (this->getPosition().x > target.x - OFFSET_FOLLOW && this->getPosition().x < target.x + OFFSET_FOLLOW) // in bound offset
 				this->setVelocityX(0);
 			
-
-			//if (this->getPosition().y > target.y) // check collision with wall
-			//	this->setPosition(this->getPosition().x + this->getVelocity().x*dt, this->getPosition().y + this->getVelocity().y*dt);
-			//else
-			//	this->setStatus(eStatus::ENDING);
-
+			this->setPosition(this->getPosition().x + this->getVelocity().x*dt, this->getPosition().y + this->getVelocity().y*dt);
 		}
 
 		if (this->isInStatus(eStatus::ENDING))
@@ -150,7 +142,7 @@ void Skree::update(float dt)
 			{
 				if (this->canDraw)
 				{
-					this->effectDeath->init(this->getPosition());
+					this->effectDeath->init(VECTOR2(this->getPosition().x, this->getPosition().y - this->getSprite()->getHeight()*0.4f));
 					BaseObject::setBoundCollision(MetroidRect(0, 0, 0, 0));
 					this->canDraw = false;
 				}

@@ -1,6 +1,8 @@
 #include "Collision.h"
 #include "ObjectManager.h"
 #include "Zommer.h"
+#include "Ripper.h"
+#include "Skree.h"
 
 Collision* Collision::instance = nullptr;
 Collision* Collision::getInstance()
@@ -186,6 +188,19 @@ bool Collision::checkCollision(BaseObject * myEntity, BaseObject * otherEntity, 
 			zommer->getListCollide()->push_back(data);
 			break;
 		}
+		case eID::RIPPER:
+		{
+			Ripper* ripper = static_cast<Ripper*>(myEntity);
+			ripper->getListCollide()->push_back(data);
+			break;
+		}
+		case eID::SKREE:
+		{
+			Skree* skree = static_cast<Skree*>(myEntity);
+			skree->getListCollide()->push_back(data);
+			break;
+		}
+
 		default:
 			break;
 		}

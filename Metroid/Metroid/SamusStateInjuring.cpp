@@ -33,7 +33,7 @@ void SamusStateInjuring::init()
 	{
 		this->samus->setVelocityX(SAMUS_MIN_SPEED_Y);
 	}*/
-	this->samus->setVelocityX(-SAMUS_VERLOCITY_X*this->samus->getDirection());
+	this->samus->setVelocityX((float)(-SAMUS_VERLOCITY_X*this->samus->getDirection()));
 	setBoundCollision();
 
 	// Set Data for sprite
@@ -174,7 +174,7 @@ void SamusStateInjuring::update(float dt)
 	}
 
 	this->samus->setVelocityY(-SAMUS_MIN_SPEED_Y);
-	this->samus->setVelocityX(-SAMUS_VERLOCITY_X*this->samus->getDirection());
+	this->samus->setVelocityX((float)(-SAMUS_VERLOCITY_X*this->samus->getDirection()));
 }
 
 void SamusStateInjuring::onStart()

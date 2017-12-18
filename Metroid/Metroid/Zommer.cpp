@@ -115,8 +115,6 @@ Zommer::~Zommer()
 	delete this->anim;
 }
 
-
-
 ZommerGravity Zommer::getGravity()
 {
 	return this->gravity;

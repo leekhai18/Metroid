@@ -6,6 +6,7 @@
 #include "Waver.h"
 #include "Rio.h"
 #include "Zommer.h"
+#include "Ripper.h"
 #include "Text.h"
 #include "Camera.h"
 #include "Map.h"
@@ -31,6 +32,10 @@ private:
 	Text* fpsText;
 	Text* opsText;
 
+	// support when collect items
+	bool justCollect;
+	float timerEffectCollectItem;
+
 public:
 	Metroid();
 	~Metroid();
@@ -46,5 +51,7 @@ public:
 	void resetAll();
 
 	HWND getCurrentHWND();
+
+	void setJustCollectItem(bool flag);
 };
 

@@ -86,8 +86,11 @@ public:
 	// Display the offscreen backbuffer to the screen.
 	HRESULT showBackbuffer();
 
-	void    drawSprite(const SpriteData &spriteData,           // sprite to draw
-		COLOR_ARGB color = GraphicsNS::WHITE);      // default to white color filter (no change)
+	// Draw Sprite transform
+	void drawSprite(const SpriteData &spriteData, COLOR_ARGB color = GraphicsNS::WHITE);
+
+	// Draw not transform
+	void drawSprite(bool isTransform, const SpriteData &spriteData, COLOR_ARGB color = GraphicsNS::WHITE);
 
 	void drawLine(const VECTOR3 * vertices, int count, COLOR_ARGB color = GraphicsNS::RED);
 	

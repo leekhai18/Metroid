@@ -1,6 +1,8 @@
 #include "SamusStateJumping.h"
 #include "SamusStateManager.h"
 #include "GameLog.h"
+#include "MaruMari.h"
+#include "EnergyTank.h"
 
 SamusStateJumping::SamusStateJumping()
 {
@@ -165,7 +167,8 @@ void SamusStateJumping::onCollision(float dt)
 	{
 		switch (i->object->getId())
 		{
-			//handle collision with wall
+
+#pragma region Wall
 		case eID::WALL: case eID::BRICK:
 			switch (i->direction)
 			{
@@ -200,10 +203,14 @@ void SamusStateJumping::onCollision(float dt)
 				break;
 			}
 			break;
-			//another object
+
+#pragma endregion
+
+#pragma region enemies
 		case eID::SKREE:
 			GAMELOG("VA CHAM SKREE");
 			break;
+
 		case eID::ZOMMER:
 			switch (i->direction)
 			{
@@ -229,6 +236,34 @@ void SamusStateJumping::onCollision(float dt)
 			SamusStateManager::getInstance()->setOldState(this);
 			this->samus->setStatus(eStatus::INJURING);
 			break;
+
+
+#pragma endregion
+
+#pragma region items
+		case eID::MARUMARI:
+		{
+			this->samus->setMariMaru(true);
+			MaruMari* mm = static_cast<MaruMari*>(i->object);
+			mm->setActivity(false);
+
+			break;
+		}
+
+		case eID::ENERGYTANK:
+		{
+			GAMELOG("VA CHAM ENERGYTANK");
+
+			this->samus->setNumLive(this->samus->getNumLive() + 1);
+			EnergyTank* energy = static_cast<EnergyTank*>(i->object);
+			energy->setActivity(false);
+
+			break;
+		}
+
+#pragma endregion
+
+
 		default:
 			break;
 		}
