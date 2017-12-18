@@ -1,7 +1,8 @@
 #include "Ripper.h"
 #define TIME_FRAME_DELAY 0.15f
-#define RIPPER_VELOCITY_X 60
+#define RIPPER_VELOCITY_X 40
 #define RIPPER_OFFSET_COLLISION 0.1f
+
 Ripper::Ripper()
 {
 }

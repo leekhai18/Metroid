@@ -75,13 +75,16 @@ bool Skree::checkCollision(Samus * sam, float dt)
 	return this->effectDeath->checkCollision(sam, dt);
 }
 
-void Skree::onCollision(Samus* sam)
+void Skree::onCollision(Samus* sam) // handle collide with skree's bullet
 {
-	SamusStateManager::getInstance()->setOldStatus(sam->getStatus());
-	sam->setStatus(eStatus::INJURING);
-	SamusStateManager::getInstance()->setOldState(SamusStateManager::getInstance()->getCurrentState());
+	if (!sam->isInStatus(eStatus::INJURING))
+	{
+		SamusStateManager::getInstance()->setOldStatus(sam->getStatus());
+		sam->setStatus(eStatus::INJURING);
+		SamusStateManager::getInstance()->setOldState(SamusStateManager::getInstance()->getCurrentState());
 
-	GAMELOG("Skree's bullets hit");
+		GAMELOG("Skree's bullets hit");
+	}
 }
 
 void Skree::onCollision(float dt)
@@ -93,13 +96,7 @@ void Skree::onCollision(float dt)
 
 	for (auto x = this->listCollide->begin(); x != this->listCollide->end(); x++)
 	{
-
-		switch (x->direction)
-		{
-		case CollideDirection::TOP:
-			this->setStatus(eStatus::ENDING);
-			break;
-		}
+		this->setStatus(eStatus::ENDING);
 	}
 
 	this->listCollide->clear();

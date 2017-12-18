@@ -41,6 +41,8 @@ void SamusStateInjuring::init()
 
 	time_to_stand = 0;
 	time_animation = 0;
+
+	this->samus->setHealth(this->samus->getHealth() - 8);
 }
 
 void SamusStateInjuring::handleInput(float dt)
@@ -56,7 +58,7 @@ void SamusStateInjuring::onCollision(float dt)
 	{
 		switch (i->object->getId())
 		{
-		case eID::WALL:case eID::BRICK:
+		case eID::WALL:case eID::BRICK:case GATEBLUE:case PORT: case GATERED:
 			switch (i->direction)
 			{
 			case CollideDirection::TOP:
@@ -67,7 +69,7 @@ void SamusStateInjuring::onCollision(float dt)
 				if (SamusStateManager::getInstance()->getOldStatus() == eStatus::RUNNING || SamusStateManager::getInstance()->getOldStatus() == eStatus::ROLLING)
 				{
 					
-					if (!(this->samus->getBoundCollision().bottom< i->object->getBoundCollision().top))
+					if (!(this->samus->getBoundCollision().bottom < i->object->getBoundCollision().top))
 					{
 						return;
 					}
@@ -90,7 +92,7 @@ void SamusStateInjuring::onCollision(float dt)
 
 		case eID::SKREE:
 
-			break;
+			
 		case eID::ZOMMER:
 			switch (i->direction)
 			{

@@ -29,6 +29,7 @@ SamusStateStanding::~SamusStateStanding()
 
 void SamusStateStanding::init()
 {
+	this->samus->setVelocityX(0);
 	if (this->samus->isFaling())
 		this->samus->setVelocityY(SAMUS_V0_FALL_Y);
 	else
@@ -202,7 +203,7 @@ void SamusStateStanding::onCollision(float dt)
 
 		case eID::SKREE:
 			GAMELOG("VA CHAM SKREE");
-			SamusStateManager::getInstance()->setOldStatus(eStatus::RUNNING);
+			SamusStateManager::getInstance()->setOldStatus(eStatus::STANDING);
 			this->samus->setStatus(eStatus::INJURING);
 			SamusStateManager::getInstance()->setOldState(this);
 			break;
@@ -248,6 +249,9 @@ void SamusStateStanding::update(float dt)
 			{
 				SamusStateManager::getInstance()->changeStateTo(this->samus->getStatus());
 			}			
+			break;
+		case eStatus::INJURING:
+			SamusStateManager::getInstance()->changeStateTo(this->samus->getStatus());
 			break;
 		default:
 			break;

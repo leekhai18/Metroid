@@ -330,6 +330,19 @@ bool Samus::getVisible()
 void Samus::setHealth(int heal)
 {
 	this->health = heal;
+
+	if (this->health <= 0)
+	{
+		if (this->numLives > 0)
+		{
+			this->numLives--;
+			this->health = 99;
+		}
+		else
+		{
+			// GAME OVER
+		}
+	}
 }
 
 int Samus::getHealth()
