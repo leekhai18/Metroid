@@ -25,19 +25,9 @@ void SamusStateInjuring::init()
 {
 
 	this->samus->setVelocityY(-SAMUS_MIN_SPEED_Y);
-	/*if(this->samus->isInDirection(eDirection::kl))
-	{
-		this->samus->setVelocityX(-SAMUS_MIN_SPEED_Y);
-	}
-	else
-	{
-		this->samus->setVelocityX(SAMUS_MIN_SPEED_Y);
-	}*/
+
 	this->samus->setVelocityX((float)(-SAMUS_VERLOCITY_X*this->samus->getDirection()));
 	setBoundCollision();
-
-	// Set Data for sprite
-	//this->samus->getSprite()->setData(IndexManager::getInstance()->samusYellowTurnRight);
 
 	time_to_stand = 0;
 	time_animation = 0;
@@ -47,8 +37,7 @@ void SamusStateInjuring::init()
 
 void SamusStateInjuring::handleInput(float dt)
 {
-	
-
+	this->samus->setVelocityY(-SAMUS_MIN_SPEED_Y);
 }
 
 void SamusStateInjuring::onCollision(float dt)
@@ -160,6 +149,7 @@ void SamusStateInjuring::update(float dt)
 		//if(this->)
 		this->samus->setStatus(SamusStateManager::getInstance()->getOldStatus());
 	}
+
 	if (this->samus->getStatus() != eStatus::INJURING)
 	{
 		switch (this->samus->getStatus())
@@ -174,9 +164,6 @@ void SamusStateInjuring::update(float dt)
 		SamusStateManager::getInstance()->changeStateTo(this->samus->getStatus());
 		return;
 	}
-
-	this->samus->setVelocityY(-SAMUS_MIN_SPEED_Y);
-	this->samus->setVelocityX((float)(-SAMUS_VERLOCITY_X*this->samus->getDirection()));
 }
 
 void SamusStateInjuring::onStart()

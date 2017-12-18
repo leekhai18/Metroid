@@ -43,6 +43,8 @@ void SamusStateRolling::init()
 
 void SamusStateRolling::handleInput(float dt)
 {
+	this->samus->setVelocity(VECTOR2(this->samus->getVelocity().x, -SAMUS_MIN_SPEED_Y));
+
 	//handle press left button
 	if (input->isKeyDown(VK_LEFT) && input->isKeyUp(VK_RIGHT))
 	{
@@ -231,7 +233,6 @@ void SamusStateRolling::update(float dt)
 	this->samus->setCanMoveRight(true);
 
 	move_to_fall = true;
-	this->samus->setVelocity(VECTOR2(this->samus->getVelocity().x, -SAMUS_MIN_SPEED_Y));
 	canStanding = false;
 }
 

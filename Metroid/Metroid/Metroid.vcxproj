@@ -156,6 +156,7 @@
     <ClInclude Include="Metroid.h" />
     <ClInclude Include="BulletPool.h" />
     <ClInclude Include="MissileRocket.h" />
+    <ClInclude Include="MotherBrain.h" />
     <ClInclude Include="ObjectManager.h" />
     <ClInclude Include="Port.h" />
     <ClInclude Include="Quadtree.h" />
@@ -216,6 +217,7 @@
     <ClCompile Include="Metroid.cpp" />
     <ClCompile Include="BulletPool.cpp" />
     <ClCompile Include="MissileRocket.cpp" />
+    <ClCompile Include="MotherBrain.cpp" />
     <ClCompile Include="ObjectManager.cpp" />
     <ClCompile Include="Port.cpp" />
     <ClCompile Include="Quadtree.cpp" />

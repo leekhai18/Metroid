@@ -21,6 +21,7 @@
 #include "Skree.h"
 #include "Ripper.h"
 #include "Rio.h"
+#include "MotherBrain.h"
 #include "Camera.h"
 #include "Collision.h"
 
@@ -263,20 +264,21 @@ bool ObjectManager::load_list(const char * filename)
 		int id;
 		MetroidRect bound;
 
-		//// write json file
+		// write json file
 		//Document d;
 		//d.Parse("json");
-		//ofstream ofs("json\\objects.json");
+		//ofstream ofs("json\\aaa.json");
 		//OStreamWrapper osw(ofs);
 		//Writer<OStreamWrapper> writer(osw);
 
-		/*writer.StartObject();
+		//writer.StartObject();
 
-		writer.Key("Wall");
-		writer.StartArray();
-*/
+
+
 #pragma region Wall
 		// Load Wall POS , 650 
+	/*	writer.Key("Wall");
+		writer.StartArray();*/
 		const Value& listWall = jSon["Wall"];
 	
 		if (listWall.IsArray())
@@ -286,14 +288,13 @@ bool ObjectManager::load_list(const char * filename)
 			{
 				BaseObject *wall = new BaseObject(eID::WALL);
 
-			
 				id = listWall[i]["id"].GetInt();
 				x = listWall[i]["x"].GetFloat();
-				y = listWall[i]["y"].GetFloat(); // Bị lệch 32bit giữa 2 layer WALL and map
+				y = listWall[i]["y"].GetFloat();
 				height = listWall[i]["height"].GetFloat();
 				width = listWall[i]["width"].GetFloat();
 
-				/*writer.StartObject();
+	/*			writer.StartObject();
 				writer.Key("x");
 				writer.Double(x);
 				writer.Key("y");
@@ -318,15 +319,101 @@ bool ObjectManager::load_list(const char * filename)
 			}
 		}
 
-	/*writer.EndArray();	
-	writer.EndObject();*/
+	//writer.EndArray();	
 #pragma endregion
 
+#pragma region other
+	// create Elevator
+	/*writer.Key("Elevator");
+	writer.StartArray();*/
+		const Value& elevator = jSon["Elevator"];
+		if (elevator.IsArray())
+		{
+			for (SizeType i = 0; i < elevator.Size(); i++)
+			{
+				BaseObject *elev = new BaseObject(eID::ELEVATOR);
+
+				id = elevator[i]["id"].GetInt();
+				x = elevator[i]["x"].GetFloat();
+				y = elevator[i]["y"].GetFloat();
+				height = elevator[i]["height"].GetFloat();
+				width = elevator[i]["width"].GetFloat();
+
+				/*			writer.StartObject();
+				writer.Key("x");
+				writer.Double(x);
+				writer.Key("y");
+				writer.Double(y);
+				writer.Key("height");
+				writer.Double(height);
+				writer.Key("width");
+				writer.Double(width);
+				writer.EndObject();*/
+
+				bound.left = x;
+				bound.top = y;
+				bound.right = bound.left + width;
+				bound.bottom = bound.top - height;
+				elev->setBoundCollision(bound);
+
+				elev->setActiveBound(bound);
+
+				object_list->push_back(elev);
+
+				map_object.insert(std::pair<int, BaseObject*>(id, elev));
+			}
+		}
+		//writer.EndArray();
+
+		// create Fire
+		/*writer.Key("Fire");
+		writer.StartArray();*/
+		const Value& listFire = jSon["Fire"];
+		if (listFire.IsArray())
+		{
+			for (SizeType i = 0; i < listFire.Size(); i++)
+			{
+				BaseObject *fire = new BaseObject(eID::FIRE);
+
+				id = listFire[i]["id"].GetInt();
+				x = listFire[i]["x"].GetFloat();
+				y = listFire[i]["y"].GetFloat();
+				height = listFire[i]["height"].GetFloat();
+				width = listFire[i]["width"].GetFloat();
+
+				//writer.StartObject();
+				//writer.Key("x");
+				//writer.Double(x);
+				//writer.Key("y");
+				//writer.Double(y);
+				//writer.Key("height");
+				//writer.Double(height);
+				//writer.Key("width");
+				//writer.Double(width);
+				//writer.EndObject();
+
+				bound.left = x;
+				bound.top = y;
+				bound.right = bound.left + width;
+				bound.bottom = bound.top - height;
+				fire->setBoundCollision(bound);
+
+				fire->setActiveBound(bound);
+
+				object_list->push_back(fire);
+
+				map_object.insert(std::pair<int, BaseObject*>(id, fire));
+			}
+		}
+		//writer.EndArray();
+
+#pragma endregion
 
 #pragma region Special Bricks
 		// BrickSecretBlue, 2
 		//writer.Key("BrickSecretBlue");
 		//writer.StartArray();
+
 		const Value& listBrickSecretBlue = jSon["BrickSecretBlue"];
 		if (listBrickSecretBlue.IsArray())
 		{
@@ -340,12 +427,12 @@ bool ObjectManager::load_list(const char * filename)
 				bsb->setPosition(VECTOR2(x, y));
 
 
-				//writer.StartObject();
-				//writer.Key("x");
-				//writer.Double(x);
-				//writer.Key("y");
-				//writer.Double(y);
-				//writer.EndObject();
+		/*		writer.StartObject();
+				writer.Key("x");
+				writer.Double(x);
+				writer.Key("y");
+				writer.Double(y);
+				writer.EndObject();*/
 
 				bound.left = x;
 				bound.top = y;
@@ -363,8 +450,9 @@ bool ObjectManager::load_list(const char * filename)
 		//writer.EndArray();
 
 		// BrickSerectGreen, 9
-		//writer.Key("BrickSerectGreen");
-		//writer.StartArray();
+	/*	writer.Key("BrickSerectGreen");
+		writer.StartArray();*/
+
 		const Value& listBrickSerectGreen = jSon["BrickSerectGreen"];
 		if (listBrickSerectGreen.IsArray())
 		{
@@ -377,12 +465,12 @@ bool ObjectManager::load_list(const char * filename)
 				y = listBrickSerectGreen[i]["y"].GetFloat();
 				bsg->setPosition(VECTOR2(x, y));
 
-				//writer.StartObject();
-				//writer.Key("x");
-				//writer.Double(x);
-				//writer.Key("y");
-				//writer.Double(y);
-				//writer.EndObject();
+		/*		writer.StartObject();
+				writer.Key("x");
+				writer.Double(x);
+				writer.Key("y");
+				writer.Double(y);
+				writer.EndObject();*/
 
 				bound.left = x;
 				bound.top = y;
@@ -401,8 +489,8 @@ bool ObjectManager::load_list(const char * filename)
 
 
 		// BrickGreen, 5
-		//writer.Key("BrickGreen");
-		//writer.StartArray();
+		/*writer.Key("BrickGreen");
+		writer.StartArray();*/
 		const Value& listBrickGreen = jSon["BrickGreen"];
 		if (listBrickGreen.IsArray())
 		{
@@ -415,12 +503,12 @@ bool ObjectManager::load_list(const char * filename)
 				y = listBrickGreen[i]["y"].GetFloat();
 				bg->setPosition(VECTOR2(x, y));
 
-				//writer.StartObject();
-				//writer.Key("x");
-				//writer.Double(x);
-				//writer.Key("y");
-				//writer.Double(y);
-				//writer.EndObject();
+			/*	writer.StartObject();
+				writer.Key("x");
+				writer.Double(x);
+				writer.Key("y");
+				writer.Double(y);
+				writer.EndObject();*/
 
 				bound.left = x;
 				bound.top = y;
@@ -476,14 +564,15 @@ bool ObjectManager::load_list(const char * filename)
 				bb->setActiveBound(bound);
 
 				object_list->push_back(bb);
+
 				map_object.insert(std::pair<int, BaseObject*>(id, bb));
 			}
 		}
-		//writer.EndArray();
+	//	writer.EndArray();
 
 		// BrickRed, 63
-		//writer.Key("BrickRed");
-		//writer.StartArray();
+	/*	writer.Key("BrickRed");
+		writer.StartArray();*/
 		const Value& listBrickRed = jSon["BrickRed"];
 		if (listBrickRed.IsArray())
 		{
@@ -496,12 +585,12 @@ bool ObjectManager::load_list(const char * filename)
 				y = listBrickRed[i]["y"].GetFloat();
 				br->setPosition(VECTOR2(x, y));
 
-				//writer.StartObject();
-				//writer.Key("x");
-				//writer.Double(x);
-				//writer.Key("y");
-				//writer.Double(y);
-				//writer.EndObject();
+		/*		writer.StartObject();
+				writer.Key("x");
+				writer.Double(x);
+				writer.Key("y");
+				writer.Double(y);
+				writer.EndObject();*/
 
 				bound.left = x;
 				bound.top = y;
@@ -512,6 +601,7 @@ bool ObjectManager::load_list(const char * filename)
 				br->setActiveBound(bound);
 
 				object_list->push_back(br);
+
 				map_object.insert(std::pair<int, BaseObject*>(id, br));
 			}
 		}
@@ -521,8 +611,8 @@ bool ObjectManager::load_list(const char * filename)
 
 #pragma region Gates and Ports
 		// create GateBlue R, 25 
-		//writer.Key("GateBlueR");
-		//writer.StartArray();
+	/*	writer.Key("GateBlueR");
+		writer.StartArray();*/
 		const Value& listGateBlueR = jSon["GateBlueR"];
 		if (listGateBlueR.IsArray())
 		{
@@ -535,12 +625,12 @@ bool ObjectManager::load_list(const char * filename)
 				y = listGateBlueR[i]["y"].GetFloat();
 				gateBlueR->setPosition(VECTOR2(x, y));
 
-				//writer.StartObject();
-				//writer.Key("x");
-				//writer.Double(x);
-				//writer.Key("y");
-				//writer.Double(y);
-				//writer.EndObject();
+				/*writer.StartObject();
+				writer.Key("x");
+				writer.Double(x);
+				writer.Key("y");
+				writer.Double(y);
+				writer.EndObject();*/
 
 				bound.left = x;
 				bound.top = y;
@@ -551,14 +641,15 @@ bool ObjectManager::load_list(const char * filename)
 				gateBlueR->setActiveBound(bound);
 
 				object_list->push_back(gateBlueR);
+
 				map_object.insert(std::pair<int, BaseObject*>(id, gateBlueR));
 			}
 		}
 		//writer.EndArray();
 
 		// create GateBlue L, 25 
-		//writer.Key("GateBuleL");
-		//writer.StartArray();
+		/*writer.Key("GateBuleL");
+		writer.StartArray();*/
 		const Value& listGateBlueL = jSon["GateBuleL"];
 		if (listGateBlueL.IsArray())
 		{
@@ -572,12 +663,12 @@ bool ObjectManager::load_list(const char * filename)
 				y = listGateBlueL[i]["y"].GetFloat();
 				gateBlueL->setPosition(VECTOR2(x, y));
 
-				//writer.StartObject();
-				//writer.Key("x");
-				//writer.Double(x);
-				//writer.Key("y");
-				//writer.Double(y);
-				//writer.EndObject();
+		/*		writer.StartObject();
+				writer.Key("x");
+				writer.Double(x);
+				writer.Key("y");
+				writer.Double(y);
+				writer.EndObject();*/
 
 				bound.left = x;
 				bound.top = y;
@@ -588,14 +679,15 @@ bool ObjectManager::load_list(const char * filename)
 				gateBlueL->setActiveBound(bound);
 
 				object_list->push_back(gateBlueL);
+
 				map_object.insert(std::pair<int, BaseObject*>(id, gateBlueL));
 			}
 		}
 		//writer.EndArray();
 
 		// create GateRed R, 4
-		//writer.Key("GateRedR");
-		//writer.StartArray();
+	/*	writer.Key("GateRedR");
+		writer.StartArray();*/
 		const Value& listGateRedR = jSon["GateRedR"];
 		if (listGateRedR.IsArray())
 		{
@@ -608,12 +700,12 @@ bool ObjectManager::load_list(const char * filename)
 				y = listGateRedR[i]["y"].GetFloat();
 				gateRedR->setPosition(VECTOR2(x, y));
 
-				//writer.StartObject();
-				//writer.Key("x");
-				//writer.Double(x);
-				//writer.Key("y");
-				//writer.Double(y);
-				//writer.EndObject();
+			/*	writer.StartObject();
+				writer.Key("x");
+				writer.Double(x);
+				writer.Key("y");
+				writer.Double(y);
+				writer.EndObject();*/
 
 				bound.left = x;
 				bound.top = y;
@@ -624,14 +716,15 @@ bool ObjectManager::load_list(const char * filename)
 				gateRedR->setActiveBound(bound);
 
 				object_list->push_back(gateRedR);
+
 				map_object.insert(std::pair<int, BaseObject*>(id, gateRedR));
 			}
 		}
 		//writer.EndArray();
 
 		// create GateRed L, 4
-		//writer.Key("GateRedL");
-		//writer.StartArray();
+	/*	writer.Key("GateRedL");
+		writer.StartArray();*/
 		const Value& listGateRedL = jSon["GateRedL"];
 		if (listGateRedL.IsArray())
 		{
@@ -661,6 +754,7 @@ bool ObjectManager::load_list(const char * filename)
 				gateRedL->setActiveBound(bound);
 
 				object_list->push_back(gateRedL);
+
 				map_object.insert(std::pair<int, BaseObject*>(id, gateRedL));
 			}
 		}
@@ -684,16 +778,16 @@ bool ObjectManager::load_list(const char * filename)
 				height = listPort[i]["height"].GetFloat();
 				width = listPort[i]["width"].GetFloat();
 
-				//writer.StartObject();
-				//writer.Key("x");
-				//writer.Double(x);
-				//writer.Key("y");
-				//writer.Double(y);
-				//writer.Key("height");
-				//writer.Double(height);
-				//writer.Key("width");
-				//writer.Double(width);
-				//writer.EndObject();
+		/*		writer.StartObject();
+				writer.Key("x");
+				writer.Double(x);
+				writer.Key("y");
+				writer.Double(y);
+				writer.Key("height");
+				writer.Double(height);
+				writer.Key("width");
+				writer.Double(width);
+				writer.EndObject();*/
 
 				bound.left = x;
 				bound.top = y;
@@ -704,6 +798,7 @@ bool ObjectManager::load_list(const char * filename)
 				port->setActiveBound(bound);
 
 				object_list->push_back(port);
+
 				map_object.insert(std::pair<int, BaseObject*>(id, port));
 			}
 		}
@@ -724,13 +819,13 @@ bool ObjectManager::load_list(const char * filename)
 			y = maruMari["y"].GetFloat();
 			mm->setPosition(VECTOR2(x + 2, y));
 
-			//writer.Key("MaruMari");
-			//writer.StartObject();
-			//writer.Key("x");
-			//writer.Double(x);
-			//writer.Key("y");
-			//writer.Double(y);
-			//writer.EndObject();
+		/*	writer.Key("MaruMari");
+			writer.StartObject();
+			writer.Key("x");
+			writer.Double(x);
+			writer.Key("y");
+			writer.Double(y);
+			writer.EndObject();*/
 
 			bound.left = x;
 			bound.top = y;
@@ -745,73 +840,84 @@ bool ObjectManager::load_list(const char * filename)
 		}
 
 		// create ice beam
+		/*writer.Key("IceBeam");
+		writer.StartArray();*/
 		const Value& iceBeam = jSon["IceBeam"];
-		if (iceBeam.IsObject())
+		if (iceBeam.IsArray())
 		{
-			IceBeam *ib = new IceBeam(this->textureManager, this->graphics);
+			for (SizeType i = 0; i < iceBeam.Size(); i++)
+			{
+				IceBeam *ib = new IceBeam(this->textureManager, this->graphics);
 
-			id = iceBeam["id"].GetInt();
-			x = iceBeam["x"].GetFloat();
-			y = iceBeam["y"].GetFloat();
-			ib->setPosition(VECTOR2(x, y));
+				id = iceBeam[i]["id"].GetInt();
+				x = iceBeam[i]["x"].GetFloat();
+				y = iceBeam[i]["y"].GetFloat();
+				ib->setPosition(VECTOR2(x, y));
 
-			//writer.Key("IceBeam");
-			//writer.StartObject();
-			//writer.Key("x");
-			//writer.Double(x);
-			//writer.Key("y");
-			//writer.Double(y);
-			//writer.EndObject();
 
-			bound.left = x;
-			bound.top = y;
-			bound.right = bound.left + ib->getSprite()->getWidth();
-			bound.bottom = bound.top - ib->getSprite()->getHeight();
-			ib->setBoundCollision(bound);
+			/*	writer.StartObject();
+				writer.Key("x");
+				writer.Double(x);
+				writer.Key("y");
+				writer.Double(y);
+				writer.EndObject();*/
 
-			ib->setActiveBound(bound);
+				bound.left = x;
+				bound.top = y;
+				bound.right = bound.left + ib->getSprite()->getWidth();
+				bound.bottom = bound.top - ib->getSprite()->getHeight();
+				ib->setBoundCollision(bound);
 
-			object_list->push_back(ib);
+				ib->setActiveBound(bound);
 
-			map_object.insert(std::pair<int, BaseObject*>(id, ib));
+				object_list->push_back(ib);
+
+				map_object.insert(std::pair<int, BaseObject*>(id, ib));
+			}
 		}
+		//writer.EndArray();
 
 		// create Bomb
+		/*writer.Key("Bomb");
+		writer.StartArray();*/
 		const Value& bomb = jSon["Bomb"];
-		if (bomb.IsObject())
+		if (bomb.IsArray())
 		{
-			Bomb *bm = new Bomb(this->textureManager, this->graphics);
+			for (SizeType i = 0; i < bomb.Size(); i++)
+			{
+				Bomb *bm = new Bomb(this->textureManager, this->graphics);
 
-			id = bomb["id"].GetInt();
-			x = bomb["x"].GetFloat();
-			y = bomb["y"].GetFloat();
-			bm->setPosition(VECTOR2(x, y));
+				id = bomb[i]["id"].GetInt();
+				x = bomb[i]["x"].GetFloat();
+				y = bomb[i]["y"].GetFloat();
+				bm->setPosition(VECTOR2(x, y));
 
-			//writer.Key("Bomb");
-			//writer.StartObject();
-			//writer.Key("x");
-			//writer.Double(x);
-			//writer.Key("y");
-			//writer.Double(y);
-			//writer.EndObject();
+			/*	writer.StartObject();
+				writer.Key("x");
+				writer.Double(x);
+				writer.Key("y");
+				writer.Double(y);
+				writer.EndObject();*/
 
 
-			bound.left = x;
-			bound.top = y;
-			bound.right = bound.left + bm->getSprite()->getWidth();
-			bound.bottom = bound.top - bm->getSprite()->getHeight();
-			bm->setBoundCollision(bound);
+				bound.left = x;
+				bound.top = y;
+				bound.right = bound.left + bm->getSprite()->getWidth();
+				bound.bottom = bound.top - bm->getSprite()->getHeight();
+				bm->setBoundCollision(bound);
 
-			bm->setActiveBound(bound);
+				bm->setActiveBound(bound);
 
-			object_list->push_back(bm);
+				object_list->push_back(bm);
 
-			map_object.insert(std::pair<int, BaseObject*>(id, bm));
+				map_object.insert(std::pair<int, BaseObject*>(id, bm));
+			}
 		}
+		//writer.EndArray();
 
 		// create EnergyTank, 3
-		//writer.Key("EnergyTank");
-		//writer.StartArray();
+		/*writer.Key("EnergyTank");
+		writer.StartArray();*/
 		const Value& listEnergyTank = jSon["EnergyTank"];
 		if (listEnergyTank.IsArray())
 		{
@@ -825,12 +931,12 @@ bool ObjectManager::load_list(const char * filename)
 				y = listEnergyTank[i]["y"].GetFloat();
 				energyT->setPosition(VECTOR2(x, y));
 
-				//writer.StartObject();
-				//writer.Key("x");
-				//writer.Double(x);
-				//writer.Key("y");
-				//writer.Double(y);
-				//writer.EndObject();
+				////writer.StartObject();
+				////writer.Key("x");
+				////writer.Double(x);
+				////writer.Key("y");
+				////writer.Double(y);
+				////writer.EndObject();
 
 				bound.left = x;
 				bound.top = y;
@@ -848,37 +954,42 @@ bool ObjectManager::load_list(const char * filename)
 		//writer.EndArray();
 
 		// create Long Beam
+	/*	writer.Key("LongBeam");
+		writer.StartArray();*/
 		const Value& longBeam = jSon["LongBeam"];
-		if (longBeam.IsObject())
+		if (longBeam.IsArray())
 		{
-			LongBeam *lb = new LongBeam(this->textureManager, this->graphics);
+			for (SizeType i = 0; i < longBeam.Size(); i++)
+			{
+				LongBeam *lb = new LongBeam(this->textureManager, this->graphics);
 
-			id = longBeam["id"].GetInt();
-			x = longBeam["x"].GetFloat();
-			y = longBeam["y"].GetFloat();
-			lb->setPosition(VECTOR2(x, y));
+				id = longBeam[i]["id"].GetInt();
+				x = longBeam[i]["x"].GetFloat();
+				y = longBeam[i]["y"].GetFloat();
+				lb->setPosition(VECTOR2(x, y));
 
-			//writer.Key("LongBeam");
-			//writer.StartObject();
-			//writer.Key("x");
-			//writer.Double(x);
-			//writer.Key("y");
-			//writer.Double(y);
-			//writer.EndObject();
+				//writer.StartObject();
+				//writer.Key("x");
+				//writer.Double(x);
+				//writer.Key("y");
+				//writer.Double(y);
+				//writer.EndObject();
 
 
-			bound.left = x;
-			bound.top = y;
-			bound.right = bound.left + lb->getSprite()->getWidth();
-			bound.bottom = bound.top - lb->getSprite()->getHeight();
-			lb->setBoundCollision(bound);
+				bound.left = x;
+				bound.top = y;
+				bound.right = bound.left + lb->getSprite()->getWidth();
+				bound.bottom = bound.top - lb->getSprite()->getHeight();
+				lb->setBoundCollision(bound);
 
-			lb->setActiveBound(bound);
+				lb->setActiveBound(bound);
 
-			object_list->push_back(lb);
+				object_list->push_back(lb);
 
-			map_object.insert(std::pair<int, BaseObject*>(id, lb));
+				map_object.insert(std::pair<int, BaseObject*>(id, lb));
+			}
 		}
+		//writer.EndArray();
 
 		// create MissileRocket
 		//writer.Key("MissileRocket");
@@ -896,12 +1007,12 @@ bool ObjectManager::load_list(const char * filename)
 				y = listRocket[i]["y"].GetFloat();
 				rocket->setPosition(VECTOR2(x, y));
 
-				//writer.StartObject();
-				//writer.Key("x");
-				//writer.Double(x);
-				//writer.Key("y");
-				//writer.Double(y);
-				//writer.EndObject();
+	/*			writer.StartObject();
+				writer.Key("x");
+				writer.Double(x);
+				writer.Key("y");
+				writer.Double(y);
+				writer.EndObject();*/
 
 
 				bound.left = x;
@@ -920,37 +1031,43 @@ bool ObjectManager::load_list(const char * filename)
 		//writer.EndArray();
 
 		// create Varia
+	/*	writer.Key("Varia");
+		writer.StartArray();*/
+
 		const Value& varia = jSon["Varia"];
-		if (varia.IsObject())
+		if (varia.IsArray())
 		{
-			Varia *va = new Varia(this->textureManager, this->graphics);
+			for (SizeType i = 0; i < varia.Size(); i++)
+			{
+				Varia *va = new Varia(this->textureManager, this->graphics);
 
-			id = varia["id"].GetInt();
-			x = varia["x"].GetFloat();
-			y = varia["y"].GetFloat();
-			va->setPosition(VECTOR2(x, y));
+				id = varia[i]["id"].GetInt();
+				x = varia[i]["x"].GetFloat();
+				y = varia[i]["y"].GetFloat();
+				va->setPosition(VECTOR2(x, y));
 
-			//writer.Key("Varia");
-			//writer.StartObject();
-			//writer.Key("x");
-			//writer.Double(x);
-			//writer.Key("y");
-			//writer.Double(y);
-			//writer.EndObject();
+	/*			writer.StartObject();
+				writer.Key("x");
+				writer.Double(x);
+				writer.Key("y");
+				writer.Double(y);
+				writer.EndObject();*/
 
 
-			bound.left = x;
-			bound.top = y;
-			bound.right = bound.left + va->getSprite()->getWidth();
-			bound.bottom = bound.top - va->getSprite()->getHeight();
-			va->setBoundCollision(bound);
+				bound.left = x;
+				bound.top = y;
+				bound.right = bound.left + va->getSprite()->getWidth();
+				bound.bottom = bound.top - va->getSprite()->getHeight();
+				va->setBoundCollision(bound);
 
-			va->setActiveBound(bound);
+				va->setActiveBound(bound);
 
-			object_list->push_back(va);
+				object_list->push_back(va);
 
-			map_object.insert(std::pair<int, BaseObject*>(id, va));
+				map_object.insert(std::pair<int, BaseObject*>(id, va));
+			}
 		}
+		//writer.EndArray();
 
 #pragma endregion
 
@@ -1020,8 +1137,8 @@ bool ObjectManager::load_list(const char * filename)
 		}
 
 		// create ZommerYellow
-		//writer.Key("ZommerYellow");
-		//writer.StartArray();
+	/*	writer.Key("ZommerYellow");
+		writer.StartArray();*/
 		const Value& listZommerYellow = jSon["ZommerYellow"];
 		if (listZommerYellow.IsArray())
 		{
@@ -1032,8 +1149,6 @@ bool ObjectManager::load_list(const char * filename)
 				id = listZommerYellow[i]["id"].GetInt();
 				x = listZommerYellow[i]["x"].GetFloat() ;
 				y = listZommerYellow[i]["y"].GetFloat();
-				y = y- 16 +zmy->getSprite()->getHeight()*0.5f;
-				x += zmy->getSprite()->getWidth()*0.5f;
 				zmy->setPosition(VECTOR2(x, y));
 
 				const Value& arrayWall = listZommerYellow[i]["ListCollideID"];
@@ -1048,10 +1163,10 @@ bool ObjectManager::load_list(const char * filename)
 				bound.bottom = bound.top - zmy->getSprite()->getHeight();
 				zmy->setBoundCollision();
 
-				bound.bottom = listZommerYellow[i]["bottomA"].GetFloat();
-				bound.top = listZommerYellow[i]["topA"].GetFloat();
-				bound.left = listZommerYellow[i]["leftA"].GetFloat();
-				bound.right = listZommerYellow[i]["rightA"].GetFloat();
+				bound.bottom = listZommerYellow[i]["ba"].GetFloat();
+				bound.top = listZommerYellow[i]["ta"].GetFloat();
+				bound.left = listZommerYellow[i]["la"].GetFloat();
+				bound.right = listZommerYellow[i]["ra"].GetFloat();
 				zmy->setActiveBound(bound);
 
 				//writer.StartObject();
@@ -1059,13 +1174,13 @@ bool ObjectManager::load_list(const char * filename)
 				//writer.Double(x);
 				//writer.Key("y");
 				//writer.Double(y);
-				//writer.Key("bottomA");
+				//writer.Key("ba");
 				//writer.Double(bound.bottom);
-				//writer.Key("topA");
+				//writer.Key("ta");
 				//writer.Double(bound.top);
-				//writer.Key("leftA");
+				//writer.Key("la");
 				//writer.Double(bound.left);
-				//writer.Key("rightA");
+				//writer.Key("ra");
 				//writer.Double(bound.right);
 				//writer.EndObject();
 
@@ -1078,8 +1193,8 @@ bool ObjectManager::load_list(const char * filename)
 		//writer.EndArray();
 
 		// create ZommerBrown
-		//writer.Key("ZommerBrown");
-		//writer.StartArray();
+	/*	writer.Key("ZommerBrown");
+		writer.StartArray();*/
 		const Value& listZommerBrown = jSon["ZommerBrown"];
 		if (listZommerBrown.IsArray())
 		{
@@ -1090,8 +1205,6 @@ bool ObjectManager::load_list(const char * filename)
 				id = listZommerBrown[i]["id"].GetInt();
 				x = listZommerBrown[i]["x"].GetFloat();
 				y = listZommerBrown[i]["y"].GetFloat();
-				y = y - 16 + zmb->getSprite()->getHeight()*0.5f;
-				x += 8;
 				zmb->setPosition(VECTOR2(x, y));
 
 				const Value& arrayWall = listZommerBrown[i]["ListCollideID"];
@@ -1105,27 +1218,26 @@ bool ObjectManager::load_list(const char * filename)
 				bound.bottom = bound.top - zmb->getSprite()->getHeight();
 				zmb->setBoundCollision();
 
-				bound.bottom = listZommerBrown[i]["bottomA"].GetFloat();
-				bound.top = listZommerBrown[i]["topA"].GetFloat();
-				bound.left = listZommerBrown[i]["leftA"].GetFloat();
-				bound.right = listZommerBrown[i]["rightA"].GetFloat();
+				bound.bottom = listZommerBrown[i]["ba"].GetFloat();
+				bound.top = listZommerBrown[i]["ta"].GetFloat();
+				bound.left = listZommerBrown[i]["la"].GetFloat();
+				bound.right = listZommerBrown[i]["ra"].GetFloat();
 				zmb->setActiveBound(bound);
 
-				//writer.StartObject();
-				//writer.Key("x");
-				//writer.Double(x);
-				//writer.Key("y");
-				//writer.Double(y);
-				//writer.Key("bottomA");
-				//writer.Double(bound.bottom);
-				//writer.Key("topA");
-				//writer.Double(bound.top);
-				//writer.Key("leftA");
-				//writer.Double(bound.left);
-				//writer.Key("rightA");
-				//writer.Double(bound.right);
-				//writer.EndObject();
-
+		/*		writer.StartObject();
+				writer.Key("x");
+				writer.Double(x);
+				writer.Key("y");
+				writer.Double(y);
+				writer.Key("ba");
+				writer.Double(bound.bottom);
+				writer.Key("ta");
+				writer.Double(bound.top);
+				writer.Key("la");
+				writer.Double(bound.left);
+				writer.Key("ra");
+				writer.Double(bound.right);
+				writer.EndObject();*/
 
 				object_list->push_back(zmb);
 
@@ -1135,8 +1247,8 @@ bool ObjectManager::load_list(const char * filename)
 		//writer.EndArray();
 
 		// create ZommerRed
-		//writer.Key("ZommerRed");
-		//writer.StartArray();
+	/*	writer.Key("ZommerRed");
+		writer.StartArray();*/
 		const Value& listZommerRed = jSon["ZommerRed"];
 		if (listZommerRed.IsArray())
 		{
@@ -1147,8 +1259,7 @@ bool ObjectManager::load_list(const char * filename)
 				id = listZommerRed[i]["id"].GetInt();
 				x = listZommerRed[i]["x"].GetFloat();
 				y = listZommerRed[i]["y"].GetFloat();
-				y = y - 16 + zmr->getSprite()->getHeight()*0.5f;
-				x += 8;
+
 				zmr->setPosition(VECTOR2(x, y));
 
 				const Value& arrayWall = listZommerRed[i]["ListCollideID"];
@@ -1156,16 +1267,17 @@ bool ObjectManager::load_list(const char * filename)
 				{
 					zmr->getListWallCanCollide()->push_back(map_object.find(arrayWall[t].GetInt())->second);
 				}
+
 				bound.left = x;
 				bound.top = y;
 				bound.right = bound.left + zmr->getSprite()->getWidth();
 				bound.bottom = bound.top - zmr->getSprite()->getHeight();
 				zmr->setBoundCollision();
 
-				bound.bottom = listZommerRed[i]["bottomA"].GetFloat();
-				bound.top = listZommerRed[i]["topA"].GetFloat();
-				bound.left = listZommerRed[i]["leftA"].GetFloat();
-				bound.right = listZommerRed[i]["rightA"].GetFloat();
+				bound.bottom = listZommerRed[i]["ba"].GetFloat();
+				bound.top = listZommerRed[i]["ta"].GetFloat();
+				bound.left = listZommerRed[i]["la"].GetFloat();
+				bound.right = listZommerRed[i]["ra"].GetFloat();
 				zmr->setActiveBound(bound);
 
 				//writer.StartObject();
@@ -1173,13 +1285,13 @@ bool ObjectManager::load_list(const char * filename)
 				//writer.Double(x);
 				//writer.Key("y");
 				//writer.Double(y);
-				//writer.Key("bottomA");
+				//writer.Key("ba");
 				//writer.Double(bound.bottom);
-				//writer.Key("topA");
+				//writer.Key("ta");
 				//writer.Double(bound.top);
-				//writer.Key("leftA");
+				//writer.Key("la");
 				//writer.Double(bound.left);
-				//writer.Key("rightA");
+				//writer.Key("ra");
 				//writer.Double(bound.right);
 				//writer.EndObject();
 
@@ -1192,8 +1304,8 @@ bool ObjectManager::load_list(const char * filename)
 		//writer.EndArray();
 
 		// create ZebYellow
-		//writer.Key("SpawnZebYellow");
-		//writer.StartArray();
+		/*writer.Key("SpawnZebYellow");
+		writer.StartArray();*/
 		const Value& listZebYellow = jSon["SpawnZebYellow"];
 		if (listZebYellow.IsArray())
 		{
@@ -1212,26 +1324,26 @@ bool ObjectManager::load_list(const char * filename)
 				bound.bottom = bound.top - zby->getSprite()->getHeight();
 				zby->setBoundCollision(bound);
 
-				bound.bottom = listZebYellow[i]["bottomA"].GetFloat();
-				bound.top = listZebYellow[i]["topA"].GetFloat();
-				bound.left = listZebYellow[i]["leftA"].GetFloat();
-				bound.right = listZebYellow[i]["rightA"].GetFloat();
+				bound.bottom = listZebYellow[i]["ba"].GetFloat();
+				bound.top = listZebYellow[i]["ta"].GetFloat();
+				bound.left = listZebYellow[i]["la"].GetFloat();
+				bound.right = listZebYellow[i]["ra"].GetFloat();
 				zby->setActiveBound(bound);
 
-				//writer.StartObject();
-				//writer.Key("x");
-				//writer.Double(x);
-				//writer.Key("y");
-				//writer.Double(y);
-				//writer.Key("bottomA");
-				//writer.Double(bound.bottom);
-				//writer.Key("topA");
-				//writer.Double(bound.top);
-				//writer.Key("leftA");
-				//writer.Double(bound.left);
-				//writer.Key("rightA");
-				//writer.Double(bound.right);
-				//writer.EndObject();
+			/*	writer.StartObject();
+				writer.Key("x");
+				writer.Double(x);
+				writer.Key("y");
+				writer.Double(y);
+				writer.Key("ba");
+				writer.Double(bound.bottom);
+				writer.Key("ta");
+				writer.Double(bound.top);
+				writer.Key("la");
+				writer.Double(bound.left);
+				writer.Key("ra");
+				writer.Double(bound.right);
+				writer.EndObject();*/
 
 
 				object_list->push_back(zby);
@@ -1242,8 +1354,8 @@ bool ObjectManager::load_list(const char * filename)
 		//writer.EndArray();
 
 		// create ZebBrown
-		//writer.Key("SpawnZebBrown");
-		//writer.StartArray();
+		/*writer.Key("SpawnZebBrown");
+		writer.StartArray();*/
 		const Value& listZebBrown = jSon["SpawnZebBrown"];
 		if (listZebBrown.IsArray())
 		{
@@ -1262,10 +1374,10 @@ bool ObjectManager::load_list(const char * filename)
 				bound.bottom = bound.top - zbb->getSprite()->getHeight();
 				zbb->setBoundCollision(bound);
 
-				bound.bottom = listZebBrown[i]["bottomA"].GetFloat();
-				bound.top = listZebBrown[i]["topA"].GetFloat();
-				bound.left = listZebBrown[i]["leftA"].GetFloat();
-				bound.right = listZebBrown[i]["rightA"].GetFloat();
+				bound.bottom = listZebBrown[i]["ba"].GetFloat();
+				bound.top = listZebBrown[i]["ta"].GetFloat();
+				bound.left = listZebBrown[i]["la"].GetFloat();
+				bound.right = listZebBrown[i]["ra"].GetFloat();
 				zbb->setActiveBound(bound);
 
 				//writer.StartObject();
@@ -1273,13 +1385,13 @@ bool ObjectManager::load_list(const char * filename)
 				//writer.Double(x);
 				//writer.Key("y");
 				//writer.Double(y);
-				//writer.Key("bottomA");
+				//writer.Key("ba");
 				//writer.Double(bound.bottom);
-				//writer.Key("topA");
+				//writer.Key("ta");
 				//writer.Double(bound.top);
-				//writer.Key("leftA");
+				//writer.Key("la");
 				//writer.Double(bound.left);
-				//writer.Key("rightA");
+				//writer.Key("ra");
 				//writer.Double(bound.right);
 				//writer.EndObject();
 
@@ -1292,8 +1404,8 @@ bool ObjectManager::load_list(const char * filename)
 		//writer.EndArray();
 
 		// create ZebRed
-		//writer.Key("SpawnZebRed");
-		//writer.StartArray();
+	/*	writer.Key("SpawnZebRed");
+		writer.StartArray();*/
 		const Value& listZebRed = jSon["SpawnZebRed"];
 		if (listZebRed.IsArray())
 		{
@@ -1312,26 +1424,26 @@ bool ObjectManager::load_list(const char * filename)
 				bound.bottom = bound.top - zbr->getSprite()->getHeight();
 				zbr->setBoundCollision(bound);
 
-				bound.bottom = listZebRed[i]["bottomA"].GetFloat();
-				bound.top = listZebRed[i]["topA"].GetFloat();
-				bound.left = listZebRed[i]["leftA"].GetFloat();
-				bound.right = listZebRed[i]["rightA"].GetFloat();
+				bound.bottom = listZebRed[i]["ba"].GetFloat();
+				bound.top = listZebRed[i]["ta"].GetFloat();
+				bound.left = listZebRed[i]["la"].GetFloat();
+				bound.right = listZebRed[i]["ra"].GetFloat();
 				zbr->setActiveBound(bound);
 
-				//writer.StartObject();
-				//writer.Key("x");
-				//writer.Double(x);
-				//writer.Key("y");
-				//writer.Double(y);
-				//writer.Key("bottomA");
-				//writer.Double(bound.bottom);
-				//writer.Key("topA");
-				//writer.Double(bound.top);
-				//writer.Key("leftA");
-				//writer.Double(bound.left);
-				//writer.Key("rightA");
-				//writer.Double(bound.right);
-				//writer.EndObject();
+	/*			writer.StartObject();
+				writer.Key("x");
+				writer.Double(x);
+				writer.Key("y");
+				writer.Double(y);
+				writer.Key("ba");
+				writer.Double(bound.bottom);
+				writer.Key("ta");
+				writer.Double(bound.top);
+				writer.Key("la");
+				writer.Double(bound.left);
+				writer.Key("ra");
+				writer.Double(bound.right);
+				writer.EndObject();*/
 
 
 				object_list->push_back(zbr);
@@ -1342,8 +1454,8 @@ bool ObjectManager::load_list(const char * filename)
 		//writer.EndArray();
 
 		// create WaverBrown
-		//writer.Key("WaverGreen");
-		//writer.StartArray();
+		/*writer.Key("WaverGreen");
+		writer.StartArray();*/
 		const Value& listWaverBrown = jSon["WaverGreen"];
 		if (listWaverBrown.IsArray())
 		{
@@ -1362,26 +1474,26 @@ bool ObjectManager::load_list(const char * filename)
 				bound.bottom = bound.top - wvb->getSprite()->getHeight();
 				wvb->setBoundCollision(bound);
 
-				bound.bottom = listWaverBrown[i]["bottomA"].GetFloat();
-				bound.top = listWaverBrown[i]["topA"].GetFloat();
-				bound.left = listWaverBrown[i]["leftA"].GetFloat();
-				bound.right = listWaverBrown[i]["rightA"].GetFloat();
+				bound.bottom = listWaverBrown[i]["ba"].GetFloat();
+				bound.top = listWaverBrown[i]["ta"].GetFloat();
+				bound.left = listWaverBrown[i]["la"].GetFloat();
+				bound.right = listWaverBrown[i]["ra"].GetFloat();
 				wvb->setActiveBound(bound);
 
-				//writer.StartObject();
-				//writer.Key("x");
-				//writer.Double(x);
-				//writer.Key("y");
-				//writer.Double(y);
-				//writer.Key("bottomA");
-				//writer.Double(bound.bottom);
-				//writer.Key("topA");
-				//writer.Double(bound.top);
-				//writer.Key("leftA");
-				//writer.Double(bound.left);
-				//writer.Key("rightA");
-				//writer.Double(bound.right);
-				//writer.EndObject();
+	/*			writer.StartObject();
+				writer.Key("x");
+				writer.Double(x);
+				writer.Key("y");
+				writer.Double(y);
+				writer.Key("ba");
+				writer.Double(bound.bottom);
+				writer.Key("ta");
+				writer.Double(bound.top);
+				writer.Key("la");
+				writer.Double(bound.left);
+				writer.Key("ra");
+				writer.Double(bound.right);
+				writer.EndObject();*/
 
 
 
@@ -1393,8 +1505,8 @@ bool ObjectManager::load_list(const char * filename)
 		//writer.EndArray();
 
 		// create WaverRed
-		//writer.Key("WaverBlue");
-		//writer.StartArray();
+		/*writer.Key("WaverBlue");
+		writer.StartArray();*/
 		const Value& listWaverRed = jSon["WaverBlue"];
 		if (listWaverRed.IsArray())
 		{
@@ -1413,10 +1525,10 @@ bool ObjectManager::load_list(const char * filename)
 				bound.bottom = bound.top - wvr->getSprite()->getHeight();
 				wvr->setBoundCollision(bound);
 
-				bound.bottom = listWaverRed[i]["bottomA"].GetFloat();
-				bound.top = listWaverRed[i]["topA"].GetFloat();
-				bound.left = listWaverRed[i]["leftA"].GetFloat();
-				bound.right = listWaverRed[i]["rightA"].GetFloat();
+				bound.bottom = listWaverRed[i]["ba"].GetFloat();
+				bound.top = listWaverRed[i]["ta"].GetFloat();
+				bound.left = listWaverRed[i]["la"].GetFloat();
+				bound.right = listWaverRed[i]["ra"].GetFloat();
 				wvr->setActiveBound(bound);
 
 				//writer.StartObject();
@@ -1424,13 +1536,13 @@ bool ObjectManager::load_list(const char * filename)
 				//writer.Double(x);
 				//writer.Key("y");
 				//writer.Double(y);
-				//writer.Key("bottomA");
+				//writer.Key("ba");
 				//writer.Double(bound.bottom);
-				//writer.Key("topA");
+				//writer.Key("ta");
 				//writer.Double(bound.top);
-				//writer.Key("leftA");
+				//writer.Key("la");
 				//writer.Double(bound.left);
-				//writer.Key("rightA");
+				//writer.Key("ra");
 				//writer.Double(bound.right);
 				//writer.EndObject();
 
@@ -1443,8 +1555,8 @@ bool ObjectManager::load_list(const char * filename)
 		//writer.EndArray();
 
 		// create SkreeYellow
-		//writer.Key("SkreeYellow");
-		//writer.StartArray();
+	/*	writer.Key("SkreeYellow");
+		writer.StartArray();*/
 		const Value& listSkreeYellow = jSon["SkreeYellow"];
 		if (listSkreeYellow.IsArray())
 		{
@@ -1465,26 +1577,26 @@ bool ObjectManager::load_list(const char * filename)
 					sky->getListWallCanCollide()->push_back(map_object.find(arrayWall[t].GetInt())->second);
 				}
 
-				bound.bottom = listSkreeYellow[i]["bottomA"].GetFloat();
-				bound.top = listSkreeYellow[i]["topA"].GetFloat();
-				bound.left = listSkreeYellow[i]["leftA"].GetFloat();
-				bound.right = listSkreeYellow[i]["rightA"].GetFloat();
+				bound.bottom = listSkreeYellow[i]["ba"].GetFloat();
+				bound.top = listSkreeYellow[i]["ta"].GetFloat();
+				bound.left = listSkreeYellow[i]["la"].GetFloat();
+				bound.right = listSkreeYellow[i]["ra"].GetFloat();
 				sky->setActiveBound(bound);
 
-				//writer.StartObject();
-				//writer.Key("x");
-				//writer.Double(x);
-				//writer.Key("y");
-				//writer.Double(y);
-				//writer.Key("bottomA");
-				//writer.Double(bound.bottom);
-				//writer.Key("topA");
-				//writer.Double(bound.top);
-				//writer.Key("leftA");
-				//writer.Double(bound.left);
-				//writer.Key("rightA");
-				//writer.Double(bound.right);
-				//writer.EndObject();
+		/*		writer.StartObject();
+				writer.Key("x");
+				writer.Double(x);
+				writer.Key("y");
+				writer.Double(y);
+				writer.Key("ba");
+				writer.Double(bound.bottom);
+				writer.Key("ta");
+				writer.Double(bound.top);
+				writer.Key("la");
+				writer.Double(bound.left);
+				writer.Key("ra");
+				writer.Double(bound.right);
+				writer.EndObject();*/
 
 
 				object_list->push_back(sky);
@@ -1495,8 +1607,8 @@ bool ObjectManager::load_list(const char * filename)
 		//writer.EndArray();
 
 		// create SkreeBrown
-		//writer.Key("SkreeBrown");
-		//writer.StartArray();
+		/*writer.Key("SkreeBrown");
+		writer.StartArray();*/
 		const Value& listSkreeBrown = jSon["SkreeBrown"];
 		if (listSkreeBrown.IsArray())
 		{
@@ -1517,26 +1629,26 @@ bool ObjectManager::load_list(const char * filename)
 					skb->getListWallCanCollide()->push_back(map_object.find(arrayWall[t].GetInt())->second);
 				}
 
-				bound.bottom = listSkreeBrown[i]["bottomA"].GetFloat();
-				bound.top = listSkreeBrown[i]["topA"].GetFloat();
-				bound.left = listSkreeBrown[i]["leftA"].GetFloat();
-				bound.right = listSkreeBrown[i]["rightA"].GetFloat();
+				bound.bottom = listSkreeBrown[i]["ba"].GetFloat();
+				bound.top = listSkreeBrown[i]["ta"].GetFloat();
+				bound.left = listSkreeBrown[i]["la"].GetFloat();
+				bound.right = listSkreeBrown[i]["ra"].GetFloat();
 				skb->setActiveBound(bound);
 
-				//writer.StartObject();
-				//writer.Key("x");
-				//writer.Double(x);
-				//writer.Key("y");
-				//writer.Double(y);
-				//writer.Key("bottomA");
-				//writer.Double(bound.bottom);
-				//writer.Key("topA");
-				//writer.Double(bound.top);
-				//writer.Key("leftA");
-				//writer.Double(bound.left);
-				//writer.Key("rightA");
-				//writer.Double(bound.right);
-				//writer.EndObject();
+	/*			writer.StartObject();
+				writer.Key("x");
+				writer.Double(x);
+				writer.Key("y");
+				writer.Double(y);
+				writer.Key("ba");
+				writer.Double(bound.bottom);
+				writer.Key("ta");
+				writer.Double(bound.top);
+				writer.Key("la");
+				writer.Double(bound.left);
+				writer.Key("ra");
+				writer.Double(bound.right);
+				writer.EndObject();*/
 
 
 				object_list->push_back(skb);
@@ -1547,8 +1659,8 @@ bool ObjectManager::load_list(const char * filename)
 		//writer.EndArray();
 
 		// create RipperYellow
-		//writer.Key("RipperYellow");
-		//writer.StartArray();
+	/*	writer.Key("RipperYellow");
+		writer.StartArray();*/
 		const Value& listRipperYellow = jSon["RipperYellow"];
 		if (listRipperYellow.IsArray())
 		{
@@ -1560,8 +1672,6 @@ bool ObjectManager::load_list(const char * filename)
 				x = listRipperYellow[i]["x"].GetFloat();
 				y = listRipperYellow[i]["y"].GetFloat();
 
-				y = y - 16 + rpy->getSprite()->getHeight()*0.5f;
-				x += rpy->getSprite()->getWidth()*0.5f;
 				rpy->setPosition(VECTOR2(x, y));
 
 				const Value& arrayWall = listRipperYellow[i]["ListCollideID"];
@@ -1572,27 +1682,27 @@ bool ObjectManager::load_list(const char * filename)
 
 				rpy->setBoundCollision();
 
-				bound.bottom = listRipperYellow[i]["bottomA"].GetFloat();
-				bound.top = listRipperYellow[i]["topA"].GetFloat();
-				bound.left = listRipperYellow[i]["leftA"].GetFloat();
-				bound.right = listRipperYellow[i]["rightA"].GetFloat();
+				bound.bottom = listRipperYellow[i]["ba"].GetFloat();
+				bound.top = listRipperYellow[i]["ta"].GetFloat();
+				bound.left = listRipperYellow[i]["la"].GetFloat();
+				bound.right = listRipperYellow[i]["ra"].GetFloat();
 				rpy->setActiveBound(bound);
 
 				
-				//writer.StartObject();
-				//writer.Key("x");
-				//writer.Double(x);
-				//writer.Key("y");
-				//writer.Double(y);
-				//writer.Key("bottomA");
-				//writer.Double(bound.bottom);
-				//writer.Key("topA");
-				//writer.Double(bound.top);
-				//writer.Key("leftA");
-				//writer.Double(bound.left);
-				//writer.Key("rightA");
-				//writer.Double(bound.right);
-				//writer.EndObject();
+	/*			writer.StartObject();
+				writer.Key("x");
+				writer.Double(x);
+				writer.Key("y");
+				writer.Double(y);
+				writer.Key("ba");
+				writer.Double(bound.bottom);
+				writer.Key("ta");
+				writer.Double(bound.top);
+				writer.Key("la");
+				writer.Double(bound.left);
+				writer.Key("ra");
+				writer.Double(bound.right);
+				writer.EndObject();*/
 
 
 				object_list->push_back(rpy);
@@ -1603,8 +1713,8 @@ bool ObjectManager::load_list(const char * filename)
 		//writer.EndArray();
 
 		// create RipperBrown
-		//writer.Key("RipperBrown");
-		//writer.StartArray();
+	/*	writer.Key("RipperBrown");
+		writer.StartArray();*/
 		const Value& listRipperBrown = jSon["RipperBrown"];
 		if (listRipperBrown.IsArray())
 		{
@@ -1616,8 +1726,6 @@ bool ObjectManager::load_list(const char * filename)
 				x = listRipperBrown[i]["x"].GetFloat();
 				y = listRipperBrown[i]["y"].GetFloat();
 
-				y = y - 16 + rpb->getSprite()->getHeight()*0.5f;
-				x = x + rpb->getSprite()->getWidth()*0.5f;
 				rpb->setPosition(VECTOR2(x, y));
 
 				const Value& arrayWall = listRipperBrown[i]["ListCollideID"];
@@ -1629,10 +1737,10 @@ bool ObjectManager::load_list(const char * filename)
 
 				rpb->setBoundCollision();
 
-				bound.bottom = listRipperBrown[i]["bottomA"].GetFloat();
-				bound.top = listRipperBrown[i]["topA"].GetFloat();
-				bound.left = listRipperBrown[i]["leftA"].GetFloat();
-				bound.right = listRipperBrown[i]["rightA"].GetFloat();
+				bound.bottom = listRipperBrown[i]["ba"].GetFloat();
+				bound.top = listRipperBrown[i]["ta"].GetFloat();
+				bound.left = listRipperBrown[i]["la"].GetFloat();
+				bound.right = listRipperBrown[i]["ra"].GetFloat();
 				rpb->setActiveBound(bound);
 
 				//writer.StartObject();
@@ -1640,13 +1748,13 @@ bool ObjectManager::load_list(const char * filename)
 				//writer.Double(x);
 				//writer.Key("y");
 				//writer.Double(y);
-				//writer.Key("bottomA");
+				//writer.Key("ba");
 				//writer.Double(bound.bottom);
-				//writer.Key("topA");
+				//writer.Key("ta");
 				//writer.Double(bound.top);
-				//writer.Key("leftA");
+				//writer.Key("la");
 				//writer.Double(bound.left);
-				//writer.Key("rightA");
+				//writer.Key("ra");
 				//writer.Double(bound.right);
 				//writer.EndObject();
 
@@ -1659,8 +1767,8 @@ bool ObjectManager::load_list(const char * filename)
 		//writer.EndArray();
 
 		// create RipperRed
-		//writer.Key("RipperRed");
-		//writer.StartArray();
+	/*	writer.Key("RipperRed");
+		writer.StartArray();*/
 		const Value& listRipperRed = jSon["RipperRed"];
 		if (listRipperRed.IsArray())
 		{
@@ -1672,8 +1780,6 @@ bool ObjectManager::load_list(const char * filename)
 				x = listRipperRed[i]["x"].GetFloat();
 				y = listRipperRed[i]["y"].GetFloat();
 
-				y = y - 16 + rpr->getSprite()->getHeight()*0.5f;
-				x = x + rpr->getSprite()->getWidth()*0.5f;
 				rpr->setPosition(VECTOR2(x, y));
 
 				const Value& arrayWall = listRipperRed[i]["ListCollideID"];
@@ -1684,10 +1790,10 @@ bool ObjectManager::load_list(const char * filename)
 
 				rpr->setBoundCollision();
 
-				bound.bottom = listRipperRed[i]["bottomA"].GetFloat();
-				bound.top = listRipperRed[i]["topA"].GetFloat();
-				bound.left = listRipperRed[i]["leftA"].GetFloat();
-				bound.right = listRipperRed[i]["rightA"].GetFloat();
+				bound.bottom = listRipperRed[i]["ba"].GetFloat();
+				bound.top = listRipperRed[i]["ta"].GetFloat();
+				bound.left = listRipperRed[i]["la"].GetFloat();
+				bound.right = listRipperRed[i]["ra"].GetFloat();
 				rpr->setActiveBound(bound);
 
 				//writer.StartObject();
@@ -1695,13 +1801,13 @@ bool ObjectManager::load_list(const char * filename)
 				//writer.Double(x);
 				//writer.Key("y");
 				//writer.Double(y);
-				//writer.Key("bottomA");
+				//writer.Key("ba");
 				//writer.Double(bound.bottom);
-				//writer.Key("topA");
+				//writer.Key("ta");
 				//writer.Double(bound.top);
-				//writer.Key("leftA");
+				//writer.Key("la");
 				//writer.Double(bound.left);
-				//writer.Key("rightA");
+				//writer.Key("ra");
 				//writer.Double(bound.right);
 				//writer.EndObject();
 
@@ -1714,8 +1820,8 @@ bool ObjectManager::load_list(const char * filename)
 		//writer.EndArray();
 
 		// create RioYellow
-		//writer.Key("RioYellow");
-		//writer.StartArray();
+	/*	writer.Key("RioYellow");
+		writer.StartArray();*/
 		const Value& listRioYellow = jSon["RioYellow"];
 		if (listRioYellow.IsArray())
 		{
@@ -1727,34 +1833,30 @@ bool ObjectManager::load_list(const char * filename)
 				x = listRioYellow[i]["x"].GetFloat();
 				y = listRioYellow[i]["y"].GetFloat();
 
-				y = y - 16 + roy->getSprite()->getHeight()*0.5f;
-				x = x + roy->getSprite()->getWidth()*0.5f;
-
 				roy->initPositions(VECTOR2(x, y));
-
 
 				roy->setBoundCollision();
 
-				bound.bottom = listRioYellow[i]["bottomA"].GetFloat();
-				bound.top = listRioYellow[i]["topA"].GetFloat();
-				bound.left = listRioYellow[i]["leftA"].GetFloat();
-				bound.right = listRioYellow[i]["rightA"].GetFloat();
+				bound.bottom = listRioYellow[i]["ba"].GetFloat();
+				bound.top = listRioYellow[i]["ta"].GetFloat();
+				bound.left = listRioYellow[i]["la"].GetFloat();
+				bound.right = listRioYellow[i]["ra"].GetFloat();
 				roy->setActiveBound(bound);
 
-				//writer.StartObject();
-				//writer.Key("x");
-				//writer.Double(x);
-				//writer.Key("y");
-				//writer.Double(y);
-				//writer.Key("bottomA");
-				//writer.Double(bound.bottom);
-				//writer.Key("topA");
-				//writer.Double(bound.top);
-				//writer.Key("leftA");
-				//writer.Double(bound.left);
-				//writer.Key("rightA");
-				//writer.Double(bound.right);
-				//writer.EndObject();
+	/*			writer.StartObject();
+				writer.Key("x");
+				writer.Double(x);
+				writer.Key("y");
+				writer.Double(y);
+				writer.Key("ba");
+				writer.Double(bound.bottom);
+				writer.Key("ta");
+				writer.Double(bound.top);
+				writer.Key("la");
+				writer.Double(bound.left);
+				writer.Key("ra");
+				writer.Double(bound.right);
+				writer.EndObject();*/
 
 
 				object_list->push_back(roy);
@@ -1765,8 +1867,8 @@ bool ObjectManager::load_list(const char * filename)
 		//writer.EndArray();
 
 		// create RioBrown
-		//writer.Key("RioBrown");
-		//writer.StartArray();
+	/*	writer.Key("RioBrown");
+		writer.StartArray();*/
 		const Value& listRioBrown = jSon["RioBrown"];
 		if (listRioBrown.IsArray())
 		{
@@ -1778,32 +1880,30 @@ bool ObjectManager::load_list(const char * filename)
 				x = listRioBrown[i]["x"].GetFloat();
 				y = listRioBrown[i]["y"].GetFloat();
 
-				y = y - 16 + rob->getSprite()->getHeight()*0.5f;
-				x = x + rob->getSprite()->getWidth()*0.5f;
 				rob->initPositions(VECTOR2(x, y));
 
 				rob->setBoundCollision();
 
-				bound.bottom = listRioBrown[i]["bottomA"].GetFloat();
-				bound.top = listRioBrown[i]["topA"].GetFloat();
-				bound.left = listRioBrown[i]["leftA"].GetFloat();
-				bound.right = listRioBrown[i]["rightA"].GetFloat();
+				bound.bottom = listRioBrown[i]["ba"].GetFloat();
+				bound.top = listRioBrown[i]["ta"].GetFloat();
+				bound.left = listRioBrown[i]["la"].GetFloat();
+				bound.right = listRioBrown[i]["ra"].GetFloat();
 				rob->setActiveBound(bound);
 
-				//writer.StartObject();
-				//writer.Key("x");
-				//writer.Double(x);
-				//writer.Key("y");
-				//writer.Double(y);
-				//writer.Key("bottomA");
-				//writer.Double(bound.bottom);
-				//writer.Key("topA");
-				//writer.Double(bound.top);
-				//writer.Key("leftA");
-				//writer.Double(bound.left);
-				//writer.Key("rightA");
-				//writer.Double(bound.right);
-				//writer.EndObject();
+	/*			writer.StartObject();
+				writer.Key("x");
+				writer.Double(x);
+				writer.Key("y");
+				writer.Double(y);
+				writer.Key("ba");
+				writer.Double(bound.bottom);
+				writer.Key("ta");
+				writer.Double(bound.top);
+				writer.Key("la");
+				writer.Double(bound.left);
+				writer.Key("ra");
+				writer.Double(bound.right);
+				writer.EndObject();*/
 
 
 				object_list->push_back(rob);
@@ -1814,8 +1914,8 @@ bool ObjectManager::load_list(const char * filename)
 		//writer.EndArray();
 
 		// create RioRed
-		//writer.Key("RioRed");
-		//writer.StartArray();
+	/*	writer.Key("RioRed");
+		writer.StartArray();*/
 		const Value& listRioRed = jSon["RioRed"];
 		if (listRioRed.IsArray())
 		{
@@ -1833,26 +1933,26 @@ bool ObjectManager::load_list(const char * filename)
 
 				ror->setBoundCollision();
 
-				bound.bottom = listRioRed[i]["bottomA"].GetFloat();
-				bound.top = listRioRed[i]["topA"].GetFloat();
-				bound.left = listRioRed[i]["leftA"].GetFloat();
-				bound.right = listRioRed[i]["rightA"].GetFloat();
+				bound.bottom = listRioRed[i]["ba"].GetFloat();
+				bound.top = listRioRed[i]["ta"].GetFloat();
+				bound.left = listRioRed[i]["la"].GetFloat();
+				bound.right = listRioRed[i]["ra"].GetFloat();
 				ror->setActiveBound(bound);
 
-				//writer.StartObject();
-				//writer.Key("x");
-				//writer.Double(x);
-				//writer.Key("y");
-				//writer.Double(y);
-				//writer.Key("bottomA");
-				//writer.Double(bound.bottom);
-				//writer.Key("topA");
-				//writer.Double(bound.top);
-				//writer.Key("leftA");
-				//writer.Double(bound.left);
-				//writer.Key("rightA");
-				//writer.Double(bound.right);
-				//writer.EndObject();
+	/*			writer.StartObject();
+				writer.Key("x");
+				writer.Double(x);
+				writer.Key("y");
+				writer.Double(y);
+				writer.Key("ba");
+				writer.Double(bound.bottom);
+				writer.Key("ta");
+				writer.Double(bound.top);
+				writer.Key("la");
+				writer.Double(bound.left);
+				writer.Key("ra");
+				writer.Double(bound.right);
+				writer.EndObject();*/
 
 
 				object_list->push_back(ror);
@@ -1860,7 +1960,7 @@ bool ObjectManager::load_list(const char * filename)
 				map_object.insert(std::pair<int, BaseObject*>(id, ror));
 			}
 		}
-		//writer.EndArray();
+	//	writer.EndArray();
 
 
 
@@ -1869,8 +1969,8 @@ bool ObjectManager::load_list(const char * filename)
 
 #pragma region Boss
 		// create Kraid, 2
-		//writer.Key("BossKraid");
-		//writer.StartArray();
+		/*writer.Key("BossKraid");
+		writer.StartArray();*/
 		const Value& listKraid = jSon["BossKraid"];
 		if (listKraid.IsArray())
 		{
@@ -1889,17 +1989,18 @@ bool ObjectManager::load_list(const char * filename)
 				bound.bottom = bound.top - kraid->getSprite()->getHeight();
 				kraid->setBoundCollision(bound);
 
-				//writer.StartObject();
-				//writer.Key("x");
-				//writer.Double(x);
-				//writer.Key("y");
-				//writer.Double(y);
-				//writer.EndObject();
+	/*			writer.StartObject();
+				writer.Key("x");
+				writer.Double(x);
+				writer.Key("y");
+				writer.Double(y);
+				writer.EndObject();*/
 
 
 				kraid->setActiveBound(bound);
 
 				object_list->push_back(kraid);
+
 				map_object.insert(std::pair<int, BaseObject*>(id, kraid));
 			}
 		}
@@ -1916,13 +2017,13 @@ bool ObjectManager::load_list(const char * filename)
 			y = dragon["y"].GetFloat();
 			dg->setPosition(VECTOR2(x, y));
 
-			//writer.Key("Dragon");
-			//writer.StartObject();
-			//writer.Key("x");
-			//writer.Double(x);
-			//writer.Key("y");
-			//writer.Double(y);
-			//writer.EndObject();
+	/*		writer.Key("Dragon");
+			writer.StartObject();
+			writer.Key("x");
+			writer.Double(x);
+			writer.Key("y");
+			writer.Double(y);
+			writer.EndObject();*/
 
 			bound.left = x;
 			bound.top = y;
@@ -1937,7 +2038,41 @@ bool ObjectManager::load_list(const char * filename)
 			map_object.insert(std::pair<int, BaseObject*>(id, dg));
 		}
 
+		// create Mother Facker
+		const Value& mother = jSon["MotherBrain"];
+		if (mother.IsObject())
+		{
+			MotherBrain *motherFacker = new MotherBrain(this->textureManager, this->graphics);
+
+			id = mother["id"].GetInt();
+			x = mother["x"].GetFloat();
+			y = mother["y"].GetFloat();
+			motherFacker->setPosition(VECTOR2(x, y));
+
+	/*		writer.Key("MotherBrain");
+			writer.StartObject();
+			writer.Key("x");
+			writer.Double(x);
+			writer.Key("y");
+			writer.Double(y);
+			writer.EndObject();*/
+
+			bound.left = x;
+			bound.top = y;
+			bound.right = bound.left + motherFacker->getSprite()->getWidth();
+			bound.bottom = bound.top - motherFacker->getSprite()->getHeight();
+			motherFacker->setBoundCollision(bound);
+
+			motherFacker->setActiveBound(bound);
+
+			object_list->push_back(motherFacker);
+
+			map_object.insert(std::pair<int, BaseObject*>(id, motherFacker));
+		}
+
 #pragma endregion
+
+
 
 		//writer.EndObject();
 
