@@ -41,6 +41,8 @@ void SamusStateInjuring::init()
 
 	time_to_stand = 0;
 	time_animation = 0;
+
+	this->samus->setHealth(this->samus->getHealth() - 8);
 }
 
 void SamusStateInjuring::handleInput(float dt)
