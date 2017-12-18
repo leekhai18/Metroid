@@ -208,9 +208,7 @@ void SamusStateJumping::onCollision(float dt)
 
 #pragma region enemies
 		case eID::SKREE:
-			GAMELOG("VA CHAM SKREE");
-			break;
-
+		case eID::RIPPER:
 		case eID::ZOMMER:
 			switch (i->direction)
 			{

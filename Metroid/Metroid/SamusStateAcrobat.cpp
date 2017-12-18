@@ -153,7 +153,7 @@ void SamusStateAcrobat::onCollision(float dt)
 
 #pragma region Zommer
 			//another object
-		case eID::ZOMMER:
+		case eID::ZOMMER: case SKREE:
 		{
 			switch (i->direction)
 			{
