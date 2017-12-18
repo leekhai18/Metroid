@@ -52,6 +52,8 @@ void SamusStateStanding::init()
 
 void SamusStateStanding::handleInput(float dt)
 {
+	this->samus->setVelocityY(-SAMUS_MIN_SPEED_Y);
+
 	if (input->isKeyUp(VK_LEFT) && input->isKeyUp(VK_RIGHT))
 		timerToRunning = 0;
 
@@ -260,8 +262,6 @@ void SamusStateStanding::update(float dt)
 		//SamusStateManager::getInstance()->changeStateTo(this->samus->getStatus());
 		return;
 	}
-
-	this->samus->setVelocityY(-SAMUS_MIN_SPEED_Y);
 
 	canRolling = false;
 }

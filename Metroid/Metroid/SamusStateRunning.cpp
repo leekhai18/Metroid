@@ -42,6 +42,8 @@ void SamusStateRunning::init()
 
 void SamusStateRunning::handleInput(float dt)
 {
+	this->samus->setVelocityY(-SAMUS_MIN_SPEED_Y);
+
 #pragma region Horizontal
 	if ((input->isKeyUp(VK_RIGHT) && input->isKeyUp(VK_LEFT)) || (input->isKeyDown(VK_LEFT) && input->isKeyDown(VK_RIGHT))
 		|| (input->isKeyDown(VK_RIGHT) && this->samus->isInDirection(eDirection::left))
@@ -375,12 +377,9 @@ void SamusStateRunning::update(float dt)
 		SamusStateManager::getInstance()->changeStateTo(this->samus->getStatus());
 		return;
 	}
-	this->samus->setVelocityY(-SAMUS_MIN_SPEED_Y);
 
 	this->samus->setCanMoveLeft(true);
-
 	this->samus->setCanMoveRight(true);
-
 	this->samus->setFall(true);
 }
 

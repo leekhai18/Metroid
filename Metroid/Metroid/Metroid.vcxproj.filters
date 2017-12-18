@@ -59,6 +59,7 @@
     <ClCompile Include="Zommer.cpp" />
     <ClCompile Include="IFreezable.cpp" />
     <ClCompile Include="SamusStateInjuring.cpp" />
+    <ClCompile Include="MotherBrain.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AlienBig.h" />
@@ -121,6 +122,7 @@
     <ClInclude Include="Zommer.h" />
     <ClInclude Include="IFreezable.h" />
     <ClInclude Include="SamusStateInjuring.h" />
+    <ClInclude Include="MotherBrain.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Metroid.rc" />
