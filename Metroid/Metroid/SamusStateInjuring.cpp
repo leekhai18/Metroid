@@ -52,6 +52,8 @@ void SamusStateInjuring::onCollision(float dt)
 		case eID::BRICK:
 		case eID::FIRE:
 		case eID::ELEVATOR:
+		case eID::PORT:
+
 			switch (i->direction)
 			{
 			case CollideDirection::TOP:
@@ -59,7 +61,9 @@ void SamusStateInjuring::onCollision(float dt)
 
 				break;
 			case CollideDirection::LEFT:
-				if (SamusStateManager::getInstance()->getOldStatus() == eStatus::RUNNING || SamusStateManager::getInstance()->getOldStatus() == eStatus::ROLLING)
+				if (SamusStateManager::getInstance()->getOldStatus() == eStatus::RUNNING ||
+					SamusStateManager::getInstance()->getOldStatus() == eStatus::ROLLING|| 
+					SamusStateManager::getInstance()->getOldStatus() == eStatus::STANDING)
 				{
 					
 					if (!(this->samus->getBoundCollision().bottom < i->object->getBoundCollision().top))
@@ -70,7 +74,9 @@ void SamusStateInjuring::onCollision(float dt)
 				this->samus->setVelocityX(0);
 				break;
 			case CollideDirection::RIGHT:
-				if (SamusStateManager::getInstance()->getOldStatus() == eStatus::RUNNING || SamusStateManager::getInstance()->getOldStatus() == eStatus::ROLLING)
+				if (SamusStateManager::getInstance()->getOldStatus() == eStatus::RUNNING ||
+					SamusStateManager::getInstance()->getOldStatus() == eStatus::ROLLING ||
+					SamusStateManager::getInstance()->getOldStatus() == eStatus::STANDING)
 				{
 					
 					if (!(this->samus->getBoundCollision().bottom< i->object->getBoundCollision().top))

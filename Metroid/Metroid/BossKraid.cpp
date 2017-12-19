@@ -33,7 +33,7 @@ BossKraid::BossKraid(TextureManager * textureM, Graphics * graphics,Samus* samus
 
 	direction = eDirection::right;
 
-
+	heath = 100;
 }
 
 

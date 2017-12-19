@@ -5,6 +5,8 @@
 #define ACTIVE_AREA_WIDTH 32
 #define ACTIVE_AREA_HEIGHT 32
 
+
+
 Camera* Camera::instance = nullptr;
 Camera * Camera::getInstance()
 {

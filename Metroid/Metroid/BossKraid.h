@@ -20,6 +20,9 @@ private:
 	VECTOR2 afterPosition;
 	VECTOR2 startPosition;
 	float floor;
+
+	int heath;
+	bool init;
 public:
 	BossKraid();
 

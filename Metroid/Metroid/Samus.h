@@ -105,6 +105,7 @@ private:
 	Sprite* healthIcon;
 	Text* healthText;
 
+	bool canGoElevator;
 public:
 	float timerShoot;
 
