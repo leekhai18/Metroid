@@ -68,7 +68,6 @@ void Quadtree::clear()
 	//Clear all nodes
 	if (nodes)
 	{
-
 		for (auto node = nodes->begin(); node != nodes->end(); ++node)
 		{
 			(*node)->clear();
@@ -80,48 +79,7 @@ void Quadtree::clear()
 	objects_list.clear();
 }
 
-void Quadtree::insert(BaseObject * obj)
-{
-	//insert obj into corresponding nodes
-	if (nodes)
-	{
-		for (auto node = nodes->begin(); node != nodes->end(); ++node)
-		{
-			if((*node)->isContain(obj->getActiveBound()))
-			{
-				(*node)->insert(obj);
-			}
-		}
 
-
-		return; // Return here to ignore rest.
-	}
-
-	//Insert obj into current quadtree
-	if (this->isContain(obj->getActiveBound()))
-	{
-		objects_list.push_back(obj);
-	}
-
-	//Split and move all objects in list into it’s corresponding nodes
-	if (objects_list.size() > MAX_OBJECT_IN_REGION && level < MAX_LEVEL)
-	{
-		split();
-
-		while (!objects_list.empty())
-		{
-
-			for (auto node = nodes->begin(); node != nodes->end(); ++node)
-			{
-				if ((*node)->isContain(objects_list.back()->getActiveBound()))
-				{
-					(*node)->insert(objects_list.back());
-				}
-			}
-			objects_list.pop_back();
-		}
-	}
-}
 
 void Quadtree::retrieve(list<BaseObject*>* listNotWallCanCollideSamus, list<BaseObject*>* listObjectNotWallOnViewPort, list<BaseObject*>* listWallCanCollideSamus, MetroidRect rect, BaseObject* samus)
 {
@@ -169,7 +127,7 @@ void Quadtree::retrieve(list<BaseObject*>* listNotWallCanCollideSamus, list<Base
 
 			if (!found3)
 			{
-				if (Collision::getInstance()->isCollide(rect, (*i)->getActiveBound())) // Must bound collision, will fixed after
+				if (Collision::getInstance()->isCollide(rect, (*i)->getBoundCollision())) // Must bound collision, will fixed after
 				{
 					if ((*i)->getId() != eID::WALL)
 						listObjectNotWallOnViewPort->push_back(*i);
@@ -179,12 +137,4 @@ void Quadtree::retrieve(list<BaseObject*>* listNotWallCanCollideSamus, list<Base
 	}
 }
 
-Quadtree*  Quadtree::createQuadTree(MetroidRect rect, list<BaseObject*>* object_list)
-{
-	Quadtree* quadtree = new Quadtree(1, rect);
 
-	for (auto i = object_list->begin(); i != object_list->end(); i++)
-		quadtree->insert(*i);
-
-	return quadtree;
-}

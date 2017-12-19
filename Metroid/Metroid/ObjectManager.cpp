@@ -24,7 +24,7 @@
 #include "MotherBrain.h"
 #include "Camera.h"
 #include "Collision.h"
-
+#include "BossKraid.h"
 #include "rapidjson-master\include\rapidjson\writer.h"
 #include "rapidjson-master\include\rapidjson\ostreamwrapper.h"
 
@@ -53,6 +53,11 @@ void ObjectManager::handleVelocity(float dt)
 				Waver* waver = static_cast<Waver*>(*i);
 				waver->handleVelocity(dt);
 			}
+			if ((*i)->getId() == eID::BOSSKRAID)
+			{
+				BossKraid* bossKraid = static_cast<BossKraid*>(*i);
+				bossKraid->handleVelocity(dt);
+			}
 		}
 	}
 }
@@ -71,7 +76,7 @@ void ObjectManager::onCheckCollision(float dt)
 
 		MetroidRect r = Camera::getInstance()->getBound();
 		//Get all objects that can collide with current obj
-		quadtree->retrieve(listNotWallCanCollideSamus, listObjectNotWallOnViewPort, listWallCanCollideSamus, MetroidRect(r.top, r.bottom - 20, r.left, r.right), samus);
+		quadtree->retrieve(listNotWallCanCollideSamus, listObjectNotWallOnViewPort, listWallCanCollideSamus, MetroidRect(r.top + 20, r.bottom - 20, r.left -20, r.right +20), samus);
 	}
 
 	if (listObjectNotWallOnViewPort)
@@ -117,6 +122,16 @@ void ObjectManager::onCheckCollision(float dt)
 				skr->onCollision(samus);
 			}
 		}
+
+		/*if ((*x)->getId() == eID::BOSSKRAID)
+		{
+			BossKraid* bossKraid = static_cast<BossKraid*>(*x);
+
+			if (bossKraid->checkCollision(samus, dt))
+			{
+				bossKraid->onCollision(samus);
+			}
+		}*/
 	}
 
 	// handle on listCollide
@@ -221,8 +236,6 @@ bool ObjectManager::load_quatree(const char * filename)
 		jSon.ParseStream(isw);
 
 		//quadtree =new Quadtree()
-
-
 		const Value& levelValue = jSon["Level"];
 		const Value& regionValue = jSon["Region"];
 		const Value& objectList = jSon["ObjectList"];
@@ -2000,19 +2013,28 @@ bool ObjectManager::load_list(const char * filename)
 		{
 			for (SizeType i = 0; i < listKraid.Size(); i++)
 			{
-				BossKraid *kraid = new BossKraid(this->textureManager, this->graphics);
-
+				BossKraid *kraid = new BossKraid(this->textureManager, this->graphics,this->samus);
+				
 				id = listKraid[i]["id"].GetInt();
 				x = listKraid[i]["x"].GetFloat();
 				y = listKraid[i]["y"].GetFloat();
+				x += kraid->getSprite()->getWidth()*0.5f;
+				y-= kraid->getSprite()->getHeight()*0.5f;
 				kraid->setPosition(VECTOR2(x, y));
 
-				bound.left = x;
-				bound.top = y;
-				bound.right = bound.left + kraid->getSprite()->getWidth();
-				bound.bottom = bound.top - kraid->getSprite()->getHeight();
-				kraid->setBoundCollision(bound);
+				kraid->setStartPosition(VECTOR2(x, y));
+				bound.bottom = listKraid[i]["ba"].GetFloat();
+				bound.top = listKraid[i]["ta"].GetFloat();
+				bound.left = listKraid[i]["la"].GetFloat();
+				bound.right = listKraid[i]["ra"].GetFloat();
 
+				kraid->setBoundCollision();
+
+				const Value& arrayWall = listZommerYellow[i]["ListCollideID"];
+				for (SizeType t = 0; t < arrayWall.Size(); t++)
+				{
+					kraid->getListWallCanCollide()->push_back(map_object.find(arrayWall[t].GetInt())->second);
+				}
 	/*			writer.StartObject();
 				writer.Key("x");
 				writer.Double(x);

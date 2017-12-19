@@ -71,6 +71,11 @@ list<CollisionReturn>* Waver::getListCollide()
 void Waver::setStartPosition(VECTOR2 position)
 {
 	this->startPosition = position;
+
+}
+void Waver::reInit()
+{
+	this->setPosition(startPosition);
 }
 void Waver::handleVelocity(float dt)
 {
@@ -118,7 +123,7 @@ void Waver::setBoundCollision()
 void Waver::onCollision(float dt)
 {
 
-	for (auto i = this->getListWallCanCollide()->begin(); i != this->getListWallCanCollide()->end(); i++)
+	for (auto i = this->listWallCanCollide->begin(); i != this->listWallCanCollide->end(); i++)
 	{
 		Collision::getInstance()->checkCollision(this, *i, dt);
 	}
@@ -154,8 +159,6 @@ void Waver::update(float dt)
 
 	if (active)
 	{
-
-		
 		// nhanh dần -> chậm dần, 1 chu kỳ thì 1 turn anim,
 		this->setPosition(VECTOR2(this->getPosition().x + this->velocity.x*dt, this->getPosition().y + this->velocity.y*dt));
 		setBoundCollision();
@@ -165,7 +168,7 @@ void Waver::update(float dt)
 		
 		if (this->getPosition().x  < Camera::getInstance()->getBound().left || this->getPosition().x > Camera::getInstance()->getBound().right)
 		{
-
+			
 		}
 	}
 }

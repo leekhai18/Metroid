@@ -5,8 +5,8 @@
 
 
 #define DISTANCE_MOVE_FRONT_GATE 20
-#define SAMUS_POS_X 3648
-#define SAMUS_POS_Y 2993
+#define SAMUS_POS_X 808//3648
+#define SAMUS_POS_Y 4214
 
 
 

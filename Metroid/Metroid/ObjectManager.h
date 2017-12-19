@@ -63,8 +63,6 @@ public:
 	void update(float dt);
 	void draw();
 
-
-
 	ObjectManager();
 	~ObjectManager();
 };

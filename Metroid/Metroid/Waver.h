@@ -23,6 +23,7 @@ public:
 	list<BaseObject*>* getListWallCanCollide();
 	list<CollisionReturn> *getListCollide();
 	void setStartPosition(VECTOR2 position);
+	void reInit();
 	void handleVelocity(float dt);
 	void setBoundCollision();
 	void update(float dt);

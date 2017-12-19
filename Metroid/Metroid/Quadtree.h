@@ -28,9 +28,9 @@ public:
 	Quadtree(int level, MetroidRect region);
 	~Quadtree();
 	void clear();
-	void insert(BaseObject* entity);
+	
 	void retrieve(list<BaseObject*>* listCanCollideSamus, list<BaseObject*>* listObjectNotWallOnViewPort, list<BaseObject*>* listWallCanCollideSamus, MetroidRect rect, BaseObject* samus);
-	static Quadtree*  createQuadTree(MetroidRect rect , list<BaseObject*>* object_list);
+
 
 	
 };
