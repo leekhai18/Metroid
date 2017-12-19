@@ -140,7 +140,6 @@ void Skree::update(float dt)
 				if (this->canDraw)
 				{
 					this->effectDeath->init(VECTOR2(this->getPosition().x, this->getPosition().y - this->getSprite()->getHeight()*0.4f));
-					BaseObject::setBoundCollision(MetroidRect(0, 0, 0, 0));
 					this->canDraw = false;
 				}
 
@@ -170,7 +169,6 @@ void Skree::update(float dt)
 				{
 					this->finish();
 					this->explosion->start();
-					BaseObject::setBoundCollision(MetroidRect(0, 0, 0, 0));
 				}
 			}
 		}
@@ -253,16 +251,6 @@ void Skree::finish()
 {
 	isActivity = false;
 	this->effectDeath->setPosition(VECTOR2ZERO);
-}
-
-void Skree::setActivity(bool flag)
-{
-	this->isActivity = flag;
-}
-
-bool Skree::isActivitied()
-{
-	return this->isActivity;
 }
 
 void Skree::setBeHit(bool flag)

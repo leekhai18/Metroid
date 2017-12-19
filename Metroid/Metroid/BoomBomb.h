@@ -1,26 +1,23 @@
 #pragma once
 #include "BaseObject.h"
 #include <list>
+#include "Animation.h"
 
-#define DISTANCE_SHOOT 52
-#define VELOCITY 180
-#define EXPLOSION_TIME_FRAME_DELAY 0.1f
 
-class Bullet : public BaseObject
+class BoomBomb : public BaseObject
 {
 private:
-	float distance;
-
+	Animation* anim;
 	list<CollisionReturn> *listCollide;
-	bool isCollided;
+
 	float timer;
 
 	float dame;
 
 public:
-	Bullet(TextureManager* textureM, Graphics* graphics);
-	Bullet();
-	~Bullet();
+	BoomBomb(TextureManager* textureM, Graphics* graphics);
+	BoomBomb();
+	~BoomBomb();
 
 	void update(float dt);
 	void draw();
@@ -28,7 +25,8 @@ public:
 	void onCollision();
 
 	void setBoundCollision();
-	void init(VECTOR2 stPosition);
+
+	void start(VECTOR2 pos);
 
 	// Use object pool
 	void returnPool();

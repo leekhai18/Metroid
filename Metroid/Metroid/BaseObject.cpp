@@ -6,6 +6,7 @@ BaseObject::BaseObject(eID id)
 	this->sprite = nullptr;
 	this->status = eStatus::START;
 	this->direction = eDirection::right;
+	this->isActivity = true;
 }
 
 BaseObject::BaseObject()
@@ -13,6 +14,7 @@ BaseObject::BaseObject()
 	this->sprite = nullptr;
 	this->status = eStatus::START;
 	this->direction = eDirection::right;
+	this->isActivity = true;
 }
 
 
@@ -199,4 +201,14 @@ MetroidRect BaseObject::getActiveBound()
 void BaseObject::setActiveBound(MetroidRect rect)
 {
 	this->activeBound = rect;
+}
+
+void BaseObject::setActivity(bool flag)
+{
+	this->isActivity = flag;
+}
+
+bool BaseObject::isActivitied()
+{
+	return this->isActivity;
 }

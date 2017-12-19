@@ -22,6 +22,7 @@ Bullet::Bullet(TextureManager * textureM, Graphics * graphics) : BaseObject(eID:
 	this->setOrigin(VECTOR2(0.5f, 0.5f));
 
 	this->setPosition(VECTOR2ZERO);
+	this->setStatus(eStatus::ENDING);
 
 	this->distance = 0;
 	this->isCollided = false;
@@ -50,57 +51,64 @@ void Bullet::onCollision()
 	{
 		switch (i->object->getId())
 		{
-		case eID::WALL:
-			this->sprite->setData(IndexManager::getInstance()->samusYellowBulletNormalColliding);
-			this->isCollided = true;
-			
-			switch (i->direction)
+			if (i->object->isActivitied())
 			{
-			case CollideDirection::LEFT : case CollideDirection::RIGHT:
-				this->setPositionX(i->positionCollision);
-				break;
-			case CollideDirection::TOP:
-				this->setPositionY(i->positionCollision);
-				break;
-			default:
-				break;
+				case eID::WALL:
+					this->sprite->setData(IndexManager::getInstance()->samusYellowBulletNormalColliding);
+					this->isCollided = true;
+
+					switch (i->direction)
+					{
+					case CollideDirection::LEFT: case CollideDirection::RIGHT:
+						this->setPositionX(i->positionCollision);
+						break;
+					case CollideDirection::TOP:
+						this->setPositionY(i->positionCollision);
+						break;
+					default:
+						break;
+					}
+
+					break;
+
+				case eID::GATEBLUE: case eID::GATERED:
+				{
+					this->sprite->setData(IndexManager::getInstance()->samusYellowBulletNormalColliding);
+					this->isCollided = true;
+
+					GateBlue* gate = static_cast<GateBlue*>(i->object);
+					gate->setHit(true);
+
+					switch (i->direction)
+					{
+					case CollideDirection::LEFT: case CollideDirection::RIGHT:
+						this->setPositionX(i->positionCollision);
+						break;
+					default:
+						break;
+					}
+					break;
+				}
+
+				case eID::SKREE:
+				{
+					Skree* skr = static_cast<Skree*>(i->object);
+					skr->setBeHit(true);
+					skr->decreaseHealth(this->dame);
+					break;
+				}
+
+
+				case eID::ZOMMER:
+				{
+					Zommer* zommer = static_cast<Zommer*>((*i).object);
+					zommer->setCold(true);
+					break;
+				}
+
+				default:
+					break;
 			}
-
-			break;
-
-		case eID::GATEBLUE:
-		{
-			this->sprite->setData(IndexManager::getInstance()->samusYellowBulletNormalColliding);
-			this->isCollided = true;
-
-			GateBlue* gate = static_cast<GateBlue*>(i->object);
-			gate->setHit(true);
-
-			switch (i->direction)
-			{
-			case CollideDirection::LEFT: case CollideDirection::RIGHT:
-				this->setPositionX(i->positionCollision);
-				break;
-			default:
-				break;
-			}
-			break;
-		}
-
-		case eID::SKREE:
-		{
-			GAMELOG("HIT SKREE");
-			Skree* skr = static_cast<Skree*>(i->object);
-			skr->setBeHit(true);
-			skr->decreaseHealth(this->dame);
-			break;
-		}
-
-
-		case eID::ZOMMER:
-			Zommer* zommer = static_cast<Zommer*>((*i).object);
-			zommer->setCold(true);
-			break;
 		}
 	}
 
@@ -120,7 +128,6 @@ void Bullet::update(float dt)
 		}
 		else
 		{
-			this->setStatus(eStatus::ENDING);
 			BulletPool::getInstance()->returnPool(this);
 		}
 	}
@@ -153,14 +160,17 @@ void Bullet::init(VECTOR2 stPosition)
 
 	this->distance = 0;
 	this->setStatus(eStatus::RUNNING);
+	this->isActivity = true;
 }
 
 void Bullet::returnPool()
 {
+	this->setStatus(eStatus::ENDING);
 	this->setPosition(VECTOR2ZERO);
 	this->sprite->setData(IndexManager::getInstance()->samusYellowBulletNormal);
 	isCollided = false;
 	this->timer = 0;
+	this->isActivity = false;
 }
 
 list<CollisionReturn>* Bullet::getListCollide()

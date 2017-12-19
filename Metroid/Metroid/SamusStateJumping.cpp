@@ -4,6 +4,10 @@
 #include "MaruMari.h"
 #include "EnergyTank.h"
 #include "Camera.h"
+#include "Bomb.h"
+#include "GateBlue.h"
+#include "GateRed.h"
+
 SamusStateJumping::SamusStateJumping()
 {
 }
@@ -11,7 +15,6 @@ SamusStateJumping::SamusStateJumping()
 SamusStateJumping::SamusStateJumping(Samus * samus, Input * input) : BaseState(samus, input)
 {
 }
-
 
 SamusStateJumping::~SamusStateJumping()
 {
@@ -208,6 +211,80 @@ void SamusStateJumping::onCollision(float dt)
 
 #pragma endregion
 
+#pragma region GATE and PORT
+		case eID::GATEBLUE: case eID::GATERED:
+		{
+			if (i->object->isActivitied())
+			{
+				switch (i->direction)
+				{
+				case CollideDirection::LEFT:
+				{
+					if (Camera::getInstance()->moveWhenSamusOnPort())
+					{
+						GateBlue* gate = static_cast<GateBlue*>(i->object);
+						gate->setIsCollideSamusInPort(true);
+
+						this->samus->setIsCollidingPort(false);
+						this->samus->setVelocityX(0);
+						this->samus->setCanMoveToFrontGate(true);
+					}
+					else
+					{
+						this->samus->setVelocityX(0);
+						this->samus->setCanMoveRight(false);
+					}
+
+					break;
+				}
+				case CollideDirection::RIGHT:
+				{
+					if (Camera::getInstance()->moveWhenSamusOnPort())
+					{
+						GateBlue* gate = static_cast<GateBlue*>(i->object);
+						gate->setIsCollideSamusInPort(true);
+
+						this->samus->setIsCollidingPort(false);
+						this->samus->setVelocityX(0);
+						this->samus->setCanMoveToFrontGate(true);
+					}
+					else
+					{
+						this->samus->setVelocityX(0);
+						this->samus->setCanMoveLeft(false);
+					}
+
+					break;
+				}
+				}
+			}
+
+			break;
+		}
+
+		case eID::PORT:
+		{
+			switch (i->direction)
+			{
+			case LEFT:
+				Camera::getInstance()->setVelocity(VECTOR2(SAMUS_VERLOCITY_X, 0));
+				Camera::getInstance()->setOnPort(true);
+				this->samus->setIsCollidingPort(true);
+				break;
+			case RIGHT:
+				Camera::getInstance()->setVelocity(VECTOR2(-SAMUS_VERLOCITY_X, 0));
+				Camera::getInstance()->setOnPort(true);
+				this->samus->setIsCollidingPort(true);
+				break;
+			default:
+				break;
+			}
+
+			break;
+		}
+
+#pragma endregion
+
 #pragma region enemies
 		case eID::ZOMMER:
 		case eID::SKREE:
@@ -256,11 +333,20 @@ void SamusStateJumping::onCollision(float dt)
 
 		case eID::ENERGYTANK:
 		{
-			GAMELOG("VA CHAM ENERGYTANK");
-
 			this->samus->setNumLive(this->samus->getNumLive() + 1);
 			EnergyTank* energy = static_cast<EnergyTank*>(i->object);
 			energy->setActivity(false);
+
+			break;
+		}
+
+		case eID::BOMB:
+		{
+			this->samus->setMariMaru(true); // just test
+
+			this->samus->setBomb(true);
+			Bomb* bom = static_cast<Bomb*>(i->object);
+			bom->setActivity(false);
 
 			break;
 		}
@@ -355,7 +441,7 @@ void SamusStateJumping::fire()
 	}
 	else
 	{
-		stP = VECTOR2(this->samus->getPosition().x + this->samus->getDirection()*this->samus->getSprite()->getWidth()*0.3f, this->samus->getPosition().y + 2);
+		stP = VECTOR2(this->samus->getPosition().x + this->samus->getDirection()*this->samus->getSprite()->getWidth()*0.2f, this->samus->getPosition().y + 2);
 		bullet->setVelocity(VECTOR2((float)VELOCITY*this->samus->getDirection(), 0));
 	}
 

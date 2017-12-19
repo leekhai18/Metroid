@@ -38,7 +38,10 @@ Zeb::Zeb(TextureManager * textureM, Graphics * graphics, EnemyColors color) : Ba
 		break;
 	}
 
+	this->setOrigin(VECTOR2(0.5, 0.5));
+
 	this->anim->start();
+	isActivity = true;
 }
 
 
@@ -48,21 +51,36 @@ Zeb::~Zeb()
 }
 
 void Zeb::update(float dt)
-{	
-	if (this->isInStatus(eStatus::RUNNING))
+{
+	if(this->getPosition().x == 4024.0f)
+	{
+		int test = 0;
+	}
+	if (isActivity == true)
 	{
 		this->anim->update(dt);
 
-		if (this->getPosition().y > this->samusPosition.y - 30) // Cao hon cai sung, van cham dau
+		if (this->getPosition().y < this->samusPosition.y)
 		{
-			this->setPositionY(this->getPosition().y - VELOCITY_Y*dt);
+			this->setPositionY(this->getPosition().y + VELOCITY_Y*dt);
+			if (this->getPosition().y >= this->samusPosition.y && flag == false)
+			{
+				this->velocity.x = VELOCITY_X*direction;
+				this->velocity.y = 0;
+				flag = true;
+			}
 		}
-		else
-		{
-			this->setPositionX(this->getPosition().x + VELOCITY_X*getDirection()*dt);
+		this->setPositionX(this->getPosition().x + velocity.x*dt);
+	}
+	else
+	{
+		init(this->startPosition);
+	}
 
-			// if position.x > areaActivity ---> delete
-		}
+	if (this->getPosition().x < Camera::getInstance()->getBound().left || this->getPosition().x > Camera::getInstance()->getBound().right)
+	{
+			
+			isActivity = false;
 	}
 }
 
@@ -71,23 +89,38 @@ void Zeb::draw()
 	this->sprite->draw();
 }
 
+void Zeb::setBoundCollision()
+{
+	MetroidRect rect;
+	VECTOR2 position(this->getPosition().x, this->getPosition().y);
+	rect.left = position.x - this->getSprite()->getWidth() *0.5f;
+	rect.right = position.x + this->getSprite()->getWidth() *0.5f;
+	rect.top = position.y + this->getSprite()->getHeight() *0.5f;
+	rect.bottom = position.y - this->getSprite()->getHeight() *0.5f;
+
+	this->boundCollision = rect;
+}
+
+void Zeb::setStartPosition(VECTOR2 startPosition)
+{
+	this->startPosition = startPosition;
+}
+
 void Zeb::init(VECTOR2 samusPosition)
 {
-	if (this->samusPosition == VECTOR2ZERO)
+	flag = false;
+	isActivity = true;
+	this->samusPosition = samusPosition;
+	this->velocity.x = 0;
+	if (this->getPosition().x - samusPosition.x > 0)
 	{
-		this->samusPosition = samusPosition;
-
-		if (this->getPosition().x - samusPosition.x > 0)
-		{
-			this->setDirection(eDirection::left);
-			this->setScaleX(1);
-		}
-		else
-		{
-			this->setDirection(eDirection::right);
-			this->setScaleX(-1);
-		}
-
-		this->setStatus(eStatus::RUNNING);
+		this->setDirection(eDirection::left);
+		this->setScaleX(1);
+	}
+	else
+	{
+		this->setDirection(eDirection::right);
+		this->setScaleX(-1);
 	}
 }
+

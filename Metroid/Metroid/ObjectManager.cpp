@@ -70,8 +70,9 @@ void ObjectManager::onCheckCollision(float dt)
 		listWallCanCollideSamus->clear();
 
 		MetroidRect r = Camera::getInstance()->getBound();
+
 		//Get all objects that can collide with current obj
-		quadtree->retrieve(listNotWallCanCollideSamus, listObjectNotWallOnViewPort, listWallCanCollideSamus, MetroidRect(r.top, r.bottom - 20, r.left, r.right), samus);
+		quadtree->retrieve(listNotWallCanCollideSamus, listObjectNotWallOnViewPort, listWallCanCollideSamus, MetroidRect(r.top + 20, r.bottom - 20, r.left - 20, r.right + 20), samus);
 	}
 
 	if (listObjectNotWallOnViewPort)
@@ -158,6 +159,15 @@ void ObjectManager::update(float dt)
 			{
 				Rio* rio = static_cast<Rio*>(*i);
 				rio->setTarget(samus->getPosition());
+			}
+
+			if ((*i)->getId() == eID::ZEB)
+			{
+				Zeb* zeb = static_cast<Zeb*>(*i);
+				if(zeb->getPosition().x==4024)
+				{
+					int test = 1;
+				}
 			}
 			
 			(*i)->update(dt);
@@ -1330,13 +1340,14 @@ bool ObjectManager::load_list(const char * filename)
 				id = listZebYellow[i]["id"].GetInt();
 				x = listZebYellow[i]["x"].GetFloat();
 				y = listZebYellow[i]["y"].GetFloat();
+				
+				y = y - 16 + zby->getSprite()->getHeight()*0.5f;
+				x += 8;
+
+				zby->setStartPosition(VECTOR2(x, y));
 				zby->setPosition(VECTOR2(x, y));
 
-				bound.left = x;
-				bound.top = y;
-				bound.right = bound.left + zby->getSprite()->getWidth();
-				bound.bottom = bound.top - zby->getSprite()->getHeight();
-				zby->setBoundCollision(bound);
+				zby->setBoundCollision();
 
 				bound.bottom = listZebYellow[i]["ba"].GetFloat();
 				bound.top = listZebYellow[i]["ta"].GetFloat();
@@ -1380,13 +1391,14 @@ bool ObjectManager::load_list(const char * filename)
 				id = listZebBrown[i]["id"].GetInt();
 				x = listZebBrown[i]["x"].GetFloat();
 				y = listZebBrown[i]["y"].GetFloat();
+
+				y = y - 16 + zbb->getSprite()->getHeight()*0.5f;
+				x += 8;
+
+				zbb->setStartPosition(VECTOR2(x, y));
 				zbb->setPosition(VECTOR2(x, y));
 
-				bound.left = x;
-				bound.top = y;
-				bound.right = bound.left + zbb->getSprite()->getWidth();
-				bound.bottom = bound.top - zbb->getSprite()->getHeight();
-				zbb->setBoundCollision(bound);
+				zbb->setBoundCollision();
 
 				bound.bottom = listZebBrown[i]["ba"].GetFloat();
 				bound.top = listZebBrown[i]["ta"].GetFloat();
@@ -1430,13 +1442,14 @@ bool ObjectManager::load_list(const char * filename)
 				id = listZebRed[i]["id"].GetInt();
 				x = listZebRed[i]["x"].GetFloat();
 				y = listZebRed[i]["y"].GetFloat();
+			
+				y = y - 16 + zbr->getSprite()->getHeight()*0.5f;
+				x += 8;
+
+				zbr->setStartPosition(VECTOR2(x, y));
 				zbr->setPosition(VECTOR2(x, y));
 
-				bound.left = x;
-				bound.top = y;
-				bound.right = bound.left + zbr->getSprite()->getWidth();
-				bound.bottom = bound.top - zbr->getSprite()->getHeight();
-				zbr->setBoundCollision(bound);
+				zbr->setBoundCollision();
 
 				bound.bottom = listZebRed[i]["ba"].GetFloat();
 				bound.top = listZebRed[i]["ta"].GetFloat();
@@ -2085,9 +2098,13 @@ bool ObjectManager::load_list(const char * filename)
 			bound.top = y;
 			bound.right = bound.left + motherFacker->getSprite()->getWidth();
 			bound.bottom = bound.top - motherFacker->getSprite()->getHeight();
-			motherFacker->setBoundCollision(bound);
-
 			motherFacker->setActiveBound(bound);
+
+			bound.left = x + 16;
+			bound.top = y - 63;
+			bound.right = bound.left + 80;
+			bound.bottom = bound.top - 65;
+			motherFacker->setBoundCollision(bound);
 
 			object_list->push_back(motherFacker);
 

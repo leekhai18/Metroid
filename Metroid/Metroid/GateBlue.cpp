@@ -22,6 +22,8 @@ GateBlue::GateBlue(TextureManager * textureM, Graphics * graphics) : BaseObject(
 
 	closeAnim = new Animation(this->sprite, IndexManager::getInstance()->gateBlueRClose, NUM_FRAMES_GATE_ANIM, 0.1f, false);
 	openAnim = new Animation(this->sprite, IndexManager::getInstance()->gateBlueROpen, NUM_FRAMES_GATE_ANIM, 0.1f, false);
+
+	this->isActivity = true;
 }
 
 
@@ -76,7 +78,7 @@ void GateBlue::effectOpen()
 	{
 		openAnim->start();
 		closeAnim->reInit();
-		this->boundCollision = MetroidRect(0, 0, 0, 0);
+		this->isActivity = false;
 	}
 }
 
@@ -86,7 +88,7 @@ void GateBlue::effectClose()
 	openAnim->reInit();
 	isHit = false;
 	isCollideSamusInPort = false;
-	this->boundCollision = this->baseBound;
+	this->isActivity = true;
 }
 
 void GateBlue::setHit(bool flag)
@@ -102,5 +104,4 @@ void GateBlue::setIsCollideSamusInPort(bool flag)
 void GateBlue::setBoundCollision(MetroidRect rect)
 {
 	BaseObject::setBoundCollision(rect);
-	this->baseBound = rect;
 }

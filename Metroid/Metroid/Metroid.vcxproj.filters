@@ -18,7 +18,6 @@
     <ClCompile Include="GameLog.cpp" />
     <ClCompile Include="GameManager.cpp" />
     <ClCompile Include="GateBlue.cpp" />
-    <ClCompile Include="GateRed.cpp" />
     <ClCompile Include="Graphics.cpp" />
     <ClCompile Include="IceBeam.cpp" />
     <ClCompile Include="IndexManager.cpp" />
@@ -60,6 +59,9 @@
     <ClCompile Include="IFreezable.cpp" />
     <ClCompile Include="SamusStateInjuring.cpp" />
     <ClCompile Include="MotherBrain.cpp" />
+    <ClCompile Include="BoomBomb.cpp" />
+    <ClCompile Include="BoomBombPool.cpp" />
+    <ClCompile Include="GateRed.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AlienBig.h" />
@@ -81,7 +83,6 @@
     <ClInclude Include="GameLog.h" />
     <ClInclude Include="GameManager.h" />
     <ClInclude Include="GateBlue.h" />
-    <ClInclude Include="GateRed.h" />
     <ClInclude Include="Graphics.h" />
     <ClInclude Include="IceBeam.h" />
     <ClInclude Include="IndexManager.h" />
@@ -123,6 +124,9 @@
     <ClInclude Include="IFreezable.h" />
     <ClInclude Include="SamusStateInjuring.h" />
     <ClInclude Include="MotherBrain.h" />
+    <ClInclude Include="BoomBomb.h" />
+    <ClInclude Include="BoomBombPool.h" />
+    <ClInclude Include="GateRed.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Metroid.rc" />
