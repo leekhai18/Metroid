@@ -57,7 +57,7 @@ void ObjectManager::onCheckCollision(float dt)
 
 		MetroidRect r = Camera::getInstance()->getBound();
 		//Get all objects that can collide with current obj
-		quadtree->retrieve(listNotWallCanCollideSamus, listObjectNotWallOnViewPort, listWallCanCollideSamus, MetroidRect(r.top, r.bottom, r.left, r.right), samus);
+		quadtree->retrieve(listNotWallCanCollideSamus, listObjectNotWallOnViewPort, listWallCanCollideSamus, MetroidRect(r.top, r.bottom - 20, r.left, r.right), samus);
 	}
 
 	if (listObjectNotWallOnViewPort)
@@ -1467,12 +1467,18 @@ bool ObjectManager::load_list(const char * filename)
 				x = listWaverBrown[i]["x"].GetFloat();
 				y = listWaverBrown[i]["y"].GetFloat();
 				wvb->setPosition(VECTOR2(x, y));
-
+		
 				bound.left = x;
 				bound.top = y;
 				bound.right = bound.left + wvb->getSprite()->getWidth();
 				bound.bottom = bound.top - wvb->getSprite()->getHeight();
-				wvb->setBoundCollision(bound);
+				wvb->setBoundCollision();
+
+				const Value& arrayWall = listWaverBrown[i]["ListCollideID"];
+				for (SizeType t = 0; t < arrayWall.Size(); t++)
+				{
+					wvb->getListWallCanCollide()->push_back(map_object.find(arrayWall[t].GetInt())->second);
+				}
 
 				bound.bottom = listWaverBrown[i]["ba"].GetFloat();
 				bound.top = listWaverBrown[i]["ta"].GetFloat();
@@ -1523,8 +1529,12 @@ bool ObjectManager::load_list(const char * filename)
 				bound.top = y;
 				bound.right = bound.left + wvr->getSprite()->getWidth();
 				bound.bottom = bound.top - wvr->getSprite()->getHeight();
-				wvr->setBoundCollision(bound);
-
+				wvr->setBoundCollision();
+				const Value& arrayWall = listWaverRed[i]["ListCollideID"];
+				for (SizeType t = 0; t < arrayWall.Size(); t++)
+				{
+					wvr->getListWallCanCollide()->push_back(map_object.find(arrayWall[t].GetInt())->second);
+				}
 				bound.bottom = listWaverRed[i]["ba"].GetFloat();
 				bound.top = listWaverRed[i]["ta"].GetFloat();
 				bound.left = listWaverRed[i]["la"].GetFloat();

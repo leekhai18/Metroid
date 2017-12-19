@@ -14,6 +14,7 @@ private:
 	WaverDirectionY directionY;
 
 	VECTOR2 startPosition;
+	bool active;
 public:
 	Waver();
 	Waver(TextureManager* textureM, Graphics* graphics, EnemyColors color);
@@ -22,6 +23,7 @@ public:
 	list<BaseObject*>* getListWallCanCollide();
 	list<CollisionReturn> *getListCollide();
 	void setStartPosition(VECTOR2 position);
+	void setBoundCollision();
 	void update(float dt);
 	void onCollision(float dt);
 	void draw();

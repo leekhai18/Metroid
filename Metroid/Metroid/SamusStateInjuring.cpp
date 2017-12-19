@@ -47,7 +47,7 @@ void SamusStateInjuring::onCollision(float dt)
 	{
 		switch (i->object->getId())
 		{
-		case eID::WALL:case eID::BRICK:case GATEBLUE:case PORT: case GATERED:
+		case eID::WALL:case eID::BRICK:case GATEBLUE:case PORT: case GATERED: case eID::FIRE:
 			switch (i->direction)
 			{
 			case CollideDirection::TOP:

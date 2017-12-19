@@ -8,8 +8,7 @@
 #define SAMUS_POS_X 3648
 #define SAMUS_POS_Y 2993
 
-#define SAMUS_POS_X 640
-#define SAMUS_POS_Y 1267
+
 
 
 Samus::Samus(TextureManager* textureM,Graphics* graphics, Input* input) : BaseObject(eID::SAMUS)

@@ -113,7 +113,7 @@ void SamusStateFallRolling::onCollision(float dt)
 	{
 		switch (i->object->getId())
 		{
-		case eID::WALL: case eID::BRICK:
+		case eID::WALL: case eID::BRICK: case eID::FIRE:
 			switch (i->direction)
 			{
 			case CollideDirection::LEFT:

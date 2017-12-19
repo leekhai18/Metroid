@@ -186,11 +186,13 @@ void SamusStateStanding::handleInput(float dt)
 
 void SamusStateStanding::onCollision(float dt)
 {
+	int test;
 	for (auto i = this->samus->getListCollide()->begin(); i != this->samus->getListCollide()->end(); i++)
 	{
 		switch (i->object->getId())
 		{
-		case eID::WALL:case eID::BRICK:
+		case eID::WALL:case eID::BRICK: case eID::FIRE:
+			
 			switch (i->direction)
 			{
 			case CollideDirection::TOP:

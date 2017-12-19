@@ -3,7 +3,7 @@
 #include "Camera.h"
 #define TIME_FRAME_DELAY 0.5f
 #define MAX_WAVER_VELOCITY_Y 100
-#define WAVER_VELOCITY_X 100
+#define WAVER_VELOCITY_X 50
 #define WAVER_ACCELERATE_Y 100
 #define TIME_TO_CHANGE_STATE 0.5f
 Waver::Waver()
@@ -49,6 +49,8 @@ Waver::Waver(TextureManager * textureM, Graphics * graphics, EnemyColors color) 
 	this->velocity = VECTOR2(WAVER_VELOCITY_X*direction, MAX_WAVER_VELOCITY_Y*directionY);
 	this->listWallCanCollide = new list<BaseObject*>();
 	this->listCollide = new list<CollisionReturn>();
+
+	active = true;
 }
 
 
@@ -68,6 +70,17 @@ void Waver::setStartPosition(VECTOR2 position)
 {
 	this->startPosition = position;
 }
+void Waver::setBoundCollision()
+{
+	MetroidRect rect;
+	VECTOR2 position(this->getPosition().x, this->getPosition().y);
+	rect.left = position.x - this->getSprite()->getWidth() *0.5f;
+	rect.right = position.x + this->getSprite()->getWidth() *0.5f;
+	rect.top = position.y + this->getSprite()->getHeight() *0.5f;
+	rect.bottom = position.y - this->getSprite()->getHeight() *0.5f;
+
+	this->boundCollision = rect;
+}
 void Waver::onCollision(float dt)
 {
 	for (auto i = this->getListWallCanCollide()->begin(); i != this->getListWallCanCollide()->end(); i++)
@@ -80,18 +93,22 @@ void Waver::onCollision(float dt)
 		switch (x->direction)
 		{
 		case CollideDirection::LEFT:
-			direction = eDirection::right;
+			direction = eDirection::left;
+			this->velocity.x = -WAVER_VELOCITY_X;
 			this->sprite->setFlipX(true);
 			break;
 		case CollideDirection::RIGHT:
-			direction = eDirection::left;
-			this->sprite->setFlipX(true);
+			direction = eDirection::right;
+			this->velocity.x = WAVER_VELOCITY_X;
+			this->sprite->setFlipX(false);
 			break;
 		case CollideDirection::TOP:
-
+			velocity.y = -MAX_WAVER_VELOCITY_Y;
+			directionY = WaverDirectionY::down;
 			break;
 		case CollideDirection::BOTTOM:
-
+			velocity.y = MAX_WAVER_VELOCITY_Y;
+			directionY = WaverDirectionY::up;
 			break;
 		}
 	}
@@ -102,41 +119,45 @@ void Waver::update(float dt)
 {
 	this->anim->update(dt);
 
-	
+	if (active)
+	{
 
-	if (directionY == WaverDirectionY::up)
-	{
-		this->velocity_frame = velocity.y - WAVER_ACCELERATE_Y*dt;
-		if (velocity_frame <= 0)
+		if (directionY == WaverDirectionY::up)
 		{
-			velocity.y = -MAX_WAVER_VELOCITY_Y;
-			this->velocity_frame = velocity.y + WAVER_ACCELERATE_Y*dt;
-			directionY = WaverDirectionY::down;
-		}
-	}
-	else
-	{
-		this->velocity_frame = velocity.y + WAVER_ACCELERATE_Y*dt;
-		if (velocity_frame >= 0)
-		{
-			velocity.y = MAX_WAVER_VELOCITY_Y;
 			this->velocity_frame = velocity.y - WAVER_ACCELERATE_Y*dt;
-			directionY = WaverDirectionY::up;
+			if (velocity_frame <= 0)
+			{
+				velocity.y = -MAX_WAVER_VELOCITY_Y;
+				this->velocity_frame = velocity.y + WAVER_ACCELERATE_Y*dt;
+				directionY = WaverDirectionY::down;
+			}
 		}
-	}
+		else
+		{
+			this->velocity_frame = velocity.y + WAVER_ACCELERATE_Y*dt;
+			if (velocity_frame >= 0)
+			{
+				velocity.y = MAX_WAVER_VELOCITY_Y;
+				this->velocity_frame = velocity.y - WAVER_ACCELERATE_Y*dt;
+				directionY = WaverDirectionY::up;
+			}
+		}
 
 
 
-	this->velocity.y = (velocity_frame + velocity.y)*0.5f;
+		this->velocity.y = (velocity_frame + velocity.y)*0.5f;
 
-	// nhanh dần -> chậm dần, 1 chu kỳ thì 1 turn anim,
-	this->setPosition(VECTOR2(this->getPosition().x + this->velocity.x*dt, this->getPosition().y + this->velocity.y*dt));
+		// nhanh dần -> chậm dần, 1 chu kỳ thì 1 turn anim,
+		this->setPosition(VECTOR2(this->getPosition().x + this->velocity.x*dt, this->getPosition().y + this->velocity.y*dt));
 
-	this->velocity.y = velocity_frame;
 
-	if (this->getPosition().x  < Camera::getInstance()->getBound().left || this->getPosition().x > Camera::getInstance()->getBound().right)
-	{
-	
+		this->velocity.y = velocity_frame;
+
+		setBoundCollision();
+		if (this->getPosition().x  < Camera::getInstance()->getBound().left || this->getPosition().x > Camera::getInstance()->getBound().right)
+		{
+
+		}
 	}
 }
 

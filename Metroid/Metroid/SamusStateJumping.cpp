@@ -169,7 +169,7 @@ void SamusStateJumping::onCollision(float dt)
 		{
 
 #pragma region Wall
-		case eID::WALL: case eID::BRICK:
+		case eID::WALL: case eID::BRICK: case eID::FIRE:
 			switch (i->direction)
 			{
 			case CollideDirection::LEFT:

@@ -3,6 +3,7 @@
 #include "Zommer.h"
 #include "Ripper.h"
 #include "Skree.h"
+#include "Waver.h"
 
 Collision* Collision::instance = nullptr;
 Collision* Collision::getInstance()
@@ -200,7 +201,13 @@ bool Collision::checkCollision(BaseObject * myEntity, BaseObject * otherEntity, 
 			skree->getListCollide()->push_back(data);
 			break;
 		}
+		case eID::WAVER:
+		{
+			Waver* waver = static_cast<Waver*>(myEntity);
+			waver->getListCollide()->push_back(data);
 
+			break;
+		}
 		default:
 			break;
 		}
