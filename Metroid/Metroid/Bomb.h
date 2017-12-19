@@ -6,6 +6,7 @@ class Bomb : public BaseObject
 {
 private:
 	Animation *anim;
+	bool isActivity;
 
 public:
 	Bomb();
@@ -14,5 +15,8 @@ public:
 
 	void update(float dt);
 	void draw();
+
+	void setActivity(bool flag);
+	bool getActivity();
 };
 

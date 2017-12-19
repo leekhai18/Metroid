@@ -52,6 +52,8 @@ void SamusStateStanding::init()
 
 void SamusStateStanding::handleInput(float dt)
 {
+	this->samus->setVelocityY(-SAMUS_MIN_SPEED_Y);
+
 	if (input->isKeyUp(VK_LEFT) && input->isKeyUp(VK_RIGHT))
 		timerToRunning = 0;
 
@@ -261,8 +263,6 @@ void SamusStateStanding::update(float dt)
 		return;
 	}
 
-	this->samus->setVelocityY(-SAMUS_MIN_SPEED_Y);
-
 	canRolling = false;
 }
 
@@ -286,7 +286,7 @@ void SamusStateStanding::fire()
 	}
 	else
 	{
-		stP = VECTOR2(this->samus->getPosition().x + this->samus->getDirection()*this->samus->getSprite()->getWidth()*0.3f, this->samus->getPosition().y + 2);
+		stP = VECTOR2(this->samus->getPosition().x, this->samus->getPosition().y + 3);
 		bullet->setVelocity(VECTOR2((float)VELOCITY*this->samus->getDirection(), 0));
 	}
 

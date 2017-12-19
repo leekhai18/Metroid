@@ -30,19 +30,13 @@ BulletPool::BulletPool(TextureManager * textureM, Graphics * graphics, int start
 
 BulletPool::~BulletPool()
 {
-	while (this->list.size())
-	{
-		Bullet *obj = this->list.front();
-		this->list.erase(this->list.begin());
-		delete obj;
-	}
 }
 
 Bullet * BulletPool::getBullet()
 {
 	if (this->list.empty())
 	{
-		return new Bullet();
+		return new Bullet(textureManager, graphics);
 	}
 	else
 	{
@@ -77,4 +71,16 @@ void BulletPool::returnPool(Bullet * bullet)
 std::vector<Bullet*> BulletPool::getListUsing()
 {
 	return this->listUsing;
+}
+
+void BulletPool::release()
+{
+	while (this->list.size())
+	{
+		Bullet *obj = this->list.front();
+		this->list.erase(this->list.begin());
+		delete obj;
+	}
+
+	delete instance;
 }

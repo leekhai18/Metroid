@@ -198,7 +198,7 @@ void SamusStateRunning::onCollision(float dt)
 	{
 		switch (i->object->getId())
 		{
-#pragma region Wall
+#pragma region Wall & Port
 		case eID::WALL: case eID::BRICK:
 			switch (i->direction)
 			{
@@ -249,7 +249,7 @@ void SamusStateRunning::onCollision(float dt)
 #pragma endregion
 
 #pragma region GATE
-		case eID::GATEBLUE:
+		case eID::GATEBLUE: case eID::GATERED:
 			switch (i->direction)
 			{
 			case CollideDirection::LEFT:
@@ -375,13 +375,12 @@ void SamusStateRunning::update(float dt)
 		SamusStateManager::getInstance()->changeStateTo(this->samus->getStatus());
 		return;
 	}
-	this->samus->setVelocityY(-SAMUS_MIN_SPEED_Y);
 
 	this->samus->setCanMoveLeft(true);
-
 	this->samus->setCanMoveRight(true);
-
 	this->samus->setFall(true);
+
+	this->samus->setVelocityY(-SAMUS_MIN_SPEED_Y);
 }
 
 
@@ -412,7 +411,7 @@ void SamusStateRunning::fire()
 	}
 	else
 	{
-		stP = VECTOR2(this->samus->getPosition().x + this->samus->getDirection()*this->samus->getSprite()->getWidth()*0.6f, this->samus->getPosition().y + 4);
+		stP = VECTOR2(this->samus->getPosition().x + this->samus->getDirection()*this->samus->getSprite()->getWidth()*0.3f, this->samus->getPosition().y + 4);
 		bullet->setVelocity(VECTOR2((float)VELOCITY*this->samus->getDirection(), 0));
 	}
 

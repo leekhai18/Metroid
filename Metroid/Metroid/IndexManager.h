@@ -1,7 +1,7 @@
 #pragma once
 // Class used to manage Index Sprites in Texture
 
-#define MAX_INDEX 201
+#define MAX_INDEX 259
 
 // Define NUM_FRAMES
 #define NUM_FRAMES_ZOOMER 2
@@ -17,10 +17,11 @@
 #define NUM_FRAMES_SAMUS_RUNNING 3
 #define NUM_FRAMES_SAMUS_ROLLING 4
 #define NUM_FRAMES_SAMUS_JUMPING 4
-#define NUM_FRAMES_SAMUS_BOMB 3
+#define NUM_FRAMES_SAMUS_BOMB 2
 #define NUM_FRAMES_EXPLOSION 2
 #define NUM_FRAMES_BOSS_KRAID 2
 #define NUM_FRAMES_GATE_ANIM 5
+#define NUM_FRAMES_MOTHER 4
 
 
 
@@ -107,8 +108,22 @@ public:
 	const int samusYellowBulletNormalColliding = 164;
 	const int samusYellowBulletIce = 165;
 	const int samusYellowBulletIceColliding = 166;
-	const int samusYellowBombEffect[3] = { 167,168,169 };
+	const int samusYellowBombEffect[2] = { 167,168 };
 	const int samusYellowExplosion[2] = { 170,171 };
+
+	const int samusYellowIceTurnRight = 230;
+	const int samusYellowIceTurnUp = 229;
+	const int samusYellowIceRunningRight[3] = { 227,228,226 };
+	const int samusYellowIceJumpRight = 225;
+	const int samusYellowIceJumpingRight[4] = { 224,223,222,220 };
+	const int samusYellowIceRollingRight[4] = { 217,218,219,221 };
+	const int samusYellowIceHittingRight = 216;
+	const int samusYellowIceHittingUp = 211;
+	const int samusYellowIceHittingAndRunningRight[3] = { 214,215,213 };
+	const int samusYellowIceHittingAndJumpRight = 212;
+	const int samusYellowIceRunningUpRight[3] = { 209,210,208 };
+	const int samusYellowIceJumpUp = 207;
+	const int samusYellowIceHittingJumpUp = 206;
 
 
 
@@ -130,8 +145,22 @@ public:
 	const int samusPinkBulletNormalColliding = 173;
 	const int samusPinkBulletIce = 174;
 	const int samusPinkBulletIceColliding = 175;
-	const int samusPinkBombEffect[3] = { 176,177,178 };
+	const int samusPinkBombEffect[2] = { 176,177 };
 	const int samusPinkExplosion[2] = { 179,180 };
+
+	const int samusPinkIceTurnRight = 255;
+	const int samusPinkIceTurnUp = 254;
+	const int samusPinkIceRunningRight[3] = { 252,253,251 };
+	const int samusPinkIceJumpRight = 249;
+	const int samusPinkIceJumpingRight[4] = { 250,248,247,246 };
+	const int samusPinkIceRollingRight[4] = { 242,243,244,245 };
+	const int samusPinkIceHittingRight = 241;
+	const int samusPinkIceHittingUp = 236;
+	const int samusPinkIceHittingAndRunningRight[3] = { 234,235,233 };
+	const int samusPinkIceHittingAndJumpRight = 237;
+	const int samusPinkIceRunningUpRight[3] = { 239,240,238 };
+	const int samusPinkIceJumpUp = 232;
+	const int samusPinkIceHittingJumpUp = 231;
 
 
 	const int alienSmallR = 181;
@@ -149,6 +178,8 @@ public:
 	const int gateRedROpen[5] = { 188, 196, 197, 198, 199 };
 	const int gateRedRClose[5] = { 199, 198, 197, 196, 188 };
 	const int bossKraidR[2] = { 189,190 };
+	const int motherBrain[4] = { 202,203,204,205 };
+	const int bulletMotherBrain[4] = { 256,257,258,259 };
 
 	const int enIcon = 201;
 	const int liveIcon = 200;

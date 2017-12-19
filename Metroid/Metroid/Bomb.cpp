@@ -1,4 +1,5 @@
 #include "Bomb.h"
+#include "Metroid.h"
 
 Bomb::Bomb()
 {
@@ -14,6 +15,8 @@ Bomb::Bomb(TextureManager * textureM, Graphics * graphics) : BaseObject(eID::BOM
 
 	this->anim = new Animation(this->sprite, IndexManager::getInstance()->bomb, NUM_FRAMES_ITEM, TIME_FRAME_ITEM);
 	this->anim->start();
+
+	this->isActivity = true;
 }
 
 
@@ -25,10 +28,48 @@ Bomb::~Bomb()
 
 void Bomb::update(float dt)
 {
-	this->anim->update(dt);
+	if (isActivity)
+	{
+		this->anim->update(dt);
+	}
 }
 
 void Bomb::draw()
 {
-	this->sprite->draw();
+	if (isActivity)
+	{
+		this->sprite->draw();
+	}
+}
+
+void Bomb::setActivity(bool flag)
+{
+	this->isActivity = flag;
+
+	if (this->isActivity == true)
+	{
+		MetroidRect bound;
+
+		bound.left = this->getPosition().x;
+		bound.top = this->getPosition().y;
+		bound.right = bound.left + this->getSprite()->getWidth();
+		bound.bottom = bound.top - this->getSprite()->getHeight();
+
+		this->setBoundCollision(bound);
+		this->setActiveBound(bound);
+	}
+	else
+	{
+		MetroidRect bound(0, 0, 0, 0);
+
+		this->setBoundCollision(bound);
+		this->setActiveBound(bound);
+
+		Metroid::getInstance()->setJustCollectItem(true);
+	}
+}
+
+bool Bomb::getActivity()
+{
+	return this->isActivity;
 }

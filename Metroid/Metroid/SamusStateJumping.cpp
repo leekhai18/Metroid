@@ -3,6 +3,7 @@
 #include "GameLog.h"
 #include "MaruMari.h"
 #include "EnergyTank.h"
+#include "Bomb.h"
 
 SamusStateJumping::SamusStateJumping()
 {
@@ -250,11 +251,20 @@ void SamusStateJumping::onCollision(float dt)
 
 		case eID::ENERGYTANK:
 		{
-			GAMELOG("VA CHAM ENERGYTANK");
-
 			this->samus->setNumLive(this->samus->getNumLive() + 1);
 			EnergyTank* energy = static_cast<EnergyTank*>(i->object);
 			energy->setActivity(false);
+
+			break;
+		}
+
+		case eID::BOMB:
+		{
+			this->samus->setMariMaru(true); // just test
+
+			this->samus->setBomb(true);
+			Bomb* bom = static_cast<Bomb*>(i->object);
+			bom->setActivity(false);
 
 			break;
 		}
@@ -349,7 +359,7 @@ void SamusStateJumping::fire()
 	}
 	else
 	{
-		stP = VECTOR2(this->samus->getPosition().x + this->samus->getDirection()*this->samus->getSprite()->getWidth()*0.3f, this->samus->getPosition().y + 2);
+		stP = VECTOR2(this->samus->getPosition().x + this->samus->getDirection()*this->samus->getSprite()->getWidth()*0.2f, this->samus->getPosition().y + 2);
 		bullet->setVelocity(VECTOR2((float)VELOCITY*this->samus->getDirection(), 0));
 	}
 

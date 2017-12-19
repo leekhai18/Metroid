@@ -1,6 +1,9 @@
 #include "SamusStateRolling.h"
 #include "SamusStateManager.h"
+#include "GameLog.h"
+#include "BoomBombPool.h"
 
+#define TIME_START_BOMB 0.1f
 
 SamusStateRolling::SamusStateRolling()
 {
@@ -9,6 +12,7 @@ SamusStateRolling::SamusStateRolling()
 SamusStateRolling::SamusStateRolling(Samus * samus, Input * input) : BaseState(samus, input)
 {
 	timer = 0;
+	timerToStartBoom = 0;
 }
 
 
@@ -43,6 +47,8 @@ void SamusStateRolling::init()
 
 void SamusStateRolling::handleInput(float dt)
 {
+	this->samus->setVelocity(VECTOR2(this->samus->getVelocity().x, -SAMUS_MIN_SPEED_Y));
+
 	//handle press left button
 	if (input->isKeyDown(VK_LEFT) && input->isKeyUp(VK_RIGHT))
 	{
@@ -84,6 +90,16 @@ void SamusStateRolling::handleInput(float dt)
 	if (input->isKeyDown(VK_UP) || input->isKeyDown(VK_X))
 	{
 		this->samus->setStatus(eStatus::STANDING);
+	}
+
+	if (input->isKeyDown(VK_Z) && this->samus->isHaveBomb())
+	{
+		timerToStartBoom += dt;
+		if (timerToStartBoom > TIME_START_BOMB)
+		{
+			BoomBombPool::getInstance()->getBoom()->start(this->samus->getPosition());
+			timerToStartBoom = 0;
+		}
 	}
 }
 
@@ -231,7 +247,6 @@ void SamusStateRolling::update(float dt)
 	this->samus->setCanMoveRight(true);
 
 	move_to_fall = true;
-	this->samus->setVelocity(VECTOR2(this->samus->getVelocity().x, -SAMUS_MIN_SPEED_Y));
 	canStanding = false;
 }
 
