@@ -52,6 +52,8 @@ public:
 	bool load_quatree(const char *filename);
 	void release();
 
+	void handleVelocity(float dt);
+
 	void onCheckCollision(float frametime);
 	void onCheckCollision(BaseObject* obj, float frametime);
 

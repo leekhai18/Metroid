@@ -51,6 +51,8 @@ Waver::Waver(TextureManager * textureM, Graphics * graphics, EnemyColors color) 
 	this->listCollide = new list<CollisionReturn>();
 
 	active = true;
+
+
 }
 
 
@@ -156,11 +158,11 @@ void Waver::update(float dt)
 		
 		// nhanh dần -> chậm dần, 1 chu kỳ thì 1 turn anim,
 		this->setPosition(VECTOR2(this->getPosition().x + this->velocity.x*dt, this->getPosition().y + this->velocity.y*dt));
-
+		setBoundCollision();
 
 		this->velocity.y = velocity_frame;
 
-		setBoundCollision();
+		
 		if (this->getPosition().x  < Camera::getInstance()->getBound().left || this->getPosition().x > Camera::getInstance()->getBound().right)
 		{
 

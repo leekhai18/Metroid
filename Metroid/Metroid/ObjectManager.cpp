@@ -42,6 +42,20 @@ ObjectManager * ObjectManager::getInstance()
 
 	return instance;
 }
+void ObjectManager::handleVelocity(float dt)
+{
+	if (listObjectNotWallOnViewPort)
+	{
+		for (list<BaseObject*>::iterator i = listObjectNotWallOnViewPort->begin(); i != listObjectNotWallOnViewPort->end(); ++i) 
+		{
+			if ((*i)->getId() == eID::WAVER)
+			{
+				Waver* waver = static_cast<Waver*>(*i);
+				waver->handleVelocity(dt);
+			}
+		}
+	}
+}
 
 void ObjectManager::onCheckCollision(float dt)
 {
@@ -2137,3 +2151,4 @@ void ObjectManager::release()
 
 	delete instance;
 }
+

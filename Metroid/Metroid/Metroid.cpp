@@ -104,6 +104,7 @@ void Metroid::initialize(HWND hwnd)
 void Metroid::handleInput(float dt)
 {
 	samus->handleInput(dt);
+	ObjectManager::getInstance()->handleVelocity(dt);
 }
 
 void Metroid::collisions(float dt)
