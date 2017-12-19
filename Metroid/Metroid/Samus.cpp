@@ -76,8 +76,8 @@ Samus::~Samus()
 
 void Samus::handleInput(float dt)
 {
-	if (!Camera::getInstance()->moveWhenSamusOnPort())
-		SamusStateManager::getInstance()->getCurrentState()->handleInput(dt);
+	
+	SamusStateManager::getInstance()->getCurrentState()->handleInput(dt);
 
 #pragma region handle camera
 	if (!Camera::getInstance()->moveWhenSamusOnPort())

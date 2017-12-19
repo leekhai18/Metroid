@@ -1,6 +1,6 @@
 #include "SamusStateFallRolling.h"
 #include "SamusStateManager.h"
-
+#include "Camera.h"
 
 SamusStateFallRolling::SamusStateFallRolling()
 {
@@ -37,57 +37,59 @@ void SamusStateFallRolling::init()
 
 void SamusStateFallRolling::handleInput(float dt)
 {
-	//handle press left button
-	if (input->isKeyDown(VK_LEFT) && input->isKeyUp(VK_RIGHT))
-	{
-		if (this->samus->isInDirection(eDirection::right))
+	if (!Camera::getInstance()->moveWhenSamusOnPort()) {
+		//handle press left button
+		if (input->isKeyDown(VK_LEFT) && input->isKeyUp(VK_RIGHT))
 		{
-			this->samus->setFlipX(true);
-			this->samus->setDirection(eDirection::left);
-		}
-		//check if moveLeft = false, it means samus is colliding with other object in right side
-		if (this->samus->canMoveLeft() == true)
-		{
-			if (this->samus->isFaling())
-				this->samus->setVelocityX(-SAMUS_VELOCITY_JUMP_X);
-			else
-				this->samus->setVelocityX(-SAMUS_VERLOCITY_X);
-		}
-	}
-
-	//handle press right button
-	if (input->isKeyDown(VK_RIGHT) && input->isKeyUp(VK_LEFT))
-	{
-		if (this->samus->isInDirection(eDirection::left))
-		{
-			this->samus->setFlipX(false);
-			this->samus->setDirection(eDirection::right);
+			if (this->samus->isInDirection(eDirection::right))
+			{
+				this->samus->setFlipX(true);
+				this->samus->setDirection(eDirection::left);
+			}
+			//check if moveLeft = false, it means samus is colliding with other object in right side
+			if (this->samus->canMoveLeft() == true)
+			{
+				if (this->samus->isFaling())
+					this->samus->setVelocityX(-SAMUS_VELOCITY_JUMP_X);
+				else
+					this->samus->setVelocityX(-SAMUS_VERLOCITY_X);
+			}
 		}
 
-		//check if moveRight = false, it means samus is colliding with other object in left side
-		if (this->samus->canMoveRight() == true)
+		//handle press right button
+		if (input->isKeyDown(VK_RIGHT) && input->isKeyUp(VK_LEFT))
 		{
-			if (this->samus->isFaling())
-				this->samus->setVelocityX(SAMUS_VELOCITY_JUMP_X);
-			else
-				this->samus->setVelocityX(SAMUS_VERLOCITY_X);
+			if (this->samus->isInDirection(eDirection::left))
+			{
+				this->samus->setFlipX(false);
+				this->samus->setDirection(eDirection::right);
+			}
 
+			//check if moveRight = false, it means samus is colliding with other object in left side
+			if (this->samus->canMoveRight() == true)
+			{
+				if (this->samus->isFaling())
+					this->samus->setVelocityX(SAMUS_VELOCITY_JUMP_X);
+				else
+					this->samus->setVelocityX(SAMUS_VERLOCITY_X);
+
+			}
 		}
-	}
 
-	if ((input->isKeyUp(VK_RIGHT) && input->isKeyUp(VK_LEFT)) || (input->isKeyDown(VK_LEFT) && input->isKeyDown(VK_RIGHT)))
-	{
-		this->samus->setVelocityX(0);
-	}
+		if ((input->isKeyUp(VK_RIGHT) && input->isKeyUp(VK_LEFT)) || (input->isKeyDown(VK_LEFT) && input->isKeyDown(VK_RIGHT)))
+		{
+			this->samus->setVelocityX(0);
+		}
 
-	if (input->isKeyDown(VK_UP) || input->isKeyDown(VK_X))
-	{
-		//this->samus->setStatus(eStatus::STANDING);
-	}
+		if (input->isKeyDown(VK_UP) || input->isKeyDown(VK_X))
+		{
+			//this->samus->setStatus(eStatus::STANDING);
+		}
 
-	if (this->samus->getVelocity().y > -SAMUS_MAX_SPEED_Y)
-	{
-		this->samus->setVelocityY(this->samus->getVelocity().y + ACCELERATE_Y*dt);
+		if (this->samus->getVelocity().y > -SAMUS_MAX_SPEED_Y)
+		{
+			this->samus->setVelocityY(this->samus->getVelocity().y + ACCELERATE_Y*dt);
+		}
 	}
 }
 

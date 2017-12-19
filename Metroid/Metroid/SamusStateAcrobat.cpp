@@ -2,7 +2,7 @@
 #include "SamusStateManager.h"
 #include "GameLog.h"
 #include "MaruMari.h"
-
+#include "Camera.h"
 SamusStateAcrobat::SamusStateAcrobat()
 {
 }
@@ -36,72 +36,75 @@ void SamusStateAcrobat::init()
 
 void SamusStateAcrobat::handleInput(float dt)
 {
+	if (!Camera::getInstance()->moveWhenSamusOnPort())
+	{
 #pragma region Horizontal
-	if (input->isKeyDown(VK_RIGHT) && input->isKeyUp(VK_LEFT))
-	{
-		// Handle direction
-		if (this->samus->isInDirection(eDirection::left))
+		if (input->isKeyDown(VK_RIGHT) && input->isKeyUp(VK_LEFT))
 		{
-			this->samus->setFlipX(false);
-			this->samus->setDirection(eDirection::right);
-		}
-		this->samus->setVelocityX(SAMUS_VELOCITY_JUMP_X);
-	}
-
-	if (input->isKeyDown(VK_LEFT) && input->isKeyUp(VK_RIGHT))
-	{
-		if (this->samus->isInDirection(eDirection::right))
-		{
-			this->samus->setFlipX(true);
-			this->samus->setDirection(eDirection::left);
+			// Handle direction
+			if (this->samus->isInDirection(eDirection::left))
+			{
+				this->samus->setFlipX(false);
+				this->samus->setDirection(eDirection::right);
+			}
+			this->samus->setVelocityX(SAMUS_VELOCITY_JUMP_X);
 		}
 
-		this->samus->setVelocityX(-SAMUS_VELOCITY_JUMP_X);
-	}
+		if (input->isKeyDown(VK_LEFT) && input->isKeyUp(VK_RIGHT))
+		{
+			if (this->samus->isInDirection(eDirection::right))
+			{
+				this->samus->setFlipX(true);
+				this->samus->setDirection(eDirection::left);
+			}
 
-	if ((input->isKeyUp(VK_RIGHT) && input->isKeyUp(VK_LEFT)) || (input->isKeyDown(VK_LEFT) && input->isKeyDown(VK_RIGHT)))
-	{
-		this->samus->setVelocityX(0);
-	}
+			this->samus->setVelocityX(-SAMUS_VELOCITY_JUMP_X);
+		}
+
+		if ((input->isKeyUp(VK_RIGHT) && input->isKeyUp(VK_LEFT)) || (input->isKeyDown(VK_LEFT) && input->isKeyDown(VK_RIGHT)))
+		{
+			this->samus->setVelocityX(0);
+		}
 #pragma endregion
 
 #pragma region Vertical
-	// Handle vertical
-	if (this->samus->isFaling() == false) // is going up
-	{	
-		//samus.velocity.y= V + at
-		this->samus->setVelocityY(this->samus->getVelocity().y + ACCELERATE_Y*dt);
-
-		jumpDistance += this->samus->getVelocity().y*dt;
-		time += dt;
-		
-		if (jumpDistance < MAX_JUMP)
+		// Handle vertical
+		if (this->samus->isFaling() == false) // is going up
 		{
-			this->samus->setFall(false);
-		}
-		else
-		{
-			jumpDistance = 0;
-			this->samus->setFall(true);
-			this->samus->setVelocityY(SAMUS_V0_FALL_Y);
-		}
-
-		//if we release jump button, samus will jump to MIN_JUMP
-		if (input->isKeyUp(VK_X))
-		{
-			this->samus->setFall(true);
-			this->samus->setVelocityY(SAMUS_V0_FALL_Y);		
-		}
-	}
-	else //Falling
-	{
-		if (this->samus->getVelocity().y > -SAMUS_MAX_SPEED_Y)
+			//samus.velocity.y= V + at
 			this->samus->setVelocityY(this->samus->getVelocity().y + ACCELERATE_Y*dt);
 
-		if(this->samus->getPosition().y <= position_to_jump)
-			this->samus->setStatus(eStatus::JUMPING);
-	}
+			jumpDistance += this->samus->getVelocity().y*dt;
+			time += dt;
+
+			if (jumpDistance < MAX_JUMP)
+			{
+				this->samus->setFall(false);
+			}
+			else
+			{
+				jumpDistance = 0;
+				this->samus->setFall(true);
+				this->samus->setVelocityY(SAMUS_V0_FALL_Y);
+			}
+
+			//if we release jump button, samus will jump to MIN_JUMP
+			if (input->isKeyUp(VK_X))
+			{
+				this->samus->setFall(true);
+				this->samus->setVelocityY(SAMUS_V0_FALL_Y);
+			}
+		}
+		else //Falling
+		{
+			if (this->samus->getVelocity().y > -SAMUS_MAX_SPEED_Y)
+				this->samus->setVelocityY(this->samus->getVelocity().y + ACCELERATE_Y*dt);
+
+			if (this->samus->getPosition().y <= position_to_jump)
+				this->samus->setStatus(eStatus::JUMPING);
+		}
 #pragma endregion
+	}
 }
 
 #pragma region Collision

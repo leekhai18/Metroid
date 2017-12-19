@@ -3,7 +3,7 @@
 #include "GameLog.h"
 #include "MaruMari.h"
 #include "EnergyTank.h"
-
+#include "Camera.h"
 SamusStateJumping::SamusStateJumping()
 {
 }
@@ -39,124 +39,125 @@ void SamusStateJumping::init()
 
 void SamusStateJumping::handleInput(float dt)
 {
-
+	if (!Camera::getInstance()->moveWhenSamusOnPort()) {
 #pragma region Horizontal
-	if (input->isKeyDown(VK_RIGHT) && input->isKeyUp(VK_LEFT))
-	{
-		// Handle direction
-		if (this->samus->isInDirection(eDirection::left))
+		if (input->isKeyDown(VK_RIGHT) && input->isKeyUp(VK_LEFT))
 		{
-			this->samus->setFlipX(false);
-			this->samus->setDirection(eDirection::right);
+			// Handle direction
+			if (this->samus->isInDirection(eDirection::left))
+			{
+				this->samus->setFlipX(false);
+				this->samus->setDirection(eDirection::right);
+			}
+
+			this->samus->setVelocityX(SAMUS_VELOCITY_JUMP_X);
 		}
 
-		this->samus->setVelocityX(SAMUS_VELOCITY_JUMP_X);
-	}
-
-	if (input->isKeyDown(VK_LEFT) && input->isKeyUp(VK_RIGHT))
-	{
-
-		// Handle direction	
-		if (this->samus->isInDirection(eDirection::right))
+		if (input->isKeyDown(VK_LEFT) && input->isKeyUp(VK_RIGHT))
 		{
-			this->samus->setFlipX(true);		
-			this->samus->setDirection(eDirection::left);
+
+			// Handle direction	
+			if (this->samus->isInDirection(eDirection::right))
+			{
+				this->samus->setFlipX(true);
+				this->samus->setDirection(eDirection::left);
+			}
+
+			this->samus->setVelocityX(-SAMUS_VELOCITY_JUMP_X);
 		}
 
-		this->samus->setVelocityX(-SAMUS_VELOCITY_JUMP_X);
-	}
-
-	if ((input->isKeyUp(VK_RIGHT) && input->isKeyUp(VK_LEFT)) || (input->isKeyDown(VK_LEFT) && input->isKeyDown(VK_RIGHT)))
-	{
-		this->samus->setVelocityX(0);
-	}
+		if ((input->isKeyUp(VK_RIGHT) && input->isKeyUp(VK_LEFT)) || (input->isKeyDown(VK_LEFT) && input->isKeyDown(VK_RIGHT)))
+		{
+			this->samus->setVelocityX(0);
+		}
 #pragma endregion
 
 #pragma region Vertical
-	// Handle vertical
-	if (this->samus->isFaling() == false) // is going up
-	{
-		//samus.velocity.y= V + at
-		this->samus->setVelocityY(this->samus->getVelocity().y + ACCELERATE_Y*dt);
-
-		jumpDistance += this->samus->getVelocity().y*dt;
-		time += dt;
-
-		//if acrobat and time enough to change acrobat state
-		if (time >= TIME_TO_ACROBAT && samus->isAcrobat())
+		// Handle vertical
+		if (this->samus->isFaling() == false) // is going up
 		{
-			samus->setStatus(eStatus::ACROBAT);
-		}
-
-		if (jumpDistance < MAX_JUMP)
-		{
-			this->samus->setFall(false);
-		}
-		else
-		{
-			jumpDistance = 0;
-			this->samus->setFall(true);
-			this->samus->setVelocityY(SAMUS_V0_FALL_Y);
-		}
-
-		//if we release jump button, samus will jump to MIN_JUMP
-		if (input->isKeyUp(VK_X))
-		{
-			this->samus->setFall(true);
-			this->samus->setVelocityY(SAMUS_V0_FALL_Y);
-		}
-	}
-	else // Falling
-	{
-		if (this->samus->getVelocity().y > -SAMUS_MAX_SPEED_Y)
+			//samus.velocity.y= V + at
 			this->samus->setVelocityY(this->samus->getVelocity().y + ACCELERATE_Y*dt);
-	}
+
+			jumpDistance += this->samus->getVelocity().y*dt;
+			time += dt;
+
+			//if acrobat and time enough to change acrobat state
+			if (time >= TIME_TO_ACROBAT && samus->isAcrobat())
+			{
+				samus->setStatus(eStatus::ACROBAT);
+			}
+
+			if (jumpDistance < MAX_JUMP)
+			{
+				this->samus->setFall(false);
+			}
+			else
+			{
+				jumpDistance = 0;
+				this->samus->setFall(true);
+				this->samus->setVelocityY(SAMUS_V0_FALL_Y);
+			}
+
+			//if we release jump button, samus will jump to MIN_JUMP
+			if (input->isKeyUp(VK_X))
+			{
+				this->samus->setFall(true);
+				this->samus->setVelocityY(SAMUS_V0_FALL_Y);
+			}
+		}
+		else // Falling
+		{
+			if (this->samus->getVelocity().y > -SAMUS_MAX_SPEED_Y)
+				this->samus->setVelocityY(this->samus->getVelocity().y + ACCELERATE_Y*dt);
+		}
 #pragma endregion
 
 
 #pragma region Shooting
 
-	if (this->animation == nullptr)
-	{
-		if (input->isKeyDown(VK_Z) && input->isKeyUp(VK_UP))
+		if (this->animation == nullptr)
 		{
-			// Set Data for sprite
-			this->samus->getSprite()->setData(IndexManager::getInstance()->samusYellowHittingAndJumpRight);
-
-			this->isUp = false;
-			if (this->samus->timerShoot > TIME_SHOOTING)
+			if (input->isKeyDown(VK_Z) && input->isKeyUp(VK_UP))
 			{
-				this->fire();
-				this->samus->timerShoot = 0;
+				// Set Data for sprite
+				this->samus->getSprite()->setData(IndexManager::getInstance()->samusYellowHittingAndJumpRight);
+
+				this->isUp = false;
+				if (this->samus->timerShoot > TIME_SHOOTING)
+				{
+					this->fire();
+					this->samus->timerShoot = 0;
+				}
+			}
+
+			if (input->isKeyDown(VK_Z) && input->isKeyDown(VK_UP))
+			{
+				// Set Data for sprite
+				this->samus->getSprite()->setData(IndexManager::getInstance()->samusYellowHittingJumpUp);
+
+				this->isUp = true;
+				if (this->samus->timerShoot > TIME_SHOOTING)
+				{
+					this->fire();
+					this->samus->timerShoot = 0;
+				}
+			}
+
+			if (input->isKeyDown(VK_UP) && input->isKeyUp(VK_Z))
+			{
+				// Set Data for sprite
+				this->samus->getSprite()->setData(IndexManager::getInstance()->samusYellowJumpUp);
+			}
+
+			if (input->isKeyUp(VK_Z) && input->isKeyUp(VK_UP) && this->samus->isInStatus(eStatus::JUMPING))
+			{
+				// Set Data for sprite
+				this->samus->getSprite()->setData(IndexManager::getInstance()->samusYellowJumpRight);
 			}
 		}
-
-		if (input->isKeyDown(VK_Z) && input->isKeyDown(VK_UP))
-		{
-			// Set Data for sprite
-			this->samus->getSprite()->setData(IndexManager::getInstance()->samusYellowHittingJumpUp);
-
-			this->isUp = true;
-			if (this->samus->timerShoot > TIME_SHOOTING)
-			{
-				this->fire();
-				this->samus->timerShoot = 0;
-			}
-		}
-
-		if (input->isKeyDown(VK_UP) && input->isKeyUp(VK_Z))
-		{
-			// Set Data for sprite
-			this->samus->getSprite()->setData(IndexManager::getInstance()->samusYellowJumpUp);
-		}
-
-		if (input->isKeyUp(VK_Z) && input->isKeyUp(VK_UP) && this->samus->isInStatus(eStatus::JUMPING))
-		{
-			// Set Data for sprite
-			this->samus->getSprite()->setData(IndexManager::getInstance()->samusYellowJumpRight);
-		}
-	}
 #pragma endregion
+	}
 }
 
 void SamusStateJumping::onCollision(float dt)

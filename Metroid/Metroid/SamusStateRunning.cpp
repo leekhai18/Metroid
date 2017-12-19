@@ -3,7 +3,7 @@
 #include "GameLog.h"
 #include "Camera.h"
 #include "GateBlue.h"
-
+#include "Camera.h"
 SamusStateRunning::SamusStateRunning()
 {
 }
@@ -43,154 +43,155 @@ void SamusStateRunning::init()
 void SamusStateRunning::handleInput(float dt)
 {
 	this->samus->setVelocityY(-SAMUS_MIN_SPEED_Y);
-
+	if (!Camera::getInstance()->moveWhenSamusOnPort()) 
+	{
 #pragma region Horizontal
-	if ((input->isKeyUp(VK_RIGHT) && input->isKeyUp(VK_LEFT)) || (input->isKeyDown(VK_LEFT) && input->isKeyDown(VK_RIGHT))
-		|| (input->isKeyDown(VK_RIGHT) && this->samus->isInDirection(eDirection::left))
-		|| (input->isKeyDown(VK_LEFT) && this->samus->isInDirection(eDirection::right)))
-	{
-		//reset velocity
-		this->samus->setVelocityX(0);
-		this->samus->setStatus(eStatus::STANDING);
-		return;
-	}
-	if (input->isKeyDown(VK_LEFT) && input->isKeyUp(VK_RIGHT))
-	{
-		this->samus->setVelocityX(-SAMUS_VERLOCITY_X);
-	}
+		if ((input->isKeyUp(VK_RIGHT) && input->isKeyUp(VK_LEFT)) || (input->isKeyDown(VK_LEFT) && input->isKeyDown(VK_RIGHT))
+			|| (input->isKeyDown(VK_RIGHT) && this->samus->isInDirection(eDirection::left))
+			|| (input->isKeyDown(VK_LEFT) && this->samus->isInDirection(eDirection::right)))
+		{
+			//reset velocity
+			this->samus->setVelocityX(0);
+			this->samus->setStatus(eStatus::STANDING);
+			return;
+		}
+		if (input->isKeyDown(VK_LEFT) && input->isKeyUp(VK_RIGHT))
+		{
+			this->samus->setVelocityX(-SAMUS_VERLOCITY_X);
+		}
 
-	if (input->isKeyUp(VK_LEFT) && input->isKeyDown(VK_RIGHT))
-	{
-		this->samus->setVelocityX(SAMUS_VERLOCITY_X);
-	}
+		if (input->isKeyUp(VK_LEFT) && input->isKeyDown(VK_RIGHT))
+		{
+			this->samus->setVelocityX(SAMUS_VERLOCITY_X);
+		}
 
 
 #pragma endregion
-	if (input->isKeyUp(VK_X) == true)
-	{
-		this->samus->setCanJump(true);
-	}
-	//When we press jump key, change state to jump
-	if (input->isKeyDown(VK_X) && this->samus->canJump() == true)
-	{
-		//reset velocity
-		this->samus->setFall(false);
-		this->samus->setAcrobat(true);
-		this->samus->setStatus(eStatus::JUMPING);
-		return;
-	}
-
-	//when we press up button hand of samus will raise to sky
-	if (input->isKeyDown(VK_UP))
-	{
-		//stop current animation
-		this->animation->stop();
-		//change animation to hand raise to sky
-		this->animation = runningUp;
-		//start new animation
-		this->animation->start();
-	}
-	//when we press shot button and not press up button, samus will shot horizontal 
-	if (input->isKeyDown(VK_Z) && input->isKeyUp(VK_UP))
-	{
-		//stop current animation
-		this->animation->stop();
-		//change animation to shot horizontal
-		this->animation = runningHittingRight;
-		//start new animation
-		this->animation->start();
-
-		//we must press shot button enoung long to samus shot
-		this->isUp = false;
-		if (this->samus->timerShoot > TIME_SHOOTING)
+		if (input->isKeyUp(VK_X) == true)
 		{
-			this->fire();
-			this->samus->timerShoot = 0;
+			this->samus->setCanJump(true);
 		}
-	}
-
-	if (input->isKeyDown(VK_UP) && input->isKeyDown(VK_Z))
-	{
-		this->animation->stop();
-
-		this->samus->getSprite()->setData(IndexManager::getInstance()->samusYellowHittingUp);
-		this->animation = runningUp;
-		this->animation->start();
-
-		this->isUp = true;
-		if (this->samus->timerShoot > TIME_SHOOTING)
+		//When we press jump key, change state to jump
+		if (input->isKeyDown(VK_X) && this->samus->canJump() == true)
 		{
-			this->fire();
-			this->samus->timerShoot = 0;
+			//reset velocity
+			this->samus->setFall(false);
+			this->samus->setAcrobat(true);
+			this->samus->setStatus(eStatus::JUMPING);
+			return;
 		}
-	}
 
-	if (input->isKeyUp(VK_UP) && input->isKeyUp(VK_Z) && (input->isKeyDown(VK_LEFT) || input->isKeyDown(VK_RIGHT)))
-	{
-		this->animation->stop();
-
-		this->animation = runningNormal;
-		this->animation->start();
-	}
-
-
-
-
-
-	//when we press up button hand of samus will raise to sky
-	if (input->isKeyDown(VK_UP))
-	{
-		//stop current animation
-		this->animation->stop();
-		//change animation to hand raise to sky
-		this->animation = runningUp;
-		//start new animation
-		this->animation->start();
-	}
-	//when we press shot button and not press up button, samus will shot horizontal 
-	if (input->isKeyDown(VK_Z) && input->isKeyUp(VK_UP))
-	{
-		//stop current animation
-		this->animation->stop();
-		//change animation to shot horizontal
-		this->animation = runningHittingRight;
-		//start new animation
-		this->animation->start();
-
-		//we must press shot button enoung long to samus shot
-		this->isUp = false;
-		if (this->samus->timerShoot > TIME_SHOOTING)
+		//when we press up button hand of samus will raise to sky
+		if (input->isKeyDown(VK_UP))
 		{
-			this->fire();
-			this->samus->timerShoot = 0;
+			//stop current animation
+			this->animation->stop();
+			//change animation to hand raise to sky
+			this->animation = runningUp;
+			//start new animation
+			this->animation->start();
 		}
-	}
-
-	if (input->isKeyDown(VK_UP) && input->isKeyDown(VK_Z))
-	{
-		this->animation->stop();
-
-		this->samus->getSprite()->setData(IndexManager::getInstance()->samusYellowHittingUp);
-		this->animation = runningUp;
-		this->animation->start();
-
-		this->isUp = true;
-		if (this->samus->timerShoot > TIME_SHOOTING)
+		//when we press shot button and not press up button, samus will shot horizontal 
+		if (input->isKeyDown(VK_Z) && input->isKeyUp(VK_UP))
 		{
-			this->fire();
-			this->samus->timerShoot = 0;
+			//stop current animation
+			this->animation->stop();
+			//change animation to shot horizontal
+			this->animation = runningHittingRight;
+			//start new animation
+			this->animation->start();
+
+			//we must press shot button enoung long to samus shot
+			this->isUp = false;
+			if (this->samus->timerShoot > TIME_SHOOTING)
+			{
+				this->fire();
+				this->samus->timerShoot = 0;
+			}
 		}
+
+		if (input->isKeyDown(VK_UP) && input->isKeyDown(VK_Z))
+		{
+			this->animation->stop();
+
+			this->samus->getSprite()->setData(IndexManager::getInstance()->samusYellowHittingUp);
+			this->animation = runningUp;
+			this->animation->start();
+
+			this->isUp = true;
+			if (this->samus->timerShoot > TIME_SHOOTING)
+			{
+				this->fire();
+				this->samus->timerShoot = 0;
+			}
+		}
+
+		if (input->isKeyUp(VK_UP) && input->isKeyUp(VK_Z) && (input->isKeyDown(VK_LEFT) || input->isKeyDown(VK_RIGHT)))
+		{
+			this->animation->stop();
+
+			this->animation = runningNormal;
+			this->animation->start();
+		}
+
+
+
+
+
+		//when we press up button hand of samus will raise to sky
+		if (input->isKeyDown(VK_UP))
+		{
+			//stop current animation
+			this->animation->stop();
+			//change animation to hand raise to sky
+			this->animation = runningUp;
+			//start new animation
+			this->animation->start();
+		}
+		//when we press shot button and not press up button, samus will shot horizontal 
+		if (input->isKeyDown(VK_Z) && input->isKeyUp(VK_UP))
+		{
+			//stop current animation
+			this->animation->stop();
+			//change animation to shot horizontal
+			this->animation = runningHittingRight;
+			//start new animation
+			this->animation->start();
+
+			//we must press shot button enoung long to samus shot
+			this->isUp = false;
+			if (this->samus->timerShoot > TIME_SHOOTING)
+			{
+				this->fire();
+				this->samus->timerShoot = 0;
+			}
+		}
+
+		if (input->isKeyDown(VK_UP) && input->isKeyDown(VK_Z))
+		{
+			this->animation->stop();
+
+			this->samus->getSprite()->setData(IndexManager::getInstance()->samusYellowHittingUp);
+			this->animation = runningUp;
+			this->animation->start();
+
+			this->isUp = true;
+			if (this->samus->timerShoot > TIME_SHOOTING)
+			{
+				this->fire();
+				this->samus->timerShoot = 0;
+			}
+		}
+
+		if (input->isKeyUp(VK_UP) && input->isKeyUp(VK_Z) && (input->isKeyDown(VK_LEFT) || input->isKeyDown(VK_RIGHT)))
+		{
+			this->animation->stop();
+
+			this->animation = runningNormal;
+			this->animation->start();
+		}
+
 	}
-
-	if (input->isKeyUp(VK_UP) && input->isKeyUp(VK_Z) && (input->isKeyDown(VK_LEFT) || input->isKeyDown(VK_RIGHT)))
-	{
-		this->animation->stop();
-
-		this->animation = runningNormal;
-		this->animation->start();
-	}
-
-	
 
 }
 void SamusStateRunning::onCollision(float dt)
