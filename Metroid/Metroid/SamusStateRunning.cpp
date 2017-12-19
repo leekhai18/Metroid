@@ -423,12 +423,12 @@ void SamusStateRunning::fire()
 	if (isUp)
 	{
 		stP = VECTOR2(this->samus->getPosition().x + this->samus->getDirection(), this->samus->getPosition().y + this->samus->getSprite()->getHeight()*0.4f);
-		bullet->setVelocity(VECTOR2(0, VELOCITY));
+		bullet->setVelocity(VECTOR2(0, VELOCITY_BULLET));
 	}
 	else
 	{
 		stP = VECTOR2(this->samus->getPosition().x + this->samus->getDirection()*this->samus->getSprite()->getWidth()*0.3f, this->samus->getPosition().y + 4);
-		bullet->setVelocity(VECTOR2((float)VELOCITY*this->samus->getDirection(), 0));
+		bullet->setVelocity(VECTOR2((float)VELOCITY_BULLET*this->samus->getDirection(), 0));
 	}
 
 	bullet->init(stP);

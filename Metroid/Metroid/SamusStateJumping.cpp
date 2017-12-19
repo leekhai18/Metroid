@@ -7,6 +7,8 @@
 #include "Bomb.h"
 #include "GateBlue.h"
 #include "GateRed.h"
+#include "LongBeam.h"
+#include "MissileRocket.h"
 
 SamusStateJumping::SamusStateJumping()
 {
@@ -351,6 +353,26 @@ void SamusStateJumping::onCollision(float dt)
 			break;
 		}
 
+		case eID::LONGBEAM:
+		{
+			this->samus->setLongBeam(true);
+			LongBeam* lb = static_cast<LongBeam*>(i->object);
+			lb->setActivity(false);
+
+			BulletPool::getInstance()->setDistanceShoot(DISTANCE_SHOOT*2);
+
+			break;
+		}
+
+		case eID::MISSILEROCKET:
+		{
+			this->samus->setNumRocket(this->samus->getNumRocket() + 5);
+			MissileRocket* mrocket = static_cast<MissileRocket*>(i->object);
+			mrocket->setActivity(false);
+
+			break;
+		}
+
 #pragma endregion
 
 
@@ -437,12 +459,12 @@ void SamusStateJumping::fire()
 	if (isUp)
 	{
 		stP = VECTOR2(this->samus->getPosition().x + this->samus->getDirection(), this->samus->getPosition().y + this->samus->getSprite()->getHeight()*0.5f);
-		bullet->setVelocity(VECTOR2(0, VELOCITY));
+		bullet->setVelocity(VECTOR2(0, VELOCITY_BULLET));
 	}
 	else
 	{
 		stP = VECTOR2(this->samus->getPosition().x + this->samus->getDirection()*this->samus->getSprite()->getWidth()*0.2f, this->samus->getPosition().y + 2);
-		bullet->setVelocity(VECTOR2((float)VELOCITY*this->samus->getDirection(), 0));
+		bullet->setVelocity(VECTOR2((float)VELOCITY_BULLET*this->samus->getDirection(), 0));
 	}
 
 	bullet->init(stP);

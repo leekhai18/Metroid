@@ -165,6 +165,8 @@
     <ClInclude Include="resource.h" />
     <ClInclude Include="Rio.h" />
     <ClInclude Include="Ripper.h" />
+    <ClInclude Include="Rocket.h" />
+    <ClInclude Include="RocketPool.h" />
     <ClInclude Include="Samus.h" />
     <ClInclude Include="SamusStateAcrobat.h" />
     <ClInclude Include="SamusStateFallRolling.h" />
@@ -227,6 +229,8 @@
     <ClCompile Include="Quadtree.cpp" />
     <ClCompile Include="Rio.cpp" />
     <ClCompile Include="Ripper.cpp" />
+    <ClCompile Include="Rocket.cpp" />
+    <ClCompile Include="RocketPool.cpp" />
     <ClCompile Include="Samus.cpp" />
     <ClCompile Include="SamusStateAcrobat.cpp" />
     <ClCompile Include="SamusStateFallRolling.cpp" />

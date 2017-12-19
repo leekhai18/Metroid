@@ -45,27 +45,41 @@ Samus::Samus(TextureManager* textureM,Graphics* graphics, Input* input) : BaseOb
 	this->distance = 0;
 
 	this->timerShoot = 0;
-	bulletPool = new BulletPool(textureM, graphics, 10);
+	bulletPool = new BulletPool(textureM, graphics, 15);
 	this->listCollide = new list<CollisionReturn>();
 
-	boomPool = new BoomBombPool(textureM, graphics, 5);
+	boomPool = new BoomBombPool(textureM, graphics, 10);
+	rocketPool = new RocketPool(textureM, graphics, 5);
 
 	visible = true;
 	this->numLives = 0;
 	this->listNumLives = new list<Sprite*>();
 
 	this->health = 30;
-	this->healthIcon = new Sprite();
-	if (!this->healthIcon->initialize(graphics, textureM, SpriteManager::getInstance()))
+	this->labelIconHealth = new Sprite();
+	if (!this->labelIconHealth->initialize(graphics, textureM, SpriteManager::getInstance()))
 	{
 		throw GameError(GameErrorNS::FATAL_ERROR, "Can not init sprite Health Icon");
 	}
-	this->healthIcon->setData(IndexManager::getInstance()->enIcon);
-	this->healthIcon->setPosition(VECTOR2(20, 20));
-	this->healthIcon->setScale(VECTOR2(1.2f, 1.2f));
+	this->labelIconHealth->setData(IndexManager::getInstance()->enIcon);
+	this->labelIconHealth->setPosition(VECTOR2(20, 20));
+	this->labelIconHealth->setScale(VECTOR2(1.2f, 1.2f));
 
-	this->healthText = new Text("30", eFont::body, 8, VECTOR2(45, 20), GraphicsNS::WHITE, false, true);
-	this->healthText->initialize(graphics);
+	this->textHealth = new Text("30", eFont::body, 8, VECTOR2(45, 20), GraphicsNS::WHITE, false, true);
+	this->textHealth->initialize(graphics);
+
+	this->missitleRocket = 0;
+	this->labelIconRoket = new Sprite();
+	if (!this->labelIconRoket->initialize(graphics, textureM, SpriteManager::getInstance()))
+	{
+		throw GameError(GameErrorNS::FATAL_ERROR, "Can not init sprite Health Icon");
+	}
+	this->labelIconRoket->setData(IndexManager::getInstance()->rocketYellowR);
+	this->labelIconRoket->setPosition(VECTOR2(20, 30));
+
+	this->textNumRocket = new Text("0", eFont::body, 8, VECTOR2(45, 30), GraphicsNS::WHITE, false, true);
+	this->textNumRocket->initialize(graphics);
+
 }
 
 Samus::Samus()
@@ -187,6 +201,9 @@ void Samus::update(float dt)
 
 	for (unsigned i = 0; i < this->boomPool->getListUsing().size(); i++)
 		this->boomPool->getListUsing().at(i)->update(dt);
+
+	for (unsigned i = 0; i < this->rocketPool->getListUsing().size(); i++)
+		this->rocketPool->getListUsing().at(i)->update(dt);
 }
 
 void Samus::draw()
@@ -199,6 +216,8 @@ void Samus::draw()
 		for (unsigned i = 0; i < this->boomPool->getListUsing().size(); i++)
 			this->boomPool->getListUsing().at(i)->draw();
 
+		for (unsigned i = 0; i < this->rocketPool->getListUsing().size(); i++)
+			this->rocketPool->getListUsing().at(i)->draw();
 
 		this->sprite->draw();
 	}
@@ -211,10 +230,17 @@ void Samus::drawInFrontMap()
 		(*i)->draw(false);
 	}
 
-	this->healthIcon->draw(false);
+	this->labelIconHealth->draw(false);
 	
-	this->healthText->setText(std::to_string(this->health));
-	this->healthText->draw();
+	this->textHealth->setText(std::to_string(this->health));
+	this->textHealth->draw();
+
+	if (this->missitleRocket > 0)
+	{
+		this->labelIconRoket->draw(false);
+		this->textNumRocket->setText(std::to_string(this->missitleRocket));
+		this->textNumRocket->draw();
+	}
 }
 
 void Samus::setIsCollidingPort(bool flag)
@@ -249,10 +275,15 @@ void Samus::release()
 
 	bulletPool->release();
 	boomPool->release();
+	rocketPool->release();
 
 	this->listCollide->clear();
 	delete this->listCollide;
-	delete this->healthIcon;
+
+	delete this->labelIconHealth;
+	delete this->labelIconRoket;
+	delete this->textHealth;
+	delete this->textNumRocket;
 
 	for (list<Sprite*>::iterator i = listNumLives->begin(); i != listNumLives->end(); ++i)
 	{
@@ -456,6 +487,26 @@ bool Samus::isHaveBomb()
 void Samus::setBomb(bool flag)
 {
 	this->isBomb = flag;
+}
+
+bool Samus::isHaveLongBeam()
+{
+	return this->isLongBeam;
+}
+
+void Samus::setLongBeam(bool flag)
+{
+	this->isLongBeam = flag;
+}
+
+int Samus::getNumRocket()
+{
+	return this->missitleRocket;
+}
+
+void Samus::setNumRocket(int num)
+{
+	this->missitleRocket = num;
 }
 
 

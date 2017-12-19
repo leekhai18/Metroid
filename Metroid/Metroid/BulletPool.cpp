@@ -86,3 +86,11 @@ void BulletPool::release()
 
 	delete instance;
 }
+
+void BulletPool::setDistanceShoot(float dis)
+{
+	for (unsigned i = 0; i < this->list.size(); i++)
+	{
+		this->list.at(i)->setDistanceShoot(dis);
+	}
+}

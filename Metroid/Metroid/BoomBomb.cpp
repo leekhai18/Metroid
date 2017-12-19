@@ -104,6 +104,7 @@ void BoomBomb::start(VECTOR2 pos)
 	this->explosion->reInit();
 	this->timer = 0;
 	this->setStatus(eStatus::START);
+	this->sprite->setData(IndexManager::getInstance()->samusYellowBombEffect[0]);
 }
 
 void BoomBomb::returnPool()

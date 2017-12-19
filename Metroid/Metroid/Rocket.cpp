@@ -1,24 +1,25 @@
-#include "Bullet.h"
-#include "BulletPool.h"
+#include "Rocket.h"
+#include "RocketPool.h"
 #include "Collision.h"
 #include "GateBlue.h"
 #include "MaruMari.h"
 #include "GameLog.h"
 #include "Skree.h"
 #include "Zommer.h"
-#define WIDTH_BULLET_HALF 1
-#define HEIGHT_BULLET_HALF 1
+#include "GateRed.h"
+#define WIDTH_ROCKET_HALF 4
+#define HEIGHT_ROCKET_HALF 4
 
-Bullet::Bullet(TextureManager * textureM, Graphics * graphics) : BaseObject(eID::BULLET)
+Rocket::Rocket(TextureManager * textureM, Graphics * graphics) : BaseObject(eID::ROCKET)
 {
 	this->sprite = new Sprite();
 	if (!this->sprite->initialize(graphics, textureM, SpriteManager::getInstance()))
 	{
-		throw GameError(GameErrorNS::FATAL_ERROR, "Can not init sprite Bullet");
+		throw GameError(GameErrorNS::FATAL_ERROR, "Can not init sprite ROCKET");
 	}
 
 	// Set Data for sprite
-	this->sprite->setData(IndexManager::getInstance()->samusYellowBulletNormal);
+	this->sprite->setData(IndexManager::getInstance()->rocketYellowR);
 	this->setOrigin(VECTOR2(0.5f, 0.5f));
 
 	this->setPosition(VECTOR2ZERO);
@@ -30,24 +31,22 @@ Bullet::Bullet(TextureManager * textureM, Graphics * graphics) : BaseObject(eID:
 	this->listCollide = new list<CollisionReturn>();
 
 	this->dame = 1; // se setup lai sau
-
-	this->distanceShoot = DISTANCE_SHOOT;
 }
 
-Bullet::Bullet()
+Rocket::Rocket()
 {
 
 }
 
 
-Bullet::~Bullet()
+Rocket::~Rocket()
 {
 	delete this->sprite;
 	this->listCollide->clear();
 	delete this->listCollide;
 }
 
-void Bullet::onCollision()
+void Rocket::onCollision()
 {
 	for (auto i = this->listCollide->begin(); i != this->listCollide->end(); i++)
 	{
@@ -55,43 +54,33 @@ void Bullet::onCollision()
 		{
 			switch (i->object->getId())
 			{
-				case eID::WALL : case eID::GATERED:
-					this->sprite->setData(IndexManager::getInstance()->samusYellowBulletNormalColliding);
+				case eID::WALL:
+					this->sprite->setData(IndexManager::getInstance()->samusYellowExplosion[0]);
 					this->isCollided = true;
 					this->velocity = VECTOR2ZERO;
-
-					switch (i->direction)
-					{
-					case CollideDirection::LEFT: case CollideDirection::RIGHT:
-						this->setPositionX(i->positionCollision);
-						break;
-					case CollideDirection::TOP:
-						this->setPositionY(i->positionCollision);
-						break;
-					default:
-						break;
-					}
-
 					break;
 
 				case eID::GATEBLUE:
 				{
-					this->sprite->setData(IndexManager::getInstance()->samusYellowBulletNormalColliding);
+					this->sprite->setData(IndexManager::getInstance()->samusYellowExplosion[0]);
 					this->isCollided = true;
+
+					GateBlue* gateB = static_cast<GateBlue*>(i->object);
+					gateB->setHit(true);
 					this->velocity = VECTOR2ZERO;
 
+					break;
+				}
 
-					GateBlue* gate = static_cast<GateBlue*>(i->object);
-					gate->setHit(true);
+				case eID::GATERED:
+				{
+					this->sprite->setData(IndexManager::getInstance()->samusYellowExplosion[0]);
+					this->isCollided = true;
 
-					switch (i->direction)
-					{
-					case CollideDirection::LEFT: case CollideDirection::RIGHT:
-						this->setPositionX(i->positionCollision);
-						break;
-					default:
-						break;
-					}
+					GateRed* gateR = static_cast<GateRed*>(i->object);
+					gateR->setDurability(gateR->getDurability() - 1);
+					this->velocity = VECTOR2ZERO;
+
 					break;
 				}
 
@@ -125,19 +114,19 @@ void Bullet::onCollision()
 }
 
 
-void Bullet::update(float dt)
+void Rocket::update(float dt)
 {
 	if (!this->isCollided)
 	{
-		if (this->distance < this->distanceShoot)
+		if (this->distance < DISTANCE_SHOOT_ROCKET)
 		{
-			this->distance += VELOCITY_BULLET*dt;
+			this->distance += VELOCITY_ROCKET*dt;
 			this->setPosition(this->getPosition().x + this->getVelocity().x*dt, this->getPosition().y + this->getVelocity().y*dt);
 			setBoundCollision();
 		}
 		else
 		{
-			BulletPool::getInstance()->returnPool(this);
+			RocketPool::getInstance()->returnPool(this);
 		}
 	}
 	else
@@ -145,25 +134,25 @@ void Bullet::update(float dt)
 		timer += dt;
 		if (timer > 0.1)
 		{
-			BulletPool::getInstance()->returnPool(this);
+			RocketPool::getInstance()->returnPool(this);
 		}
 	}
 }
 
-void Bullet::draw()
+void Rocket::draw()
 {
 	this->sprite->draw();
 }
 
-void Bullet::setBoundCollision()
+void Rocket::setBoundCollision()
 {
-	boundCollision.left = getPosition().x - WIDTH_BULLET_HALF;
-	boundCollision.right = getPosition().x + WIDTH_BULLET_HALF;
-	boundCollision.top = getPosition().y + HEIGHT_BULLET_HALF;
-	boundCollision.bottom = getPosition().y - HEIGHT_BULLET_HALF;
+	boundCollision.left = getPosition().x - WIDTH_ROCKET_HALF;
+	boundCollision.right = getPosition().x + WIDTH_ROCKET_HALF;
+	boundCollision.top = getPosition().y + HEIGHT_ROCKET_HALF;
+	boundCollision.bottom = getPosition().y - HEIGHT_ROCKET_HALF;
 }
 
-void Bullet::init(VECTOR2 stPosition)
+void Rocket::init(VECTOR2 stPosition)
 {
 	this->setPosition(stPosition);
 	setBoundCollision();
@@ -173,7 +162,7 @@ void Bullet::init(VECTOR2 stPosition)
 	this->isActivity = true;
 }
 
-void Bullet::returnPool()
+void Rocket::returnPool()
 {
 	this->setStatus(eStatus::ENDING);
 	this->setPosition(VECTOR2ZERO);
@@ -185,18 +174,9 @@ void Bullet::returnPool()
 	this->velocity = VECTOR2ZERO;
 }
 
-list<CollisionReturn>* Bullet::getListCollide()
+list<CollisionReturn>* Rocket::getListCollide()
 {
 	return this->listCollide;
 }
 
-float Bullet::getDistanceShoot()
-{
-	return this->distanceShoot;
-}
-
-void Bullet::setDistanceShoot(float distan)
-{
-	this->distanceShoot = distan;
-}
 

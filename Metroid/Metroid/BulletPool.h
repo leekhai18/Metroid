@@ -26,4 +26,6 @@ public:
 	std::vector<Bullet*> getListUsing();
 
 	void release();
+
+	void setDistanceShoot(float dis);
 };

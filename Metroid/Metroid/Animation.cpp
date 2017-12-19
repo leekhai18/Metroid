@@ -118,7 +118,7 @@ void Animation::reInit()
 {
 	this->isFinish = false;
 	this->canAnimate = false;
-	this->sprite->setData(this->listFrames[0]);
+	this->currentFrame = 0;
 }
 
 bool Animation::isFinished()

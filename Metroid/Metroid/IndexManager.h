@@ -1,7 +1,7 @@
 #pragma once
 // Class used to manage Index Sprites in Texture
 
-#define MAX_INDEX 259
+#define MAX_INDEX 263
 
 // Define NUM_FRAMES
 #define NUM_FRAMES_ZOOMER 2
@@ -88,6 +88,10 @@ public:
 
 	const int en[2] = { 92,93 };
 	const int rocket[2] = { 95,96 };
+	const int rocketYellowR = 260;
+	const int rocketYellowUp = 261;
+	const int rocketPinkR = 262;
+	const int rocketPinkUp = 263;
 
 
 	const int samusYellowStart[4] = { 105,106,107,108 };

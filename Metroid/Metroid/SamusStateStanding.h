@@ -25,5 +25,7 @@ public:
 	void onExit();
 
 	void fire();
+	void fireRocket();
+
 };
 

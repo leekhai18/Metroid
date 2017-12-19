@@ -1,4 +1,5 @@
 #include "MissileRocket.h"
+#include "Metroid.h"
 
 MissileRocket::MissileRocket()
 {
@@ -25,10 +26,44 @@ MissileRocket::~MissileRocket()
 
 void MissileRocket::update(float dt)
 {
-	this->anim->update(dt);
+	if (this->isActivity)
+		this->anim->update(dt);
 }
 
 void MissileRocket::draw()
 {
-	this->sprite->draw();
+	if (this->isActivity)
+		this->sprite->draw();
+}
+
+void MissileRocket::setActivity(bool flag)
+{
+	this->isActivity = flag;
+
+	if (this->isActivity == true)
+	{
+		MetroidRect bound;
+
+		bound.left = this->getPosition().x;
+		bound.top = this->getPosition().y;
+		bound.right = bound.left + this->getSprite()->getWidth();
+		bound.bottom = bound.top - this->getSprite()->getHeight();
+
+		this->setBoundCollision(bound);
+		this->setActiveBound(bound);
+	}
+	else
+	{
+		MetroidRect bound(0, 0, 0, 0);
+
+		this->setBoundCollision(bound);
+		this->setActiveBound(bound);
+
+		Metroid::getInstance()->setJustCollectItem(true);
+	}
+}
+
+bool MissileRocket::getActivity()
+{
+	return this->isActivity;
 }
