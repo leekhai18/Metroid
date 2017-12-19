@@ -70,58 +70,10 @@ void Waver::setStartPosition(VECTOR2 position)
 {
 	this->startPosition = position;
 }
-void Waver::setBoundCollision()
+void Waver::handleVelocity(float dt)
 {
-	MetroidRect rect;
-	VECTOR2 position(this->getPosition().x, this->getPosition().y);
-	rect.left = position.x - this->getSprite()->getWidth() *0.5f;
-	rect.right = position.x + this->getSprite()->getWidth() *0.5f;
-	rect.top = position.y + this->getSprite()->getHeight() *0.5f;
-	rect.bottom = position.y - this->getSprite()->getHeight() *0.5f;
-
-	this->boundCollision = rect;
-}
-void Waver::onCollision(float dt)
-{
-	for (auto i = this->getListWallCanCollide()->begin(); i != this->getListWallCanCollide()->end(); i++)
-	{
-		Collision::getInstance()->checkCollision(this, *i, dt);
-	}
-	for (auto x = this->listCollide->begin(); x != this->listCollide->end(); x++)
-	{
-
-		switch (x->direction)
-		{
-		case CollideDirection::LEFT:
-			direction = eDirection::left;
-			this->velocity.x = -WAVER_VELOCITY_X;
-			this->sprite->setFlipX(true);
-			break;
-		case CollideDirection::RIGHT:
-			direction = eDirection::right;
-			this->velocity.x = WAVER_VELOCITY_X;
-			this->sprite->setFlipX(false);
-			break;
-		case CollideDirection::TOP:
-			velocity.y = -MAX_WAVER_VELOCITY_Y;
-			directionY = WaverDirectionY::down;
-			break;
-		case CollideDirection::BOTTOM:
-			velocity.y = MAX_WAVER_VELOCITY_Y;
-			directionY = WaverDirectionY::up;
-			break;
-		}
-	}
-
-	this->listCollide->clear();
-}
-void Waver::update(float dt)
-{
-	this->anim->update(dt);
-
 	if (active)
 	{
-
 		if (directionY == WaverDirectionY::up)
 		{
 			this->velocity_frame = velocity.y - WAVER_ACCELERATE_Y*dt;
@@ -146,7 +98,62 @@ void Waver::update(float dt)
 
 
 		this->velocity.y = (velocity_frame + velocity.y)*0.5f;
+		this->velocity.x = WAVER_VELOCITY_X*direction;
+	}
 
+}
+void Waver::setBoundCollision()
+{
+	MetroidRect rect;
+	VECTOR2 position(this->getPosition().x, this->getPosition().y);
+	rect.left = position.x - this->getSprite()->getWidth() *0.5f;
+	rect.right = position.x + this->getSprite()->getWidth() *0.5f;
+	rect.top = position.y + this->getSprite()->getHeight() *0.5f;
+	rect.bottom = position.y - this->getSprite()->getHeight() *0.5f;
+
+	this->boundCollision = rect;
+}
+void Waver::onCollision(float dt)
+{
+
+	for (auto i = this->getListWallCanCollide()->begin(); i != this->getListWallCanCollide()->end(); i++)
+	{
+		Collision::getInstance()->checkCollision(this, *i, dt);
+	}
+	for (auto x = this->listCollide->begin(); x != this->listCollide->end(); x++)
+	{
+
+		switch (x->direction)
+		{
+		case CollideDirection::LEFT:
+			direction = eDirection::left;			
+			this->sprite->setFlipX(true);
+			break;
+		case CollideDirection::RIGHT:
+			direction = eDirection::right;
+			this->sprite->setFlipX(false);
+			break;
+		case CollideDirection::TOP:
+			velocity.y = 0;
+			directionY = WaverDirectionY::down;
+			break;
+		case CollideDirection::BOTTOM:
+			velocity.y = 0;
+			directionY = WaverDirectionY::up;
+			break;
+		}
+	}
+
+	this->listCollide->clear();
+}
+void Waver::update(float dt)
+{
+	this->anim->update(dt);
+
+	if (active)
+	{
+
+		
 		// nhanh dần -> chậm dần, 1 chu kỳ thì 1 turn anim,
 		this->setPosition(VECTOR2(this->getPosition().x + this->velocity.x*dt, this->getPosition().y + this->velocity.y*dt));
 

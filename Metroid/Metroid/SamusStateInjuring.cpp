@@ -164,6 +164,8 @@ void SamusStateInjuring::update(float dt)
 			break;
 		}
 		this->samus->setVisible(true);
+		this->samus->setCanMoveLeft(true);
+		this->samus->setCanMoveRight(true);
 		SamusStateManager::getInstance()->changeStateTo(this->samus->getStatus());
 		return;
 	}

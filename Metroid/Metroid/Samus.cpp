@@ -170,6 +170,8 @@ void Samus::update(float dt)
 		{
 			this->distance = 0;
 			moveToFontGate = false;
+			this->setCanMoveLeft(true);
+			this->setCanMoveRight(true);
 			this->setStatus(eStatus::STANDING);
 		}
 	}

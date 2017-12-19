@@ -144,6 +144,10 @@ void Zommer::onCollision(float dt)
 
 		switch (x->direction)
 		{
+			if(x->object->getId()==PORT)
+			{
+				int test = 0;
+			}
 		case CollideDirection::LEFT:
 
 			bound = Collision::getInstance()->getSweptBroadphaseRect(this->boundCollision, VECTOR2(velocity.x, 0), dt);
