@@ -6,12 +6,12 @@
 
 #define DISTANCE_MOVE_FRONT_GATE 24
 
-#define SAMUS_POS_X 640
-#define SAMUS_POS_Y 1267
+//#define SAMUS_POS_X 640
+//#define SAMUS_POS_Y 1267
 
 //Boss
-//#define SAMUS_POS_X 640
-//#define SAMUS_POS_Y 4210
+#define SAMUS_POS_X 640
+#define SAMUS_POS_Y 4210
 
 Samus::Samus(TextureManager* textureM,Graphics* graphics, Input* input) : BaseObject(eID::SAMUS)
 {

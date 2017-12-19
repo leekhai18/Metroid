@@ -49,9 +49,9 @@ void Bullet::onCollision()
 {
 	for (auto i = this->listCollide->begin(); i != this->listCollide->end(); i++)
 	{
-		switch (i->object->getId())
+		if (i->object->isActivitied())
 		{
-			if (i->object->isActivitied())
+			switch (i->object->getId())
 			{
 				case eID::WALL:
 					this->sprite->setData(IndexManager::getInstance()->samusYellowBulletNormalColliding);
@@ -157,6 +157,7 @@ void Bullet::setBoundCollision()
 void Bullet::init(VECTOR2 stPosition)
 {
 	this->setPosition(stPosition);
+	setBoundCollision();
 
 	this->distance = 0;
 	this->setStatus(eStatus::RUNNING);
@@ -167,10 +168,12 @@ void Bullet::returnPool()
 {
 	this->setStatus(eStatus::ENDING);
 	this->setPosition(VECTOR2ZERO);
+	setBoundCollision();
 	this->sprite->setData(IndexManager::getInstance()->samusYellowBulletNormal);
 	isCollided = false;
 	this->timer = 0;
 	this->isActivity = false;
+	this->velocity = VECTOR2ZERO;
 }
 
 list<CollisionReturn>* Bullet::getListCollide()

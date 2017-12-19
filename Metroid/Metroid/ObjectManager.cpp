@@ -109,6 +109,15 @@ void ObjectManager::onCheckCollision(float dt)
 		for (unsigned i = 0; i < BulletPool::getInstance()->getListUsing().size(); i++)
 			Collision::getInstance()->checkCollision(BulletPool::getInstance()->getListUsing().at(i), *x, dt);
 
+		for (unsigned i = 0; i < BoomBombPool::getInstance()->getListUsing().size(); i++)
+		{
+			if (Collision::getInstance()->isCollide(BoomBombPool::getInstance()->getListUsing().at(i)->getBoundCollision(), (*x)->getBoundCollision()))
+			{
+				BoomBombPool::getInstance()->getListUsing().at(i)->getListCollide()->push_back(*x);
+			}
+		}
+
+
 		if ((*x)->getId() == eID::SKREE)
 		{
 			Skree* skr = static_cast<Skree*>(*x);
@@ -124,6 +133,10 @@ void ObjectManager::onCheckCollision(float dt)
 	samus->onCollision(dt);
 	for (unsigned i = 0; i < BulletPool::getInstance()->getListUsing().size(); i++)
 		BulletPool::getInstance()->getListUsing().at(i)->onCollision();
+
+	for (unsigned i = 0; i < BoomBombPool::getInstance()->getListUsing().size(); i++)
+		BoomBombPool::getInstance()->getListUsing().at(i)->onCollision();
+
 #pragma endregion
 
 }
@@ -164,10 +177,7 @@ void ObjectManager::update(float dt)
 			if ((*i)->getId() == eID::ZEB)
 			{
 				Zeb* zeb = static_cast<Zeb*>(*i);
-				if(zeb->getPosition().x==4024)
-				{
-					int test = 1;
-				}
+
 			}
 			
 			(*i)->update(dt);

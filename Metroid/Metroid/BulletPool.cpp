@@ -36,7 +36,9 @@ Bullet * BulletPool::getBullet()
 {
 	if (this->list.empty())
 	{
-		return new Bullet(textureManager, graphics);
+		Bullet* bul = new Bullet(textureManager, graphics);
+		this->listUsing.push_back(bul);
+		return bul;
 	}
 	else
 	{

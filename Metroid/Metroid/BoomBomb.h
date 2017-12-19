@@ -8,11 +8,14 @@ class BoomBomb : public BaseObject
 {
 private:
 	Animation* anim;
-	list<CollisionReturn> *listCollide;
+	Animation* explosion;
+	list<BaseObject*> *listCollide;
 
 	float timer;
 
 	float dame;
+
+	bool canHandledCollision;
 
 public:
 	BoomBomb(TextureManager* textureM, Graphics* graphics);
@@ -31,6 +34,6 @@ public:
 	// Use object pool
 	void returnPool();
 
-	list<CollisionReturn> *getListCollide();
+	list<BaseObject*> *getListCollide();
 };
 
