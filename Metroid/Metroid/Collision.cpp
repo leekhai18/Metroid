@@ -4,6 +4,7 @@
 #include "Ripper.h"
 #include "Skree.h"
 #include "Waver.h"
+#include "BossKraid.h"
 
 Collision* Collision::instance = nullptr;
 Collision* Collision::getInstance()
@@ -205,6 +206,13 @@ bool Collision::checkCollision(BaseObject * myEntity, BaseObject * otherEntity, 
 		{
 			Waver* waver = static_cast<Waver*>(myEntity);
 			waver->getListCollide()->push_back(data);
+
+			break;
+		}
+		case eID::BOSSKRAID:
+		{
+			BossKraid* bossKraid = static_cast<BossKraid*>(myEntity);
+			bossKraid->getListCollide()->push_back(data);
 
 			break;
 		}

@@ -13,12 +13,13 @@ private:
 	VECTOR2 P3;
 	list<BaseObject*> *listWallCanCollide;
 	list<CollisionReturn> *listCollide;
-	int time;
+	float time;
 	bool isDown;
 	bool isActivity;
 	VECTOR2 beforePosition;
 	VECTOR2 afterPosition;
 	VECTOR2 startPosition;
+	float floor;
 public:
 	BossKraid();
 

@@ -76,7 +76,7 @@ void ObjectManager::onCheckCollision(float dt)
 
 		MetroidRect r = Camera::getInstance()->getBound();
 		//Get all objects that can collide with current obj
-		quadtree->retrieve(listNotWallCanCollideSamus, listObjectNotWallOnViewPort, listWallCanCollideSamus, MetroidRect(r.top + 20, r.bottom - 20, r.left -20, r.right +20), samus);
+		quadtree->retrieve(listNotWallCanCollideSamus, listObjectNotWallOnViewPort, listWallCanCollideSamus, MetroidRect(r.top + 40, r.bottom - 40, r.left-50, r.right +50), samus);
 	}
 
 	if (listObjectNotWallOnViewPort)
@@ -2030,7 +2030,7 @@ bool ObjectManager::load_list(const char * filename)
 
 				kraid->setBoundCollision();
 
-				const Value& arrayWall = listZommerYellow[i]["ListCollideID"];
+				const Value& arrayWall = listKraid[i]["ListCollideID"];
 				for (SizeType t = 0; t < arrayWall.Size(); t++)
 				{
 					kraid->getListWallCanCollide()->push_back(map_object.find(arrayWall[t].GetInt())->second);
