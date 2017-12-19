@@ -7,6 +7,10 @@
 #define CAM_POS_X 640
 #define CAM_POS_Y 1320
 
+//Boss
+//#define CAM_POS_X 640
+//#define CAM_POS_Y 4200
+
 
 class Camera
 {

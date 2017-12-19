@@ -92,6 +92,7 @@ enum eID {
 	ICEBEAM,
 	ENERGYTANK,
 	BOMB,
+	BOOMBOMB,
 	WALL,
 	PORT,
 	FIRE,

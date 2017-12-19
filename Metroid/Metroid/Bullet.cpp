@@ -22,6 +22,7 @@ Bullet::Bullet(TextureManager * textureM, Graphics * graphics) : BaseObject(eID:
 	this->setOrigin(VECTOR2(0.5f, 0.5f));
 
 	this->setPosition(VECTOR2ZERO);
+	this->setStatus(eStatus::ENDING);
 
 	this->distance = 0;
 	this->isCollided = false;
@@ -68,7 +69,7 @@ void Bullet::onCollision()
 
 			break;
 
-		case eID::GATEBLUE:
+		case eID::GATEBLUE: case eID::GATERED:
 		{
 			this->sprite->setData(IndexManager::getInstance()->samusYellowBulletNormalColliding);
 			this->isCollided = true;
@@ -89,7 +90,6 @@ void Bullet::onCollision()
 
 		case eID::SKREE:
 		{
-			GAMELOG("HIT SKREE");
 			Skree* skr = static_cast<Skree*>(i->object);
 			skr->setBeHit(true);
 			skr->decreaseHealth(this->dame);
@@ -120,7 +120,6 @@ void Bullet::update(float dt)
 		}
 		else
 		{
-			this->setStatus(eStatus::ENDING);
 			BulletPool::getInstance()->returnPool(this);
 		}
 	}
@@ -157,6 +156,7 @@ void Bullet::init(VECTOR2 stPosition)
 
 void Bullet::returnPool()
 {
+	this->setStatus(eStatus::ENDING);
 	this->setPosition(VECTOR2ZERO);
 	this->sprite->setData(IndexManager::getInstance()->samusYellowBulletNormal);
 	isCollided = false;

@@ -8,6 +8,7 @@
 #include "Animation.h"
 #include "BaseObject.h"
 #include "BulletPool.h"
+#include "BoomBombPool.h"
 #include <list>
 #include "Text.h"
 
@@ -83,6 +84,7 @@ private:
 	float distance;
 
 	BulletPool *bulletPool;
+	BoomBombPool* boomPool;
 
 	list<CollisionReturn> *listCollide;
 
@@ -92,8 +94,11 @@ private:
 	
 #pragma region items
 	bool isMariMaru;
+
 	int numLives;
 	list<Sprite*> *listNumLives;
+
+	bool isBomb;
 #pragma endregion
 
 	int health;
@@ -160,6 +165,9 @@ public:
 
 	int getNumLive();
 	void setNumLive(int num);
+
+	bool isHaveBomb();
+	void setBomb(bool flag);
 #pragma endregion
 
 };

@@ -130,6 +130,8 @@
     <ClInclude Include="BaseObject.h" />
     <ClInclude Include="BaseState.h" />
     <ClInclude Include="Bomb.h" />
+    <ClInclude Include="BoomBomb.h" />
+    <ClInclude Include="BoomBombPool.h" />
     <ClInclude Include="BossDragon.h" />
     <ClInclude Include="BossKraid.h" />
     <ClInclude Include="Brick.h" />
@@ -193,6 +195,8 @@
     <ClCompile Include="BaseObject.cpp" />
     <ClCompile Include="BaseState.cpp" />
     <ClCompile Include="Bomb.cpp" />
+    <ClCompile Include="BoomBomb.cpp" />
+    <ClCompile Include="BoomBombPool.cpp" />
     <ClCompile Include="BossDragon.cpp" />
     <ClCompile Include="BossKraid.cpp" />
     <ClCompile Include="Brick.cpp" />

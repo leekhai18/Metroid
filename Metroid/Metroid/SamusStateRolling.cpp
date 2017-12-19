@@ -1,6 +1,9 @@
 #include "SamusStateRolling.h"
 #include "SamusStateManager.h"
+#include "GameLog.h"
+#include "BoomBombPool.h"
 
+#define TIME_START_BOMB 0.1f
 
 SamusStateRolling::SamusStateRolling()
 {
@@ -9,6 +12,7 @@ SamusStateRolling::SamusStateRolling()
 SamusStateRolling::SamusStateRolling(Samus * samus, Input * input) : BaseState(samus, input)
 {
 	timer = 0;
+	timerToStartBoom = 0;
 }
 
 
@@ -86,6 +90,16 @@ void SamusStateRolling::handleInput(float dt)
 	if (input->isKeyDown(VK_UP) || input->isKeyDown(VK_X))
 	{
 		this->samus->setStatus(eStatus::STANDING);
+	}
+
+	if (input->isKeyDown(VK_Z) && this->samus->isHaveBomb())
+	{
+		timerToStartBoom += dt;
+		if (timerToStartBoom > TIME_START_BOMB)
+		{
+			BoomBombPool::getInstance()->getBoom()->start(this->samus->getPosition());
+			timerToStartBoom = 0;
+		}
 	}
 }
 

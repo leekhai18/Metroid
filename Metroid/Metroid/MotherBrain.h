@@ -4,6 +4,9 @@
 
 class MotherBrain : public BaseObject
 {
+private:
+	Animation *anim;
+
 public:
 	MotherBrain();
 	MotherBrain(TextureManager* textureM, Graphics* graphics);

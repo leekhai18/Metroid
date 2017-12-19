@@ -24,4 +24,6 @@ public:
 	void returnPool(Bullet* bullet);
 
 	std::vector<Bullet*> getListUsing();
+
+	void release();
 };

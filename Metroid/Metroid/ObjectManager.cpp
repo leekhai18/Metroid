@@ -2061,9 +2061,13 @@ bool ObjectManager::load_list(const char * filename)
 			bound.top = y;
 			bound.right = bound.left + motherFacker->getSprite()->getWidth();
 			bound.bottom = bound.top - motherFacker->getSprite()->getHeight();
-			motherFacker->setBoundCollision(bound);
-
 			motherFacker->setActiveBound(bound);
+
+			bound.left = x + 16;
+			bound.top = y - 63;
+			bound.right = bound.left + 80;
+			bound.bottom = bound.top - 65;
+			motherFacker->setBoundCollision(bound);
 
 			object_list->push_back(motherFacker);
 
