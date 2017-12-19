@@ -14,5 +14,8 @@ public:
 
 	void update(float dt);
 	void draw();
+
+	void setActivity(bool flag);
+	bool getActivity();
 };
 

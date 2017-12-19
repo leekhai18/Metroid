@@ -233,7 +233,61 @@ void SamusStateRunning::onCollision(float dt)
 			}
 			break;
 
+#pragma endregion
+
+#pragma region GATE and PORT
+		case eID::GATEBLUE: case eID::GATERED:
+		{
+			if (i->object->isActivitied())
+			{
+				switch (i->direction)
+				{
+					case CollideDirection::LEFT:
+					{
+						if (Camera::getInstance()->moveWhenSamusOnPort())
+						{
+							GateBlue* gate = static_cast<GateBlue*>(i->object);
+							gate->setIsCollideSamusInPort(true);
+
+							this->samus->setIsCollidingPort(false);
+							this->samus->setVelocityX(0);
+							this->samus->setCanMoveToFrontGate(true);
+						}
+						else
+						{
+							this->samus->setVelocityX(0);
+							this->samus->setCanMoveRight(false);
+						}
+
+						break;
+					}
+					case CollideDirection::RIGHT:
+					{
+						if (Camera::getInstance()->moveWhenSamusOnPort())
+						{
+							GateBlue* gate = static_cast<GateBlue*>(i->object);
+							gate->setIsCollideSamusInPort(true);
+
+							this->samus->setIsCollidingPort(false);
+							this->samus->setVelocityX(0);
+							this->samus->setCanMoveToFrontGate(true);
+						}
+						else
+						{
+							this->samus->setVelocityX(0);
+							this->samus->setCanMoveLeft(false);
+						}
+
+						break;
+					}
+				}
+			}
+
+			break;
+		}
+
 		case eID::PORT:
+		{
 			switch (i->direction)
 			{
 			case LEFT:
@@ -251,55 +305,10 @@ void SamusStateRunning::onCollision(float dt)
 			default:
 				break;
 			}
+
 			break;
-#pragma endregion
+		}
 
-#pragma region GATE
-		case eID::GATEBLUE:
-			switch (i->direction)
-			{
-			case CollideDirection::LEFT:
-			{
-				if (Camera::getInstance()->moveWhenSamusOnPort())
-				{
-					GateBlue* gate = static_cast<GateBlue*>(i->object);
-					gate->setIsCollideSamusInPort(true);
-
-					this->samus->setIsCollidingPort(false);
-					this->samus->setVelocityX(0);
-					this->samus->setCanMoveToFrontGate(true);
-				}
-				else
-				{
-					this->samus->setVelocityX(0);
-					this->samus->setCanMoveRight(false);
-					this->samus->setStatus(eStatus::STANDING);
-				}
-
-				break;
-			}
-			case CollideDirection::RIGHT:
-			{
-				if (Camera::getInstance()->moveWhenSamusOnPort())
-				{
-					GateBlue* gate = static_cast<GateBlue*>(i->object);
-					gate->setIsCollideSamusInPort(true);
-
-					this->samus->setIsCollidingPort(false);
-					this->samus->setVelocityX(0);
-					this->samus->setCanMoveToFrontGate(true);
-				}
-				else
-				{
-					this->samus->setVelocityX(0);
-					this->samus->setCanMoveLeft(false);
-					this->samus->setStatus(eStatus::STANDING);
-				}
-
-				break;
-			}
-			}
-			break;
 #pragma endregion
 
 #pragma region Enemies
@@ -312,25 +321,32 @@ void SamusStateRunning::onCollision(float dt)
 		case eID::WAVER:
 		case eID::ZEB:
 		case eID::BOSSKRAID:
-			switch (i->direction)
+		{
+			if (i->object->isActivitied())
 			{
-			case CollideDirection::LEFT:
-				this->samus->setVelocityX(0);
-				//not allow move left
-				//this->samus->setCanMoveRight(false);
-				break;
-			case CollideDirection::RIGHT:
-				this->samus->setVelocityX(0);
-				//not allow move right
-				//this->samus->setCanMoveLeft(false);
-				break;
-			case CollideDirection::TOP:
-				this->samus->setVelocityY(0);
-				break;
+				switch (i->direction)
+				{
+				case CollideDirection::LEFT:
+					this->samus->setVelocityX(0);
+					//not allow move left
+					//this->samus->setCanMoveRight(false);
+					break;
+				case CollideDirection::RIGHT:
+					this->samus->setVelocityX(0);
+					//not allow move right
+					//this->samus->setCanMoveLeft(false);
+					break;
+				case CollideDirection::TOP:
+					this->samus->setVelocityY(0);
+					break;
+				}
+				SamusStateManager::getInstance()->setOldStatus(eStatus::RUNNING);
+				this->samus->setStatus(eStatus::INJURING);
+				SamusStateManager::getInstance()->setOldState(this);
 			}
-			SamusStateManager::getInstance()->setOldStatus(eStatus::RUNNING);
-			this->samus->setStatus(eStatus::INJURING);
-			SamusStateManager::getInstance()->setOldState(this);
+
+			break;
+		}
 
 
 #pragma endregion
@@ -382,6 +398,8 @@ void SamusStateRunning::update(float dt)
 	this->samus->setCanMoveLeft(true);
 	this->samus->setCanMoveRight(true);
 	this->samus->setFall(true);
+
+	this->samus->setVelocityY(-SAMUS_MIN_SPEED_Y);
 }
 
 
@@ -412,7 +430,7 @@ void SamusStateRunning::fire()
 	}
 	else
 	{
-		stP = VECTOR2(this->samus->getPosition().x + this->samus->getDirection()*this->samus->getSprite()->getWidth()*0.6f, this->samus->getPosition().y + 4);
+		stP = VECTOR2(this->samus->getPosition().x + this->samus->getDirection()*this->samus->getSprite()->getWidth()*0.3f, this->samus->getPosition().y + 4);
 		bullet->setVelocity(VECTOR2((float)VELOCITY*this->samus->getDirection(), 0));
 	}
 

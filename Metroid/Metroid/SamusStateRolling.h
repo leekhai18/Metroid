@@ -10,6 +10,8 @@ private:
 	bool flagUpDown;
 	float timer;
 
+	float timerToStartBoom;
+
 public:
 	SamusStateRolling();
 	SamusStateRolling(Samus* samus, Input* input);

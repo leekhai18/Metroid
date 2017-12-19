@@ -8,8 +8,12 @@
 #define SAMUS_POS_X 808//3648
 #define SAMUS_POS_Y 4214
 
+#define SAMUS_POS_X 640
+#define SAMUS_POS_Y 1267
 
-
+//Boss
+//#define SAMUS_POS_X 640
+//#define SAMUS_POS_Y 4210
 
 Samus::Samus(TextureManager* textureM,Graphics* graphics, Input* input) : BaseObject(eID::SAMUS)
 {
@@ -43,8 +47,10 @@ Samus::Samus(TextureManager* textureM,Graphics* graphics, Input* input) : BaseOb
 	this->distance = 0;
 
 	this->timerShoot = 0;
-	bulletPool = new BulletPool(textureM, graphics, 20);
+	bulletPool = new BulletPool(textureM, graphics, 10);
 	this->listCollide = new list<CollisionReturn>();
+
+	boomPool = new BoomBombPool(textureM, graphics, 5);
 
 	visible = true;
 	this->numLives = 0;
@@ -88,6 +94,7 @@ void Samus::handleInput(float dt)
 				Camera::getInstance()->setVelocity(VECTOR2(0, 0));
 		}
 	}
+
 	//if (input->isKeyDown(VK_LEFT))
 	//	Camera::getInstance()->setVelocity(VECTOR2(-150, 0));	
 	//if (input->isKeyDown(VK_RIGHT))
@@ -172,7 +179,6 @@ void Samus::update(float dt)
 			moveToFontGate = false;
 			this->setCanMoveLeft(true);
 			this->setCanMoveRight(true);
-			this->setStatus(eStatus::STANDING);
 		}
 	}
 #pragma endregion
@@ -180,6 +186,9 @@ void Samus::update(float dt)
 	this->timerShoot += dt;
 	for (unsigned i = 0; i < this->bulletPool->getListUsing().size(); i++)
 		this->bulletPool->getListUsing().at(i)->update(dt);
+
+	for (unsigned i = 0; i < this->boomPool->getListUsing().size(); i++)
+		this->boomPool->getListUsing().at(i)->update(dt);
 }
 
 void Samus::draw()
@@ -188,6 +197,10 @@ void Samus::draw()
 	{
 		for (unsigned i = 0; i < this->bulletPool->getListUsing().size(); i++)
 			this->bulletPool->getListUsing().at(i)->draw();
+
+		for (unsigned i = 0; i < this->boomPool->getListUsing().size(); i++)
+			this->boomPool->getListUsing().at(i)->draw();
+
 
 		this->sprite->draw();
 	}
@@ -235,7 +248,10 @@ void Samus::release()
 	delete rollingAnimation;
 	delete startingAnimation;
 	delete jumpingAnimation;
-	delete bulletPool;
+
+	bulletPool->release();
+	boomPool->release();
+
 	this->listCollide->clear();
 	delete this->listCollide;
 	delete this->healthIcon;
@@ -422,6 +438,7 @@ void Samus::setNumLive(int num)
 			throw GameError(GameErrorNS::FATAL_ERROR, "Can not init sprite live");
 		}
 		live->setData(IndexManager::getInstance()->liveIcon);
+		live->setPosition(VECTOR2(54 - this->numLives * live->getWidth() * 1.2f, 10));
 
 		this->listNumLives->push_back(live);
 	}
@@ -431,6 +448,16 @@ void Samus::setNumLive(int num)
 	}
 
 	this->numLives = num;
+}
+
+bool Samus::isHaveBomb()
+{
+	return isBomb;
+}
+
+void Samus::setBomb(bool flag)
+{
+	this->isBomb = flag;
 }
 
 

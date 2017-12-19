@@ -1,6 +1,7 @@
 #include "SamusStateFallRolling.h"
 #include "SamusStateManager.h"
 #include "Camera.h"
+#include "GameLog.h"
 
 SamusStateFallRolling::SamusStateFallRolling()
 {

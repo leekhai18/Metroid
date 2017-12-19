@@ -6,7 +6,6 @@ class GateBlue : public BaseObject
 {
 private:
 	bool isHit;
-	MetroidRect baseBound;
 	bool isCollideSamusInPort;
 	float timer;
 

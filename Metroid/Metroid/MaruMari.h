@@ -7,8 +7,6 @@ class MaruMari : public BaseObject
 private:
 	Animation *anim;
 
-	bool isActivity;
-
 public:
 	MaruMari();
 	MaruMari(TextureManager* textureM, Graphics* graphics);

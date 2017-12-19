@@ -3,6 +3,9 @@
 #include "GameLog.h"
 #include "MaruMari.h"
 #include "Camera.h"
+#include "GateBlue.h"
+#include "GateRed.h"
+
 SamusStateAcrobat::SamusStateAcrobat()
 {
 }
@@ -157,7 +160,84 @@ void SamusStateAcrobat::onCollision(float dt)
 			break;
 #pragma endregion
 
-#pragma region Zommer
+#pragma region GATE and PORT
+		case eID::GATEBLUE: case eID::GATERED:
+		{
+			if (i->object->isActivitied())
+			{
+				switch (i->direction)
+				{
+				case CollideDirection::LEFT:
+				{
+					if (Camera::getInstance()->moveWhenSamusOnPort())
+					{
+						GateBlue* gate = static_cast<GateBlue*>(i->object);
+						gate->setIsCollideSamusInPort(true);
+
+						this->samus->setIsCollidingPort(false);
+						this->samus->setVelocityX(0);
+						this->samus->setCanMoveToFrontGate(true);
+					}
+					else
+					{
+						this->samus->setVelocityX(0);
+						this->samus->setCanMoveRight(false);
+					}
+
+					break;
+				}
+				case CollideDirection::RIGHT:
+				{
+					if (Camera::getInstance()->moveWhenSamusOnPort())
+					{
+						GateBlue* gate = static_cast<GateBlue*>(i->object);
+						gate->setIsCollideSamusInPort(true);
+
+						this->samus->setIsCollidingPort(false);
+						this->samus->setVelocityX(0);
+						this->samus->setCanMoveToFrontGate(true);
+					}
+					else
+					{
+						this->samus->setVelocityX(0);
+						this->samus->setCanMoveLeft(false);
+					}
+
+					break;
+				}
+				}
+			}
+
+			break;
+		}
+
+		case eID::PORT:
+		{
+			switch (i->direction)
+			{
+			case LEFT:
+				Camera::getInstance()->setVelocity(VECTOR2(SAMUS_VERLOCITY_X, 0));
+				Camera::getInstance()->setOnPort(true);
+				this->animation->setPause(true);
+				this->samus->setIsCollidingPort(true);
+				break;
+			case RIGHT:
+				Camera::getInstance()->setVelocity(VECTOR2(-SAMUS_VERLOCITY_X, 0));
+				Camera::getInstance()->setOnPort(true);
+				this->animation->setPause(true);
+				this->samus->setIsCollidingPort(true);
+				break;
+			default:
+				break;
+			}
+
+			break;
+		}
+
+#pragma endregion
+
+
+#pragma region Enemies
 			//another object
 		case eID::ZOMMER:
 		case eID::SKREE:

@@ -3,7 +3,7 @@
 #include "SamusStateManager.h"
 
 #define TIME_ANIMATION 0.1f
-#define TIME_TO_STANDING 0.6f
+#define TIME_TO_STANDING 0.5f
 SamusStateInjuring::SamusStateInjuring()
 {
 }
@@ -26,7 +26,7 @@ void SamusStateInjuring::init()
 
 	this->samus->setVelocityY(-SAMUS_MIN_SPEED_Y);
 
-	this->samus->setVelocityX((float)(-SAMUS_VERLOCITY_X*this->samus->getDirection()));
+	
 	setBoundCollision();
 
 	time_to_stand = 0;
@@ -38,6 +38,7 @@ void SamusStateInjuring::init()
 void SamusStateInjuring::handleInput(float dt)
 {
 	this->samus->setVelocityY(-SAMUS_MIN_SPEED_Y);
+	this->samus->setVelocityX((float)(-SAMUS_VERLOCITY_X*this->samus->getDirection()));
 }
 
 void SamusStateInjuring::onCollision(float dt)

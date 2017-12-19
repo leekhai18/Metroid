@@ -187,7 +187,6 @@ void SamusStateStanding::handleInput(float dt)
 
 void SamusStateStanding::onCollision(float dt)
 {
-	int test;
 	for (auto i = this->samus->getListCollide()->begin(); i != this->samus->getListCollide()->end(); i++)
 	{
 		switch (i->object->getId())
@@ -293,7 +292,7 @@ void SamusStateStanding::fire()
 	}
 	else
 	{
-		stP = VECTOR2(this->samus->getPosition().x + this->samus->getDirection()*this->samus->getSprite()->getWidth()*0.3f, this->samus->getPosition().y + 2);
+		stP = VECTOR2(this->samus->getPosition().x, this->samus->getPosition().y + 3);
 		bullet->setVelocity(VECTOR2((float)VELOCITY*this->samus->getDirection(), 0));
 	}
 

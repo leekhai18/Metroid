@@ -18,7 +18,6 @@ private:
 
 	// support to reinit
 	VECTOR2 initPosition;
-	bool isActivity;
 	bool canDraw;
 
 	list<BaseObject*> *listWallCanCollide;
@@ -51,9 +50,6 @@ public:
 	void reInit();
 
 	void finish();
-
-	void setActivity(bool flag);
-	bool isActivitied();
 
 	void setBeHit(bool flag);
 	void decreaseHealth(float dame);

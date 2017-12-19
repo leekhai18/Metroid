@@ -129,6 +129,7 @@ void Quadtree::retrieve(list<BaseObject*>* listNotWallCanCollideSamus, list<Base
 			{
 				if (Collision::getInstance()->isCollide(rect, (*i)->getBoundCollision())) // Must bound collision, will fixed after
 				{
+				
 					if ((*i)->getId() != eID::WALL)
 						listObjectNotWallOnViewPort->push_back(*i);
 				}

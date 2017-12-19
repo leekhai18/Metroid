@@ -16,6 +16,9 @@ protected:
 	MetroidRect boundCollision;
 	VECTOR2 velocity;
 	VECTOR2 accelerate;
+
+	bool isActivity;
+
 public:
 	BaseObject(eID id);
 	BaseObject();
@@ -70,6 +73,9 @@ public:
 
 	virtual MetroidRect getActiveBound();
 	virtual void setActiveBound(MetroidRect rect);
+
+	virtual void setActivity(bool flag);
+	virtual bool isActivitied();
 };
 
 

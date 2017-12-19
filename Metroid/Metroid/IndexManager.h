@@ -17,10 +17,11 @@
 #define NUM_FRAMES_SAMUS_RUNNING 3
 #define NUM_FRAMES_SAMUS_ROLLING 4
 #define NUM_FRAMES_SAMUS_JUMPING 4
-#define NUM_FRAMES_SAMUS_BOMB 3
+#define NUM_FRAMES_SAMUS_BOMB 2
 #define NUM_FRAMES_EXPLOSION 2
 #define NUM_FRAMES_BOSS_KRAID 2
 #define NUM_FRAMES_GATE_ANIM 5
+#define NUM_FRAMES_MOTHER 4
 
 
 
@@ -107,7 +108,7 @@ public:
 	const int samusYellowBulletNormalColliding = 164;
 	const int samusYellowBulletIce = 165;
 	const int samusYellowBulletIceColliding = 166;
-	const int samusYellowBombEffect[3] = { 167,168,169 };
+	const int samusYellowBombEffect[2] = { 167,168 };
 	const int samusYellowExplosion[2] = { 170,171 };
 
 	const int samusYellowIceTurnRight = 230;
@@ -144,7 +145,7 @@ public:
 	const int samusPinkBulletNormalColliding = 173;
 	const int samusPinkBulletIce = 174;
 	const int samusPinkBulletIceColliding = 175;
-	const int samusPinkBombEffect[3] = { 176,177,178 };
+	const int samusPinkBombEffect[2] = { 176,177 };
 	const int samusPinkExplosion[2] = { 179,180 };
 
 	const int samusPinkIceTurnRight = 255;

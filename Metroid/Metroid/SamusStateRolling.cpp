@@ -1,6 +1,12 @@
 #include "SamusStateRolling.h"
 #include "SamusStateManager.h"
 #include "Camera.h"
+#include "GameLog.h"
+#include "BoomBombPool.h"
+#include "GateBlue.h"
+#include "GateRed.h"
+
+#define TIME_START_BOMB 0.1f
 
 SamusStateRolling::SamusStateRolling()
 {
@@ -9,6 +15,7 @@ SamusStateRolling::SamusStateRolling()
 SamusStateRolling::SamusStateRolling(Samus * samus, Input * input) : BaseState(samus, input)
 {
 	timer = 0;
+	timerToStartBoom = 0;
 }
 
 
@@ -88,6 +95,16 @@ void SamusStateRolling::handleInput(float dt)
 			this->samus->setStatus(eStatus::STANDING);
 		}
 	}
+
+	if (input->isKeyDown(VK_Z) && this->samus->isHaveBomb())
+	{
+		timerToStartBoom += dt;
+		if (timerToStartBoom > TIME_START_BOMB)
+		{
+			BoomBombPool::getInstance()->getBoom()->start(this->samus->getPosition());
+			timerToStartBoom = 0;
+		}
+	}
 }
 
 void SamusStateRolling::onCollision(float dt)
@@ -148,6 +165,84 @@ void SamusStateRolling::onCollision(float dt)
 				break;
 			}
 			break;
+
+#pragma region GATE and PORT
+		case eID::GATEBLUE: case eID::GATERED:
+		{
+			if (i->object->isActivitied())
+			{
+				switch (i->direction)
+				{
+				case CollideDirection::LEFT:
+				{
+					if (Camera::getInstance()->moveWhenSamusOnPort())
+					{
+						GateBlue* gate = static_cast<GateBlue*>(i->object);
+						gate->setIsCollideSamusInPort(true);
+
+						this->samus->setIsCollidingPort(false);
+						this->samus->setVelocityX(0);
+						this->samus->setCanMoveToFrontGate(true);
+					}
+					else
+					{
+						this->samus->setVelocityX(0);
+						this->samus->setCanMoveRight(false);
+					}
+
+					break;
+				}
+				case CollideDirection::RIGHT:
+				{
+					if (Camera::getInstance()->moveWhenSamusOnPort())
+					{
+						GateBlue* gate = static_cast<GateBlue*>(i->object);
+						gate->setIsCollideSamusInPort(true);
+
+						this->samus->setIsCollidingPort(false);
+						this->samus->setVelocityX(0);
+						this->samus->setCanMoveToFrontGate(true);
+					}
+					else
+					{
+						this->samus->setVelocityX(0);
+						this->samus->setCanMoveLeft(false);
+					}
+
+					break;
+				}
+				}
+			}
+
+			break;
+		}
+
+		case eID::PORT:
+		{
+			switch (i->direction)
+			{
+			case LEFT:
+				Camera::getInstance()->setVelocity(VECTOR2(SAMUS_VERLOCITY_X, 0));
+				Camera::getInstance()->setOnPort(true);
+				this->animation->setPause(true);
+				this->samus->setIsCollidingPort(true);
+				break;
+			case RIGHT:
+				Camera::getInstance()->setVelocity(VECTOR2(-SAMUS_VERLOCITY_X, 0));
+				Camera::getInstance()->setOnPort(true);
+				this->animation->setPause(true);
+				this->samus->setIsCollidingPort(true);
+				break;
+			default:
+				break;
+			}
+
+			break;
+		}
+
+#pragma endregion
+
+#pragma region Enemies
 		case eID::ZOMMER:
 		case eID::SKREE:
 		case eID::RIO:
@@ -155,33 +250,30 @@ void SamusStateRolling::onCollision(float dt)
 		case eID::WAVER:
 		case eID::ZEB:
 		case eID::BOSSKRAID:
-			switch (i->direction)
+		{
+			if (i->object->isActivitied())
 			{
-			case CollideDirection::LEFT:
-				this->samus->setVelocityX(0);
-				//not allow move left
-				//this->samus->setCanMoveRight(false);
-				break;
-			case CollideDirection::RIGHT:
-				this->samus->setVelocityX(0);
-				//not allow move right
-				//this->samus->setCanMoveLeft(false);
-				break;
-			case CollideDirection::TOP:
-				this->samus->setVelocityY(0);
-
-				this->samus->setPositionY(i->positionCollision + OFFSET_ROLLING);
-				canStanding = true;
-				move_to_fall = false;
-				break;
+				switch (i->direction)
+				{
+				case CollideDirection::LEFT:
+					this->samus->setVelocityX(0);
+					break;
+				case CollideDirection::RIGHT:
+					this->samus->setVelocityX(0);
+					break;
+				case CollideDirection::TOP:
+					this->samus->setVelocityY(0);
+					break;
+				}
+				SamusStateManager::getInstance()->setOldStatus(eStatus::ROLLING);
+				this->samus->setStatus(eStatus::INJURING);
+				SamusStateManager::getInstance()->setOldState(this);
 			}
-			//this->samus->setVelocity(VECTOR2(0, 0));
-			SamusStateManager::getInstance()->setOldStatus(eStatus::ROLLING);
-			SamusStateManager::getInstance()->setOldState(this);
-			this->samus->setStatus(eStatus::INJURING);
+
 			break;
-		default:
-			break;
+		}
+#pragma endregion
+
 		}
 
 	}
