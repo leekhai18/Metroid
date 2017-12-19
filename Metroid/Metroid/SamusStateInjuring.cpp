@@ -79,10 +79,13 @@ void SamusStateInjuring::onCollision(float dt)
 			}
 			break;
 
-		case eID::SKREE:
-
-			
 		case eID::ZOMMER:
+		case eID::SKREE:
+		case eID::RIO:
+		case eID::RIPPER:
+		case eID::WAVER:
+		case eID::ZEB:
+		case eID::BOSSKRAID:
 			switch (i->direction)
 			{
 			case CollideDirection::TOP:

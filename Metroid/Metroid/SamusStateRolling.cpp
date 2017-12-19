@@ -145,6 +145,12 @@ void SamusStateRolling::onCollision(float dt)
 			}
 			break;
 		case eID::ZOMMER:
+		case eID::SKREE:
+		case eID::RIO:
+		case eID::RIPPER:
+		case eID::WAVER:
+		case eID::ZEB:
+		case eID::BOSSKRAID:
 			switch (i->direction)
 			{
 			case CollideDirection::LEFT:

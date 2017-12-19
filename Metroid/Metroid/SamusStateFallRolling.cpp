@@ -37,7 +37,8 @@ void SamusStateFallRolling::init()
 
 void SamusStateFallRolling::handleInput(float dt)
 {
-	if (!Camera::getInstance()->moveWhenSamusOnPort()) {
+	if (!Camera::getInstance()->moveWhenSamusOnPort()) 
+	{
 		//handle press left button
 		if (input->isKeyDown(VK_LEFT) && input->isKeyUp(VK_RIGHT))
 		{
@@ -137,6 +138,12 @@ void SamusStateFallRolling::onCollision(float dt)
 			}
 			break;
 		case eID::ZOMMER:
+		case eID::SKREE:
+		case eID::RIO:
+		case eID::RIPPER:
+		case eID::WAVER:
+		case eID::ZEB:
+		case eID::BOSSKRAID:
 			switch (i->direction)
 			{
 			case CollideDirection::LEFT:

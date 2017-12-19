@@ -39,7 +39,8 @@ void SamusStateJumping::init()
 
 void SamusStateJumping::handleInput(float dt)
 {
-	if (!Camera::getInstance()->moveWhenSamusOnPort()) {
+	if (!Camera::getInstance()->moveWhenSamusOnPort()) 
+	{
 #pragma region Horizontal
 		if (input->isKeyDown(VK_RIGHT) && input->isKeyUp(VK_LEFT))
 		{
@@ -208,9 +209,13 @@ void SamusStateJumping::onCollision(float dt)
 #pragma endregion
 
 #pragma region enemies
-		case eID::SKREE:
-		case eID::RIPPER:
 		case eID::ZOMMER:
+		case eID::SKREE:
+		case eID::RIO:
+		case eID::RIPPER:
+		case eID::WAVER:
+		case eID::ZEB:
+		case eID::BOSSKRAID:
 			switch (i->direction)
 			{
 			case CollideDirection::LEFT:

@@ -206,14 +206,15 @@ void SamusStateStanding::onCollision(float dt)
 			}
 			break;
 
-		case eID::SKREE:
-			GAMELOG("VA CHAM SKREE");
-			SamusStateManager::getInstance()->setOldStatus(eStatus::STANDING);
-			this->samus->setStatus(eStatus::INJURING);
-			SamusStateManager::getInstance()->setOldState(this);
-			break;
+
 
 		case eID::ZOMMER:
+		case eID::SKREE:
+		case eID::RIO:
+		case eID::RIPPER:
+		case eID::WAVER:
+		case eID::ZEB:
+		case eID::BOSSKRAID:
 			switch (i->direction)
 			{
 			case CollideDirection::TOP:
