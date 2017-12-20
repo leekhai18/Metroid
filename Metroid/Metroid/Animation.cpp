@@ -136,3 +136,8 @@ float Animation::getTimeFrameDelay()
 {
 	return this->frameDelay;
 }
+
+void Animation::setListFrames(const int * list)
+{
+	this->listFrames = list;
+}

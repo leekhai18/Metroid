@@ -37,6 +37,9 @@ Bullet * BulletPool::getBullet()
 	if (this->list.empty())
 	{
 		Bullet* bul = new Bullet(textureManager, graphics);
+		if (this->currentIceBullet)
+			bul->setIceBullet();
+
 		this->listUsing.push_back(bul);
 		return bul;
 	}
@@ -53,6 +56,9 @@ Bullet * BulletPool::getBullet()
 		}	
 
 		Bullet* bul = new Bullet(textureManager, graphics);
+		if (this->currentIceBullet)
+			bul->setIceBullet();
+
 		this->listUsing.push_back(bul);
 		return bul;
 	}
@@ -93,4 +99,14 @@ void BulletPool::setDistanceShoot(float dis)
 	{
 		this->list.at(i)->setDistanceShoot(dis);
 	}
+}
+
+void BulletPool::setIceBullet()
+{
+	for (unsigned i = 0; i < this->list.size(); i++)
+	{
+		this->list.at(i)->setIceBullet();
+	}
+
+	currentIceBullet = true;
 }

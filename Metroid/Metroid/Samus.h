@@ -111,6 +111,8 @@ private:
 	int missitleRocket;
 	Sprite* labelIconRoket;
 	Text* textNumRocket;
+
+	eSkin currentSkin;
 #pragma endregion
 
 
@@ -185,6 +187,9 @@ public:
 	int getNumRocket();
 	void setNumRocket(int num);
 
+	eSkin getCurrentSkin();
+	void setNewSkin(eSkin skin);
+	void setDataSuiteSkin(int yellow, int yellowIce, int pink, int pinkIce);
 #pragma endregion
 
 };

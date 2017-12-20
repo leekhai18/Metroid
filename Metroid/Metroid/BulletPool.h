@@ -13,6 +13,9 @@ private:
 	std::vector<Bullet*> listUsing;
 
 	static BulletPool* instance;
+
+	bool currentIceBullet;
+
 public:
 	static BulletPool* getInstance();
 
@@ -28,4 +31,6 @@ public:
 	void release();
 
 	void setDistanceShoot(float dis);
+
+	void setIceBullet();
 };

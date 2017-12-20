@@ -18,6 +18,9 @@ private:
 
 	float dame;
 
+	int indexSprite;
+	int indexEffect;
+
 public:
 	Bullet(TextureManager* textureM, Graphics* graphics);
 	Bullet();
@@ -38,5 +41,7 @@ public:
 
 	float getDistanceShoot();
 	void setDistanceShoot(float distan);
+
+	void setIceBullet();
 };
 

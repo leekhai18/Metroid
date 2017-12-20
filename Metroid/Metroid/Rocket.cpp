@@ -19,7 +19,7 @@ Rocket::Rocket(TextureManager * textureM, Graphics * graphics) : BaseObject(eID:
 	}
 
 	// Set Data for sprite
-	this->sprite->setData(IndexManager::getInstance()->rocketYellowR);
+	this->sprite->setData(IndexManager::getInstance()->rocketPinkR);
 	this->setOrigin(VECTOR2(0.5f, 0.5f));
 
 	this->setPosition(VECTOR2ZERO);
@@ -55,14 +55,14 @@ void Rocket::onCollision()
 			switch (i->object->getId())
 			{
 				case eID::WALL:
-					this->sprite->setData(IndexManager::getInstance()->samusYellowExplosion[0]);
+					this->sprite->setData(IndexManager::getInstance()->samusPinkExplosion[0]);
 					this->isCollided = true;
 					this->velocity = VECTOR2ZERO;
 					break;
 
 				case eID::GATEBLUE:
 				{
-					this->sprite->setData(IndexManager::getInstance()->samusYellowExplosion[0]);
+					this->sprite->setData(IndexManager::getInstance()->samusPinkExplosion[0]);
 					this->isCollided = true;
 
 					GateBlue* gateB = static_cast<GateBlue*>(i->object);
@@ -74,7 +74,7 @@ void Rocket::onCollision()
 
 				case eID::GATERED:
 				{
-					this->sprite->setData(IndexManager::getInstance()->samusYellowExplosion[0]);
+					this->sprite->setData(IndexManager::getInstance()->samusPinkExplosion[0]);
 					this->isCollided = true;
 
 					GateRed* gateR = static_cast<GateRed*>(i->object);
@@ -167,7 +167,7 @@ void Rocket::returnPool()
 	this->setStatus(eStatus::ENDING);
 	this->setPosition(VECTOR2ZERO);
 	setBoundCollision();
-	this->sprite->setData(IndexManager::getInstance()->samusYellowBulletNormal);
+	this->sprite->setData(IndexManager::getInstance()->rocketPinkR);
 	isCollided = false;
 	this->timer = 0;
 	this->isActivity = false;

@@ -36,5 +36,7 @@ public:
 
 	void setTimeFrameDelay(float time);
 	float getTimeFrameDelay();
+
+	void setListFrames(const int* list);
 };
 

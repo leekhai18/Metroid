@@ -134,6 +134,14 @@ enum eDirection {
 	right = 1,
 };
 
+// Skin
+enum eSkin {
+	YELLOW,
+	YELLOWICE,
+	PINK,
+	PINKICE
+};
+
 enum WaverDirectionY
 {
 	up = 1,

@@ -27,6 +27,7 @@ Samus::Samus(TextureManager* textureM,Graphics* graphics, Input* input) : BaseOb
 
 	this->setPosition(VECTOR2(SAMUS_POS_X, SAMUS_POS_Y));
 
+	currentSkin = eSkin::YELLOW;
 	runningNormalAnimation = new Animation(this->sprite, IndexManager::getInstance()->samusYellowRunningRight, NUM_FRAMES_SAMUS_RUNNING, 0.05f);
 	runningUpAnimation = new Animation(this->sprite, IndexManager::getInstance()->samusYellowRunningUpRight, NUM_FRAMES_SAMUS_RUNNING, 0.05f);
 	runningHittingRightAnimation = new Animation(this->sprite, IndexManager::getInstance()->samusYellowHittingAndRunningRight, NUM_FRAMES_SAMUS_RUNNING, 0.05f);
@@ -72,9 +73,9 @@ Samus::Samus(TextureManager* textureM,Graphics* graphics, Input* input) : BaseOb
 	this->labelIconRoket = new Sprite();
 	if (!this->labelIconRoket->initialize(graphics, textureM, SpriteManager::getInstance()))
 	{
-		throw GameError(GameErrorNS::FATAL_ERROR, "Can not init sprite Health Icon");
+		throw GameError(GameErrorNS::FATAL_ERROR, "Can not init sprite Rocket Icon");
 	}
-	this->labelIconRoket->setData(IndexManager::getInstance()->rocketYellowR);
+	this->labelIconRoket->setData(IndexManager::getInstance()->rocketPinkR);
 	this->labelIconRoket->setPosition(VECTOR2(20, 30));
 
 	this->textNumRocket = new Text("0", eFont::body, 8, VECTOR2(45, 30), GraphicsNS::WHITE, false, true);
@@ -507,6 +508,67 @@ int Samus::getNumRocket()
 void Samus::setNumRocket(int num)
 {
 	this->missitleRocket = num;
+}
+
+eSkin Samus::getCurrentSkin()
+{
+	return this->currentSkin;
+}
+
+void Samus::setNewSkin(eSkin skin)
+{
+	this->currentSkin = skin;
+
+	switch (skin)
+	{
+	case YELLOWICE:
+		runningNormalAnimation->setListFrames(IndexManager::getInstance()->samusYellowIceRunningRight);
+		runningUpAnimation->setListFrames(IndexManager::getInstance()->samusYellowIceRunningUpRight);
+		runningHittingRightAnimation->setListFrames(IndexManager::getInstance()->samusYellowIceHittingAndRunningRight);
+		rollingAnimation->setListFrames(IndexManager::getInstance()->samusYellowIceRollingRight);
+		jumpingAnimation->setListFrames(IndexManager::getInstance()->samusYellowIceJumpingRight);
+
+		break;
+	case PINK:
+		runningNormalAnimation->setListFrames(IndexManager::getInstance()->samusPinkRunningRight);
+		runningUpAnimation->setListFrames(IndexManager::getInstance()->samusPinkRunningUpRight);
+		runningHittingRightAnimation->setListFrames(IndexManager::getInstance()->samusPinkHittingAndRunningRight);
+		rollingAnimation->setListFrames(IndexManager::getInstance()->samusPinkRollingRight);
+		jumpingAnimation->setListFrames(IndexManager::getInstance()->samusPinkJumpingRight);
+
+		break;
+	case PINKICE:
+		runningNormalAnimation->setListFrames(IndexManager::getInstance()->samusPinkIceRunningRight);
+		runningUpAnimation->setListFrames(IndexManager::getInstance()->samusPinkIceRunningUpRight);
+		runningHittingRightAnimation->setListFrames(IndexManager::getInstance()->samusPinkIceHittingAndRunningRight);
+		rollingAnimation->setListFrames(IndexManager::getInstance()->samusPinkIceRollingRight);
+		jumpingAnimation->setListFrames(IndexManager::getInstance()->samusPinkIceJumpingRight);
+
+		break;
+	default:
+		break;
+	}
+}
+
+void Samus::setDataSuiteSkin(int yellow, int yellowIce, int pink, int pinkIce)
+{
+	switch (this->currentSkin)
+	{
+	case YELLOW:
+		this->getSprite()->setData(yellow);
+		break;
+	case YELLOWICE:
+		this->getSprite()->setData(yellowIce);
+		break;
+	case PINK:
+		this->getSprite()->setData(pink);
+		break;
+	case PINKICE:
+		this->getSprite()->setData(pinkIce);
+		break;
+	default:
+		break;
+	}
 }
 
 
