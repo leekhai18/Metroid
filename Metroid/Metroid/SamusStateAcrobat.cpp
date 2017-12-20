@@ -1,10 +1,16 @@
 #include "SamusStateAcrobat.h"
 #include "SamusStateManager.h"
 #include "GameLog.h"
-#include "MaruMari.h"
 #include "Camera.h"
 #include "GateBlue.h"
 #include "GateRed.h"
+#include "MaruMari.h"
+#include "EnergyTank.h"
+#include "Bomb.h"
+#include "LongBeam.h"
+#include "MissileRocket.h"
+#include "IceBeam.h"
+#include "Varia.h"
 
 SamusStateAcrobat::SamusStateAcrobat()
 {
@@ -272,16 +278,84 @@ void SamusStateAcrobat::onCollision(float dt)
 		}
 #pragma endregion
 
-#pragma region Items
+#pragma region items
 		case eID::MARUMARI:
 		{
 			this->samus->setMariMaru(true);
-
 			MaruMari* mm = static_cast<MaruMari*>(i->object);
 			mm->setActivity(false);
 
 			break;
 		}
+
+		case eID::ENERGYTANK:
+		{
+			this->samus->setNumLive(this->samus->getNumLive() + 1);
+			EnergyTank* energy = static_cast<EnergyTank*>(i->object);
+			energy->setActivity(false);
+
+			break;
+		}
+
+		case eID::BOMB:
+		{
+			this->samus->setMariMaru(true); // just test
+
+			this->samus->setBomb(true);
+			Bomb* bom = static_cast<Bomb*>(i->object);
+			bom->setActivity(false);
+
+			break;
+		}
+
+		case eID::LONGBEAM:
+		{
+			this->samus->setLongBeam(true);
+			LongBeam* lb = static_cast<LongBeam*>(i->object);
+			lb->setActivity(false);
+
+			BulletPool::getInstance()->setDistanceShoot(DISTANCE_SHOOT * 2);
+
+			break;
+		}
+
+		case eID::MISSILEROCKET:
+		{
+			this->samus->setNumRocket(this->samus->getNumRocket() + 5);
+			MissileRocket* mrocket = static_cast<MissileRocket*>(i->object);
+			mrocket->setActivity(false);
+
+			break;
+		}
+
+		case eID::ICEBEAM:
+		{
+			IceBeam* ib = static_cast<IceBeam*>(i->object);
+			ib->setActivity(false);
+
+			if (this->samus->getCurrentSkin() == eSkin::YELLOW)
+				this->samus->setNewSkin(eSkin::YELLOWICE);
+			if (this->samus->getCurrentSkin() == eSkin::PINK)
+				this->samus->setNewSkin(eSkin::PINKICE);
+
+			BulletPool::getInstance()->setIceBullet();
+
+			break;
+		}
+
+		case eID::VARIA:
+		{
+			Varia* va = static_cast<Varia*>(i->object);
+			va->setActivity(false);
+
+			if (this->samus->getCurrentSkin() == eSkin::YELLOW)
+				this->samus->setNewSkin(eSkin::PINK);
+			if (this->samus->getCurrentSkin() == eSkin::YELLOWICE)
+				this->samus->setNewSkin(eSkin::PINKICE);
+
+			break;
+		}
+
 #pragma endregion
 
 		default:
