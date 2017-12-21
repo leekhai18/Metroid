@@ -17,7 +17,8 @@ private:
 	VECTOR2 samusPosition;
 	VECTOR2 startPosition;
 	int health;
-	bool flag;
+	bool allowFly = false;
+	bool isActivity;
 
 public:
 	Zeb();
@@ -27,7 +28,9 @@ public:
 	void update(float dt);
 	void draw();
 	void setBoundCollision();
+	void handleVelocity(float dt);
 	void setStartPosition(VECTOR2 startPosition);
-	void init(VECTOR2 samusPosition);
+	void reInit();
+	void setTarget(VECTOR2 samusPosition);
 };
 

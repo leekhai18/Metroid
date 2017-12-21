@@ -41,7 +41,7 @@ Zeb::Zeb(TextureManager * textureM, Graphics * graphics, EnemyColors color) : Ba
 	this->setOrigin(VECTOR2(0.5, 0.5));
 
 	this->anim->start();
-	isActivity = true;
+	isActivity = false;
 }
 
 
@@ -49,39 +49,47 @@ Zeb::~Zeb()
 {
 	delete this->anim;
 }
-
-void Zeb::update(float dt)
+void Zeb::reInit()
 {
-	if(this->getPosition().x == 4024.0f)
-	{
-		int test = 0;
-	}
+	allowFly = false;
+	isActivity = false;
+	this->setPosition(startPosition);
+}
+void Zeb::handleVelocity(float dt)
+{
 	if (isActivity == true)
 	{
 		this->anim->update(dt);
 
-		if (this->getPosition().y < this->samusPosition.y)
+		if (this->getPosition().y < this->samusPosition.y && allowFly == false)
 		{
-			this->setPositionY(this->getPosition().y + VELOCITY_Y*dt);
-			if (this->getPosition().y >= this->samusPosition.y && flag == false)
-			{
-				this->velocity.x = VELOCITY_X*direction;
-				this->velocity.y = 0;
-				flag = true;
-			}
+			this->velocity.y = VELOCITY_Y;
+			this->velocity.x = 0;
+
 		}
-		this->setPositionX(this->getPosition().x + velocity.x*dt);
+		if (this->getPosition().y >= this->samusPosition.y && allowFly == false)
+		{
+			this->velocity.x = VELOCITY_X*direction;
+			this->velocity.y = 0;
+			allowFly = true;
+		}
+		
 	}
 	else
 	{
-		init(this->startPosition);
+		isActivity = true;
 	}
 
 	if (this->getPosition().x < Camera::getInstance()->getBound().left || this->getPosition().x > Camera::getInstance()->getBound().right)
-	{
-			
-			isActivity = false;
+	{		
+		reInit();
 	}
+}
+
+void Zeb::update(float dt)
+{
+	this->setPosition(VECTOR2(this->getPosition().x + velocity.x*dt,
+		this->getPosition().y + velocity.y*dt));
 }
 
 void Zeb::draw()
@@ -101,17 +109,16 @@ void Zeb::setBoundCollision()
 	this->boundCollision = rect;
 }
 
+
 void Zeb::setStartPosition(VECTOR2 startPosition)
 {
 	this->startPosition = startPosition;
 }
 
-void Zeb::init(VECTOR2 samusPosition)
+
+void Zeb::setTarget(VECTOR2 samusPosition)
 {
-	flag = false;
-	isActivity = true;
 	this->samusPosition = samusPosition;
-	this->velocity.x = 0;
 	if (this->getPosition().x - samusPosition.x > 0)
 	{
 		this->setDirection(eDirection::left);
@@ -120,7 +127,8 @@ void Zeb::init(VECTOR2 samusPosition)
 	else
 	{
 		this->setDirection(eDirection::right);
-		this->setScaleX(-1);
+		//this->setScaleX(-1);
 	}
 }
+
 

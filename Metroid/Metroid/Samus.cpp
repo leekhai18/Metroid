@@ -6,8 +6,8 @@
 
 #define DISTANCE_MOVE_FRONT_GATE 24
 
-#define SAMUS_POS_X 640
-#define SAMUS_POS_Y 1267
+#define SAMUS_POS_X 3200
+#define SAMUS_POS_Y 2040
 
 //Boss
 //#define SAMUS_POS_X 640

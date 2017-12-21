@@ -44,6 +44,15 @@ ObjectManager * ObjectManager::getInstance()
 }
 void ObjectManager::handleVelocity(float dt)
 {
+	listNotWallCanCollideSamus->clear();
+	listObjectNotWallOnViewPort->clear();
+	listWallCanCollideSamus->clear();
+
+	MetroidRect r = Camera::getInstance()->getBound();
+	quadtree->retrieve(listNotWallCanCollideSamus, 
+		listObjectNotWallOnViewPort, listWallCanCollideSamus, 
+		MetroidRect(r.top + 20, r.bottom - 20, r.left - 20, r.right + 20), samus);
+
 	if (listObjectNotWallOnViewPort)
 	{
 		for (list<BaseObject*>::iterator i = listObjectNotWallOnViewPort->begin(); i != listObjectNotWallOnViewPort->end(); ++i) 
@@ -52,6 +61,11 @@ void ObjectManager::handleVelocity(float dt)
 			{
 				Waver* waver = static_cast<Waver*>(*i);
 				waver->handleVelocity(dt);
+			}
+			if ((*i)->getId() == eID::ZEB)
+			{
+				Zeb* zeb = static_cast<Zeb*>(*i);
+				zeb->handleVelocity(dt);	
 			}
 		}
 	}
@@ -65,14 +79,10 @@ void ObjectManager::onCheckCollision(float dt)
 	{
 		timer = 0;
 
-		listNotWallCanCollideSamus->clear();
-		listObjectNotWallOnViewPort->clear();
-		listWallCanCollideSamus->clear();
-
-		MetroidRect r = Camera::getInstance()->getBound();
+	
 
 		//Get all objects that can collide with current obj
-		quadtree->retrieve(listNotWallCanCollideSamus, listObjectNotWallOnViewPort, listWallCanCollideSamus, MetroidRect(r.top + 20, r.bottom - 20, r.left - 20, r.right + 20), samus);
+		
 	}
 
 	if (listObjectNotWallOnViewPort)
@@ -164,10 +174,7 @@ void ObjectManager::update(float dt)
 			if ((*i)->getId() == eID::ZEB)
 			{
 				Zeb* zeb = static_cast<Zeb*>(*i);
-				if(zeb->getPosition().x==4024)
-				{
-					int test = 1;
-				}
+				zeb->setTarget(samus->getPosition());
 			}
 			
 			(*i)->update(dt);
@@ -1395,7 +1402,7 @@ bool ObjectManager::load_list(const char * filename)
 				y = y - 16 + zbb->getSprite()->getHeight()*0.5f;
 				x += 8;
 
-				zbb->setStartPosition(VECTOR2(x, y));
+				//zbb->setStartPosition(VECTOR2(x, y));
 				zbb->setPosition(VECTOR2(x, y));
 
 				zbb->setBoundCollision();

@@ -3,8 +3,8 @@
 #include <d3d9.h>
 #include "Constants.h"
 
-#define CAM_POS_X 640
-#define CAM_POS_Y 1320
+#define CAM_POS_X 3200
+#define CAM_POS_Y 2040
 
 //Boss
 //#define CAM_POS_X 640
