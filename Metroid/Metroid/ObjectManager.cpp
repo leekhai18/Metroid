@@ -58,6 +58,11 @@ void ObjectManager::handleVelocity(float dt)
 				BossKraid* bossKraid = static_cast<BossKraid*>(*i);
 				bossKraid->handleVelocity(dt);
 			}
+			if ((*i)->getId() == eID::MOTHERBRAIN)
+			{
+				MotherBrain* motherBrain = static_cast<MotherBrain*>(*i);
+				motherBrain->handleVelocity(dt);
+			}
 		}
 	}
 }
@@ -133,6 +138,12 @@ void ObjectManager::onCheckCollision(float dt)
 				bossKraid->onCollision(samus);
 			}
 		}*/
+		if ((*x)->getId() == eID::MOTHERBRAIN)
+		{
+			MotherBrain* motherBrain = static_cast<MotherBrain*>(*x);
+
+			motherBrain->onCollision(samus, dt);
+		}
 	}
 
 	// handle on listCollide
@@ -2101,11 +2112,14 @@ bool ObjectManager::load_list(const char * filename)
 		const Value& mother = jSon["MotherBrain"];
 		if (mother.IsObject())
 		{
-			MotherBrain *motherFacker = new MotherBrain(this->textureManager, this->graphics);
+			MotherBrain *motherFacker = new MotherBrain(this->textureManager, this->graphics,samus);
 
 			id = mother["id"].GetInt();
 			x = mother["x"].GetFloat();
 			y = mother["y"].GetFloat();
+			x += motherFacker->getSprite()->getWidth()*0.5f;
+			y -= motherFacker->getSprite()->getHeight()*0.5f;
+
 			motherFacker->setPosition(VECTOR2(x, y));
 
 	/*		writer.Key("MotherBrain");
@@ -2116,17 +2130,17 @@ bool ObjectManager::load_list(const char * filename)
 			writer.Double(y);
 			writer.EndObject();*/
 
-			bound.left = x;
-			bound.top = y;
-			bound.right = bound.left + motherFacker->getSprite()->getWidth();
-			bound.bottom = bound.top - motherFacker->getSprite()->getHeight();
+			bound.left = x - motherFacker->getSprite()->getWidth();
+			bound.top = y + motherFacker->getSprite()->getHeight();
+			bound.right = x + motherFacker->getSprite()->getWidth();
+			bound.bottom = y - motherFacker->getSprite()->getHeight();
 			motherFacker->setActiveBound(bound);
 
 			bound.left = x + 16;
 			bound.top = y - 63;
 			bound.right = bound.left + 80;
 			bound.bottom = bound.top - 65;
-			motherFacker->setBoundCollision(bound);
+			motherFacker->setBoundCollision();
 
 			object_list->push_back(motherFacker);
 

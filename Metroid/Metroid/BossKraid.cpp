@@ -125,7 +125,7 @@ void BossKraid::handleVelocity(float dt)
 			{
 				this->velocity = (this->beforePosition - this->afterPosition) / dt;
 			}
-			int test = 0;
+		
 		}
 		else
 		{

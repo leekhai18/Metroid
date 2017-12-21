@@ -155,10 +155,12 @@
     <ClInclude Include="Map.h" />
     <ClInclude Include="MapInfo.h" />
     <ClInclude Include="MaruMari.h" />
+    <ClInclude Include="MBulletPool.h" />
     <ClInclude Include="Metroid.h" />
     <ClInclude Include="BulletPool.h" />
     <ClInclude Include="MissileRocket.h" />
     <ClInclude Include="MotherBrain.h" />
+    <ClInclude Include="MotherBrainBullet.h" />
     <ClInclude Include="ObjectManager.h" />
     <ClInclude Include="Port.h" />
     <ClInclude Include="Quadtree.h" />
@@ -218,10 +220,12 @@
     <ClCompile Include="Map.cpp" />
     <ClCompile Include="MapInfo.cpp" />
     <ClCompile Include="MaruMari.cpp" />
+    <ClCompile Include="MBulletPool.cpp" />
     <ClCompile Include="Metroid.cpp" />
     <ClCompile Include="BulletPool.cpp" />
     <ClCompile Include="MissileRocket.cpp" />
     <ClCompile Include="MotherBrain.cpp" />
+    <ClCompile Include="MotherBrainBullet.cpp" />
     <ClCompile Include="ObjectManager.cpp" />
     <ClCompile Include="Port.cpp" />
     <ClCompile Include="Quadtree.cpp" />
