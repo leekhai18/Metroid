@@ -17,13 +17,14 @@ BoomBomb::BoomBomb(TextureManager * textureM, Graphics * graphics) : BaseObject(
 	}
 	this->setOrigin(VECTOR2(0.5f, 0.5f));
 
+	this->explosion = new Animation(this->sprite, IndexManager::getInstance()->samusYellowExplosion, NUM_FRAMES_EXPLOSION, EXPLOSION_TIME_FRAME_DELAY, false);
 	this->anim = new Animation(this->sprite, IndexManager::getInstance()->samusYellowBombEffect, NUM_FRAMES_SAMUS_BOMB, 0.1f);
 
 	this->setPosition(VECTOR2ZERO);
 	this->setStatus(eStatus::ENDING);
 
 	this->timer = 0;
-	this->listCollide = new list<CollisionReturn>();
+	this->listCollide = new list<BaseObject*>();
 
 	this->dame = 1; // se setup lai sau
 }
@@ -37,31 +38,21 @@ BoomBomb::~BoomBomb()
 {
 	delete this->sprite;
 	delete this->anim;
+	delete this->explosion;
 	this->listCollide->clear();
 	delete this->listCollide;
 }
 
 void BoomBomb::onCollision()
 {
-	for (auto i = this->listCollide->begin(); i != this->listCollide->end(); i++)
+	if (canHandledCollision)
 	{
-		switch (i->object->getId())
+		for (auto i = listCollide->begin(); i != listCollide->end(); i++)
 		{
-			case eID::SKREE:
-			{
-				Skree* skr = static_cast<Skree*>(i->object);
-				skr->setBeHit(true);
-				skr->decreaseHealth(this->dame);
-				break;
-			}
-
-			case eID::ZOMMER:
-			{
-				Zommer* zommer = static_cast<Zommer*>((*i).object);
-				zommer->setCold(true);
-				break;
-			}
+			GAMELOG("BOOOOMM");
 		}
+
+		canHandledCollision = false;
 	}
 
 	this->listCollide->clear();
@@ -70,21 +61,31 @@ void BoomBomb::onCollision()
 
 void BoomBomb::update(float dt)
 {
-	timer += dt;
-	if (timer > TIME_BOM)
+	if (!this->anim->isFinished())
 	{
-		this->anim->stop();
-		BoomBombPool::getInstance()->returnPool(this);
+		timer += dt;
+		if (timer > TIME_BOM)
+		{
+			this->anim->stop();
+			this->explosion->start();
+			this->setBoundCollision();
+			this->canHandledCollision = true;
+		}
+
+		this->anim->update(dt);
 	}
 	else
 	{
-		this->anim->update(dt);
+		this->explosion->update(dt);
+
+		if (this->explosion->isFinished())
+			BoomBombPool::getInstance()->returnPool(this);
 	}
 }
 
 void BoomBomb::draw()
 {
-	if (!this->anim->isFinished())
+	if (!this->explosion->isFinished())
 		this->sprite->draw();
 }
 
@@ -100,17 +101,20 @@ void BoomBomb::start(VECTOR2 pos)
 {
 	this->setPosition(pos);
 	this->anim->start();
+	this->explosion->reInit();
 	this->timer = 0;
 	this->setStatus(eStatus::START);
+	this->sprite->setData(IndexManager::getInstance()->samusYellowBombEffect[0]);
 }
 
 void BoomBomb::returnPool()
 {
 	this->setPosition(VECTOR2ZERO);
 	this->setStatus(eStatus::ENDING);
+	this->boundCollision = MetroidRect(0, 0, 0, 0);
 }
 
-list<CollisionReturn>* BoomBomb::getListCollide()
+list<BaseObject*>* BoomBomb::getListCollide()
 {
 	return this->listCollide;
 }

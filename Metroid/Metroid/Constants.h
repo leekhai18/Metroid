@@ -88,6 +88,7 @@ enum eID {
 	MARUMARI,
 	VARIA,
 	MISSILEROCKET,
+	ROCKET,
 	LONGBEAM,
 	ICEBEAM,
 	ENERGYTANK,
@@ -131,6 +132,14 @@ enum eStatus {
 enum eDirection {
 	left = -1,
 	right = 1,
+};
+
+// Skin
+enum eSkin {
+	YELLOW,
+	YELLOWICE,
+	PINK,
+	PINKICE
 };
 
 enum WaverDirectionY

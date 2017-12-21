@@ -5,6 +5,7 @@
 #include "Skree.h"
 #include "Waver.h"
 #include "BossKraid.h"
+#include "Rocket.h"
 
 Collision* Collision::instance = nullptr;
 Collision* Collision::getInstance()
@@ -182,6 +183,12 @@ bool Collision::checkCollision(BaseObject * myEntity, BaseObject * otherEntity, 
 		{
 			Bullet* bullet = static_cast<Bullet*>(myEntity);
 			bullet->getListCollide()->push_back(data);
+			break;
+		}
+		case eID::ROCKET:
+		{
+			Rocket* rocket = static_cast<Rocket*>(myEntity);
+			rocket->getListCollide()->push_back(data);
 			break;
 		}
 		case eID::ZOMMER:

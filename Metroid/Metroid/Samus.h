@@ -9,6 +9,7 @@
 #include "BaseObject.h"
 #include "BulletPool.h"
 #include "BoomBombPool.h"
+#include "RocketPool.h"
 #include <list>
 #include "Text.h"
 
@@ -23,6 +24,7 @@
 #define MAX_JUMP 84.0f
 
 #define TIME_SHOOTING 0.15f
+#define TIME_SHOOTING_ROCKET 0.3f
 
 #define MAX_HEIHT 32
 
@@ -85,6 +87,7 @@ private:
 
 	BulletPool *bulletPool;
 	BoomBombPool* boomPool;
+	RocketPool* rocketPool;
 
 	list<CollisionReturn> *listCollide;
 
@@ -97,13 +100,22 @@ private:
 
 	int numLives;
 	list<Sprite*> *listNumLives;
+	int health;
+	Sprite* labelIconHealth;
+	Text* textHealth;
 
 	bool isBomb;
+
+	bool isLongBeam;
+
+	int missitleRocket;
+	Sprite* labelIconRoket;
+	Text* textNumRocket;
+
+	eSkin currentSkin;
 #pragma endregion
 
-	int health;
-	Sprite* healthIcon;
-	Text* healthText;
+
 
 	bool canGoElevator;
 public:
@@ -169,6 +181,16 @@ public:
 
 	bool isHaveBomb();
 	void setBomb(bool flag);
+
+	bool isHaveLongBeam();
+	void setLongBeam(bool flag);
+
+	int getNumRocket();
+	void setNumRocket(int num);
+
+	eSkin getCurrentSkin();
+	void setNewSkin(eSkin skin);
+	void setDataSuiteSkin(int yellow, int yellowIce, int pink, int pinkIce);
 #pragma endregion
 
 };

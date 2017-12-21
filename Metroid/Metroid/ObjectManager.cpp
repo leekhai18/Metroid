@@ -101,11 +101,16 @@ void ObjectManager::onCheckCollision(float dt)
 
 		for (unsigned i = 0; i < BulletPool::getInstance()->getListUsing().size(); i++)
 			Collision::getInstance()->checkCollision(BulletPool::getInstance()->getListUsing().at(i), *x, dt);
+
+		for (unsigned i = 0; i < RocketPool::getInstance()->getListUsing().size(); i++)
+			Collision::getInstance()->checkCollision(RocketPool::getInstance()->getListUsing().at(i), *x, dt);
 	}
 	// handle on listCollide
 	samus->onCollision(dt);
 	for (unsigned i = 0; i < BulletPool::getInstance()->getListUsing().size(); i++)
 		BulletPool::getInstance()->getListUsing().at(i)->onCollision();
+	for (unsigned i = 0; i < RocketPool::getInstance()->getListUsing().size(); i++)
+		RocketPool::getInstance()->getListUsing().at(i)->onCollision();
 #pragma endregion
 
 
@@ -118,6 +123,19 @@ void ObjectManager::onCheckCollision(float dt)
 
 		for (unsigned i = 0; i < BulletPool::getInstance()->getListUsing().size(); i++)
 			Collision::getInstance()->checkCollision(BulletPool::getInstance()->getListUsing().at(i), *x, dt);
+
+		for (unsigned i = 0; i < RocketPool::getInstance()->getListUsing().size(); i++)
+			Collision::getInstance()->checkCollision(RocketPool::getInstance()->getListUsing().at(i), *x, dt);
+
+
+		for (unsigned i = 0; i < BoomBombPool::getInstance()->getListUsing().size(); i++)
+		{
+			if (Collision::getInstance()->isCollide(BoomBombPool::getInstance()->getListUsing().at(i)->getBoundCollision(), (*x)->getBoundCollision()))
+			{
+				BoomBombPool::getInstance()->getListUsing().at(i)->getListCollide()->push_back(*x);
+			}
+		}
+
 
 		if ((*x)->getId() == eID::SKREE)
 		{
@@ -150,6 +168,13 @@ void ObjectManager::onCheckCollision(float dt)
 	samus->onCollision(dt);
 	for (unsigned i = 0; i < BulletPool::getInstance()->getListUsing().size(); i++)
 		BulletPool::getInstance()->getListUsing().at(i)->onCollision();
+
+	for (unsigned i = 0; i < RocketPool::getInstance()->getListUsing().size(); i++)
+		RocketPool::getInstance()->getListUsing().at(i)->onCollision();
+
+	for (unsigned i = 0; i < BoomBombPool::getInstance()->getListUsing().size(); i++)
+		BoomBombPool::getInstance()->getListUsing().at(i)->onCollision();
+
 #pragma endregion
 
 }
@@ -190,10 +215,7 @@ void ObjectManager::update(float dt)
 			if ((*i)->getId() == eID::ZEB)
 			{
 				Zeb* zeb = static_cast<Zeb*>(*i);
-				if(zeb->getPosition().x==4024)
-				{
-					int test = 1;
-				}
+
 			}
 			
 			(*i)->update(dt);

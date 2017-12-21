@@ -1,7 +1,7 @@
 #pragma once
 // Class used to manage Index Sprites in Texture
 
-#define MAX_INDEX 259
+#define MAX_INDEX 263
 
 // Define NUM_FRAMES
 #define NUM_FRAMES_ZOOMER 2
@@ -88,6 +88,10 @@ public:
 
 	const int en[2] = { 92,93 };
 	const int rocket[2] = { 95,96 };
+	const int rocketYellowR = 260;
+	const int rocketYellowUp = 261;
+	const int rocketPinkR = 262;
+	const int rocketPinkUp = 263;
 
 
 	const int samusYellowStart[4] = { 105,106,107,108 };
@@ -138,7 +142,7 @@ public:
 	const int samusPinkHittingUp = 157;
 	const int samusPinkHittingAndRunningRight[3] = { 154,153,155 };
 	const int samusPinkHittingAndJumpRight = 156;
-	const int samusPinkHittingAndRunningUp[3] = { 159,158,160 };
+	const int samusPinkRunningUpRight[3] = { 159,158,160 };
 	const int samusPinkJumpUp = 161;
 	const int samusPinkHittingJumpUp = 162;
 	const int samusPinkBulletNormal = 172;
@@ -156,9 +160,9 @@ public:
 	const int samusPinkIceRollingRight[4] = { 242,243,244,245 };
 	const int samusPinkIceHittingRight = 241;
 	const int samusPinkIceHittingUp = 236;
-	const int samusPinkIceHittingAndRunningRight[3] = { 234,235,233 };
+	const int samusPinkIceHittingAndRunningRight[3] = { 239,240,238 };
 	const int samusPinkIceHittingAndJumpRight = 237;
-	const int samusPinkIceRunningUpRight[3] = { 239,240,238 };
+	const int samusPinkIceRunningUpRight[3] = { 234,235,233 };
 	const int samusPinkIceJumpUp = 232;
 	const int samusPinkIceHittingJumpUp = 231;
 

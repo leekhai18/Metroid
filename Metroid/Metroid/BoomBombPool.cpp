@@ -36,7 +36,10 @@ BoomBomb * BoomBombPool::getBoom()
 {
 	if (this->list.empty())
 	{
-		return new BoomBomb(textureManager, graphics);
+		BoomBomb* boom = new BoomBomb(textureManager, graphics);
+		this->listUsing.push_back(boom);
+
+		return boom;
 	}
 	else
 	{

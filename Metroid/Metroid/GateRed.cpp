@@ -19,6 +19,7 @@ GateRed::GateRed(TextureManager * textureM, Graphics * graphics) : BaseObject(eI
 
 	timer = 0;
 	isHit = false;
+	durability = 5;
 
 	closeAnim = new Animation(this->sprite, IndexManager::getInstance()->gateRedRClose, NUM_FRAMES_GATE_ANIM, 0.1f, false);
 	openAnim = new Animation(this->sprite, IndexManager::getInstance()->gateRedROpen, NUM_FRAMES_GATE_ANIM, 0.1f, false);
@@ -87,13 +88,9 @@ void GateRed::effectClose()
 	closeAnim->start();
 	openAnim->reInit();
 	isHit = false;
+	durability = 5;
 	isCollideSamusInPort = false;
 	this->isActivity = true;
-}
-
-void GateRed::setHit(bool flag)
-{
-	isHit = flag;
 }
 
 void GateRed::setIsCollideSamusInPort(bool flag)
@@ -104,4 +101,17 @@ void GateRed::setIsCollideSamusInPort(bool flag)
 void GateRed::setBoundCollision(MetroidRect rect)
 {
 	BaseObject::setBoundCollision(rect);
+}
+
+int GateRed::getDurability()
+{
+	return this->durability;
+}
+
+void GateRed::setDurability(int dura)
+{
+	this->durability = dura;
+
+	if (this->durability <= 0)
+		isHit = true;
 }

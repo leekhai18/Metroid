@@ -2,15 +2,14 @@
 #include "BaseObject.h"
 #include <list>
 
-#define DISTANCE_SHOOT 52
-#define VELOCITY_BULLET 180
+#define DISTANCE_SHOOT_ROCKET 100
+#define VELOCITY_ROCKET 120
 #define EXPLOSION_TIME_FRAME_DELAY 0.1f
 
-class Bullet : public BaseObject
+class Rocket : public BaseObject
 {
 private:
 	float distance;
-	float distanceShoot;
 
 	list<CollisionReturn> *listCollide;
 	bool isCollided;
@@ -18,13 +17,10 @@ private:
 
 	float dame;
 
-	int indexSprite;
-	int indexEffect;
-
 public:
-	Bullet(TextureManager* textureM, Graphics* graphics);
-	Bullet();
-	~Bullet();
+	Rocket(TextureManager* textureM, Graphics* graphics);
+	Rocket();
+	~Rocket();
 
 	void update(float dt);
 	void draw();
@@ -38,10 +34,5 @@ public:
 	void returnPool();
 
 	list<CollisionReturn> *getListCollide();
-
-	float getDistanceShoot();
-	void setDistanceShoot(float distan);
-
-	void setIceBullet();
 };
 

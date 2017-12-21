@@ -94,7 +94,7 @@ void Skree::onCollision(float dt)
 		Collision::getInstance()->checkCollision(this, *i, dt);
 	}
 
-	for (auto x = this->listCollide->begin(); x != this->listCollide->end(); x++)
+	if (listCollide->size() != 0)
 	{
 		this->setStatus(eStatus::ENDING);
 	}

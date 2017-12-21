@@ -12,6 +12,8 @@ private:
 	Animation *openAnim;
 	Animation *closeAnim;
 
+	int durability;
+
 public:
 	GateRed();
 	GateRed(TextureManager* textureM, Graphics* graphics);
@@ -23,8 +25,10 @@ public:
 	void effectOpen();
 	void effectClose();
 	
-	void setHit(bool flag);
 	void setIsCollideSamusInPort(bool flag);
 	void setBoundCollision(MetroidRect rect);
+
+	int getDurability();
+	void setDurability(int dura);
 };
 

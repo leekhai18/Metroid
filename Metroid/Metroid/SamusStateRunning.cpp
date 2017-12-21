@@ -114,7 +114,12 @@ void SamusStateRunning::handleInput(float dt)
 		{
 			this->animation->stop();
 
-			this->samus->getSprite()->setData(IndexManager::getInstance()->samusYellowHittingUp);
+			this->samus->setDataSuiteSkin(
+				IndexManager::getInstance()->samusYellowHittingUp,
+				IndexManager::getInstance()->samusYellowIceHittingUp,
+				IndexManager::getInstance()->samusPinkHittingUp,
+				IndexManager::getInstance()->samusPinkIceHittingUp);
+
 			this->animation = runningUp;
 			this->animation->start();
 
@@ -133,64 +138,6 @@ void SamusStateRunning::handleInput(float dt)
 			this->animation = runningNormal;
 			this->animation->start();
 		}
-
-
-
-
-
-		//when we press up button hand of samus will raise to sky
-		if (input->isKeyDown(VK_UP))
-		{
-			//stop current animation
-			this->animation->stop();
-			//change animation to hand raise to sky
-			this->animation = runningUp;
-			//start new animation
-			this->animation->start();
-		}
-		//when we press shot button and not press up button, samus will shot horizontal 
-		if (input->isKeyDown(VK_Z) && input->isKeyUp(VK_UP))
-		{
-			//stop current animation
-			this->animation->stop();
-			//change animation to shot horizontal
-			this->animation = runningHittingRight;
-			//start new animation
-			this->animation->start();
-
-			//we must press shot button enoung long to samus shot
-			this->isUp = false;
-			if (this->samus->timerShoot > TIME_SHOOTING)
-			{
-				this->fire();
-				this->samus->timerShoot = 0;
-			}
-		}
-
-		if (input->isKeyDown(VK_UP) && input->isKeyDown(VK_Z))
-		{
-			this->animation->stop();
-
-			this->samus->getSprite()->setData(IndexManager::getInstance()->samusYellowHittingUp);
-			this->animation = runningUp;
-			this->animation->start();
-
-			this->isUp = true;
-			if (this->samus->timerShoot > TIME_SHOOTING)
-			{
-				this->fire();
-				this->samus->timerShoot = 0;
-			}
-		}
-
-		if (input->isKeyUp(VK_UP) && input->isKeyUp(VK_Z) && (input->isKeyDown(VK_LEFT) || input->isKeyDown(VK_RIGHT)))
-		{
-			this->animation->stop();
-
-			this->animation = runningNormal;
-			this->animation->start();
-		}
-
 	}
 
 }
@@ -426,12 +373,12 @@ void SamusStateRunning::fire()
 	if (isUp)
 	{
 		stP = VECTOR2(this->samus->getPosition().x + this->samus->getDirection(), this->samus->getPosition().y + this->samus->getSprite()->getHeight()*0.4f);
-		bullet->setVelocity(VECTOR2(0, VELOCITY));
+		bullet->setVelocity(VECTOR2(0, VELOCITY_BULLET));
 	}
 	else
 	{
 		stP = VECTOR2(this->samus->getPosition().x + this->samus->getDirection()*this->samus->getSprite()->getWidth()*0.3f, this->samus->getPosition().y + 4);
-		bullet->setVelocity(VECTOR2((float)VELOCITY*this->samus->getDirection(), 0));
+		bullet->setVelocity(VECTOR2((float)VELOCITY_BULLET*this->samus->getDirection(), 0));
 	}
 
 	bullet->init(stP);

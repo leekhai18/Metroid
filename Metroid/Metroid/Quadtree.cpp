@@ -118,7 +118,7 @@ void Quadtree::retrieve(list<BaseObject*>* listNotWallCanCollideSamus, list<Base
 
 			if (!found2)
 			{
-				if (Collision::getInstance()->isCollide(samus->getActiveBound(), (*i)->getActiveBound()))
+				if (Collision::getInstance()->isCollide(samus->getActiveBound(), (*i)->getBoundCollision()))
 				{
 					if ((*i)->getId() == eID::WALL)
 						listWallCanCollideSamus->push_back(*i);

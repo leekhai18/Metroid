@@ -64,6 +64,8 @@
     <ClCompile Include="GateRed.cpp" />
     <ClCompile Include="MotherBrainBullet.cpp" />
     <ClCompile Include="MBulletPool.cpp" />
+    <ClCompile Include="Rocket.cpp" />
+    <ClCompile Include="RocketPool.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AlienBig.h" />
@@ -131,6 +133,8 @@
     <ClInclude Include="GateRed.h" />
     <ClInclude Include="MotherBrainBullet.h" />
     <ClInclude Include="MBulletPool.h" />
+    <ClInclude Include="Rocket.h" />
+    <ClInclude Include="RocketPool.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Metroid.rc" />

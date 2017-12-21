@@ -17,8 +17,10 @@ Bullet::Bullet(TextureManager * textureM, Graphics * graphics) : BaseObject(eID:
 		throw GameError(GameErrorNS::FATAL_ERROR, "Can not init sprite Bullet");
 	}
 
+	this->indexSprite = IndexManager::getInstance()->samusYellowBulletNormal;
+	this->indexEffect = IndexManager::getInstance()->samusYellowBulletNormalColliding;
 	// Set Data for sprite
-	this->sprite->setData(IndexManager::getInstance()->samusYellowBulletNormal);
+	this->sprite->setData(indexSprite);
 	this->setOrigin(VECTOR2(0.5f, 0.5f));
 
 	this->setPosition(VECTOR2ZERO);
@@ -30,6 +32,8 @@ Bullet::Bullet(TextureManager * textureM, Graphics * graphics) : BaseObject(eID:
 	this->listCollide = new list<CollisionReturn>();
 
 	this->dame = 1; // se setup lai sau
+
+	this->distanceShoot = DISTANCE_SHOOT;
 }
 
 Bullet::Bullet()
@@ -49,13 +53,14 @@ void Bullet::onCollision()
 {
 	for (auto i = this->listCollide->begin(); i != this->listCollide->end(); i++)
 	{
-		switch (i->object->getId())
+		if (i->object->isActivitied())
 		{
-			if (i->object->isActivitied())
+			switch (i->object->getId())
 			{
-				case eID::WALL:
-					this->sprite->setData(IndexManager::getInstance()->samusYellowBulletNormalColliding);
+				case eID::WALL : case eID::GATERED:
+					this->sprite->setData(indexEffect);
 					this->isCollided = true;
+					this->velocity = VECTOR2ZERO;
 
 					switch (i->direction)
 					{
@@ -71,10 +76,12 @@ void Bullet::onCollision()
 
 					break;
 
-				case eID::GATEBLUE: case eID::GATERED:
+				case eID::GATEBLUE:
 				{
-					this->sprite->setData(IndexManager::getInstance()->samusYellowBulletNormalColliding);
+					this->sprite->setData(indexEffect);
 					this->isCollided = true;
+					this->velocity = VECTOR2ZERO;
+
 
 					GateBlue* gate = static_cast<GateBlue*>(i->object);
 					gate->setHit(true);
@@ -95,6 +102,8 @@ void Bullet::onCollision()
 					Skree* skr = static_cast<Skree*>(i->object);
 					skr->setBeHit(true);
 					skr->decreaseHealth(this->dame);
+					this->velocity = VECTOR2ZERO;
+
 					break;
 				}
 
@@ -103,6 +112,8 @@ void Bullet::onCollision()
 				{
 					Zommer* zommer = static_cast<Zommer*>((*i).object);
 					zommer->setCold(true);
+					this->velocity = VECTOR2ZERO;
+
 					break;
 				}
 
@@ -120,9 +131,9 @@ void Bullet::update(float dt)
 {
 	if (!this->isCollided)
 	{
-		if (this->distance < DISTANCE_SHOOT)
+		if (this->distance < this->distanceShoot)
 		{
-			this->distance += VELOCITY*dt;
+			this->distance += VELOCITY_BULLET*dt;
 			this->setPosition(this->getPosition().x + this->getVelocity().x*dt, this->getPosition().y + this->getVelocity().y*dt);
 			setBoundCollision();
 		}
@@ -157,6 +168,7 @@ void Bullet::setBoundCollision()
 void Bullet::init(VECTOR2 stPosition)
 {
 	this->setPosition(stPosition);
+	setBoundCollision();
 
 	this->distance = 0;
 	this->setStatus(eStatus::RUNNING);
@@ -167,14 +179,33 @@ void Bullet::returnPool()
 {
 	this->setStatus(eStatus::ENDING);
 	this->setPosition(VECTOR2ZERO);
-	this->sprite->setData(IndexManager::getInstance()->samusYellowBulletNormal);
+	setBoundCollision();
+	this->sprite->setData(indexSprite);
 	isCollided = false;
 	this->timer = 0;
 	this->isActivity = false;
+	this->velocity = VECTOR2ZERO;
 }
 
 list<CollisionReturn>* Bullet::getListCollide()
 {
 	return this->listCollide;
+}
+
+float Bullet::getDistanceShoot()
+{
+	return this->distanceShoot;
+}
+
+void Bullet::setDistanceShoot(float distan)
+{
+	this->distanceShoot = distan;
+}
+
+void Bullet::setIceBullet()
+{
+	this->indexSprite = IndexManager::getInstance()->samusPinkBulletIce;
+	this->indexEffect = IndexManager::getInstance()->samusPinkBulletIceColliding;
+	this->sprite->setData(indexSprite);
 }
 
