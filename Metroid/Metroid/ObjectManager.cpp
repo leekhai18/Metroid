@@ -87,7 +87,7 @@ void ObjectManager::onCheckCollision(float dt)
 		MetroidRect r = Camera::getInstance()->getBound();
 
 		//Get all objects that can collide with current obj
-		quadtree->retrieve(listNotWallCanCollideSamus, listObjectNotWallOnViewPort, listWallCanCollideSamus, MetroidRect(r.top + 20, r.bottom - 20, r.left - 20, r.right + 20), samus);
+		quadtree->retrieve(listNotWallCanCollideSamus, listObjectNotWallOnViewPort, listWallCanCollideSamus, MetroidRect(r.top + 40, r.bottom - 40, r.left - 40, r.right + 40), samus);
 	}
 
 	if (listObjectNotWallOnViewPort)
@@ -1224,6 +1224,10 @@ bool ObjectManager::load_list(const char * filename)
 				id = listZommerYellow[i]["id"].GetInt();
 				x = listZommerYellow[i]["x"].GetFloat() ;
 				y = listZommerYellow[i]["y"].GetFloat();
+			
+			/*	x += zmy->getSprite()->getWidth()*0.5f;
+				y = y - 16 + zmy->getSprite()->getHeight()*0.5f;*/
+
 				zmy->setPosition(VECTOR2(x, y));
 
 				zmy->setStartPosition(VECTOR2(x, y));
@@ -1278,6 +1282,9 @@ bool ObjectManager::load_list(const char * filename)
 				id = listZommerBrown[i]["id"].GetInt();
 				x = listZommerBrown[i]["x"].GetFloat();
 				y = listZommerBrown[i]["y"].GetFloat();
+
+				/*x += zmb->getSprite()->getWidth()*0.5f;
+				y = y - 16 + zmb->getSprite()->getHeight()*0.5f;*/
 				zmb->setPosition(VECTOR2(x, y));
 				zmb->setStartPosition(VECTOR2(x, y));
 				const Value& arrayWall = listZommerBrown[i]["ListCollideID"];
@@ -1329,6 +1336,8 @@ bool ObjectManager::load_list(const char * filename)
 				x = listZommerRed[i]["x"].GetFloat();
 				y = listZommerRed[i]["y"].GetFloat();
 
+				/*x += zmr->getSprite()->getWidth()*0.5f;
+				y =y - 16 + zmr->getSprite()->getHeight()*0.5f;*/
 				zmr->setPosition(VECTOR2(x, y));
 				zmr->setStartPosition(VECTOR2(x, y));
 				const Value& arrayWall = listZommerRed[i]["ListCollideID"];

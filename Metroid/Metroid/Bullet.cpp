@@ -6,6 +6,7 @@
 #include "GameLog.h"
 #include "Skree.h"
 #include "Zommer.h"
+#include "Waver.h"
 #define WIDTH_BULLET_HALF 1
 #define HEIGHT_BULLET_HALF 1
 
@@ -123,7 +124,18 @@ void Bullet::onCollision()
 					zommer->decreaseHealth(this->dame);
 					break;
 				}
-
+				case eID::WAVER:
+				{
+					Waver* waver = static_cast<Waver*>(i->object);
+					if (BulletPool::getInstance()->getCurrentIceBullet())
+					{
+						waver->setCold(true);
+					}
+					waver->setBeHit(true);
+					waver->decreaseHealth(this->dame);
+					this->velocity = VECTOR2ZERO;
+					break;
+				}
 				default:
 					break;
 			}

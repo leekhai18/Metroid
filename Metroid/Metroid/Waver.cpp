@@ -6,6 +6,7 @@
 #define WAVER_VELOCITY_X 50
 #define WAVER_ACCELERATE_Y 100
 #define TIME_TO_CHANGE_STATE 0.5f
+#define TIME_DELAY_BE_HIT 0.2f
 Waver::Waver()
 {
 
@@ -18,6 +19,7 @@ Waver::Waver(TextureManager * textureM, Graphics * graphics, EnemyColors color) 
 	{
 		throw GameError(GameErrorNS::FATAL_ERROR, "Can not init sprite Waver");
 	}
+	initialize(this->sprite, IndexManager::getInstance()->samusYellowExplosion, NUM_FRAMES_EXPLOSION, EXPLOSION_TIME_FRAME_DELAY);
 
 	switch (color)
 	{
@@ -50,7 +52,7 @@ Waver::Waver(TextureManager * textureM, Graphics * graphics, EnemyColors color) 
 	this->listWallCanCollide = new list<BaseObject*>();
 	this->listCollide = new list<CollisionReturn>();
 
-	active = true;
+	isActivity = true;
 
 
 }
@@ -76,10 +78,22 @@ void Waver::setStartPosition(VECTOR2 position)
 void Waver::reInit()
 {
 	this->setPosition(startPosition);
+	isActivity = true;
+	canDraw = true;
+	health = 2;
+	this->explosion->reInit();
+}
+void Waver::setBeHit(bool hit)
+{
+	this->beHit = hit;
+}
+void Waver::decreaseHealth(float dame)
+{
+	this->health = this->health - dame;
 }
 void Waver::handleVelocity(float dt)
 {
-	if (active)
+	if (isActivity)
 	{
 		if (directionY == WaverDirectionY::up)
 		{
@@ -122,64 +136,90 @@ void Waver::setBoundCollision()
 }
 void Waver::onCollision(float dt)
 {
-
-	for (auto i = this->listWallCanCollide->begin(); i != this->listWallCanCollide->end(); i++)
+	if (isActivity)
 	{
-		Collision::getInstance()->checkCollision(this, *i, dt);
-	}
-	for (auto x = this->listCollide->begin(); x != this->listCollide->end(); x++)
-	{
-
-		switch (x->direction)
+		for (auto i = this->listWallCanCollide->begin(); i != this->listWallCanCollide->end(); i++)
 		{
-		case CollideDirection::LEFT:
-			direction = eDirection::left;			
-			this->sprite->setFlipX(true);
-			break;
-		case CollideDirection::RIGHT:
-			direction = eDirection::right;
-			this->sprite->setFlipX(false);
-			break;
-		case CollideDirection::TOP:
-			velocity.y = 0;
-			directionY = WaverDirectionY::down;
-			break;
-		case CollideDirection::BOTTOM:
-			velocity.y = 0;
-			directionY = WaverDirectionY::up;
-			break;
+			Collision::getInstance()->checkCollision(this, *i, dt);
 		}
-	}
+		for (auto x = this->listCollide->begin(); x != this->listCollide->end(); x++)
+		{
 
-	this->listCollide->clear();
+			switch (x->direction)
+			{
+			case CollideDirection::LEFT:
+				direction = eDirection::left;
+				this->sprite->setFlipX(true);
+				break;
+			case CollideDirection::RIGHT:
+				direction = eDirection::right;
+				this->sprite->setFlipX(false);
+				break;
+			case CollideDirection::TOP:
+				velocity.y = 0;
+				directionY = WaverDirectionY::down;
+				break;
+			case CollideDirection::BOTTOM:
+				velocity.y = 0;
+				directionY = WaverDirectionY::up;
+				break;
+			}
+		}
+
+		this->listCollide->clear();
+	}
 }
 void Waver::update(float dt)
 {
-	if (this->isCold)
+	if (isActivity)
 	{
-		this->sprite->setData(this->frameID[anim->getCurrentFrame()]);
-		this->anim->setPause(true);
-		return;
-	}
-	else
-	{
-		this->anim->setPause(false);
-	}
-	this->anim->update(dt);
+		if (this->isCold)
+		{
+			this->sprite->setData(this->frameID[anim->getCurrentFrame()]);
+			this->anim->setPause(true);
+			return;
+		}
+		else
+		{
+			this->anim->setPause(false);
+		}
+		this->anim->update(dt);
 
-	if (active)
-	{
+		if (beHit)
+		{
+			timerHit += dt;
+			if (timerHit < TIME_DELAY_BE_HIT)
+			{
+				//this->animationRotate->setPause(true);
+				this->setVelocity(VECTOR2(0, 0));
+			}
+			else
+			{
+				timerHit = 0;
+				beHit = false;
+				this->anim->setPause(false);
+
+				if (this->health <= 0)
+				{
+
+					IExplosible::start();
+					this->setVelocity(VECTOR2(0, 0));
+					this->isActivity = false;
+				}
+			}
+		}
+
+	
 		// nhanh dần -> chậm dần, 1 chu kỳ thì 1 turn anim,
 		this->setPosition(VECTOR2(this->getPosition().x + this->velocity.x*dt, this->getPosition().y + this->velocity.y*dt));
 		setBoundCollision();
 
 		this->velocity.y = velocity_frame;
-
-		
-		if (this->getPosition().x  < Camera::getInstance()->getBound().left || this->getPosition().x > Camera::getInstance()->getBound().right)
-		{
-			
-		}
+	
+	}
+	if (this->getPosition().x  < Camera::getInstance()->getBound().left - 30 || this->getPosition().x > Camera::getInstance()->getBound().right + 30)
+	{
+		reInit();
 	}
 }
 
@@ -187,5 +227,9 @@ void Waver::update(float dt)
 
 void Waver::draw()
 {
-	this->sprite->draw();
+	if(canDraw)
+	{
+		this->sprite->draw();
+	}
+	
 }
