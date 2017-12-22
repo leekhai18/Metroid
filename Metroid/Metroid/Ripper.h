@@ -12,7 +12,7 @@
 #define RIPPER_COLLISION 14
 #define RIPPER_WIDTH 14
 #define RIPPER_HEIGHT 14
-class Ripper : public BaseObject
+class Ripper : public BaseObject,public IFreezable
 {
 private:
 	list<BaseObject*> *listWallCanCollide;

@@ -2,8 +2,8 @@
 #include "BaseObject.h"
 #include "Animation.h"
 #include "Samus.h"
-
-class Rio: public BaseObject
+#include "IFreezable.h"
+class Rio: public BaseObject,public IFreezable
 {
 private:
 	Animation *anim;

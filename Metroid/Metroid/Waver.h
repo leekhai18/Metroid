@@ -2,7 +2,8 @@
 #include "BaseObject.h"
 #include "Animation.h"
 #include <list>
-class Waver : public BaseObject
+#include "IFreezable.h"
+class Waver : public BaseObject,public IFreezable
 {
 private:
 	Animation* anim;

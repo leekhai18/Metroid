@@ -11,7 +11,7 @@ Waver::Waver()
 
 }
 
-Waver::Waver(TextureManager * textureM, Graphics * graphics, EnemyColors color) : BaseObject(eID::WAVER)
+Waver::Waver(TextureManager * textureM, Graphics * graphics, EnemyColors color) : BaseObject(eID::WAVER), IFreezable(IndexManager::getInstance()->waverBlue)
 {
 	this->sprite = new Sprite();
 	if (!this->sprite->initialize(graphics, textureM, SpriteManager::getInstance()))
@@ -155,6 +155,16 @@ void Waver::onCollision(float dt)
 }
 void Waver::update(float dt)
 {
+	if (this->isCold)
+	{
+		this->sprite->setData(this->frameID[anim->getCurrentFrame()]);
+		this->anim->setPause(true);
+		return;
+	}
+	else
+	{
+		this->anim->setPause(false);
+	}
 	this->anim->update(dt);
 
 	if (active)

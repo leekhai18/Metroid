@@ -7,7 +7,7 @@ Ripper::Ripper()
 {
 }
 
-Ripper::Ripper(TextureManager * textureM, Graphics * graphics, EnemyColors color) : BaseObject(eID::RIPPER)
+Ripper::Ripper(TextureManager * textureM, Graphics * graphics, EnemyColors color) : BaseObject(eID::RIPPER), IFreezable(IndexManager::getInstance()->ripperBlue)
 {
 	this->sprite = new Sprite();
 	if (!this->sprite->initialize(graphics, textureM, SpriteManager::getInstance()))
@@ -94,6 +94,12 @@ void Ripper::onCollision(float dt)
 
 void Ripper::update(float dt)
 {
+	if (this->isCold)
+	{
+		this->sprite->setData(this->frameID[IndexManager::getInstance()->ripperBlue[0]]);
+		return;
+	}
+
 	this->setPosition(VECTOR2(this->getPosition().x + this->velocity.x*dt, this->getPosition().y + this->velocity.y*dt));
 	setBoundCollision();
 }

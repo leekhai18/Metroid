@@ -51,6 +51,7 @@ void SamusStateJumping::init()
 
 void SamusStateJumping::handleInput(float dt)
 {
+	this->samus->setVelocityX(0);
 	if (!Camera::getInstance()->moveWhenSamusOnPort()) 
 	{
 #pragma region Horizontal
@@ -79,10 +80,10 @@ void SamusStateJumping::handleInput(float dt)
 			this->samus->setVelocityX(-SAMUS_VELOCITY_JUMP_X);
 		}
 
-		if ((input->isKeyUp(VK_RIGHT) && input->isKeyUp(VK_LEFT)) || (input->isKeyDown(VK_LEFT) && input->isKeyDown(VK_RIGHT)))
+		/*if ((input->isKeyUp(VK_RIGHT) && input->isKeyUp(VK_LEFT)) || (input->isKeyDown(VK_LEFT) && input->isKeyDown(VK_RIGHT)))
 		{
 			this->samus->setVelocityX(0);
-		}
+		}*/
 #pragma endregion
 
 #pragma region Vertical
@@ -456,6 +457,7 @@ void SamusStateJumping::update(float dt)
 	setBoundCollision();
 
 #pragma region ChangeState
+	int test;
 	if (this->samus->getStatus() != eStatus::JUMPING)
 	{
 		switch (this->samus->getStatus())
@@ -466,7 +468,7 @@ void SamusStateJumping::update(float dt)
 
 			break;
 		case eStatus::ACROBAT:
-			this->samus->setVelocityX(0);
+			test = 0;
 			break;
 		case eStatus::INJURING:
 			/*if(this->samus->isFaling())

@@ -5,7 +5,7 @@
 #define HEIGHT_AREA_ACTIVE 130
 #define VELOCITY_X 60
 
-Rio::Rio(TextureManager * textureM, Graphics * graphics, EnemyColors color) : BaseObject(eID::RIO)
+Rio::Rio(TextureManager * textureM, Graphics * graphics, EnemyColors color) : BaseObject(eID::RIO), IFreezable(IndexManager::getInstance()->rioBlue)
 {
 	this->sprite = new Sprite();
 	if (!this->sprite->initialize(graphics, textureM, SpriteManager::getInstance()))
@@ -55,6 +55,17 @@ Rio::~Rio()
 
 void Rio::update(float dt)
 {
+	if (this->isCold)
+	{
+		this->sprite->setData(this->frameID[anim->getCurrentFrame()]);
+		this->anim->setPause(true);
+		return;
+	}
+	else
+	{
+		this->anim->setPause(false);
+	}
+
 	this->anim->update(dt);
 
 	positionBeforeX = this->getPosition().x;

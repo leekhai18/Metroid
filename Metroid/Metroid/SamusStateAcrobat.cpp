@@ -37,6 +37,7 @@ void SamusStateAcrobat::setBoundCollision()
 }
 void SamusStateAcrobat::init()
 {
+	
 	this->animation = samus->getJumpingAnim();
 	time = 0;
 	this->position_to_jump = this->samus->getPosition().y;
@@ -45,6 +46,7 @@ void SamusStateAcrobat::init()
 
 void SamusStateAcrobat::handleInput(float dt)
 {
+	this->samus->setVelocityX(0);
 	if (!Camera::getInstance()->moveWhenSamusOnPort())
 	{
 #pragma region Horizontal
@@ -70,10 +72,10 @@ void SamusStateAcrobat::handleInput(float dt)
 			this->samus->setVelocityX(-SAMUS_VELOCITY_JUMP_X);
 		}
 
-		if ((input->isKeyUp(VK_RIGHT) && input->isKeyUp(VK_LEFT)) || (input->isKeyDown(VK_LEFT) && input->isKeyDown(VK_RIGHT)))
+		/*if ((input->isKeyUp(VK_RIGHT) && input->isKeyUp(VK_LEFT)) || (input->isKeyDown(VK_LEFT) && input->isKeyDown(VK_RIGHT)))
 		{
 			this->samus->setVelocityX(0);
-		}
+		}*/
 #pragma endregion
 
 #pragma region Vertical

@@ -16,23 +16,12 @@ class Zommer : public BaseObject,public IFreezable
 {
 private:
 	Animation *anim;
-	bool flag = true;
 	bool isCollide = false;
-	float x = 0;
-	float y = 0;
 
 	int health;
 	list<BaseObject*> *listWallCanCollide;
 	list<CollisionReturn> *listCollide;
 
-	VECTOR2 topSide;
-	VECTOR2 leftSide;
-	VECTOR2 rightSide;
-	VECTOR2 bottomSide;
-	bool ok;
-	float pos;
-
-	MetroidRect boundOfWall;
 	MetroidRect positionCollide;
 	ZommerDirection zommer_direction;
 
@@ -41,8 +30,9 @@ private:
 
 	bool isUpdate;
 
-	bool test;
-	float time;
+
+	bool beHit;
+	float timerHit;
 public:
 	Zommer(TextureManager* textureM, Graphics* graphics, EnemyColors color);
 	Zommer();

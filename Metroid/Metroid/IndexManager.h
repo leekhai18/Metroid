@@ -57,10 +57,10 @@ public:
 	const int rioRed[2] = { 27,28 };
 	const int rioBlue[2] = { 29,30 };
 
-	const int ripperYellow = 31;
+	const int ripperYellow = 31 ;
 	const int ripperBrown = 32;
 	const int ripperRed = 33;
-	const int ripperBlue = 34;
+	const int ripperBlue[1] = { 34 };
 
 	const int mellow[2] = { 35,36 };
 

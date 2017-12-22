@@ -100,10 +100,13 @@ void Bullet::onCollision()
 				case eID::SKREE:
 				{
 					Skree* skr = static_cast<Skree*>(i->object);
+					if(BulletPool::getInstance()->getCurrentIceBullet())
+					{
+						skr->setCold(true);
+					}					
 					skr->setBeHit(true);
 					skr->decreaseHealth(this->dame);
 					this->velocity = VECTOR2ZERO;
-
 					break;
 				}
 

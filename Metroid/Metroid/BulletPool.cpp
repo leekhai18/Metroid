@@ -76,6 +76,11 @@ void BulletPool::returnPool(Bullet * bullet)
 	}
 }
 
+bool BulletPool::getCurrentIceBullet()
+{
+	return this->currentIceBullet;
+}
+
 std::vector<Bullet*> BulletPool::getListUsing()
 {
 	return this->listUsing;

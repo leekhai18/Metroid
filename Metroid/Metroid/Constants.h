@@ -73,6 +73,7 @@ struct MetroidRect
 // Element ID
 enum eID {
 	SAMUS,
+	ICEBULLET,
 	BULLET,
 	SKREE,
 	ZEB,
@@ -184,4 +185,10 @@ enum ZommerGravity
 	GRAVITY_RIGHT,
 	GRAVITY_TOP,
 	GRAVITY_BOTTOM
+};
+
+enum BulletType
+{
+	NORMAL,
+	ICE
 };

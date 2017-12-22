@@ -84,7 +84,6 @@ void MotherBrain::onCollision(Samus * samus, float dt)
 }
 
 
-
 void MotherBrain::update(float dt)
 {
 	if (isActivity)

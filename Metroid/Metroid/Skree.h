@@ -3,9 +3,9 @@
 #include "Animation.h"
 #include "SkreeEffectDeath.h"
 #include "Samus.h"
+#include "IFreezable.h"
 
-
-class Skree : public BaseObject
+class Skree : public BaseObject, public IFreezable
 {
 private:
 	Animation *animationRotate;

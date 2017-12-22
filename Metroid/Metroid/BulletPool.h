@@ -26,6 +26,8 @@ public:
 	Bullet* getBullet();
 	void returnPool(Bullet* bullet);
 
+	bool getCurrentIceBullet();
+
 	std::vector<Bullet*> getListUsing();
 
 	void release();

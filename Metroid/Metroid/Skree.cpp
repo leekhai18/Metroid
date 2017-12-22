@@ -15,7 +15,7 @@
 #define TIME_DELAY_BE_HIT 0.2f
 
 
-Skree::Skree(TextureManager * textureM, Graphics * graphics, EnemyColors color) : BaseObject(eID::SKREE)
+Skree::Skree(TextureManager * textureM, Graphics * graphics, EnemyColors color) : BaseObject(eID::SKREE), IFreezable(IndexManager::getInstance()->skreeBlue)
 {
 	this->sprite = new Sprite();
 	if (!this->sprite->initialize(graphics, textureM, SpriteManager::getInstance()))
@@ -104,6 +104,18 @@ void Skree::onCollision(float dt)
 
 void Skree::update(float dt)
 {
+	//call this  in object class and set cold to true in bullet class 
+	if (this->isCold)
+	{
+		this->sprite->setData(this->frameID[animationRotate->getCurrentFrame()]);
+		this->animationRotate->setPause(true);
+		return;
+	}
+	else
+	{
+		this->animationRotate->setPause(false);
+	}
+
 	if (isActivity)
 	{
 		if (timerDeath < EFFECT_DEATH_TIME)

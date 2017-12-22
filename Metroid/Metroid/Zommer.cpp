@@ -347,12 +347,9 @@ void Zommer::update(float dt)
 			zommer_direction = ZommerDirection::LEFT_DIRECTION;
 			break;
 		case ZommerGravity::GRAVITY_RIGHT:
-			test = true;
 			this->setPosition(VECTOR2(positionCollide.left - ZOMMER_COLLISION *0.5f + 1, this->getPosition().y + this->velocity.y*dt));
 			if (zommer_direction == ZommerDirection::TOP_DIRECTION)
 			{
-				
-				pos = positionCollide.top + ZOMMER_COLLISION *0.5f;
 				gravity = ZommerGravity::GRAVITY_BOTTOM;
 				this->sprite->setRotate(0);
 				this->setPositionY(positionCollide.top + ZOMMER_COLLISION *0.5f);
@@ -376,19 +373,12 @@ void Zommer::update(float dt)
 			else
 			{
 				gravity = ZommerGravity::GRAVITY_RIGHT;
-				if (pos == (positionCollide.left - ZOMMER_COLLISION *0.5f) && !ok)
-				{
-					int test = 0;
-				}
-				ok = true;
 				this->sprite->setRotate(270);
 				this->setPositionX(positionCollide.left - ZOMMER_COLLISION *0.5f);
 			}
 			zommer_direction = ZommerDirection::TOP_DIRECTION;
 			break;
 		case ZommerGravity::GRAVITY_BOTTOM:
-			//this->velocity.x = 0;
-			time = dt;
 			this->setPosition(VECTOR2(this->positionCollide.left - ZOMMER_COLLISION *0.5f, positionCollide.top + ZOMMER_COLLISION *0.5f - 1));
 			if (zommer_direction == ZommerDirection::RIGHT_DIRECTION)
 			{
