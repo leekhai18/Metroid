@@ -15,18 +15,23 @@
 #define TIME_DELAY_BE_HIT 0.2f
 
 
-Skree::Skree(TextureManager * textureM, Graphics * graphics, EnemyColors color) : BaseObject(eID::SKREE), IFreezable(IndexManager::getInstance()->skreeBlue)
+Skree::Skree(TextureManager * textureM, Graphics * graphics, EnemyColors color) : 
+	BaseObject(eID::SKREE), IFreezable(IndexManager::getInstance()->skreeBlue)
+	
 {
 	this->sprite = new Sprite();
 	if (!this->sprite->initialize(graphics, textureM, SpriteManager::getInstance()))
 	{
 		throw GameError(GameErrorNS::FATAL_ERROR, "Can not init sprite Skree");
 	}
+
+	initialize(this->sprite, IndexManager::getInstance()->samusYellowExplosion, NUM_FRAMES_EXPLOSION, EXPLOSION_TIME_FRAME_DELAY);
+
 	this->sprite->setOrigin(VECTOR2(0.5f, 0));
 
 	beHit = false;
 	timerHit = 0;
-	this->explosion = new Animation(this->sprite, IndexManager::getInstance()->samusYellowExplosion, NUM_FRAMES_EXPLOSION, EXPLOSION_TIME_FRAME_DELAY, false);
+	//this->explosion = new Animation(this->sprite, IndexManager::getInstance()->samusYellowExplosion, NUM_FRAMES_EXPLOSION, EXPLOSION_TIME_FRAME_DELAY, false);
 
 	effectDeath = new SkreeEffectDeath(textureM, graphics);
 	timerDeath = 0;
@@ -53,7 +58,7 @@ Skree::Skree(TextureManager * textureM, Graphics * graphics, EnemyColors color) 
 	target = VECTOR2ZERO;
 
 	isActivity = true;
-	canDraw = true;
+
 }
 
 Skree::Skree()
@@ -64,7 +69,6 @@ Skree::Skree()
 Skree::~Skree()
 {
 	delete this->effectDeath;
-	delete this->explosion;
 	delete listWallCanCollide;
 	delete listCollide;
 	release();
@@ -167,7 +171,7 @@ void Skree::update(float dt)
 			timerHit += dt;
 			if (timerHit < TIME_DELAY_BE_HIT)
 			{
-				this->animationRotate->setPause(true);
+				//this->animationRotate->setPause(true);
 				this->setVelocity(VECTOR2(0, 0));
 			}
 			else
@@ -180,7 +184,7 @@ void Skree::update(float dt)
 				if (this->health <= 0)
 				{
 					this->finish();
-					this->explosion->start();
+					IExplosible::start();
 				}
 			}
 		}
@@ -191,9 +195,8 @@ void Skree::update(float dt)
 			reInit();
 	}
 
-	this->explosion->update(dt);
-	if (this->explosion->isFinished())
-		this->canDraw = false;
+	IExplosible::update(dt);
+	
 }
 
 void Skree::draw()

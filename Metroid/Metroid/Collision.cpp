@@ -29,6 +29,10 @@ bool Collision::isCollide(MetroidRect myRect, MetroidRect otherRect)
 
 bool Collision::checkCollision(BaseObject * myEntity, BaseObject * otherEntity, float frametime)
 {
+	if(!otherEntity->isActivitied())
+	{
+		return false;
+	}
 	float _dxEntry, _dyEntry, _dxExit, _dyExit;
 	float _txEntry, _tyEntry, _txExit, _tyExit;
 	MetroidRect   myRect = myEntity->getBoundCollision();

@@ -53,6 +53,11 @@ void ObjectManager::handleVelocity(float dt)
 				Waver* waver = static_cast<Waver*>(*i);
 				waver->handleVelocity(dt);
 			}
+			if ((*i)->getId() == eID::ZOMMER)
+			{
+				Zommer* zommer = static_cast<Zommer*>(*i);
+				zommer->handleVelocity(dt);
+			}
 			if ((*i)->getId() == eID::BOSSKRAID)
 			{
 				BossKraid* bossKraid = static_cast<BossKraid*>(*i);
@@ -1221,16 +1226,14 @@ bool ObjectManager::load_list(const char * filename)
 				y = listZommerYellow[i]["y"].GetFloat();
 				zmy->setPosition(VECTOR2(x, y));
 
+				zmy->setStartPosition(VECTOR2(x, y));
+
 				const Value& arrayWall = listZommerYellow[i]["ListCollideID"];
 				for (SizeType t = 0; t < arrayWall.Size(); t++)
 				{
 					zmy->getListWallCanCollide()->push_back(map_object.find(arrayWall[t].GetInt())->second);
 				}
 
-				bound.left = x;
-				bound.top = y;
-				bound.right = bound.left + zmy->getSprite()->getWidth();
-				bound.bottom = bound.top - zmy->getSprite()->getHeight();
 				zmy->setBoundCollision();
 
 				bound.bottom = listZommerYellow[i]["ba"].GetFloat();
@@ -1276,16 +1279,12 @@ bool ObjectManager::load_list(const char * filename)
 				x = listZommerBrown[i]["x"].GetFloat();
 				y = listZommerBrown[i]["y"].GetFloat();
 				zmb->setPosition(VECTOR2(x, y));
-
+				zmb->setStartPosition(VECTOR2(x, y));
 				const Value& arrayWall = listZommerBrown[i]["ListCollideID"];
 				for (SizeType t = 0; t < arrayWall.Size(); t++)
 				{
 					zmb->getListWallCanCollide()->push_back(map_object.find(arrayWall[t].GetInt())->second);
 				}
-				bound.left = x;
-				bound.top = y;
-				bound.right = bound.left + zmb->getSprite()->getWidth();
-				bound.bottom = bound.top - zmb->getSprite()->getHeight();
 				zmb->setBoundCollision();
 
 				bound.bottom = listZommerBrown[i]["ba"].GetFloat();
@@ -1331,17 +1330,12 @@ bool ObjectManager::load_list(const char * filename)
 				y = listZommerRed[i]["y"].GetFloat();
 
 				zmr->setPosition(VECTOR2(x, y));
-
+				zmr->setStartPosition(VECTOR2(x, y));
 				const Value& arrayWall = listZommerRed[i]["ListCollideID"];
 				for (SizeType t = 0; t < arrayWall.Size(); t++)
 				{
 					zmr->getListWallCanCollide()->push_back(map_object.find(arrayWall[t].GetInt())->second);
 				}
-
-				bound.left = x;
-				bound.top = y;
-				bound.right = bound.left + zmr->getSprite()->getWidth();
-				bound.bottom = bound.top - zmr->getSprite()->getHeight();
 				zmr->setBoundCollision();
 
 				bound.bottom = listZommerRed[i]["ba"].GetFloat();

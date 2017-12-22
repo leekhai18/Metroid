@@ -4,13 +4,13 @@
 #include "SkreeEffectDeath.h"
 #include "Samus.h"
 #include "IFreezable.h"
-
-class Skree : public BaseObject, public IFreezable
+#include "IExplosible.h"
+class Skree : public BaseObject, public IFreezable,public IExplosible
 {
 private:
 	Animation *animationRotate;
 	SkreeEffectDeath *effectDeath;
-	Animation *explosion;
+
 
 	VECTOR2 target;
 
@@ -18,7 +18,6 @@ private:
 
 	// support to reinit
 	VECTOR2 initPosition;
-	bool canDraw;
 
 	list<BaseObject*> *listWallCanCollide;
 	list<CollisionReturn> *listCollide;

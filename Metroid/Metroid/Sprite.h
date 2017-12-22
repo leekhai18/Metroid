@@ -12,6 +12,8 @@ protected:
 	SpriteManager *spriteManager;
 	SpriteData spriteData;  // SpriteData is defined in "graphics.h"
 	HRESULT hr;             // standard return type
+
+
 public:
 	Sprite();
 	~Sprite();
@@ -52,6 +54,7 @@ public:
 	// Return flip
 	virtual bool getFlipX() { return spriteData.flipHorizontal; }
 	virtual bool getFlipY() { return spriteData.flipVertical; }
+
 
 	////////////////////////////////////////
 	//           Set functions            //

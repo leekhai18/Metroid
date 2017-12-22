@@ -114,9 +114,13 @@ void Bullet::onCollision()
 				case eID::ZOMMER:
 				{
 					Zommer* zommer = static_cast<Zommer*>((*i).object);
-					zommer->setCold(true);
+					if (BulletPool::getInstance()->getCurrentIceBullet())
+					{
+						zommer->setCold(true);
+					}
 					this->velocity = VECTOR2ZERO;
-
+					zommer->setBeHit(true);
+					zommer->decreaseHealth(this->dame);
 					break;
 				}
 

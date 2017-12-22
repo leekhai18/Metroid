@@ -8,17 +8,18 @@
 #include "Collision.h"
 #include <map>
 #include "IFreezable.h"
+#include "IExplosible.h"
 using namespace std;
 #define ZOMMER_COLLISION 14
 #define ZOMMER_WIDTH 14
 #define ZOMMER_HEIGHT 14
-class Zommer : public BaseObject,public IFreezable
+class Zommer : public BaseObject,public IFreezable ,public IExplosible
 {
 private:
 	Animation *anim;
 	bool isCollide = false;
 
-	int health;
+	
 	list<BaseObject*> *listWallCanCollide;
 	list<CollisionReturn> *listCollide;
 
@@ -33,16 +34,24 @@ private:
 
 	bool beHit;
 	float timerHit;
+	int health;
+
+	VECTOR2 startPosition;
 public:
 	Zommer(TextureManager* textureM, Graphics* graphics, EnemyColors color);
 	Zommer();
 	~Zommer();
 	ZommerGravity getGravity();
+	void reInit();
+	void handleVelocity(float dt);
 	void setBoundCollision();
 	void onCollision(float dt);
 	void update(float dt);
 	void draw();
-	
+	void setStartPosition(VECTOR2 position);
+	void setBeHit(bool hit);
+
+	void decreaseHealth(float dame);
 
 	//void setActiveBound()
 	list<BaseObject*>* getListWallCanCollide();

@@ -55,6 +55,8 @@ bool Sprite::initialize(Graphics *g, TextureManager *textureM, SpriteManager *sp
 		spriteManager = spriteM;
 
 		spriteData.texture = textureManager->getTexture();
+
+
 	}
 	catch (...) { return false; }
 	return true;
@@ -69,6 +71,7 @@ bool Sprite::initialize(Graphics *g, TextureManager *textureM, SpriteManager *sp
 //=============================================================================
 void Sprite::draw(COLOR_ARGB color)
 {
+	
 	if (graphics == NULL)
 		return;
 
@@ -79,6 +82,7 @@ void Sprite::draw(COLOR_ARGB color)
 
 void Sprite::draw(bool isTransform, COLOR_ARGB color)
 {
+
 	if (isTransform == true)
 	{
 		this->draw();

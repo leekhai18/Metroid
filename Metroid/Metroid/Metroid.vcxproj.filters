@@ -66,6 +66,7 @@
     <ClCompile Include="MBulletPool.cpp" />
     <ClCompile Include="Rocket.cpp" />
     <ClCompile Include="RocketPool.cpp" />
+    <ClCompile Include="IExplosible.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AlienBig.h" />
@@ -135,6 +136,7 @@
     <ClInclude Include="MBulletPool.h" />
     <ClInclude Include="Rocket.h" />
     <ClInclude Include="RocketPool.h" />
+    <ClInclude Include="IExplosible.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Metroid.rc" />

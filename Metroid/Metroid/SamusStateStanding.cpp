@@ -300,6 +300,7 @@ void SamusStateStanding::onCollision(float dt)
 			break;
 		}
 		case eID::SKREE:
+		{
 			switch (i->direction)
 			{
 			case CollideDirection::TOP:
@@ -307,16 +308,18 @@ void SamusStateStanding::onCollision(float dt)
 				break;
 			}
 			Skree* skree = static_cast<Skree*>(i->object);
-			/*if (!skree->getCold())
+			if (!skree->getCold())
 			{
-				
-			}*/
+				SamusStateManager::getInstance()->setOldStatus(eStatus::STANDING);
+				this->samus->setStatus(eStatus::INJURING);
+				SamusStateManager::getInstance()->setOldState(this);
+			}
 			//this->samus->setVelocity(VECTOR2(0, 0));
-			SamusStateManager::getInstance()->setOldStatus(eStatus::STANDING);
-			this->samus->setStatus(eStatus::INJURING);
-			SamusStateManager::getInstance()->setOldState(this);
+		
 			break;
+		}
 		case eID::RIO:
+		{
 			switch (i->direction)
 			{
 			case CollideDirection::TOP:
@@ -329,7 +332,9 @@ void SamusStateStanding::onCollision(float dt)
 			this->samus->setStatus(eStatus::INJURING);
 			SamusStateManager::getInstance()->setOldState(this);
 			break;
+		}
 		case eID::RIPPER:
+		{
 			switch (i->direction)
 			{
 			case CollideDirection::TOP:
@@ -342,45 +347,55 @@ void SamusStateStanding::onCollision(float dt)
 			this->samus->setStatus(eStatus::INJURING);
 			SamusStateManager::getInstance()->setOldState(this);
 			break;
+		}
 		case eID::WAVER:
-			switch (i->direction)
-			{
-			case CollideDirection::TOP:
-				this->samus->setVelocityY(0);
-				break;
-			}
+		{
+				switch (i->direction)
+				{
+				case CollideDirection::TOP:
+					this->samus->setVelocityY(0);
+					break;
+				}
 
 			//this->samus->setVelocity(VECTOR2(0, 0));
 			SamusStateManager::getInstance()->setOldStatus(eStatus::STANDING);
 			this->samus->setStatus(eStatus::INJURING);
 			SamusStateManager::getInstance()->setOldState(this);
-			break;
-		case eID::ZEB:
-			switch (i->direction)
-			{
-			case CollideDirection::TOP:
-				this->samus->setVelocityY(0);
-				break;
-			}
-
-			//this->samus->setVelocity(VECTOR2(0, 0));
-			SamusStateManager::getInstance()->setOldStatus(eStatus::STANDING);
-			this->samus->setStatus(eStatus::INJURING);
-			SamusStateManager::getInstance()->setOldState(this);
-			break;
-		case eID::BOSSKRAID:
-			switch (i->direction)
-			{
-			case CollideDirection::TOP:
-				this->samus->setVelocityY(0);
-				break;
-			}
+			break; 
+		}
 			
+		case eID::ZEB:
+		{
+			switch (i->direction)
+			{
+			case CollideDirection::TOP:
+				this->samus->setVelocityY(0);
+				break;
+			}
+
 			//this->samus->setVelocity(VECTOR2(0, 0));
 			SamusStateManager::getInstance()->setOldStatus(eStatus::STANDING);
 			this->samus->setStatus(eStatus::INJURING);
 			SamusStateManager::getInstance()->setOldState(this);
 			break;
+		}
+			
+		case eID::BOSSKRAID:
+		{
+			switch (i->direction)
+			{
+			case CollideDirection::TOP:
+				this->samus->setVelocityY(0);
+				break;
+			}
+
+			//this->samus->setVelocity(VECTOR2(0, 0));
+			SamusStateManager::getInstance()->setOldStatus(eStatus::STANDING);
+			this->samus->setStatus(eStatus::INJURING);
+			SamusStateManager::getInstance()->setOldState(this);
+			break;
+		}
+			
 		default:
 			break;
 		}
