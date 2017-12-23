@@ -7,6 +7,9 @@
 #define WAVER_ACCELERATE_Y 100
 #define TIME_TO_CHANGE_STATE 0.5f
 #define TIME_DELAY_BE_HIT 0.2f
+#define TIME_RETURN_NOMAL 1.0f
+#define WAVER_DIMENSION 16
+#define WAVER_OFFSET 0.5f
 Waver::Waver()
 {
 
@@ -127,10 +130,10 @@ void Waver::setBoundCollision()
 {
 	MetroidRect rect;
 	VECTOR2 position(this->getPosition().x, this->getPosition().y);
-	rect.left = position.x - this->getSprite()->getWidth() *0.5f;
-	rect.right = position.x + this->getSprite()->getWidth() *0.5f;
-	rect.top = position.y + this->getSprite()->getHeight() *0.5f;
-	rect.bottom = position.y - this->getSprite()->getHeight() *0.5f;
+	rect.left = position.x - WAVER_DIMENSION *0.5f + WAVER_OFFSET;
+	rect.right = position.x + WAVER_DIMENSION *0.5f - WAVER_OFFSET;
+	rect.top = position.y + WAVER_DIMENSION *0.5f - WAVER_OFFSET;
+	rect.bottom = position.y - WAVER_DIMENSION *0.5f + WAVER_OFFSET;
 
 	this->boundCollision = rect;
 }
@@ -175,13 +178,19 @@ void Waver::update(float dt)
 	{
 		if (this->isCold)
 		{
-			this->sprite->setData(this->frameID[anim->getCurrentFrame()]);
-			this->anim->setPause(true);
-			return;
-		}
-		else
-		{
-			this->anim->setPause(false);
+			timeReturnNormal += dt;
+			if (timeReturnNormal >= TIME_RETURN_NOMAL)
+			{
+				this->anim->setPause(false);
+				this->isCold = false;
+			}
+			else
+			{
+				this->sprite->setData(this->frameID[anim->getCurrentFrame()]);
+				this->anim->setPause(true);
+				return;
+			}
+
 		}
 		this->anim->update(dt);
 
@@ -217,7 +226,8 @@ void Waver::update(float dt)
 		this->velocity.y = velocity_frame;
 	
 	}
-	if (this->getPosition().x  < Camera::getInstance()->getBound().left - 30 || this->getPosition().x > Camera::getInstance()->getBound().right + 30)
+	IExplosible::update(dt);
+	if (this->getPosition().x  < Camera::getInstance()->getBound().left - 20 || this->getPosition().x > Camera::getInstance()->getBound().right + 20)
 	{
 		reInit();
 	}

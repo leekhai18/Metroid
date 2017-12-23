@@ -3,21 +3,23 @@
 #define VELOCITY_X 120
 #define VELOCITY_Y 120
 #define TIME_FRAME_DELAY 0.2f
-
+#define TIME_DELAY_BE_HIT 0.2f
+#define TIME_RETURN_NOMAL 1.0f
 
 Zeb::Zeb()
 {
 }
 
-Zeb::Zeb(TextureManager * textureM, Graphics * graphics, EnemyColors color) : BaseObject(eID::ZEB)
+Zeb::Zeb(TextureManager * textureM, Graphics * graphics, EnemyColors color,Samus* samus) : BaseObject(eID::ZEB), IFreezable(IndexManager::getInstance()->zebBlue)
 {
+	this->samus = samus;
 	this->sprite = new Sprite();
 	if (!this->sprite->initialize(graphics, textureM, SpriteManager::getInstance()))
 	{
 		throw GameError(GameErrorNS::FATAL_ERROR, "Can not init sprite Zeb");
 	}
 	this->samusPosition = VECTOR2ZERO;
-
+	initialize(this->sprite, IndexManager::getInstance()->samusYellowExplosion, NUM_FRAMES_EXPLOSION, EXPLOSION_TIME_FRAME_DELAY);
 	switch (color)
 	{
 	case Yellow:
@@ -42,6 +44,7 @@ Zeb::Zeb(TextureManager * textureM, Graphics * graphics, EnemyColors color) : Ba
 
 	this->anim->start();
 	isActivity = true;
+	//canDraw = false;
 }
 
 
@@ -49,46 +52,125 @@ Zeb::~Zeb()
 {
 	delete this->anim;
 }
+void Zeb::reInit()
+{
+	allowFly = false;
+	isActivity = true;
+	health = 2;
+	this->setPosition(startPosition);
+	canDraw = true;
+	samusPosition = samus->getPosition();
+}
+void Zeb::handleVelocity(float dt)
+{
+	if (isActivity == true)
+	{
+		this->velocity.x = 0;
+
+		this->anim->update(dt);
+
+		if(!allowFly)
+		{
+			samusPosition = samus->getPosition();
+		}
+		if (this->getPosition().y + 50 <= this->samusPosition.y)
+		{
+			this->velocity.y = VELOCITY_Y;
+
+			this->velocity.x = 0;
+
+			direction = this->getPosition().x > this->samusPosition.x ? eDirection::left: eDirection::right ;
+
+			allowFly = true;
+			return;
+		}
+		else
+		{
+			
+		}
+		if (this->getPosition().y  >= this->samusPosition.y)
+		{
+			this->velocity.x = VELOCITY_X*direction;
+			this->velocity.y = 0;
+			//allowFly = true;
+			
+		}
+
+	}
+
+}
 
 void Zeb::update(float dt)
 {
-	if(this->getPosition().x == 4024.0f)
+	if (isActivity)
 	{
-		int test = 0;
-	}
-	if (isActivity == true)
-	{
-		this->anim->update(dt);
-
-		if (this->getPosition().y < this->samusPosition.y)
+		if (this->isCold)
 		{
-			this->setPositionY(this->getPosition().y + VELOCITY_Y*dt);
-			if (this->getPosition().y >= this->samusPosition.y && flag == false)
+			timeReturnNormal += dt;
+			if (timeReturnNormal >= TIME_RETURN_NOMAL)
 			{
-				this->velocity.x = VELOCITY_X*direction;
-				this->velocity.y = 0;
-				flag = true;
+				this->anim->setPause(false);
+				this->isCold = false;
+			}
+			else
+			{
+				this->sprite->setData(this->frameID[anim->getCurrentFrame()]);
+				this->anim->setPause(true);
+				return;
+			}
+
+		}
+
+		if (beHit)
+		{
+			timerHit += dt;
+			if (timerHit < TIME_DELAY_BE_HIT)
+			{
+				//this->animationRotate->setPause(true);
+				this->setVelocity(VECTOR2(0, 0));
+			}
+			else
+			{
+				timerHit = 0;
+				beHit = false;
+				this->anim->setPause(false);
+
+				if (this->health <= 0)
+				{
+
+					IExplosible::start();
+					this->setVelocity(VECTOR2(0, 0));
+					this->isActivity = false;
+				}
 			}
 		}
-		this->setPositionX(this->getPosition().x + velocity.x*dt);
+		this->setPosition(VECTOR2(this->getPosition().x + velocity.x*dt,
+			this->getPosition().y + velocity.y*dt));
 	}
-	else
+	if (this->getPosition().x < Camera::getInstance()->getBound().left - 20 || this->getPosition().x > Camera::getInstance()->getBound().right + 20)
 	{
-		init(this->startPosition);
-	}
-
-	if (this->getPosition().x < Camera::getInstance()->getBound().left || this->getPosition().x > Camera::getInstance()->getBound().right)
-	{
-			
-			isActivity = false;
+		reInit();
 	}
 }
 
 void Zeb::draw()
 {
-	this->sprite->draw();
+	if (isActivity)
+	{
+		if (canDraw)
+		{
+			this->sprite->draw();
+		}
+	}
 }
-
+void Zeb::setBeHit(bool hit)
+{
+	this->beHit = hit;
+}
+void Zeb::decreaseHealth(float dame)
+{
+	this->health = this->health - dame;
+}
 void Zeb::setBoundCollision()
 {
 	MetroidRect rect;
@@ -101,17 +183,16 @@ void Zeb::setBoundCollision()
 	this->boundCollision = rect;
 }
 
+
 void Zeb::setStartPosition(VECTOR2 startPosition)
 {
 	this->startPosition = startPosition;
 }
 
-void Zeb::init(VECTOR2 samusPosition)
+
+void Zeb::setTarget(VECTOR2 samusPosition)
 {
-	flag = false;
-	isActivity = true;
 	this->samusPosition = samusPosition;
-	this->velocity.x = 0;
 	if (this->getPosition().x - samusPosition.x > 0)
 	{
 		this->setDirection(eDirection::left);
@@ -120,7 +201,8 @@ void Zeb::init(VECTOR2 samusPosition)
 	else
 	{
 		this->setDirection(eDirection::right);
-		this->setScaleX(-1);
+		//this->setScaleX(-1);
 	}
 }
+
 

@@ -6,8 +6,9 @@
 
 #define DISTANCE_MOVE_FRONT_GATE 24
 
-#define SAMUS_POS_X 640
-#define SAMUS_POS_Y 1267
+//start position
+//#define SAMUS_POS_X 640
+//#define SAMUS_POS_Y 1267
 
 //Boss
 //#define SAMUS_POS_X 640
@@ -16,6 +17,14 @@
 //MotherBrain
 //#define SAMUS_POS_X 640
 //#define SAMUS_POS_Y 3656
+
+//Zeb position
+//#define SAMUS_POS_X 3810
+//#define SAMUS_POS_Y 1985
+
+//waver postision
+#define SAMUS_POS_X 3911
+#define SAMUS_POS_Y 3000
 Samus::Samus(TextureManager* textureM,Graphics* graphics, Input* input) : BaseObject(eID::SAMUS)
 {
 	this->input = input;

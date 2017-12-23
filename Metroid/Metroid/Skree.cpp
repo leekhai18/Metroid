@@ -13,7 +13,7 @@
 #define VELOCITY_Y 130
 #define OFFSET_FOLLOW 2
 #define TIME_DELAY_BE_HIT 0.2f
-
+#define TIME_RETURN_NOMAL 1.0f
 
 Skree::Skree(TextureManager * textureM, Graphics * graphics, EnemyColors color) : 
 	BaseObject(eID::SKREE), IFreezable(IndexManager::getInstance()->skreeBlue)
@@ -109,19 +109,26 @@ void Skree::onCollision(float dt)
 void Skree::update(float dt)
 {
 	//call this  in object class and set cold to true in bullet class 
-	if (this->isCold)
-	{
-		this->sprite->setData(this->frameID[animationRotate->getCurrentFrame()]);
-		this->animationRotate->setPause(true);
-		return;
-	}
-	else
-	{
-		this->animationRotate->setPause(false);
-	}
+	
 
 	if (isActivity)
 	{
+		if (this->isCold)
+		{
+			timeReturnNormal += dt;
+			if (timeReturnNormal >= TIME_RETURN_NOMAL)
+			{
+				this->animationRotate->setPause(false);
+				this->isCold = false;
+			}
+			else
+			{
+				this->sprite->setData(this->frameID[animationRotate->getCurrentFrame()]);
+				this->animationRotate->setPause(true);
+				return;
+			}
+
+		}
 		if (timerDeath < EFFECT_DEATH_TIME)
 		{
 			setBoundCollision();
@@ -165,6 +172,7 @@ void Skree::update(float dt)
 					this->finish();
 			}
 		}
+
 
 		if (beHit)
 		{

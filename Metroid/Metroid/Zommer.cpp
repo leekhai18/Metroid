@@ -5,6 +5,7 @@
 #define ZOMMER_VELOCITY_Y 45
 #define ZOMMER_OFFSET_COLLISION 0.1f
 #define TIME_DELAY_BE_HIT 0.2f
+#define TIME_RETURN_NOMAL 1.0f
 Zommer::Zommer(TextureManager * textureM, Graphics * graphics, EnemyColors color) : BaseObject(eID::ZOMMER),IFreezable(IndexManager::getInstance()->zoomerBlue)
 {
 	this->sprite = new Sprite();
@@ -338,13 +339,19 @@ void Zommer::update(float dt)
 	{
 		if (this->isCold)
 		{
-			this->sprite->setData(this->frameID[anim->getCurrentFrame()]);
-			this->anim->setPause(true);
-			return;
-		}
-		else
-		{
-			this->anim->setPause(false);
+			timeReturnNormal += dt;
+			if(timeReturnNormal >=TIME_RETURN_NOMAL)
+			{
+				this->anim->setPause(false);
+				this->isCold = false;
+			}
+			else
+			{
+				this->sprite->setData(this->frameID[anim->getCurrentFrame()]);
+				this->anim->setPause(true);
+				return;
+			}
+			
 		}
 
 		if (!gravity_bool[gravity])
@@ -460,7 +467,7 @@ void Zommer::update(float dt)
 		isUpdate = true;
 	}
 	IExplosible::update(dt);
-	if (this->getPosition().x < Camera::getInstance()->getBound().left - 30 || this->getPosition().x > Camera::getInstance()->getBound().right + 30)
+	if (this->getPosition().x < Camera::getInstance()->getBound().left - 20 || this->getPosition().x > Camera::getInstance()->getBound().right + 20)
 	{
 		reInit();
 	}

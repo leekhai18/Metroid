@@ -44,32 +44,46 @@ ObjectManager * ObjectManager::getInstance()
 }
 void ObjectManager::handleVelocity(float dt)
 {
-	if (listObjectNotWallOnViewPort)
-	{
+
 		for (list<BaseObject*>::iterator i = listObjectNotWallOnViewPort->begin(); i != listObjectNotWallOnViewPort->end(); ++i) 
 		{
-			if ((*i)->getId() == eID::WAVER)
+			switch ((*i)->getId())
+			{
+			case eID::WAVER:
 			{
 				Waver* waver = static_cast<Waver*>(*i);
 				waver->handleVelocity(dt);
+				break;
 			}
-			if ((*i)->getId() == eID::ZOMMER)
+			case eID::ZOMMER:
 			{
 				Zommer* zommer = static_cast<Zommer*>(*i);
 				zommer->handleVelocity(dt);
+				break;
 			}
-			if ((*i)->getId() == eID::BOSSKRAID)
+			case eID::BOSSKRAID:
 			{
 				BossKraid* bossKraid = static_cast<BossKraid*>(*i);
 				bossKraid->handleVelocity(dt);
+				break; 
 			}
-			if ((*i)->getId() == eID::MOTHERBRAIN)
+			case eID::MOTHERBRAIN:
 			{
 				MotherBrain* motherBrain = static_cast<MotherBrain*>(*i);
 				motherBrain->handleVelocity(dt);
+				break;
+			}
+			case eID::ZEB:
+			{
+				Zeb* zeb = static_cast<Zeb*>(*i);
+				zeb->handleVelocity(dt);
+				break;
+			}
+			default:
+				break;
 			}
 		}
-	}
+
 }
 
 void ObjectManager::onCheckCollision(float dt)
@@ -1384,7 +1398,7 @@ bool ObjectManager::load_list(const char * filename)
 		{
 			for (SizeType i = 0; i < listZebYellow.Size(); i++)
 			{
-				Zeb *zby = new Zeb(this->textureManager, this->graphics, EnemyColors::Yellow);
+				Zeb *zby = new Zeb(this->textureManager, this->graphics, EnemyColors::Yellow,samus);
 
 				id = listZebYellow[i]["id"].GetInt();
 				x = listZebYellow[i]["x"].GetFloat();
@@ -1435,7 +1449,7 @@ bool ObjectManager::load_list(const char * filename)
 		{
 			for (SizeType i = 0; i < listZebBrown.Size(); i++)
 			{
-				Zeb *zbb = new Zeb(this->textureManager, this->graphics, EnemyColors::Brown);
+				Zeb *zbb = new Zeb(this->textureManager, this->graphics, EnemyColors::Brown, samus);
 
 				id = listZebBrown[i]["id"].GetInt();
 				x = listZebBrown[i]["x"].GetFloat();
@@ -1486,7 +1500,7 @@ bool ObjectManager::load_list(const char * filename)
 		{
 			for (SizeType i = 0; i < listZebRed.Size(); i++)
 			{
-				Zeb *zbr = new Zeb(this->textureManager, this->graphics, EnemyColors::Red);
+				Zeb *zbr = new Zeb(this->textureManager, this->graphics, EnemyColors::Red, samus);
 
 				id = listZebRed[i]["id"].GetInt();
 				x = listZebRed[i]["x"].GetFloat();
@@ -1542,8 +1556,9 @@ bool ObjectManager::load_list(const char * filename)
 				id = listWaverBrown[i]["id"].GetInt();
 				x = listWaverBrown[i]["x"].GetFloat();
 				y = listWaverBrown[i]["y"].GetFloat();
+
 				wvb->setPosition(VECTOR2(x, y));
-		
+				wvb->setStartPosition(VECTOR2(x, y));
 				bound.left = x;
 				bound.top = y;
 				bound.right = bound.left + wvb->getSprite()->getWidth();
@@ -1600,7 +1615,7 @@ bool ObjectManager::load_list(const char * filename)
 				x = listWaverRed[i]["x"].GetFloat();
 				y = listWaverRed[i]["y"].GetFloat();
 				wvr->setPosition(VECTOR2(x, y));
-
+				wvr->setStartPosition(VECTOR2(x, y));
 				bound.left = x;
 				bound.top = y;
 				bound.right = bound.left + wvr->getSprite()->getWidth();

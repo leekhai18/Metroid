@@ -144,8 +144,8 @@ void Rio::update(float dt)
 
 	positionAfterX = this->getPosition().x;
 	positionAfterY = this->getPosition().y;
-	this->velocity.x = (positionAfterX - positionBeforeX) / (dt*RATE_BEZIER);
-	this->velocity.y = (positionAfterY - positionBeforeY) / (dt*RATE_BEZIER);
+	this->velocity.x = (positionAfterX - positionBeforeX) / dt;
+	this->velocity.y = (positionAfterY - positionBeforeY) / dt;
 	
 }
 

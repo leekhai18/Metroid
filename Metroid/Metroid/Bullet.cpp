@@ -7,6 +7,8 @@
 #include "Skree.h"
 #include "Zommer.h"
 #include "Waver.h"
+#include "Zeb.h"
+#include "Rio.h"
 #define WIDTH_BULLET_HALF 1
 #define HEIGHT_BULLET_HALF 1
 
@@ -133,6 +135,18 @@ void Bullet::onCollision()
 					}
 					waver->setBeHit(true);
 					waver->decreaseHealth(this->dame);
+					this->velocity = VECTOR2ZERO;
+					break;
+				}
+				case eID::ZEB:
+				{
+					Zeb* zeb = static_cast<Zeb*>(i->object);
+					if (BulletPool::getInstance()->getCurrentIceBullet())
+					{
+						zeb->setCold(true);
+					}
+					zeb->setBeHit(true);
+					zeb->decreaseHealth(this->dame);
 					this->velocity = VECTOR2ZERO;
 					break;
 				}
