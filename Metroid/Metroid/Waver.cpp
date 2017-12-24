@@ -126,6 +126,11 @@ void Waver::handleVelocity(float dt)
 	}
 
 }
+void Waver::setStartBound(MetroidRect rect)
+{
+	this->startBound = rect;
+}
+
 void Waver::setBoundCollision()
 {
 	MetroidRect rect;
@@ -170,6 +175,26 @@ void Waver::onCollision(float dt)
 		}
 
 		this->listCollide->clear();
+
+		switch (direction)
+		{
+		case eDirection::left:
+			if (boundCollision.left + velocity.x*dt <= Camera::getInstance()->getBound().left)
+			{
+				this->velocity.x = 0;
+				direction = eDirection::right;
+			}
+			break;
+		case eDirection::right:
+			if (boundCollision.right + velocity.x*dt >= Camera::getInstance()->getBound().right)
+			{
+				direction = eDirection::left;
+				this->velocity.x = 0;
+			}
+			break;
+		default:
+			break;
+		}
 	}
 }
 void Waver::update(float dt)
@@ -227,7 +252,10 @@ void Waver::update(float dt)
 	
 	}
 	IExplosible::update(dt);
-	if (this->getPosition().x  < Camera::getInstance()->getBound().left - 20 || this->getPosition().x > Camera::getInstance()->getBound().right + 20)
+
+
+	if (!Collision::getInstance()->isCollide(Camera::getInstance()->getBound(),this->startBound)
+		&& !Collision::getInstance()->isCollide(Camera::getInstance()->getBound(), this->boundCollision))
 	{
 		reInit();
 	}

@@ -37,6 +37,7 @@ private:
 	int health;
 
 	VECTOR2 startPosition;
+	MetroidRect startBound;
 public:
 	Zommer(TextureManager* textureM, Graphics* graphics, EnemyColors color);
 	Zommer();
@@ -45,6 +46,7 @@ public:
 	void reInit();
 	void handleVelocity(float dt);
 	void setBoundCollision();
+	void setStartBound(MetroidRect rect);
 	void onCollision(float dt);
 	void update(float dt);
 	void draw();

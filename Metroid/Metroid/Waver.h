@@ -18,6 +18,7 @@ private:
 	VECTOR2 startPosition;
 	bool beHit;
 	float timerHit;
+	MetroidRect startBound;
 public:
 	Waver();
 	Waver(TextureManager* textureM, Graphics* graphics, EnemyColors color);
@@ -30,6 +31,7 @@ public:
 	void setBeHit(bool hit);
 	void decreaseHealth(float dame);
 	void handleVelocity(float dt);
+	void setStartBound(MetroidRect rect);
 	void setBoundCollision();
 	void update(float dt);
 	void onCollision(float dt);

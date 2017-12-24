@@ -89,8 +89,8 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 //=============================================================================
 LRESULT WINAPI WinProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 {
-	//return (game->messageHandler(hwnd, msg, wParam, lParam));
-	return (ScenceManager::getInstance()->messageHandler(hwnd, msg, wParam, lParam));
+	return (game->messageHandler(hwnd, msg, wParam, lParam));
+	//return (ScenceManager::getInstance()->messageHandler(hwnd, msg, wParam, lParam));
 }
 
 //=============================================================================

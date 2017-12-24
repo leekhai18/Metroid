@@ -32,9 +32,7 @@ private:
 	Text* fpsText;
 	Text* opsText;
 
-	SpriteData data;
 
-	TextureManager* testM;
 
 	// support when collect items
 	bool justCollect;

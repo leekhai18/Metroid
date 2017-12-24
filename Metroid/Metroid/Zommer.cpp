@@ -1,11 +1,12 @@
 #include "Zommer.h"
-
+#include "Camera.h"
 #define TIME_FRAME_DELAY 0.15f
 #define ZOMMER_VELOCITY_X 45
 #define ZOMMER_VELOCITY_Y 45
 #define ZOMMER_OFFSET_COLLISION 0.1f
 #define TIME_DELAY_BE_HIT 0.2f
 #define TIME_RETURN_NOMAL 1.0f
+
 Zommer::Zommer(TextureManager * textureM, Graphics * graphics, EnemyColors color) : BaseObject(eID::ZOMMER),IFreezable(IndexManager::getInstance()->zoomerBlue)
 {
 	this->sprite = new Sprite();
@@ -87,6 +88,9 @@ void Zommer::reInit()
 	canDraw = true;
 	health = 2;
 	this->explosion->reInit();
+	zommer_direction = ZommerDirection::RIGHT_DIRECTION;
+	gravity = ZommerGravity::GRAVITY_BOTTOM;
+	//sprite->setData()
 }
 void Zommer::setBoundCollision()
 {
@@ -99,7 +103,10 @@ void Zommer::setBoundCollision()
 
 	this->boundCollision = rect;
 }
-
+void Zommer::setStartBound(MetroidRect rect)
+{
+	this->startBound = rect;
+}
 void Zommer::handleVelocity(float dt)
 {
 	if (isActivity)
@@ -330,7 +337,33 @@ void Zommer::onCollision(float dt)
 		}
 
 		this->listCollide->clear();
+
+		switch (zommer_direction)
+		{
+		case ZommerDirection::LEFT_DIRECTION:
+		case ZommerDirection::TOP_DIRECTION: 
+			if (boundCollision.left + velocity.x*dt <= Camera::getInstance()->getBound().left)
+			{
+				this->zommer_direction = ZommerDirection::RIGHT_DIRECTION;
+				this->velocity.x = 0;
+
+			}
+			break;
+		case ZommerDirection::RIGHT_DIRECTION:
+		case ZommerDirection::BOTTOM_DIRECTION:
+			if (boundCollision.right + velocity.x*dt >= Camera::getInstance()->getBound().right)
+			{
+				this->zommer_direction = ZommerDirection::LEFT_DIRECTION;
+				this->velocity.x = 0;
+					
+			}
+			break;
+		
+		}
+
 	}
+
+	
 }
 void Zommer::update(float dt)
 {
@@ -467,7 +500,9 @@ void Zommer::update(float dt)
 		isUpdate = true;
 	}
 	IExplosible::update(dt);
-	if (this->getPosition().x < Camera::getInstance()->getBound().left - 20 || this->getPosition().x > Camera::getInstance()->getBound().right + 20)
+
+	if (!Collision::getInstance()->isCollide(Camera::getInstance()->getBound(), this->startBound)
+		&& !Collision::getInstance()->isCollide(Camera::getInstance()->getBound(), this->boundCollision))
 	{
 		reInit();
 	}
