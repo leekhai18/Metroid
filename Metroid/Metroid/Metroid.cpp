@@ -106,6 +106,7 @@ void Metroid::handleInput(float dt)
 {
 	samus->handleInput(dt);
 	ObjectManager::getInstance()->handleVelocity(dt);
+	
 }
 
 void Metroid::collisions(float dt)
@@ -131,6 +132,32 @@ void Metroid::update(float dt)
 		ObjectManager::getInstance()->update(dt);
 		samus->update(dt);
 		this->camera->update(dt);
+		//go to boss
+		if(input->isKeyDown(VK_S))
+		{
+			
+		}
+		//go to mother brain
+
+		if (input->isKeyDown(VK_D))
+		{
+
+		}
+		//add rocket
+		if (input->isKeyDown(VK_F))
+		{
+
+		}
+		//add boom
+		if (input->isKeyDown(VK_G))
+		{
+
+		}
+		//add ice bullet
+		if (input->isKeyDown(VK_A))
+		{
+
+		}
 	}
 }
 

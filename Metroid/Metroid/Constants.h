@@ -44,9 +44,12 @@ const UCHAR ALT_KEY = VK_MENU;         // Alt key
 const UCHAR ENTER_KEY = VK_RETURN;       // Enter key
 #define VK_X 0x58
 #define VK_Z 0x5A
-
-
-										 // Source
+#define VK_D 0x44
+#define VK_S 0x53 
+#define VK_A 0x41
+#define VK_F 0x46
+#define VK_G 0x47
+// Source
 const char STARTGAME_IMAGE[] = "Resources\\SpriteSheets\\StartGame.png";
 const char SOURCE_IMAGE[] = "Resources\\SpriteSheets\\MetroidTexture.png";//character of game
 const char SOURCE_JSON[] = "json\\MetroidTexture.json"; //json file of metroid sprite
