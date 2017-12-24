@@ -57,8 +57,8 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 			}
 			else
 			{
-				//game->run(hwnd);    // run the game loop
-				ScenceManager::getInstance()->run();
+				game->run(hwnd);    // run the game loop
+				//ScenceManager::getInstance()->run();
 			}
 		}
 		SAFE_DELETE(game);     // free memory before exit

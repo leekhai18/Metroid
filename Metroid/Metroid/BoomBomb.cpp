@@ -8,6 +8,8 @@
 #include "Rio.h"
 #include "Zeb.h"
 #include "Brick.h"
+#include "BossKraid.h"
+#include "MotherBrain.h"
 #define TIME_BOM 2
 #define W_H_BOOM_HALF 8
 
@@ -29,7 +31,7 @@ BoomBomb::BoomBomb(TextureManager * textureM, Graphics * graphics) : BaseObject(
 	this->timer = 0;
 	this->listCollide = new list<BaseObject*>();
 
-	this->dame = 1; // se setup lai sau
+	this->dame = 2; // se setup lai sau
 }
 
 BoomBomb::BoomBomb()
@@ -107,6 +109,15 @@ void BoomBomb::onCollision()
 				}
 				zeb->setBeHit(true);
 				zeb->decreaseHealth(this->dame);
+				this->velocity = VECTOR2ZERO;
+				break;
+			}
+			case eID::BOSSKRAID:
+			{
+				BossKraid* bossKraid = static_cast<BossKraid*>(*i);
+
+				bossKraid->setBeHit(true);
+				bossKraid->decreaseHealth(this->dame);
 				this->velocity = VECTOR2ZERO;
 				break;
 			}

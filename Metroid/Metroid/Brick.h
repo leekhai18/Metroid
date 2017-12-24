@@ -6,6 +6,7 @@ class Brick : public BaseObject
 private:
 	
 	float timeReset;
+	list<BaseObject*>* listCanCollide;
 public:
 	Brick();
 	Brick(TextureManager* textureM, Graphics* graphics, BrickStyle style);

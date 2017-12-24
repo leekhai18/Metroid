@@ -6,6 +6,9 @@
 #define BOSSKRAID_JUMP_HEIGHT 100
 #define BOSSKRAID_OFFSET 0.1f
 #define WIDTH_ACTIVE 144.0f
+
+#define TIME_DELAY_BE_HIT 0.2f
+#define TIME_RETURN_NOMAL 1.0f
 BossKraid::BossKraid()
 {
 }
@@ -18,6 +21,8 @@ BossKraid::BossKraid(TextureManager * textureM, Graphics * graphics,Samus* samus
 		throw GameError(GameErrorNS::FATAL_ERROR, "Can not init sprite BossKraid");
 	}
 
+	initialize(this->sprite, IndexManager::getInstance()->samusYellowExplosion, NUM_FRAMES_EXPLOSION, EXPLOSION_TIME_FRAME_DELAY);
+
 	this->anim = new Animation(this->sprite, IndexManager::getInstance()->bossKraidR, NUM_FRAMES_BOSS_KRAID, 0.3f);
 	this->anim->start();
 	this->listWallCanCollide = new list<BaseObject*>();
@@ -26,14 +31,14 @@ BossKraid::BossKraid(TextureManager * textureM, Graphics * graphics,Samus* samus
 	time = 0;
 	this->samus = samus;
 	isDown = false;
-	isActivity = false;
+	isActivity = true;
 
 	this->getSprite()->setOrigin(VECTOR2(0.5, 0.5));
 	setBoundCollision();
 
 	direction = eDirection::right;
 
-	heath = 100;
+	health = 50;
 }
 
 
@@ -79,7 +84,7 @@ void BossKraid::reInit()
 		|| this->samus->isInStatus(eStatus::RUNNING) || this->samus->isInStatus(eStatus::ROLLING)))
 	{
 		this->samus->getPosition().x > this->getPosition().x ? this->sprite->setFlipX(false) : this->sprite->setFlipX(true);
-		isActivity = true;
+		//isActivity = true;
 		P1 = VECTOR2(this->getPosition().x, floor);
 
 		P3 = VECTOR2(samus->getPosition().x, floor);
@@ -133,66 +138,112 @@ void BossKraid::handleVelocity(float dt)
 			reInit();
 		}
 	}
-	else
-	{
-		reInit();
-	}
+	//else
+	//{
+	//	reInit();
+	//}
 }
 
 void BossKraid::onCollision(float dt)
 {
-	for (auto i = this->listWallCanCollide->begin(); i != this->listWallCanCollide->end(); i++)
+	if (isActivity)
 	{
-		Collision::getInstance()->checkCollision(this, *i, dt);
-	}
-
-	for (auto x = this->listCollide->begin(); x != this->listCollide->end(); x++)
-	{
-		switch (x->direction)
+		for (auto i = this->listWallCanCollide->begin(); i != this->listWallCanCollide->end(); i++)
 		{
-		case CollideDirection::LEFT:
-			//this->velocity.y
-			this->velocity.x = 0;
-			//isDown = true;
-			break;
-		case CollideDirection::RIGHT:
-			this->velocity.x = 0;
-			//isDown = true;
-			break;
-		case CollideDirection::TOP:
-			this->velocity.y = 0;
-			
-			break;
-		case CollideDirection::BOTTOM:
-			this->velocity.y = 0;
-			break;
+			Collision::getInstance()->checkCollision(this, *i, dt);
 		}
-	}
 
-	this->listCollide->clear();
+		for (auto x = this->listCollide->begin(); x != this->listCollide->end(); x++)
+		{
+			switch (x->direction)
+			{
+			case CollideDirection::LEFT:
+				//this->velocity.y
+				this->velocity.x = 0;
+				//isDown = true;
+				break;
+			case CollideDirection::RIGHT:
+				this->velocity.x = 0;
+				//isDown = true;
+				break;
+			case CollideDirection::TOP:
+				this->velocity.y = 0;
+
+				break;
+			case CollideDirection::BOTTOM:
+				this->velocity.y = 0;
+				break;
+			}
+		}
+
+		this->listCollide->clear();
+	}
 }
 
 
 void BossKraid::update(float dt)
 {
-	this->anim->update(dt);
-	this->setPosition(this->getPosition().x + this->velocity.x*dt, this->getPosition().y + this->velocity.y*dt);
-	setBoundCollision();
-	if(time == 1.0f)
+	if(isActivity)
 	{
-		isDown = true;
-		this->velocity.x = 0;
+		this->anim->update(dt);
+		if (beHit)
+		{
+			timerHit += dt;
+			if (timerHit < TIME_DELAY_BE_HIT)
+			{
+				//this->animationRotate->setPause(true);
+				this->setVelocity(VECTOR2(0, 0));
+			}
+			else
+			{
+				timerHit = 0;
+				beHit = false;
+				this->anim->setPause(false);
+
+				if (this->health <= 0)
+				{
+
+					IExplosible::start();
+					this->setVelocity(VECTOR2(0, 0));
+					this->isActivity = false;
+
+					return;
+				}
+			}
+		}
+
+		this->setPosition(this->getPosition().x + this->velocity.x*dt, this->getPosition().y + this->velocity.y*dt);
+		setBoundCollision();
+		if (time == 1.0f)
+		{
+			isDown = true;
+			this->velocity.x = 0;
+		}
+		if (this->getPosition().x - this->getSprite()->getWidth() *0.5f  < Camera::getInstance()->getBound().left ||
+			this->getPosition().x + this->getSprite()->getWidth() *0.5f> Camera::getInstance()->getBound().right)
+		{
+
+			reInit();
+		}
 	}
-	if (this->getPosition().x - this->getSprite()->getWidth() *0.5f  < Camera::getInstance()->getBound().left ||
-		this->getPosition().x + this->getSprite()->getWidth() *0.5f> Camera::getInstance()->getBound().right)
-	{
-		
-		reInit();
-	}
+	
+	
+	IExplosible::update(dt);
 }
 
 
 void BossKraid::draw()
 {
-	this->sprite->draw();
+	if (canDraw&& isActivity)
+	{
+		this->sprite->draw();
+	}
+}
+void BossKraid::setBeHit(bool hit)
+{
+	this->beHit = hit;
+}
+void BossKraid::decreaseHealth(float dame)
+{
+	this->health = this->health - dame;
 }

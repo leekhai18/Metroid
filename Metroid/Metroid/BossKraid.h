@@ -3,7 +3,8 @@
 #include "Animation.h"
 #include "Samus.h"
 #include <list>
-class BossKraid : public BaseObject
+#include "IExplosible.h"
+class BossKraid : public BaseObject,public IExplosible
 {
 private:
 	Animation *anim;
@@ -21,7 +22,10 @@ private:
 	VECTOR2 startPosition;
 	float floor;
 
-	int heath;
+
+	int health;
+	bool beHit;
+	float timerHit;
 	bool init;
 public:
 	BossKraid();
@@ -41,5 +45,7 @@ public:
 	void onCollision(float dt);
 	
 	void draw();
+	void setBeHit(bool hit);
+	void decreaseHealth(float dame);
 };
 

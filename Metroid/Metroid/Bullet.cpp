@@ -9,6 +9,8 @@
 #include "Waver.h"
 #include "Zeb.h"
 #include "Rio.h"
+#include "BossKraid.h"
+#include "MotherBrain.h"
 #define WIDTH_BULLET_HALF 1
 #define HEIGHT_BULLET_HALF 1
 
@@ -60,7 +62,7 @@ void Bullet::onCollision()
 		{
 			switch (i->object->getId())
 			{
-				case eID::WALL : case eID::GATERED:
+				case eID::WALL : case eID::GATERED: case eID::BRICK:
 					this->sprite->setData(indexEffect);
 					this->isCollided = true;
 					this->velocity = VECTOR2ZERO;
@@ -99,7 +101,7 @@ void Bullet::onCollision()
 					}
 					break;
 				}
-
+				
 				case eID::SKREE:
 				{
 					Skree* skr = static_cast<Skree*>(i->object);
@@ -147,6 +149,24 @@ void Bullet::onCollision()
 					}
 					zeb->setBeHit(true);
 					zeb->decreaseHealth(this->dame);
+					this->velocity = VECTOR2ZERO;
+					break;
+				}
+				case eID::BOSSKRAID:
+				{
+					BossKraid* bossKraid = static_cast<BossKraid*>(i->object);
+
+					bossKraid->setBeHit(true);
+					bossKraid->decreaseHealth(this->dame);
+					this->velocity = VECTOR2ZERO;
+					break;
+				}
+				case eID::MOTHERBRAIN:
+				{
+					MotherBrain* motherBrain = static_cast<MotherBrain*>(i->object);
+
+					//motherBrain->setBeHit(true);
+					//motherBrain->decreaseHealth(this->dame);
 					this->velocity = VECTOR2ZERO;
 					break;
 				}

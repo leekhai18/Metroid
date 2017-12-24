@@ -1,5 +1,7 @@
 #include "Brick.h"
-#define TIME_TO_RESET 0.5f
+#include "Collision.h"
+#define TIME_TO_RESET 5.0f
+
 Brick::Brick()
 {
 }
@@ -33,13 +35,14 @@ Brick::Brick(TextureManager * textureM, Graphics * graphics, BrickStyle style) :
 		break;
 	}
 	isActivity = true;
-
+	listCanCollide = new list<BaseObject*>();
 }
 
 
 Brick::~Brick()
 {
 	delete this->sprite;
+	delete listCanCollide;
 }
 
 
@@ -47,13 +50,28 @@ void Brick::onCollision(float dt)
 {
 	if (!this->isActivity)
 	{
-		
+		for (auto i = listCanCollide->begin(); i !=listCanCollide->end(); i++)
+		{
+			if(Collision::getInstance()->isCollide(this->boundCollision, (*i)->getBoundCollision()))
+			{
+				this->timeReset = 0;
+			}
+		}
 	}
 }
 
 void Brick::update(float dt)
 {
-	
+	if (!this->isActivity)
+	{
+		this->timeReset += dt;
+		if (timeReset >= TIME_TO_RESET)
+		{
+			timeReset = 0;
+			isActivity = true;
+		}
+	}
+
 }
 
 void Brick::draw()
