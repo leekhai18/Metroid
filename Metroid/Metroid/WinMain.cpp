@@ -1,4 +1,4 @@
-#pragma
+#pragma once
 
 #include <Windows.h>
 #include <stdlib.h>             // for detecting memory leaks
@@ -7,6 +7,7 @@
 #include "constants.h"
 #include "Metroid.h"
 #include "resource.h"
+#include "ScenceManager.h"
 
 // Function prototypes
 int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int);
@@ -39,7 +40,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 
 	try {
 		game->initialize(hwnd);     // throws GameError
-
+		ScenceManager::getInstance()->init(hwnd);
 									// main message loop
 		int done = 0;
 		while (!done)
@@ -56,20 +57,24 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 			}
 			else
 			{
-				game->run(hwnd);    // run the game loop
+				//game->run(hwnd);    // run the game loop
+				ScenceManager::getInstance()->run();
 			}
 		}
 		SAFE_DELETE(game);     // free memory before exit
+		ScenceManager::getInstance()->deleteAll();
 		return msg.wParam;
 	}
 	catch (const GameError &err)
 	{
+		ScenceManager::getInstance()->deleteAll();
 		game->deleteAll();
 		DestroyWindow(hwnd);
 		MessageBox(NULL, err.getMessage(), "Error", MB_OK);
 	}
 	catch (...)
 	{
+		ScenceManager::getInstance()->deleteAll();
 		game->deleteAll();
 		DestroyWindow(hwnd);
 		MessageBox(NULL, "Unknown error occured in game.", "Error", MB_OK);
@@ -84,7 +89,8 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 //=============================================================================
 LRESULT WINAPI WinProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 {
-	return (game->messageHandler(hwnd, msg, wParam, lParam));
+	//return (game->messageHandler(hwnd, msg, wParam, lParam));
+	return (ScenceManager::getInstance()->messageHandler(hwnd, msg, wParam, lParam));
 }
 
 //=============================================================================

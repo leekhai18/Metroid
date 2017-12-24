@@ -47,6 +47,7 @@ const UCHAR ENTER_KEY = VK_RETURN;       // Enter key
 
 
 										 // Source
+const char STARTGAME_IMAGE[] = "Resources\\SpriteSheets\\StartGame.png";
 const char SOURCE_IMAGE[] = "Resources\\SpriteSheets\\MetroidTexture.png";//character of game
 const char SOURCE_JSON[] = "json\\MetroidTexture.json"; //json file of metroid sprite
 const char MAP_BRINSTAR_JSON[] = "json\\MapBrinstar.json"; //json file of map brinstar
@@ -187,8 +188,11 @@ enum ZommerGravity
 	GRAVITY_BOTTOM
 };
 
-enum BulletType
+
+
+enum ScenceType
 {
-	NORMAL,
-	ICE
+	OPTION,
+	PLAY,
+	END
 };

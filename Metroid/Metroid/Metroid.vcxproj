@@ -163,6 +163,7 @@
     <ClInclude Include="MotherBrain.h" />
     <ClInclude Include="MotherBrainBullet.h" />
     <ClInclude Include="ObjectManager.h" />
+    <ClInclude Include="OptionScence.h" />
     <ClInclude Include="Port.h" />
     <ClInclude Include="Quadtree.h" />
     <ClInclude Include="resource.h" />
@@ -180,6 +181,8 @@
     <ClInclude Include="SamusStateRunning.h" />
     <ClInclude Include="SamusStateStanding.h" />
     <ClInclude Include="SamusStateStart.h" />
+    <ClInclude Include="Scence.h" />
+    <ClInclude Include="ScenceManager.h" />
     <ClInclude Include="Skree.h" />
     <ClInclude Include="SkreeEffectDeath.h" />
     <ClInclude Include="SkreeEffectDeathPart.h" />
@@ -231,6 +234,7 @@
     <ClCompile Include="MotherBrain.cpp" />
     <ClCompile Include="MotherBrainBullet.cpp" />
     <ClCompile Include="ObjectManager.cpp" />
+    <ClCompile Include="OptionScence.cpp" />
     <ClCompile Include="Port.cpp" />
     <ClCompile Include="Quadtree.cpp" />
     <ClCompile Include="Rio.cpp" />
@@ -247,6 +251,8 @@
     <ClCompile Include="SamusStateRunning.cpp" />
     <ClCompile Include="SamusStateStanding.cpp" />
     <ClCompile Include="SamusStateStart.cpp" />
+    <ClCompile Include="Scence.cpp" />
+    <ClCompile Include="ScenceManager.cpp" />
     <ClCompile Include="Skree.cpp" />
     <ClCompile Include="SkreeEffectDeath.cpp" />
     <ClCompile Include="SkreeEffectDeathPart.cpp" />

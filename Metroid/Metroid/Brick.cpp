@@ -1,5 +1,5 @@
 #include "Brick.h"
-
+#define TIME_TO_RESET 0.5f
 Brick::Brick()
 {
 }
@@ -32,8 +32,8 @@ Brick::Brick(TextureManager * textureM, Graphics * graphics, BrickStyle style) :
 	default:
 		break;
 	}
+	isActivity = true;
 
-	this->isVisible = true;
 }
 
 
@@ -42,17 +42,24 @@ Brick::~Brick()
 	delete this->sprite;
 }
 
+
+void Brick::onCollision(float dt)
+{
+	if (!this->isActivity)
+	{
+		
+	}
+}
+
 void Brick::update(float dt)
 {
+	
 }
 
 void Brick::draw()
 {
-	if (this->isVisible == true)
+	if (this->isActivity)
 		this->sprite->draw();
 }
 
-void Brick::setVisible(bool visible)
-{
-	this->isVisible = visible;
-}
+

@@ -53,6 +53,8 @@ void SamusStateInjuring::onCollision(float dt)
 		case eID::FIRE:
 		case eID::ELEVATOR:
 		case eID::PORT:
+		case eID::GATEBLUE:
+		case eID::GATERED:
 
 			switch (i->direction)
 			{

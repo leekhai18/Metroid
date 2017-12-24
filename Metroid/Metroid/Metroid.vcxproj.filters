@@ -67,6 +67,9 @@
     <ClCompile Include="Rocket.cpp" />
     <ClCompile Include="RocketPool.cpp" />
     <ClCompile Include="IExplosible.cpp" />
+    <ClCompile Include="ScenceManager.cpp" />
+    <ClCompile Include="Scence.cpp" />
+    <ClCompile Include="OptionScence.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AlienBig.h" />
@@ -137,6 +140,9 @@
     <ClInclude Include="Rocket.h" />
     <ClInclude Include="RocketPool.h" />
     <ClInclude Include="IExplosible.h" />
+    <ClInclude Include="ScenceManager.h" />
+    <ClInclude Include="Scence.h" />
+    <ClInclude Include="OptionScence.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Metroid.rc" />

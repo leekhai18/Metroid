@@ -21,6 +21,7 @@ Metroid::Metroid()
 
 Metroid::~Metroid()
 {
+	testM->onLostDevice();
 	textureManager->onLostDevice();
 	spriteManger->releaseAll();
 
@@ -31,6 +32,7 @@ Metroid::~Metroid()
 	delete samus;
 	delete fpsText;
 	delete opsText;
+	delete testM;
 
 	ObjectManager::getInstance()->release();
 	Collision::getInstance()->release();
@@ -74,8 +76,24 @@ void Metroid::initialize(HWND hwnd)
 	{
 		throw GameError(GameErrorNS::FATAL_ERROR, "Can not initalize map brinstar");
 	}
+	testM = new TextureManager();
+	if (!testM->initialize(graphics, STARTGAME_IMAGE))
+	{
+		throw GameError(GameErrorNS::FATAL_ERROR, "Can not load spite sheet");
+	}
 
-
+	data.origin = VECTOR2(0, 0);
+	data.width = testM->getWidth();
+	data.height = testM->getHeight();
+	RECT rect;
+	rect.top = 0;
+	rect.left = 0;
+	rect.right = testM->getWidth();
+	rect.bottom = testM->getHeight();
+	data.rect = rect;
+	data.position = VECTOR2(0, 0);
+	data.rotate = 0;
+	
 	camera = new Camera(VIEWPORT_WIDTH, VIEWPORT_HEIGHT);
 	camera->setPosition(VECTOR2(CAM_POS_X, CAM_POS_Y));
 
@@ -140,10 +158,13 @@ void Metroid::render()
 	// BEGIN
 	this->getGraphics()->spriteBegin();
 
-	samus->draw();
-	ObjectManager::getInstance()->draw();
-	mapBrinstar->draw();
+	//samus->draw();
+	//ObjectManager::getInstance()->draw();
+	//mapBrinstar->draw();
 
+	data.texture = testM->getTexture();
+
+	graphics->drawSprite(false, data, GraphicsNS::WHITE);
 	// END
 	this->getGraphics()->spriteEnd();
 

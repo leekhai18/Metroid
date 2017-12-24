@@ -4,7 +4,10 @@
 #include "GameLog.h"
 #include "Skree.h"
 #include "Zommer.h"
-
+#include "Waver.h"
+#include "Rio.h"
+#include "Zeb.h"
+#include "Brick.h"
 #define TIME_BOM 2
 #define W_H_BOOM_HALF 8
 
@@ -49,7 +52,67 @@ void BoomBomb::onCollision()
 	{
 		for (auto i = listCollide->begin(); i != listCollide->end(); i++)
 		{
-			GAMELOG("BOOOOMM");
+			switch ((*i)->getId())
+			{
+			case eID::BRICK:
+			{
+				Brick* brick = static_cast<Brick*>(*i);
+				brick->setActivity(false);
+			}
+				break;
+			case eID::SKREE:
+			{
+				Skree* skr = static_cast<Skree*>(*i);
+				if (BulletPool::getInstance()->getCurrentIceBullet())
+				{
+					skr->setCold(true);
+				}
+				skr->setBeHit(true);
+				skr->decreaseHealth(this->dame);
+				this->velocity = VECTOR2ZERO;
+				break;
+			}
+
+
+			case eID::ZOMMER:
+			{
+				Zommer* zommer = static_cast<Zommer*>((*i));
+				if (BulletPool::getInstance()->getCurrentIceBullet())
+				{
+					zommer->setCold(true);
+				}
+				this->velocity = VECTOR2ZERO;
+				zommer->setBeHit(true);
+				zommer->decreaseHealth(this->dame);
+				break;
+			}
+			case eID::WAVER:
+			{
+				Waver* waver = static_cast<Waver*>(*i);
+				if (BulletPool::getInstance()->getCurrentIceBullet())
+				{
+					waver->setCold(true);
+				}
+				waver->setBeHit(true);
+				waver->decreaseHealth(this->dame);
+				this->velocity = VECTOR2ZERO;
+				break;
+			}
+			case eID::ZEB:
+			{
+				Zeb* zeb = static_cast<Zeb*>(*i);
+				if (BulletPool::getInstance()->getCurrentIceBullet())
+				{
+					zeb->setCold(true);
+				}
+				zeb->setBeHit(true);
+				zeb->decreaseHealth(this->dame);
+				this->velocity = VECTOR2ZERO;
+				break;
+			}
+			default:
+				break;
+			}
 		}
 
 		canHandledCollision = false;
