@@ -11,6 +11,8 @@
 #include "Rio.h"
 #include "BossKraid.h"
 #include "MotherBrain.h"
+#include "AlienBig.h"
+#include "AlienSmall.h"
 #define WIDTH_BULLET_HALF 1
 #define HEIGHT_BULLET_HALF 1
 
@@ -167,6 +169,20 @@ void Bullet::onCollision()
 
 					//motherBrain->setBeHit(true);
 					//motherBrain->decreaseHealth(this->dame);
+					this->velocity = VECTOR2ZERO;
+					break;
+				}
+				case eID::ALIENBIG:
+				{
+					AlienBig* alienBig = static_cast<AlienBig*>(i->object);
+					alienBig->setBeHit();
+					this->velocity = VECTOR2ZERO;
+					break;
+				}
+				case eID::ALIENSMALL:
+				{
+					AlienSmall* alienSmall = static_cast<AlienSmall*>(i->object);
+					alienSmall->setBeHit();
 					this->velocity = VECTOR2ZERO;
 					break;
 				}

@@ -27,7 +27,7 @@ private:
 	Graphics* graphics;
 
 	Quadtree* quadtree;
-
+	int tempOK;
 	Samus* samus;
 	list<BaseObject*>* object_list;
 

@@ -1172,6 +1172,11 @@ bool ObjectManager::load_list(const char * filename)
 			y = alienBig["y"].GetFloat();
 			alienB->setPosition(VECTOR2(x, y));
 
+			const Value& arrayWall = alienBig["ListBrickID"];
+			for (SizeType t = 0; t < arrayWall.Size(); t++)
+			{
+				alienB->getListBrick()->push_back(static_cast<Brick*>(map_object.find(arrayWall[t].GetInt())->second));
+			}
 			//writer.Key("AlienBig");
 			//writer.StartObject();
 			//writer.Key("x");
@@ -1180,13 +1185,10 @@ bool ObjectManager::load_list(const char * filename)
 			//writer.Double(y);
 			//writer.EndObject();
 
-			bound.left = x;
-			bound.top = y;
-			bound.right = bound.left + alienB->getSprite()->getWidth();
-			bound.bottom = bound.top - alienB->getSprite()->getHeight();
-			alienB->setBoundCollision(bound);
 
-			alienB->setActiveBound(bound);
+			alienB->setBoundCollision();
+
+			alienB->setActiveBound(alienB->getBoundCollision());
 
 			object_list->push_back(alienB);
 
@@ -1197,11 +1199,20 @@ bool ObjectManager::load_list(const char * filename)
 		const Value& alienSmall = jSon["AlienSmall"];
 		if (alienSmall.IsObject())
 		{
-			AlienSmall *alienS = new AlienSmall(this->textureManager, this->graphics);
+			
 
 			id = alienSmall["id"].GetInt();
 			x = alienSmall["x"].GetFloat();
 			y = alienSmall["y"].GetFloat();
+
+			const Value& alienBigID = alienSmall["AlienBigID"];
+			AlienBig* big = NULL;
+
+			
+			big = static_cast<AlienBig*>((map_object.find(alienSmall["AlienBigID"].GetInt())->second));
+			
+
+			AlienSmall *alienS = new AlienSmall(this->textureManager, this->graphics,big);
 			alienS->setPosition(VECTOR2(x, y));
 
 			//writer.Key("AlienSmall");
@@ -1216,9 +1227,9 @@ bool ObjectManager::load_list(const char * filename)
 			bound.top = y;
 			bound.right = bound.left + alienS->getSprite()->getWidth();
 			bound.bottom = bound.top - alienS->getSprite()->getHeight();
-			alienS->setBoundCollision(bound);
-
-			alienS->setActiveBound(bound);
+			
+			alienS->setBoundCollision();
+			alienS->setActiveBound(alienS->getBoundCollision());
 
 			object_list->push_back(alienS);
 

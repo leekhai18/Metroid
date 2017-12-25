@@ -207,6 +207,8 @@ void SamusStateJumping::onCollision(float dt)
 		case eID::BRICK:
 		case eID::FIRE:
 		case eID::ELEVATOR:
+		case eID::ALIENBIG:
+		case eID::ALIENSMALL:
 			switch (i->direction)
 			{
 			case CollideDirection::LEFT:

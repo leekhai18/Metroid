@@ -3,7 +3,7 @@
 #include "ObjectManager.h"
 #include "Collision.h"
 #include "GameDebug.h"
-
+#include "BulletPool.h"
 #define TIME_DELAY_WHEN_COLLECT_ITEM 1
 
 Metroid::Metroid()
@@ -137,6 +137,7 @@ void Metroid::update(float dt)
 		{
 			samus->setPosition(VECTOR2(960, 4250));
 			Camera::getInstance()->setPosition(VECTOR2(912, 4208));
+			BulletPool::getInstance()->setIceBullet();
 			this->samus->setMariMaru(true);
 		}
 		//go to mother brain
