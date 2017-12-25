@@ -35,6 +35,7 @@ Brick::Brick(TextureManager * textureM, Graphics * graphics, BrickStyle style) :
 		break;
 	}
 	isActivity = true;
+	visible = true;
 	listCanCollide = new list<BaseObject*>();
 }
 
@@ -45,10 +46,22 @@ Brick::~Brick()
 	delete listCanCollide;
 }
 
+bool Brick::getVisible()
+{
+	return this->visible;
+}
+
+
+
+
+void Brick::setVisible(bool visible)
+{
+	this->visible = visible;
+}
 
 void Brick::onCollision(float dt)
 {
-	if (!this->isActivity)
+	if (!this->isActivity&&visible)
 	{
 		for (auto i = listCanCollide->begin(); i !=listCanCollide->end(); i++)
 		{
@@ -62,7 +75,7 @@ void Brick::onCollision(float dt)
 
 void Brick::update(float dt)
 {
-	if (!this->isActivity)
+	if (!this->isActivity&&visible)
 	{
 		this->timeReset += dt;
 		if (timeReset >= TIME_TO_RESET)
@@ -76,7 +89,7 @@ void Brick::update(float dt)
 
 void Brick::draw()
 {
-	if (this->isActivity)
+	if (this->isActivity&&visible)
 		this->sprite->draw();
 }
 

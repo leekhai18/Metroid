@@ -633,7 +633,7 @@ bool ObjectManager::load_list(const char * filename)
 				bb->setPosition(VECTOR2(x, y));
 
 				isVisible = listBrickBlue[i]["visible"].GetBool();
-				//bb->setVisible(isVisible);
+				bb->setVisible(isVisible);
 
 				//writer.StartObject();
 				//writer.Key("x");

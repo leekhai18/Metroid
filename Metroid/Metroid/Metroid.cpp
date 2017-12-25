@@ -132,16 +132,19 @@ void Metroid::update(float dt)
 		ObjectManager::getInstance()->update(dt);
 		samus->update(dt);
 		this->camera->update(dt);
-		//go to boss
+		//go to boss draik
 		if(input->isKeyDown(VK_S))
 		{
-			
+			samus->setPosition(VECTOR2(960, 4250));
+			Camera::getInstance()->setPosition(VECTOR2(912, 4208));
+			this->samus->setMariMaru(true);
 		}
 		//go to mother brain
 
 		if (input->isKeyDown(VK_D))
 		{
-
+			samus->setPosition(VECTOR2(640,3656));
+			Camera::getInstance()->setPosition(VECTOR2());
 		}
 		//add rocket
 		if (input->isKeyDown(VK_F))

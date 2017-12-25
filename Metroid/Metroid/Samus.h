@@ -118,12 +118,20 @@ private:
 
 
 	bool canGoElevator;
+
+	bool isHitAlienSmall;
+
+	bool isHitAlienBig;
 public:
 	float timerShoot;
 
 	Samus(TextureManager* textureM, Graphics* graphics, Input* input);
 	Samus();
 	~Samus();
+
+	void setHitAlienSmall(bool hit);
+
+	void setHitAlienBig(bool hit);
 
 	void handleInput(float dt);
 	void onCollision(float dt);

@@ -85,6 +85,7 @@ void Waver::reInit()
 	canDraw = true;
 	health = 2;
 	this->explosion->reInit();
+	this->anim->setPause(false);
 }
 void Waver::setBeHit(bool hit)
 {
@@ -224,7 +225,7 @@ void Waver::update(float dt)
 			timerHit += dt;
 			if (timerHit < TIME_DELAY_BE_HIT)
 			{
-				//this->animationRotate->setPause(true);
+				this->anim->setPause(true);
 				this->setVelocity(VECTOR2(0, 0));
 			}
 			else

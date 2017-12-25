@@ -11,8 +11,8 @@
 //#define SAMUS_POS_Y 1267
 
 //Boss
-//#define SAMUS_POS_X 640
-//#define SAMUS_POS_Y 4210
+//#define SAMUS_POS_X 960
+//#define SAMUS_POS_Y 4250
 
 //MotherBrain
 //#define SAMUS_POS_X 640
@@ -103,6 +103,15 @@ Samus::~Samus()
 {
 	this->release();
 	SamusStateManager::getInstance()->release();
+}
+
+void Samus::setHitAlienSmall(bool hit)
+{
+	
+}
+
+void Samus::setHitAlienBig(bool hit)
+{
 }
 
 void Samus::handleInput(float dt)

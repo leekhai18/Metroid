@@ -84,7 +84,8 @@ void Zommer::reInit()
 	this->isActivity = true;
 	isUpdate = true;
 	this->setPosition(startPosition);
-	this->anim->setPause(true);
+
+	this->anim->setPause(false);
 	canDraw = true;
 	health = 2;
 	this->explosion->reInit();
@@ -470,7 +471,7 @@ void Zommer::update(float dt)
 			timerHit += dt;
 			if (timerHit < TIME_DELAY_BE_HIT)
 			{
-				//this->animationRotate->setPause(true);
+				this->anim->setPause(true);
 				this->setVelocity(VECTOR2(0, 0));
 			}
 			else

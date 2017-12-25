@@ -5,7 +5,7 @@
 #include "BoomBombPool.h"
 #include "GateBlue.h"
 #include "GateRed.h"
-
+#include "Brick.h"
 #define TIME_START_BOMB 0.1f
 
 SamusStateRolling::SamusStateRolling()
@@ -130,11 +130,11 @@ void SamusStateRolling::onCollision(float dt)
 	{
 		switch (i->object->getId())
 		{
-		case eID::WALL:
-		case eID::BRICK:
+		
+			
+		case eID::WALL:	
 		case eID::FIRE:
 		case eID::ELEVATOR:
-
 			switch (i->direction)
 			{
 			case CollideDirection::LEFT:
@@ -166,6 +166,45 @@ void SamusStateRolling::onCollision(float dt)
 			}
 			break;
 
+
+		case eID::BRICK: 
+		{
+			Brick* brick = static_cast<Brick*>(i->object);
+			if (brick->getVisible())
+			{
+				switch (i->direction)
+				{
+				case CollideDirection::LEFT:
+
+					if (this->samus->getBoundCollision().bottom < i->object->getBoundCollision().top)
+					{
+						this->samus->setVelocityX(0);
+						//not allow move left
+						this->samus->setCanMoveRight(false);
+					}
+
+					break;
+				case CollideDirection::RIGHT:
+
+					if (this->samus->getBoundCollision().bottom < i->object->getBoundCollision().top)
+					{
+						this->samus->setVelocityX(0);
+						//not allow move right
+						this->samus->setCanMoveLeft(false);
+					}
+					break;
+				case CollideDirection::TOP:
+					this->samus->setVelocityY(0);
+
+					this->samus->setPositionY(i->positionCollision + OFFSET_ROLLING);
+					canStanding = true;
+					move_to_fall = false;
+					break;
+				}
+
+			}
+			break; 
+		}
 #pragma region GATE and PORT
 		case eID::GATEBLUE: case eID::GATERED:
 		{
