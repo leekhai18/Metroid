@@ -435,6 +435,65 @@ void SamusStateJumping::onCollision(float dt)
 			break;
 		}
 		case eID::SKREE:
+		{
+			Skree* skree = static_cast<Skree*>(i->object);
+			
+			if (skree->getCold())
+			{
+				switch (i->direction)
+				{
+				case CollideDirection::LEFT:
+
+					this->samus->setCanMoveRight(false);
+					this->samus->setVelocityX(0);
+					break;
+				case CollideDirection::RIGHT:
+					this->samus->setCanMoveLeft(false);
+					this->samus->setVelocityX(0);
+					break;
+				case CollideDirection::TOP:
+					jumpDistance = 0;
+					//set jump = false, when user release jump button set to true
+					this->samus->setCanJump(false);
+					//set fall to false
+					this->samus->setFall(false);
+					//reset velocity
+					this->samus->setVelocityY(0);
+					positionCollide = i->positionCollision;
+					this->samus->setStatus(eStatus::STANDING);
+					break;
+				case CollideDirection::BOTTOM:
+					/*if(this->samus->isFaling())
+					{
+					break;
+					}*/
+					jumpDistance = 0;
+					this->samus->setFall(true);
+					addY = i->positionCollision;
+					this->samus->setVelocityY(0);
+
+					this->samus->setPositionY(addY - OFFSET_JUMP);
+					break;
+				}
+				break;
+			}
+			else if (skree->getExplose())
+			{
+				skree->setCanDraw(false);
+				skree->setActivity(false);
+			}
+			else
+			{
+				if (!skree->getHandle())
+				{
+					return;
+				}
+				SamusStateManager::getInstance()->setOldStatus(eStatus::JUMPING);
+				this->samus->setStatus(eStatus::INJURING);
+				SamusStateManager::getInstance()->setOldState(this);
+			}
+			break;
+		}
 		case eID::RIO:
 		case eID::RIPPER:
 		{

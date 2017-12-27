@@ -127,7 +127,7 @@ void Zommer::setStartBound(MetroidRect rect)
 }
 void Zommer::handleVelocity(float dt)
 {
-	if (isHandle && !this->isCold)
+	if (isHandle && !this->isCold&&isActivity)
 	{
 		switch (gravity)
 		{
@@ -189,7 +189,7 @@ void Zommer::handleVelocity(float dt)
 
 void Zommer::onCollision(float dt)
 {
-	if (isHandle && !this->isCold)
+	if (isHandle && !this->isCold&&isActivity)
 	{
 		/*for (auto i = this->listCanCollide->begin(); i != this->listCanCollide->end(); i++)
 		{

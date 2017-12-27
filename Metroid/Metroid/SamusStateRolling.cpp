@@ -319,7 +319,7 @@ void SamusStateRolling::onCollision(float dt)
 			}
 			else
 			{
-				SamusStateManager::getInstance()->setOldStatus(eStatus::RUNNING);
+				SamusStateManager::getInstance()->setOldStatus(eStatus::ROLLING);
 				this->samus->setStatus(eStatus::INJURING);
 				SamusStateManager::getInstance()->setOldState(this);
 			}
@@ -353,13 +353,52 @@ void SamusStateRolling::onCollision(float dt)
 			}
 			else
 			{
-				SamusStateManager::getInstance()->setOldStatus(eStatus::RUNNING);
+				SamusStateManager::getInstance()->setOldStatus(eStatus::ROLLING);
 				this->samus->setStatus(eStatus::INJURING);
 				SamusStateManager::getInstance()->setOldState(this);
 			}
 			break;
 		}
+
 		case eID::SKREE:
+		{
+			Skree* skree = static_cast<Skree*>(i->object);
+			if (!skree->getHandle())
+			{
+				return;
+			}
+			if (skree->getCold())
+			{
+				switch (i->direction)
+				{
+				case CollideDirection::LEFT:
+					this->samus->setVelocityX(0);
+					//not allow move left
+					this->samus->setCanMoveRight(false);
+					break;
+				case CollideDirection::RIGHT:
+					this->samus->setVelocityX(0);
+					//not allow move right
+					this->samus->setCanMoveLeft(false);
+					break;
+				case CollideDirection::TOP:
+					this->samus->setVelocityY(0);
+					break;
+				}
+			}
+			else if (skree->getExplose())
+			{
+				skree->setCanDraw(false);
+				skree->setActivity(false);
+			}
+			else
+			{
+				SamusStateManager::getInstance()->setOldStatus(eStatus::ROLLING);
+				this->samus->setStatus(eStatus::INJURING);
+				SamusStateManager::getInstance()->setOldState(this);
+			}
+			break;
+		}
 		case eID::RIO:
 		case eID::RIPPER:
 		

@@ -17,7 +17,10 @@ class Ripper : public BaseObject,public IFreezable
 private:
 	map<int,BaseObject*> *listWallCanCollide;
 	list<CollisionReturn> *listCollide;
+
 	int resetFrame;
+
+	bool isHandle;
 public:
 	Ripper();
 	Ripper(TextureManager* textureM, Graphics* graphics, EnemyColors color);

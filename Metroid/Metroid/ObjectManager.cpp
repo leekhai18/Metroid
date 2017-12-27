@@ -29,7 +29,7 @@
 #include "rapidjson-master\include\rapidjson\ostreamwrapper.h"
 
 
-#define TIME_RETRIEVE 0.6f
+#define TIME_RETRIEVE 0.5f
 
 ObjectManager* ObjectManager::instance = nullptr;
 
@@ -137,8 +137,15 @@ void ObjectManager::handleVelocity(float dt)
 		case eID::RIO:
 		{
 			Rio* rio = static_cast<Rio*>((*i).second);
+			rio->setTarget(samus->getPosition());
 			rio->handleVelocity(dt);
 			break;
+		}
+		case eID::SKREE:
+		{
+			Skree* skr = static_cast<Skree*>((*i).second);
+			skr->setTarget(samus->getPosition());
+			skr->handleVelocity(dt);
 		}
 		default:
 			break;
@@ -276,23 +283,9 @@ void ObjectManager::update(float dt)
 		for (auto i = listObjectNotWallOnViewPort->begin(); i != listObjectNotWallOnViewPort->end(); ++i)
 		{
 			BaseObject* object = (*i).second;
-			if (object->getId() == eID::SKREE)
-			{
-				Skree* skr = static_cast<Skree*>(object);
-				skr->setTarget(samus->getPosition());
-			}
+			
 
-			if (object->getId() == eID::RIO)
-			{
-				Rio* rio = static_cast<Rio*>(object);
-				rio->setTarget(samus->getPosition());
-			}
 
-			if (object->getId() == eID::ZEB)
-			{
-				Zeb* zeb = static_cast<Zeb*>(object);
-
-			}
 
 			object->update(dt);
 		}
@@ -1711,7 +1704,7 @@ bool ObjectManager::load_list(const char * filename)
 				sky->setInitPosition(VECTOR2(x + sky->getSprite()->getWidth()*0.5f, y));
 
 				sky->setBoundCollision();
-
+				//sky->setStartBound(sky->getBoundCollision());
 				/*const Value& arrayWall = listSkreeYellow[i]["ListCollideID"];
 				for (SizeType t = 0; t < arrayWall.Size(); t++)
 				{
@@ -1762,7 +1755,7 @@ bool ObjectManager::load_list(const char * filename)
 				skb->setInitPosition(VECTOR2(x + skb->getSprite()->getWidth()*0.5f, y));
 
 				skb->setBoundCollision();
-
+				//skb->setStartBound(skb->getBoundCollision());
 				/*const Value& arrayWall = listSkreeBrown[i]["ListCollideID"];
 				for (SizeType t = 0; t < arrayWall.Size(); t++)
 				{
@@ -1969,7 +1962,7 @@ bool ObjectManager::load_list(const char * filename)
 				x = listRioYellow[i]["x"].GetFloat();
 				y = listRioYellow[i]["y"].GetFloat();
 
-				roy->initPositions(VECTOR2(x, y));
+				roy->reInit(VECTOR2(x, y));
 
 				roy->setBoundCollision();
 				roy->setStartBound(roy->getBoundCollision());
@@ -2015,7 +2008,7 @@ bool ObjectManager::load_list(const char * filename)
 				x = listRioBrown[i]["x"].GetFloat();
 				y = listRioBrown[i]["y"].GetFloat();
 
-				rob->initPositions(VECTOR2(x, y));
+				rob->reInit(VECTOR2(x, y));
 
 				rob->setBoundCollision();
 				rob->setStartBound(rob->getBoundCollision());
@@ -2063,7 +2056,7 @@ bool ObjectManager::load_list(const char * filename)
 
 				y = y - 16 + ror->getSprite()->getHeight()*0.5f;
 				x = x + ror->getSprite()->getWidth()*0.5f;
-				ror->initPositions(VECTOR2(x, y));
+				ror->reInit(VECTOR2(x, y));
 
 				ror->setBoundCollision();
 				ror->setStartBound(ror->getBoundCollision());

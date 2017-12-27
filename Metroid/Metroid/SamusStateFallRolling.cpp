@@ -176,7 +176,7 @@ void SamusStateFallRolling::onCollision(float dt)
 			}
 			else
 			{
-				SamusStateManager::getInstance()->setOldStatus(eStatus::RUNNING);
+				SamusStateManager::getInstance()->setOldStatus(eStatus::FALLING_ROLLING);
 				this->samus->setStatus(eStatus::INJURING);
 				SamusStateManager::getInstance()->setOldState(this);
 			}
@@ -210,7 +210,7 @@ void SamusStateFallRolling::onCollision(float dt)
 			}
 			else
 			{
-				SamusStateManager::getInstance()->setOldStatus(eStatus::RUNNING);
+				SamusStateManager::getInstance()->setOldStatus(eStatus::FALLING_ROLLING);
 				this->samus->setStatus(eStatus::INJURING);
 				SamusStateManager::getInstance()->setOldState(this);
 			}

@@ -344,6 +344,7 @@ void SamusStateRunning::onCollision(float dt)
 		case eID::SKREE:
 		{
 			Skree* skree = static_cast<Skree*>(i->object);
+			
 			if (skree->getCold())
 			{
 				switch (i->direction)
@@ -370,6 +371,10 @@ void SamusStateRunning::onCollision(float dt)
 			}
 			else
 			{
+				if (!skree->getHandle())
+				{
+					return;
+				}
 				SamusStateManager::getInstance()->setOldStatus(eStatus::RUNNING);
 				this->samus->setStatus(eStatus::INJURING);
 				SamusStateManager::getInstance()->setOldState(this);

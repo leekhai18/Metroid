@@ -32,6 +32,10 @@ private:
 	int health;
 	MetroidRect startBound;
 	
+	int resetFrame;
+	bool isHandle;
+	bool beHit;
+	float timerHit;
 public:
 	Rio(TextureManager* textureM, Graphics* graphics, EnemyColors color);
 	Rio();
@@ -42,10 +46,12 @@ public:
 	void setBoundCollision();
 
 	VECTOR2 getTarget();
+	void setBeHit(bool hit);
+	void decreaseHealth(float dame);
 	void setStartPosition(VECTOR2 position);
 	void setStartBound(MetroidRect rect);
 	void setTarget(VECTOR2 target);
 
-	void initPositions(VECTOR2 stP);
+	void reInit(VECTOR2 stP);
 };
 

@@ -19,6 +19,8 @@ private:
 
 	// support to reinit
 	VECTOR2 initPosition;
+	bool isHandle;
+
 
 	map<int,BaseObject*> *listWallCanCollide;
 	list<CollisionReturn> *listCollide;
@@ -34,11 +36,14 @@ public:
 	bool checkCollision(Samus* sam, float dt);
 	void onCollision(Samus* sam); // check collision skree's bullets with samus
 
+	void handleVelocity(float dt);
 	void onCollision(float dt);
 	void update(float dt);
 	void draw();
 	void release();
 
+
+	bool getHandle();
 	VECTOR2 getTarget();
 	void setTarget(VECTOR2 target);
 

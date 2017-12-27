@@ -41,6 +41,7 @@ Ripper::Ripper(TextureManager * textureM, Graphics * graphics, EnemyColors color
 	this->listWallCanCollide = new map<int,BaseObject*>();
 	this->listCollide = new list<CollisionReturn>();
 
+	this->isHandle = true;
 }
 
 

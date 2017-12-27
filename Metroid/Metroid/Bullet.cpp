@@ -106,24 +106,33 @@ void Bullet::onCollision()
 				
 				case eID::SKREE:
 				{
-					
 					this->isCollided = true;
 					this->velocity = VECTOR2ZERO;
-					Skree* skr = static_cast<Skree*>(i->object);
-					if(BulletPool::getInstance()->getCurrentIceBullet())
+					this->sprite->setData(indexEffect);
+					Skree* skree = static_cast<Skree*>((*i).object);
+					/*if (!skree->getHandle())
 					{
-						if (skr->getCold())
+						break;
+					}*/
+					if (!skree->getCold())
+					{
+						skree->setBeHit(true);
+						skree->decreaseHealth(this->dame);
+						
+					}
+					if (BulletPool::getInstance()->getCurrentIceBullet())
+					{
+						if (skree->getCold())
 						{
-							skr->setCold(false);
-							this->sprite->setData(indexEffect);
+							skree->setCold(false);
+							
 						}
 						else
 						{
-							skr->setCold(true);
+							skree->setCold(true);
 						}
-					}					
-					skr->setBeHit(true);
-					skr->decreaseHealth(this->dame);
+					}
+
 					break;
 				}
 
@@ -177,7 +186,7 @@ void Bullet::onCollision()
 							zommer->setCold(true);
 						}
 					}
-				
+					
 					break;
 				}
 				case eID::WAVER:

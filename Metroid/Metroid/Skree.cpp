@@ -13,7 +13,7 @@
 #define VELOCITY_Y 130
 #define OFFSET_FOLLOW 2
 #define TIME_DELAY_BE_HIT 0.2f
-#define TIME_RETURN_NOMAL 1.0f
+#define TIME_RETURN_NOMAL 5.0f
 
 Skree::Skree(TextureManager * textureM, Graphics * graphics, EnemyColors color) : 
 	BaseObject(eID::SKREE), IFreezable(IndexManager::getInstance()->skreeBlue)
@@ -60,7 +60,8 @@ Skree::Skree(TextureManager * textureM, Graphics * graphics, EnemyColors color) 
 	target = VECTOR2ZERO;
 
 	isActivity = true;
-
+	isExplose = false;
+	isHandle = true;
 }
 
 Skree::Skree()
@@ -93,51 +94,10 @@ void Skree::onCollision(Samus* sam) // handle collide with skree's bullet
 	}
 }
 
-void Skree::onCollision(float dt)
+void Skree::handleVelocity(float dt)
 {
-	/*for (auto i = this->listCanCollide->begin(); i != this->listCanCollide->end(); i++)
+	if (isActivity&&isHandle&&!this->isCold)
 	{
-		BaseObject* x = (*i).second;
-		Collision::getInstance()->checkCollision(this, x, dt);
-	}*/
-
-	if (listCollide->size() != 0)
-	{
-		this->setStatus(eStatus::ENDING);
-	}
-
-	this->listCollide->clear();
-}
-
-void Skree::update(float dt)
-{
-	//call this  in object class and set cold to true in bullet class 
-	
-
-	if (isActivity)
-	{
-		if (this->isCold)
-		{
-			timeReturnNormal += dt;
-			if (timeReturnNormal >= TIME_RETURN_NOMAL)
-			{
-				this->animationRotate->setPause(false);
-				this->isCold = false;
-			}
-			else
-			{
-				this->sprite->setData(this->frameID[animationRotate->getCurrentFrame()]);
-				this->animationRotate->setPause(true);
-				return;
-			}
-
-		}
-		if (timerDeath < EFFECT_DEATH_TIME)
-		{
-			setBoundCollision();
-			this->animationRotate->update(dt);
-		}
-
 		if (this->target != VECTOR2ZERO && this->isInStatus(eStatus::START)) // check init
 		{
 			this->setStatus(eStatus::FALLING);
@@ -153,9 +113,69 @@ void Skree::update(float dt)
 				this->setVelocityX(VELOCITY_X);
 			if (this->getPosition().x > target.x - OFFSET_FOLLOW && this->getPosition().x < target.x + OFFSET_FOLLOW) // in bound offset
 				this->setVelocityX(0);
+
 			
-			this->setPosition(this->getPosition().x + this->getVelocity().x*dt, this->getPosition().y + this->getVelocity().y*dt);
 		}
+	}
+}
+
+void Skree::onCollision(float dt)
+{
+	/*for (auto i = this->listCanCollide->begin(); i != this->listCanCollide->end(); i++)
+	{
+		BaseObject* x = (*i).second;
+		Collision::getInstance()->checkCollision(this, x, dt);
+	}*/
+	if (isActivity&&isHandle && !this->isCold)
+	{
+		for (auto i = listCollide->begin(); i != listCollide->end(); i++)
+		{
+			switch (i->direction)
+			{
+			case CollideDirection::TOP:
+				this->setStatus(eStatus::ENDING);
+				this->velocity = VECTOR2ZERO;
+				break;
+			default:
+				break;
+			}
+		}
+		this->listCollide->clear();
+	}
+
+
+}
+
+void Skree::update(float dt)
+{
+	//call this  in object class and set cold to true in bullet class 
+	
+
+	if (isActivity&&isHandle)
+	{
+		if (this->isCold)
+		{
+			timeReturnNormal += dt;
+			if (timeReturnNormal >= TIME_RETURN_NOMAL)
+			{
+				this->animationRotate->setPause(false);
+				this->isCold = false;
+			}
+			else
+			{
+				this->sprite->setData(this->frameID[animationRotate->getCurrentFrame()]);
+				this->animationRotate->setPause(true);
+				this->setVelocity(VECTOR2(0, 0));
+				return;
+			}
+
+		}
+		if (timerDeath < EFFECT_DEATH_TIME)
+		{
+			this->animationRotate->update(dt);
+		}
+
+		
 
 		if (this->isInStatus(eStatus::ENDING))
 		{
@@ -172,7 +192,12 @@ void Skree::update(float dt)
 				this->effectDeath->update(dt);
 
 				if (this->effectDeath->isFinished())
+				{
 					this->finish();
+					isHandle = false;
+					//IBonusable::start();
+				}
+					
 			}
 		}
 
@@ -195,10 +220,14 @@ void Skree::update(float dt)
 				if (this->health <= 0)
 				{
 					this->finish();
+					//isReleaseBullet = true;
 					IExplosible::start();
+					isHandle = false;
 				}
 			}
 		}
+		this->setPosition(this->getPosition().x + this->getVelocity().x*dt, this->getPosition().y + this->getVelocity().y*dt);
+		setBoundCollision();
 	}
 	else
 	{
@@ -213,7 +242,7 @@ void Skree::update(float dt)
 	else
 	{
 		IExplosible::update(dt);
-		if (isExplose)
+		if(isExplose)
 		{
 			IBonusable::start();
 		}
@@ -235,6 +264,12 @@ void Skree::release()
 {
 	delete this->animationRotate;
 	delete this->sprite;
+}
+
+
+bool Skree::getHandle()
+{
+	return isHandle;
 }
 
 VECTOR2 Skree::getTarget()
@@ -274,6 +309,11 @@ void Skree::reInit()
 {
 	canDraw = true;
 	isActivity = true;
+	isHandle = true;
+	isCold = false;
+	this->animationRotate->setPause(false);
+	this->explosion->setPause(false);
+	//this->explosion->setPause(false);
 	this->setPosition(initPosition);
 	this->setStatus(eStatus::START);
 	this->target = VECTOR2ZERO;
@@ -282,11 +322,13 @@ void Skree::reInit()
 	this->velocity = VECTOR2ZERO;
 	this->health = 2;
 	this->explosion->reInit();
+	timeReturnNormal = 0;
+	isExplose = false;
 }
 
 void Skree::finish()
 {
-	isActivity = false;
+	isHandle = false;
 	this->effectDeath->setPosition(VECTOR2ZERO);
 }
 

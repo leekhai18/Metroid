@@ -3,8 +3,8 @@
 #include <d3d9.h>
 #include "Constants.h"
 ////start position
-//#define CAM_POS_X 640
-//#define CAM_POS_Y 1320
+#define CAM_POS_X 640
+#define CAM_POS_Y 1320
 
 //#define CAM_POS_X 640//6144
 //#define CAM_POS_Y 3656//2992//
@@ -17,8 +17,8 @@
 //#define CAM_POS_Y 2040
 
 //waver postision
-#define CAM_POS_X 3911
-#define CAM_POS_Y 3000
+//#define CAM_POS_X 3911
+//#define CAM_POS_Y 3000
 class Camera
 {
 private:
