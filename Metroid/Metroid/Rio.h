@@ -44,7 +44,7 @@ public:
 	void update(float dt);
 	void draw();
 	void setBoundCollision();
-
+	bool getHandle();
 	VECTOR2 getTarget();
 	void setBeHit(bool hit);
 	void decreaseHealth(float dame);

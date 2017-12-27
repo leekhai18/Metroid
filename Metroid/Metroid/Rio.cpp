@@ -150,7 +150,7 @@ void Rio::handleVelocity(float dt)
 
 void Rio::update(float dt)
 {
-	if (isHandle)
+	if (isHandle&&isActivity)
 	{
 		if (this->isCold)
 		{
@@ -231,6 +231,11 @@ void Rio::setBoundCollision()
 	this->boundCollision = rect;
 }
 
+bool Rio::getHandle()
+{
+	return this->isHandle;
+}
+
 void Rio::draw()
 {
 	this->sprite->draw();
@@ -277,7 +282,7 @@ void Rio::reInit(VECTOR2 stP)
 	this->isActivity = true;
 	isHandle = true;
 	this->setPosition(startPosition);
-
+	this->explosion->setPause(false);
 	this->anim->setPause(false);
 	
 	IBonusable::reInit();

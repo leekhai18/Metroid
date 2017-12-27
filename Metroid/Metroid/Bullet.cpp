@@ -135,7 +135,37 @@ void Bullet::onCollision()
 
 					break;
 				}
+				case eID::RIO:
+				{
+					this->isCollided = true;
+					this->velocity = VECTOR2ZERO;
+					this->sprite->setData(indexEffect);
+					Rio* rio = static_cast<Rio*>((*i).object);
+					/*if (!skree->getHandle())
+					{
+					break;
+					}*/
+					if (!rio->getCold())
+					{
+						rio->setBeHit(true);
+						rio->decreaseHealth(this->dame);
 
+					}
+					if (BulletPool::getInstance()->getCurrentIceBullet())
+					{
+						if (rio->getCold())
+						{
+							rio->setCold(false);
+
+						}
+						else
+						{
+							rio->setCold(true);
+						}
+					}
+
+					break;
+				}
 				case eID::RIPPER:
 				{
 					
