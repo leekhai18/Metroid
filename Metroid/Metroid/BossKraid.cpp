@@ -13,7 +13,7 @@ BossKraid::BossKraid()
 {
 }
 
-BossKraid::BossKraid(TextureManager * textureM, Graphics * graphics,Samus* samus) : BaseObject(eID::BOSSKRAID)
+BossKraid::BossKraid(TextureManager * textureM, Graphics * graphics, Samus* samus) : BaseObject(eID::BOSSKRAID)
 {
 	this->sprite = new Sprite();
 	if (!this->sprite->initialize(graphics, textureM, SpriteManager::getInstance()))
@@ -21,16 +21,16 @@ BossKraid::BossKraid(TextureManager * textureM, Graphics * graphics,Samus* samus
 		throw GameError(GameErrorNS::FATAL_ERROR, "Can not init sprite BossKraid");
 	}
 
-	initialize(this->sprite, IndexManager::getInstance()->samusYellowExplosion, NUM_FRAMES_EXPLOSION, EXPLOSION_TIME_FRAME_DELAY);
+	initExplosion(this->sprite, IndexManager::getInstance()->samusYellowExplosion, NUM_FRAMES_EXPLOSION, EXPLOSION_TIME_FRAME_DELAY);
 
 	this->anim = new Animation(this->sprite, IndexManager::getInstance()->bossKraidR, NUM_FRAMES_BOSS_KRAID, 0.3f);
 	this->anim->start();
-	this->listWallCanCollide = new list<BaseObject*>();
+	this->listWallCanCollide = new map<int,BaseObject*>();
 	this->listCollide = new list<CollisionReturn>();
 
 	time = 0;
 	this->samus = samus;
-	isDown = false;
+	isDown = true;
 	isActivity = true;
 
 	this->getSprite()->setOrigin(VECTOR2(0.5, 0.5));
@@ -38,7 +38,7 @@ BossKraid::BossKraid(TextureManager * textureM, Graphics * graphics,Samus* samus
 
 	direction = eDirection::right;
 
-	health = 50;
+	health = 2;
 }
 
 
@@ -48,9 +48,11 @@ BossKraid::~BossKraid()
 {
 	delete this->anim;
 	delete this->sprite;
+	delete this->listCollide;
+	delete this->listWallCanCollide;
 }
 
-list<BaseObject*>* BossKraid::getListWallCanCollide()
+map<int,BaseObject*>* BossKraid::getListWallCanCollide()
 {
 	return this->listWallCanCollide;
 }
@@ -70,7 +72,7 @@ void BossKraid::setBoundCollision()
 	MetroidRect rect;
 	VECTOR2 position(this->getPosition().x, this->getPosition().y);
 	rect.left = position.x - this->getSprite()->getWidth() *0.5f + BOSSKRAID_OFFSET;
-	rect.right = position.x + this->getSprite()->getWidth() *0.5f -BOSSKRAID_OFFSET;
+	rect.right = position.x + this->getSprite()->getWidth() *0.5f - BOSSKRAID_OFFSET;
 	rect.top = position.y + this->getSprite()->getHeight() *0.5f - BOSSKRAID_OFFSET;
 	rect.bottom = position.y - this->getSprite()->getHeight() *0.5f + BOSSKRAID_OFFSET;
 
@@ -80,7 +82,7 @@ void BossKraid::setBoundCollision()
 void BossKraid::reInit()
 {
 	floor = this->getPosition().y - this->getSprite()->getHeight() *0.5f;
-	if (samus->getPosition().x - this->getPosition().x <= WIDTH_ACTIVE&&( this->samus->isInStatus(eStatus::STANDING)
+	if (samus->getPosition().x - this->getPosition().x <= WIDTH_ACTIVE && (this->samus->isInStatus(eStatus::STANDING)
 		|| this->samus->isInStatus(eStatus::RUNNING) || this->samus->isInStatus(eStatus::ROLLING)))
 	{
 		this->samus->getPosition().x > this->getPosition().x ? this->sprite->setFlipX(false) : this->sprite->setFlipX(true);
@@ -102,39 +104,39 @@ void BossKraid::calculateBezier()
 }
 void BossKraid::handleVelocity(float dt)
 {
-	
+
 	if (isActivity)
 	{
-		
+
 		if (!isDown)
 		{
 			this->beforePosition = this->getPosition();
-			if(time >1)
+			if (time > 1)
 			{
-				int test =0;
+				int test = 0;
 			}
 			time += dt * RATE_BEZIER;
 			if (time >= 1.0f)
 			{
 				time = 1.0f;
 			}
-			
+
 			this->afterPosition = ((1 - time)*(1 - time)*P1 + 2 * (1 - time)*time*P2 + time*time*P3);
 
 			//if(time !=0)
-			if(direction==eDirection::right)
+			if (direction == eDirection::right)
 			{
-				this->velocity = (this->afterPosition - this->beforePosition)/dt ;
+				this->velocity = (this->afterPosition - this->beforePosition) / dt;
 			}
 			else
 			{
 				this->velocity = (this->beforePosition - this->afterPosition) / dt;
 			}
-		
+
 		}
 		else
 		{
-			
+
 			reInit();
 		}
 	}
@@ -148,11 +150,12 @@ void BossKraid::onCollision(float dt)
 {
 	if (isActivity)
 	{
-		for (auto i = this->listWallCanCollide->begin(); i != this->listWallCanCollide->end(); i++)
+		/*for (auto i = this->listCanCollide->begin(); i != this->listCanCollide->end(); i++)
 		{
-			Collision::getInstance()->checkCollision(this, *i, dt);
+			BaseObject* x = (*i).second;
+			Collision::getInstance()->checkCollision(this, x, dt);
 		}
-
+*/
 		for (auto x = this->listCollide->begin(); x != this->listCollide->end(); x++)
 		{
 			switch (x->direction)
@@ -183,33 +186,24 @@ void BossKraid::onCollision(float dt)
 
 void BossKraid::update(float dt)
 {
-	if(isActivity)
+	if (isActivity)
 	{
 		this->anim->update(dt);
 		if (beHit)
 		{
-			timerHit += dt;
-			if (timerHit < TIME_DELAY_BE_HIT)
+
+			timerHit = 0;
+			beHit = false;
+			this->anim->setPause(false);
+
+			if (this->health <= 0)
 			{
-				//this->animationRotate->setPause(true);
+
+				IExplosible::start();
 				this->setVelocity(VECTOR2(0, 0));
+				this->isActivity = false;
 			}
-			else
-			{
-				timerHit = 0;
-				beHit = false;
-				this->anim->setPause(false);
 
-				if (this->health <= 0)
-				{
-
-					IExplosible::start();
-					this->setVelocity(VECTOR2(0, 0));
-					this->isActivity = false;
-
-					return;
-				}
-			}
 		}
 
 		this->setPosition(this->getPosition().x + this->velocity.x*dt, this->getPosition().y + this->velocity.y*dt);
@@ -219,22 +213,20 @@ void BossKraid::update(float dt)
 			isDown = true;
 			this->velocity.x = 0;
 		}
-		if (this->getPosition().x - this->getSprite()->getWidth() *0.5f  < Camera::getInstance()->getBound().left ||
-			this->getPosition().x + this->getSprite()->getWidth() *0.5f> Camera::getInstance()->getBound().right)
-		{
+		//if (this->getPosition().x - this->getSprite()->getWidth() *0.5f  < Camera::getInstance()->getBound().left ||
+		//	this->getPosition().x + this->getSprite()->getWidth() *0.5f> Camera::getInstance()->getBound().right)
+		//{
 
-			reInit();
-		}
+		//	reInit();
+		//}
 	}
-	
-	
 	IExplosible::update(dt);
 }
 
 
 void BossKraid::draw()
 {
-	if (canDraw&& isActivity)
+	if (!isExplose)
 	{
 		this->sprite->draw();
 	}

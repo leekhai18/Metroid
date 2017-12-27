@@ -3,7 +3,9 @@
 #include "Animation.h"
 #include "Samus.h"
 #include "IFreezable.h"
-class Rio: public BaseObject,public IFreezable
+#include "IExplosible.h"
+#include "IBonusable.h"
+class Rio: public BaseObject,public IFreezable,public IExplosible,public IBonusable
 {
 private:
 	Animation *anim;

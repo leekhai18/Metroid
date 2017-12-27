@@ -70,6 +70,7 @@
     <ClCompile Include="ScenceManager.cpp" />
     <ClCompile Include="Scence.cpp" />
     <ClCompile Include="OptionScence.cpp" />
+    <ClCompile Include="IBonusable.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AlienBig.h" />
@@ -143,6 +144,7 @@
     <ClInclude Include="ScenceManager.h" />
     <ClInclude Include="Scence.h" />
     <ClInclude Include="OptionScence.h" />
+    <ClInclude Include="IBonusable.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Metroid.rc" />

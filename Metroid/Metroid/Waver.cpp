@@ -7,7 +7,7 @@
 #define WAVER_ACCELERATE_Y 100
 #define TIME_TO_CHANGE_STATE 0.5f
 #define TIME_DELAY_BE_HIT 0.2f
-#define TIME_RETURN_NOMAL 1.0f
+#define TIME_RETURN_NOMAL 5.0f
 #define WAVER_DIMENSION 16
 #define WAVER_OFFSET 0.5f
 Waver::Waver()
@@ -22,18 +22,20 @@ Waver::Waver(TextureManager * textureM, Graphics * graphics, EnemyColors color) 
 	{
 		throw GameError(GameErrorNS::FATAL_ERROR, "Can not init sprite Waver");
 	}
-	initialize(this->sprite, IndexManager::getInstance()->samusYellowExplosion, NUM_FRAMES_EXPLOSION, EXPLOSION_TIME_FRAME_DELAY);
-
+	initExplosion(this->sprite, IndexManager::getInstance()->samusYellowExplosion, NUM_FRAMES_EXPLOSION, EXPLOSION_TIME_FRAME_DELAY);
+	this->initItem(this->sprite, IndexManager::getInstance()->en, NUM_FRAMES_BONUS, TIME_FRAME_DELAY);
 	switch (color)
 	{
 	case Brown:
 		anim = new Animation(this->sprite, IndexManager::getInstance()->waverBrown, NUM_FRAMES_WAVER, TIME_FRAME_DELAY);
 		health = 4;
+		resetFrame = IndexManager::getInstance()->waverBrown[0];
 		break;
 
 	case Red:
 		anim = new Animation(this->sprite, IndexManager::getInstance()->waverRed, NUM_FRAMES_WAVER, TIME_FRAME_DELAY);
 		health = 8;
+		resetFrame = IndexManager::getInstance()->waverRed[0];
 		break;
 
 	default:
@@ -46,26 +48,28 @@ Waver::Waver(TextureManager * textureM, Graphics * graphics, EnemyColors color) 
 
 	this->sprite->setOrigin(VECTOR2(0.5, 0.5));
 
-	this->velocity_frame = MAX_WAVER_VELOCITY_Y;
 
 	direction = eDirection::left;
 	directionY = WaverDirectionY::up;
+	this->velocity_frame = MAX_WAVER_VELOCITY_Y*directionY;
 
 	this->velocity = VECTOR2(WAVER_VELOCITY_X*direction, MAX_WAVER_VELOCITY_Y*directionY);
-	this->listWallCanCollide = new list<BaseObject*>();
+	this->listWallCanCollide = new map<int, BaseObject*>();
 	this->listCollide = new list<CollisionReturn>();
 
 	isActivity = true;
 
-
+	isHandle = true;
 }
 
 
 Waver::~Waver()
 {
 	delete anim;
+	delete listWallCanCollide;
+	delete listCollide;
 }
-list<BaseObject*>* Waver::getListWallCanCollide()
+map<int, BaseObject*>* Waver::getListWallCanCollide()
 {
 	return this->listWallCanCollide;
 }
@@ -81,11 +85,13 @@ void Waver::setStartPosition(VECTOR2 position)
 void Waver::reInit()
 {
 	this->setPosition(startPosition);
-	isActivity = true;
-	canDraw = true;
-	health = 2;
-	this->explosion->reInit();
+	isHandle = true;
+	IBonusable::reInit();
+	IExplosible::reInit();
+	health = 4;
+	this->isActivity = true;
 	this->anim->setPause(false);
+	this->sprite->setData(resetFrame);
 }
 void Waver::setBeHit(bool hit)
 {
@@ -97,8 +103,9 @@ void Waver::decreaseHealth(float dame)
 }
 void Waver::handleVelocity(float dt)
 {
-	if (isActivity)
+	if (isHandle&&!this->isCold&&isActivity)
 	{
+		this->velocity.y = velocity_frame;
 		if (directionY == WaverDirectionY::up)
 		{
 			this->velocity_frame = velocity.y - WAVER_ACCELERATE_Y*dt;
@@ -145,12 +152,13 @@ void Waver::setBoundCollision()
 }
 void Waver::onCollision(float dt)
 {
-	if (isActivity)
+	if (isHandle&&!this->isCold&&isActivity)
 	{
-		for (auto i = this->listWallCanCollide->begin(); i != this->listWallCanCollide->end(); i++)
+		/*for (auto i = this->listCanCollide->begin(); i != this->listCanCollide->end(); i++)
 		{
-			Collision::getInstance()->checkCollision(this, *i, dt);
-		}
+			BaseObject* x = (*i).second;
+			Collision::getInstance()->checkCollision(this, x, dt);
+		}*/
 		for (auto x = this->listCollide->begin(); x != this->listCollide->end(); x++)
 		{
 
@@ -200,7 +208,7 @@ void Waver::onCollision(float dt)
 }
 void Waver::update(float dt)
 {
-	if (isActivity)
+	if (isHandle&&isActivity)
 	{
 		if (this->isCold)
 		{
@@ -213,7 +221,8 @@ void Waver::update(float dt)
 			else
 			{
 				this->sprite->setData(this->frameID[anim->getCurrentFrame()]);
-				this->anim->setPause(true);
+				//this->anim->setPause(true);
+				this->setVelocity(VECTOR2(0, 0));
 				return;
 			}
 
@@ -233,13 +242,13 @@ void Waver::update(float dt)
 				timerHit = 0;
 				beHit = false;
 				this->anim->setPause(false);
-
 				if (this->health <= 0)
 				{
 
 					IExplosible::start();
 					this->setVelocity(VECTOR2(0, 0));
-					this->isActivity = false;
+					this->isHandle = false;
+					this->isCold = false;
 				}
 			}
 		}
@@ -249,10 +258,20 @@ void Waver::update(float dt)
 		this->setPosition(VECTOR2(this->getPosition().x + this->velocity.x*dt, this->getPosition().y + this->velocity.y*dt));
 		setBoundCollision();
 
-		this->velocity.y = velocity_frame;
-	
 	}
-	IExplosible::update(dt);
+
+	if (isExplose)
+	{
+		IBonusable::update(dt);
+	}
+	else
+	{
+		IExplosible::update(dt);
+		if (isExplose)
+		{
+			IBonusable::start();
+		}
+	}
 
 
 	if (!Collision::getInstance()->isCollide(Camera::getInstance()->getBound(),this->startBound)
@@ -271,4 +290,9 @@ void Waver::draw()
 		this->sprite->draw();
 	}
 	
+}
+
+bool Waver::getHandle()
+{
+	return this->isHandle;
 }

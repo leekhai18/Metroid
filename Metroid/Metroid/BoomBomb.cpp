@@ -44,7 +44,6 @@ BoomBomb::~BoomBomb()
 	delete this->sprite;
 	delete this->anim;
 	delete this->explosion;
-	this->listCollide->clear();
 	delete this->listCollide;
 }
 

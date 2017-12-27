@@ -144,23 +144,23 @@ void Metroid::update(float dt)
 
 		if (input->isKeyDown(VK_D))
 		{
-			samus->setPosition(VECTOR2(640,3656));
-			Camera::getInstance()->setPosition(VECTOR2());
+			//samus->setPosition(VECTOR2(640,3656));
+			//Camera::getInstance()->setPosition(VECTOR2());
 		}
 		//add rocket
 		if (input->isKeyDown(VK_F))
 		{
-
+			samus->setNumRocket(10);
 		}
 		//add boom
 		if (input->isKeyDown(VK_G))
 		{
-
+			samus->setBomb(true);
 		}
 		//add ice bullet
 		if (input->isKeyDown(VK_A))
 		{
-
+			BulletPool::getInstance()->setIceBullet();
 		}
 	}
 }

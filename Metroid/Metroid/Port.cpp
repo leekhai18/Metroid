@@ -16,6 +16,7 @@ Port::~Port()
 void Port::update(float dt)
 {
 	Camera::getInstance()->setNumPort(Camera::getInstance()->getNumPort() + 1);
+
 }
 
 void Port::draw()
@@ -25,6 +26,25 @@ void Port::draw()
 	{
 		Camera::getInstance()->setCanFollowOnRight(false);
 		Camera::getInstance()->setCanFollowOnLeft(false);
+		if (isReset)
+		{
+			if (this->boundCollision.left + PORT_WIDTH_HALF - OFFSET_X_CAM < Camera::getInstance()->getBound().right &&
+				this->boundCollision.left + PORT_WIDTH_HALF + OFFSET_X_CAM > Camera::getInstance()->getBound().right)
+			{
+				Camera::getInstance()->setPosition(VECTOR2(this->boundCollision.left + PORT_WIDTH_HALF - VIEWPORT_WIDTH*0.5f,
+					Camera::getInstance()->getPosition().y));
+				isReset = false;
+			}
+			if (this->boundCollision.right - PORT_WIDTH_HALF + OFFSET_X_CAM > Camera::getInstance()->getBound().left &&
+				this->boundCollision.right - PORT_WIDTH_HALF - OFFSET_X_CAM < Camera::getInstance()->getBound().left)
+			{
+				Camera::getInstance()->setPosition(VECTOR2(this->boundCollision.right - PORT_WIDTH_HALF + VIEWPORT_WIDTH*0.5f,
+					Camera::getInstance()->getPosition().y));
+				isReset = false;
+			}
+		
+		}
+
 	}
 	else
 	{
@@ -33,7 +53,7 @@ void Port::draw()
 			if (Camera::getInstance()->getPosition().x < this->boundCollision.left) // port ben phai
 			{
 				if (this->boundCollision.left + PORT_WIDTH_HALF - OFFSET_X_CAM < Camera::getInstance()->getBound().right &&
-						this->boundCollision.left + PORT_WIDTH_HALF + OFFSET_X_CAM > Camera::getInstance()->getBound().right)
+					this->boundCollision.left + PORT_WIDTH_HALF + OFFSET_X_CAM > Camera::getInstance()->getBound().right)
 				{
 					Camera::getInstance()->setCanFollowOnRight(false);
 					Camera::getInstance()->setCanFollowOnLeft(true);
@@ -48,13 +68,14 @@ void Port::draw()
 				else
 				{
 					Camera::getInstance()->setCanFollowOnRight(true);
+					//Camera::getInstance()->setCanFollowOnLeft(false);
 					isSetUpPosition = false;
 				}
 			}
 			else // port ben trai
 			{
 				if (this->boundCollision.right - PORT_WIDTH_HALF + OFFSET_X_CAM > Camera::getInstance()->getBound().left &&
-						this->boundCollision.right - PORT_WIDTH_HALF - OFFSET_X_CAM < Camera::getInstance()->getBound().left)
+					this->boundCollision.right - PORT_WIDTH_HALF - OFFSET_X_CAM < Camera::getInstance()->getBound().left)
 				{
 					Camera::getInstance()->setCanFollowOnLeft(false);
 					Camera::getInstance()->setCanFollowOnRight(true);
@@ -69,6 +90,7 @@ void Port::draw()
 				else
 				{
 					Camera::getInstance()->setCanFollowOnLeft(true);
+					//Camera::getInstance()->setCanFollowOnRight(false);
 					isSetUpPosition = false;
 				}
 
@@ -80,6 +102,9 @@ void Port::draw()
 	{
 		Camera::getInstance()->setPosition(VECTOR2(Camera::getInstance()->getPosition().x, this->boundCollision.top - OFFSET_Y_CAM));
 		isSetUpPosition = false;
+		Camera::getInstance()->setCanFollowOnLeft(true);
+		Camera::getInstance()->setCanFollowOnRight(true);
+		isReset = true;
 	}
 #pragma endregion
 }

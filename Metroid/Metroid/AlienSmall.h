@@ -13,6 +13,7 @@ public:
 	~AlienSmall();
 	void setBeHit();
 	void setBoundCollision();
+	//void setActiveBound();
 	void update(float dt);
 	void draw();
 };

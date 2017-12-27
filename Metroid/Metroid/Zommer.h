@@ -9,18 +9,19 @@
 #include <map>
 #include "IFreezable.h"
 #include "IExplosible.h"
+#include "IBonusable.h"
 using namespace std;
 #define ZOMMER_COLLISION 14
 #define ZOMMER_WIDTH 14
 #define ZOMMER_HEIGHT 14
-class Zommer : public BaseObject,public IFreezable ,public IExplosible
+class Zommer : public BaseObject,public IFreezable ,public IExplosible,public IBonusable
 {
 private:
 	Animation *anim;
 	bool isCollide = false;
-
 	
-	list<BaseObject*> *listWallCanCollide;
+	
+	map<int,BaseObject*>* listWallCanCollide;
 	list<CollisionReturn> *listCollide;
 
 	MetroidRect positionCollide;
@@ -30,20 +31,22 @@ private:
 	ZommerGravity gravity;
 
 	bool isUpdate;
-
-
 	bool beHit;
 	float timerHit;
 	int health;
 
 	VECTOR2 startPosition;
 	MetroidRect startBound;
+	bool isHandle;
+
+	int reset;
 public:
 	Zommer(TextureManager* textureM, Graphics* graphics, EnemyColors color);
 	Zommer();
 	~Zommer();
 	ZommerGravity getGravity();
 	void reInit();
+	bool getHandle();
 	void handleVelocity(float dt);
 	void setBoundCollision();
 	void setStartBound(MetroidRect rect);
@@ -55,8 +58,8 @@ public:
 
 	void decreaseHealth(float dame);
 
-	//void setActiveBound()
-	list<BaseObject*>* getListWallCanCollide();
+	//void setActiveBound();
+	map<int, BaseObject*>* getListWallCanCollide();
 	list<CollisionReturn> *getListCollide();
 };
 

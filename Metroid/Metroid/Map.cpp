@@ -34,30 +34,38 @@ void Map::draw()
 	int columnEnd = columnBegin + Camera::getInstance()->getWidth() / tileW + 2;
 	int rowBegin = (int) ((MAP_HEIGHT - viewport.top) / tileH);
 	int rowEnd = rowBegin + Camera::getInstance()->getHeight() / tileH + 1;
-
+	
+	if(columnEnd > 480)
+	{
+		columnEnd = 480;
+	}
 #pragma region set direction for following of camera
-	if (mapCell[rowBegin-1][columnBegin + 1].rect == NULL && mapCell[rowEnd][columnBegin + 1].rect != NULL)
+	if (mapCell[rowBegin - 1][columnBegin + 1].rect == NULL && mapCell[rowEnd][columnBegin + 1].rect != NULL &&
+		mapCell[rowBegin - 1][columnBegin + 16].rect == NULL && mapCell[rowEnd][columnBegin + 16].rect != NULL)
 	{
 		Camera::getInstance()->setCanFollowToUp(false);
 		Camera::getInstance()->setCanFollowToDown(true);
 		Camera::getInstance()->setCanFollowOnLeft(false);
 		Camera::getInstance()->setCanFollowOnRight(false);
 	}
-	else if (mapCell[rowBegin-1][columnBegin + 1].rect == NULL && mapCell[rowEnd][columnBegin + 1].rect != NULL)
+	else if (mapCell[rowBegin - 1][columnBegin + 1].rect != NULL && mapCell[rowEnd][columnBegin + 1].rect == NULL &&
+		mapCell[rowBegin - 1][columnBegin + 16].rect != NULL && mapCell[rowEnd][columnBegin + 16].rect == NULL)
 	{
 		Camera::getInstance()->setCanFollowToUp(true);
 		Camera::getInstance()->setCanFollowToDown(false);
 		Camera::getInstance()->setCanFollowOnLeft(false);
 		Camera::getInstance()->setCanFollowOnRight(false);
 	}
-	else if (mapCell[rowBegin-1][columnBegin + 1].rect != NULL && mapCell[rowEnd][columnBegin + 1].rect != NULL)
+	else if (mapCell[rowBegin - 1][columnBegin + 1].rect != NULL && mapCell[rowEnd][columnBegin + 1].rect != NULL &&
+		mapCell[rowBegin - 1][columnBegin + 16].rect != NULL && mapCell[rowEnd][columnBegin + 16].rect != NULL)
 	{
 		Camera::getInstance()->setCanFollowToUp(true);
 		Camera::getInstance()->setCanFollowToDown(true);
 		Camera::getInstance()->setCanFollowOnLeft(false);
 		Camera::getInstance()->setCanFollowOnRight(false);
 	}
-	else if (mapCell[rowBegin-1][columnBegin + 1].rect == NULL && mapCell[rowEnd][columnBegin + 1].rect == NULL)
+	else if ((mapCell[rowBegin - 1][columnBegin + 1].rect == NULL && mapCell[rowEnd][columnBegin + 1].rect == NULL) ||
+		(mapCell[rowBegin - 1][columnBegin + 16].rect == NULL && mapCell[rowEnd][columnBegin + 16].rect == NULL))
 	{
 		Camera::getInstance()->setCanFollowToUp(false);
 		Camera::getInstance()->setCanFollowToDown(false);

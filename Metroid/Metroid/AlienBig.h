@@ -11,6 +11,7 @@ public:
 	AlienBig();
 	AlienBig(TextureManager* textureM, Graphics* graphics);
 	void setBoundCollision();
+	//void setActiveBound();
 	~AlienBig();
 	list<Brick*>* getListBrick();
 	void setBeHit();

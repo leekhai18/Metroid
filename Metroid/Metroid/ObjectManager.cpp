@@ -29,7 +29,7 @@
 #include "rapidjson-master\include\rapidjson\ostreamwrapper.h"
 
 
-#define TIME_RETRIEVE 0.0f
+#define TIME_RETRIEVE 0.6f
 
 ObjectManager* ObjectManager::instance = nullptr;
 
@@ -42,6 +42,37 @@ ObjectManager * ObjectManager::getInstance()
 
 	return instance;
 }
+ObjectManager::ObjectManager()
+{
+	this->listNotWallCanCollideSamus = new map<int, BaseObject*>();
+	this->listObjectNotWallOnViewPort = new map<int, BaseObject*>();
+	this->listWallCanCollideSamus = new map<int, BaseObject*>();
+	this->listWallEmnermy = new map<int, BaseObject*>();
+	this->bullet_object = new map<int, BaseObject*>();
+	this->totalObjectsPerFrame = 0;
+	this->timer = 0;
+}
+void ObjectManager::release()
+{
+
+	for (auto i = map_object.begin(); i != map_object.end(); i++)
+	{
+		delete (*i).second;
+	}
+	delete listObjectNotWallOnViewPort;
+	delete listNotWallCanCollideSamus;
+
+	delete listWallCanCollideSamus;
+	delete listWallEmnermy;
+	delete bullet_object;
+
+	quadtree->clear();
+	delete quadtree;
+
+	delete instance;
+}
+
+
 void ObjectManager::handleVelocity(float dt)
 {
 
@@ -50,48 +81,57 @@ void ObjectManager::handleVelocity(float dt)
 	if (timer >= TIME_RETRIEVE)
 	{
 		timer = 0;
-
 		listNotWallCanCollideSamus->clear();
 		listObjectNotWallOnViewPort->clear();
 		listWallCanCollideSamus->clear();
-
+		listWallEmnermy->clear();
 		MetroidRect r = Camera::getInstance()->getBound();
 
 		//Get all objects that can collide with current obj
-		quadtree->retrieve(listNotWallCanCollideSamus, listObjectNotWallOnViewPort, listWallCanCollideSamus, MetroidRect(r.top + 40, r.bottom - 40, r.left - 40, r.right + 40), samus);
+		quadtree->retrieve(listNotWallCanCollideSamus, listObjectNotWallOnViewPort, listWallCanCollideSamus,
+			listWallEmnermy, MetroidRect(r.top + 20, r.bottom - 40, r.left -40, r.right+40), samus);
+		//quadtree->retrieve(listNotWallCanCollideSamus, listObjectNotWallOnViewPort, listWallCanCollideSamus, MetroidRect(r.top + 40, r.bottom - 40, r.left - 40, r.right + 40), samus);
 	}
-	for (list<BaseObject*>::iterator i = listObjectNotWallOnViewPort->begin(); i != listObjectNotWallOnViewPort->end(); ++i)
+
+
+	for (map<int,BaseObject*>::iterator i = listObjectNotWallOnViewPort->begin(); i != listObjectNotWallOnViewPort->end(); ++i)
 	{
-		switch ((*i)->getId())
+		switch (((*i).second)->getId())
 		{
 		case eID::WAVER:
 		{
-			Waver* waver = static_cast<Waver*>(*i);
+			Waver* waver = static_cast<Waver*>((*i).second);
 			waver->handleVelocity(dt);
 			break;
 		}
 		case eID::ZOMMER:
 		{
-			Zommer* zommer = static_cast<Zommer*>(*i);
+			Zommer* zommer = static_cast<Zommer*>((*i).second);
 			zommer->handleVelocity(dt);
 			break;
 		}
 		case eID::BOSSKRAID:
 		{
-			BossKraid* bossKraid = static_cast<BossKraid*>(*i);
+			BossKraid* bossKraid = static_cast<BossKraid*>((*i).second);
 			bossKraid->handleVelocity(dt);
 			break;
 		}
 		case eID::MOTHERBRAIN:
 		{
-			MotherBrain* motherBrain = static_cast<MotherBrain*>(*i);
+			MotherBrain* motherBrain = static_cast<MotherBrain*>((*i).second);
 			motherBrain->handleVelocity(dt);
 			break;
 		}
 		case eID::ZEB:
 		{
-			Zeb* zeb = static_cast<Zeb*>(*i);
+			Zeb* zeb = static_cast<Zeb*>((*i).second);
 			zeb->handleVelocity(dt);
+			break;
+		}
+		case eID::RIPPER:
+		{
+			Ripper* ripper = static_cast<Ripper*>((*i).second);
+			ripper->handleVelocity(dt);
 			break;
 		}
 		default:
@@ -106,23 +146,28 @@ void ObjectManager::onCheckCollision(float dt)
 
 	if (listObjectNotWallOnViewPort)
 	{
-		for (list<BaseObject*>::iterator i = listObjectNotWallOnViewPort->begin(); i != listObjectNotWallOnViewPort->end(); ++i)
+		for (map<int,BaseObject*>::iterator i = listObjectNotWallOnViewPort->begin(); i != listObjectNotWallOnViewPort->end(); ++i)
 		{
-			(*i)->onCollision(dt);
+			for (map<int, BaseObject*>::iterator x = listWallEmnermy->begin(); x != listWallEmnermy->end(); ++x)
+			{
+				Collision::getInstance()->checkCollision((*i).second, (*x).second, dt);
+			}		
+			((*i).second)->onCollision(dt);
 		}
 	}
 
 #pragma region handle Wall
 	for (auto x = listWallCanCollideSamus->begin(); x != listWallCanCollideSamus->end(); x++)
 	{
-		samus->setListCanCollide(*listWallCanCollideSamus);
-		Collision::getInstance()->checkCollision(samus, *x, dt);
+		BaseObject* object = (*x).second;
+		samus->setListCanCollide(listWallCanCollideSamus);
+		Collision::getInstance()->checkCollision(samus, object, dt);
 
 		for (unsigned i = 0; i < BulletPool::getInstance()->getListUsing().size(); i++)
-			Collision::getInstance()->checkCollision(BulletPool::getInstance()->getListUsing().at(i), *x, dt);
+			Collision::getInstance()->checkCollision(BulletPool::getInstance()->getListUsing().at(i), object, dt);
 
 		for (unsigned i = 0; i < RocketPool::getInstance()->getListUsing().size(); i++)
-			Collision::getInstance()->checkCollision(RocketPool::getInstance()->getListUsing().at(i), *x, dt);
+			Collision::getInstance()->checkCollision(RocketPool::getInstance()->getListUsing().at(i), object, dt);
 	}
 	// handle on listCollide
 	samus->onCollision(dt);
@@ -137,28 +182,33 @@ void ObjectManager::onCheckCollision(float dt)
 	// Get listCollide
 	for (auto x = listNotWallCanCollideSamus->begin(); x != listNotWallCanCollideSamus->end(); x++)
 	{
-		samus->setListCanCollide(*listNotWallCanCollideSamus);
-		Collision::getInstance()->checkCollision(samus, *x, dt);
+		BaseObject* object = (*x).second;
+		//if (object->getId() == BOSSKRAID)
+		//{
+		//	int test = 0;
+		//}
+		samus->setListCanCollide(listNotWallCanCollideSamus);
+		Collision::getInstance()->checkCollision(samus, object, dt);
 
 		for (unsigned i = 0; i < BulletPool::getInstance()->getListUsing().size(); i++)
-			Collision::getInstance()->checkCollision(BulletPool::getInstance()->getListUsing().at(i), *x, dt);
+			Collision::getInstance()->checkCollision(BulletPool::getInstance()->getListUsing().at(i), object, dt);
 
 		for (unsigned i = 0; i < RocketPool::getInstance()->getListUsing().size(); i++)
-			Collision::getInstance()->checkCollision(RocketPool::getInstance()->getListUsing().at(i), *x, dt);
+			Collision::getInstance()->checkCollision(RocketPool::getInstance()->getListUsing().at(i), object, dt);
 
 
 		for (unsigned i = 0; i < BoomBombPool::getInstance()->getListUsing().size(); i++)
 		{
-			if (Collision::getInstance()->isCollide(BoomBombPool::getInstance()->getListUsing().at(i)->getBoundCollision(), (*x)->getBoundCollision()))
+			if (Collision::getInstance()->isCollide(BoomBombPool::getInstance()->getListUsing().at(i)->getBoundCollision(), object->getBoundCollision()))
 			{
-				BoomBombPool::getInstance()->getListUsing().at(i)->getListCollide()->push_back(*x);
+				BoomBombPool::getInstance()->getListUsing().at(i)->getListCollide()->push_back(object);
 			}
 		}
 
 
-		if ((*x)->getId() == eID::SKREE)
+		if (object->getId() == eID::SKREE)
 		{
-			Skree* skr = static_cast<Skree*>(*x);
+			Skree* skr = static_cast<Skree*>(object);
 
 			if (skr->checkCollision(samus, dt))
 			{
@@ -168,16 +218,16 @@ void ObjectManager::onCheckCollision(float dt)
 
 		/*if ((*x)->getId() == eID::BOSSKRAID)
 		{
-			BossKraid* bossKraid = static_cast<BossKraid*>(*x);
+		BossKraid* bossKraid = static_cast<BossKraid*>(*x);
 
-			if (bossKraid->checkCollision(samus, dt))
-			{
-				bossKraid->onCollision(samus);
-			}
-		}*/
-		if ((*x)->getId() == eID::MOTHERBRAIN)
+		if (bossKraid->checkCollision(samus, dt))
 		{
-			MotherBrain* motherBrain = static_cast<MotherBrain*>(*x);
+		bossKraid->onCollision(samus);
+		}
+		}*/
+		if (object->getId() == eID::MOTHERBRAIN)
+		{
+			MotherBrain* motherBrain = static_cast<MotherBrain*>(object);
 
 			motherBrain->onCollision(samus, dt);
 		}
@@ -217,27 +267,28 @@ void ObjectManager::update(float dt)
 {
 	if (listObjectNotWallOnViewPort)
 	{
-		for (list<BaseObject*>::iterator i = listObjectNotWallOnViewPort->begin(); i != listObjectNotWallOnViewPort->end(); ++i)
+		for (auto i = listObjectNotWallOnViewPort->begin(); i != listObjectNotWallOnViewPort->end(); ++i)
 		{
-			if ((*i)->getId() == eID::SKREE)
+			BaseObject* object = (*i).second;
+			if (object->getId() == eID::SKREE)
 			{
-				Skree* skr = static_cast<Skree*>(*i);
+				Skree* skr = static_cast<Skree*>(object);
 				skr->setTarget(samus->getPosition());
 			}
 
-			if ((*i)->getId() == eID::RIO)
+			if (object->getId() == eID::RIO)
 			{
-				Rio* rio = static_cast<Rio*>(*i);
+				Rio* rio = static_cast<Rio*>(object);
 				rio->setTarget(samus->getPosition());
 			}
 
-			if ((*i)->getId() == eID::ZEB)
+			if (object->getId() == eID::ZEB)
 			{
-				Zeb* zeb = static_cast<Zeb*>(*i);
+				Zeb* zeb = static_cast<Zeb*>(object);
 
 			}
 
-			(*i)->update(dt);
+			object->update(dt);
 		}
 	}
 }
@@ -246,9 +297,9 @@ void ObjectManager::draw()
 {
 	if (listObjectNotWallOnViewPort)
 	{
-		for (list<BaseObject*>::iterator i = listObjectNotWallOnViewPort->begin(); i != listObjectNotWallOnViewPort->end(); ++i)
+		for (auto i = listObjectNotWallOnViewPort->begin(); i != listObjectNotWallOnViewPort->end(); ++i)
 		{
-			(*i)->draw();
+			(*i).second->draw();
 		}
 	}
 }
@@ -272,8 +323,8 @@ void ObjectManager::insertQuadTreeNode(const Value & value, Quadtree* quadtree)
 	for (SizeType i = 0; i < objectList.Size(); i++)
 	{
 		int id = objectList[i]["Id"].GetInt();
-		BaseObject* obj = (*map_object.find(id)).second;
-		node->getObjectList().push_back(obj);
+		//BaseObject* obj = (*map_object.find(id)).second;
+		node->getObjectList().insert(pair<int, BaseObject*>(*map_object.find(id)));
 	}
 	if (!nodes.IsNull())
 	{
@@ -366,7 +417,7 @@ bool ObjectManager::load_list(const char * filename)
 
 #pragma region Wall
 		// Load Wall POS , 650 
-	/*	writer.Key("Wall");
+		/*	writer.Key("Wall");
 		writer.StartArray();*/
 		const Value& listWall = jSon["Wall"];
 
@@ -384,15 +435,15 @@ bool ObjectManager::load_list(const char * filename)
 				width = listWall[i]["width"].GetFloat();
 
 				/*			writer.StartObject();
-							writer.Key("x");
-							writer.Double(x);
-							writer.Key("y");
-							writer.Double(y);
-							writer.Key("height");
-							writer.Double(height);
-							writer.Key("width");
-							writer.Double(width);
-							writer.EndObject();*/
+				writer.Key("x");
+				writer.Double(x);
+				writer.Key("y");
+				writer.Double(y);
+				writer.Key("height");
+				writer.Double(height);
+				writer.Key("width");
+				writer.Double(width);
+				writer.EndObject();*/
 
 				bound.left = x;
 				bound.top = y;
@@ -402,7 +453,6 @@ bool ObjectManager::load_list(const char * filename)
 
 				wall->setActiveBound(bound);
 
-				object_list->push_back(wall);
 
 				map_object.insert(std::pair<int, BaseObject*>(id, wall));
 			}
@@ -412,9 +462,9 @@ bool ObjectManager::load_list(const char * filename)
 #pragma endregion
 
 #pragma region other
-	// create Elevator
-	/*writer.Key("Elevator");
-	writer.StartArray();*/
+		// create Elevator
+		/*writer.Key("Elevator");
+		writer.StartArray();*/
 		const Value& elevator = jSon["Elevator"];
 		if (elevator.IsArray())
 		{
@@ -447,7 +497,6 @@ bool ObjectManager::load_list(const char * filename)
 
 				elev->setActiveBound(bound);
 
-				object_list->push_back(elev);
 
 				map_object.insert(std::pair<int, BaseObject*>(id, elev));
 			}
@@ -489,7 +538,6 @@ bool ObjectManager::load_list(const char * filename)
 
 				fire->setActiveBound(bound);
 
-				object_list->push_back(fire);
 
 				map_object.insert(std::pair<int, BaseObject*>(id, fire));
 			}
@@ -517,11 +565,11 @@ bool ObjectManager::load_list(const char * filename)
 
 
 				/*		writer.StartObject();
-						writer.Key("x");
-						writer.Double(x);
-						writer.Key("y");
-						writer.Double(y);
-						writer.EndObject();*/
+				writer.Key("x");
+				writer.Double(x);
+				writer.Key("y");
+				writer.Double(y);
+				writer.EndObject();*/
 
 				bound.left = x;
 				bound.top = y;
@@ -531,7 +579,6 @@ bool ObjectManager::load_list(const char * filename)
 
 				bsb->setActiveBound(bound);
 
-				object_list->push_back(bsb);
 
 				map_object.insert(std::pair<int, BaseObject*>(id, bsb));
 			}
@@ -539,7 +586,7 @@ bool ObjectManager::load_list(const char * filename)
 		//writer.EndArray();
 
 		// BrickSerectGreen, 9
-	/*	writer.Key("BrickSerectGreen");
+		/*	writer.Key("BrickSerectGreen");
 		writer.StartArray();*/
 
 		const Value& listBrickSerectGreen = jSon["BrickSerectGreen"];
@@ -555,11 +602,11 @@ bool ObjectManager::load_list(const char * filename)
 				bsg->setPosition(VECTOR2(x, y));
 
 				/*		writer.StartObject();
-						writer.Key("x");
-						writer.Double(x);
-						writer.Key("y");
-						writer.Double(y);
-						writer.EndObject();*/
+				writer.Key("x");
+				writer.Double(x);
+				writer.Key("y");
+				writer.Double(y);
+				writer.EndObject();*/
 
 				bound.left = x;
 				bound.top = y;
@@ -569,7 +616,6 @@ bool ObjectManager::load_list(const char * filename)
 
 				bsg->setActiveBound(bound);
 
-				object_list->push_back(bsg);
 
 				map_object.insert(std::pair<int, BaseObject*>(id, bsg));
 			}
@@ -593,11 +639,11 @@ bool ObjectManager::load_list(const char * filename)
 				bg->setPosition(VECTOR2(x, y));
 
 				/*	writer.StartObject();
-					writer.Key("x");
-					writer.Double(x);
-					writer.Key("y");
-					writer.Double(y);
-					writer.EndObject();*/
+				writer.Key("x");
+				writer.Double(x);
+				writer.Key("y");
+				writer.Double(y);
+				writer.EndObject();*/
 
 				bound.left = x;
 				bound.top = y;
@@ -607,7 +653,6 @@ bool ObjectManager::load_list(const char * filename)
 
 				bg->setActiveBound(bound);
 
-				object_list->push_back(bg);
 
 				map_object.insert(std::pair<int, BaseObject*>(id, bg));
 			}
@@ -652,16 +697,15 @@ bool ObjectManager::load_list(const char * filename)
 
 				bb->setActiveBound(bound);
 
-				object_list->push_back(bb);
 
 				map_object.insert(std::pair<int, BaseObject*>(id, bb));
 			}
 		}
 		//	writer.EndArray();
 
-			// BrickRed, 63
+		// BrickRed, 63
 		/*	writer.Key("BrickRed");
-			writer.StartArray();*/
+		writer.StartArray();*/
 		const Value& listBrickRed = jSon["BrickRed"];
 		if (listBrickRed.IsArray())
 		{
@@ -675,11 +719,11 @@ bool ObjectManager::load_list(const char * filename)
 				br->setPosition(VECTOR2(x, y));
 
 				/*		writer.StartObject();
-						writer.Key("x");
-						writer.Double(x);
-						writer.Key("y");
-						writer.Double(y);
-						writer.EndObject();*/
+				writer.Key("x");
+				writer.Double(x);
+				writer.Key("y");
+				writer.Double(y);
+				writer.EndObject();*/
 
 				bound.left = x;
 				bound.top = y;
@@ -689,7 +733,6 @@ bool ObjectManager::load_list(const char * filename)
 
 				br->setActiveBound(bound);
 
-				object_list->push_back(br);
 
 				map_object.insert(std::pair<int, BaseObject*>(id, br));
 			}
@@ -700,7 +743,7 @@ bool ObjectManager::load_list(const char * filename)
 
 #pragma region Gates and Ports
 		// create GateBlue R, 25 
-	/*	writer.Key("GateBlueR");
+		/*	writer.Key("GateBlueR");
 		writer.StartArray();*/
 		const Value& listGateBlueR = jSon["GateBlueR"];
 		if (listGateBlueR.IsArray())
@@ -729,7 +772,6 @@ bool ObjectManager::load_list(const char * filename)
 
 				gateBlueR->setActiveBound(bound);
 
-				object_list->push_back(gateBlueR);
 
 				map_object.insert(std::pair<int, BaseObject*>(id, gateBlueR));
 			}
@@ -753,11 +795,11 @@ bool ObjectManager::load_list(const char * filename)
 				gateBlueL->setPosition(VECTOR2(x, y));
 
 				/*		writer.StartObject();
-						writer.Key("x");
-						writer.Double(x);
-						writer.Key("y");
-						writer.Double(y);
-						writer.EndObject();*/
+				writer.Key("x");
+				writer.Double(x);
+				writer.Key("y");
+				writer.Double(y);
+				writer.EndObject();*/
 
 				bound.left = x;
 				bound.top = y;
@@ -767,7 +809,6 @@ bool ObjectManager::load_list(const char * filename)
 
 				gateBlueL->setActiveBound(bound);
 
-				object_list->push_back(gateBlueL);
 
 				map_object.insert(std::pair<int, BaseObject*>(id, gateBlueL));
 			}
@@ -775,7 +816,7 @@ bool ObjectManager::load_list(const char * filename)
 		//writer.EndArray();
 
 		// create GateRed R, 4
-	/*	writer.Key("GateRedR");
+		/*	writer.Key("GateRedR");
 		writer.StartArray();*/
 		const Value& listGateRedR = jSon["GateRedR"];
 		if (listGateRedR.IsArray())
@@ -790,11 +831,11 @@ bool ObjectManager::load_list(const char * filename)
 				gateRedR->setPosition(VECTOR2(x, y));
 
 				/*	writer.StartObject();
-					writer.Key("x");
-					writer.Double(x);
-					writer.Key("y");
-					writer.Double(y);
-					writer.EndObject();*/
+				writer.Key("x");
+				writer.Double(x);
+				writer.Key("y");
+				writer.Double(y);
+				writer.EndObject();*/
 
 				bound.left = x;
 				bound.top = y;
@@ -804,7 +845,6 @@ bool ObjectManager::load_list(const char * filename)
 
 				gateRedR->setActiveBound(bound);
 
-				object_list->push_back(gateRedR);
 
 				map_object.insert(std::pair<int, BaseObject*>(id, gateRedR));
 			}
@@ -812,7 +852,7 @@ bool ObjectManager::load_list(const char * filename)
 		//writer.EndArray();
 
 		// create GateRed L, 4
-	/*	writer.Key("GateRedL");
+		/*	writer.Key("GateRedL");
 		writer.StartArray();*/
 		const Value& listGateRedL = jSon["GateRedL"];
 		if (listGateRedL.IsArray())
@@ -842,7 +882,6 @@ bool ObjectManager::load_list(const char * filename)
 
 				gateRedL->setActiveBound(bound);
 
-				object_list->push_back(gateRedL);
 
 				map_object.insert(std::pair<int, BaseObject*>(id, gateRedL));
 			}
@@ -868,15 +907,15 @@ bool ObjectManager::load_list(const char * filename)
 				width = listPort[i]["width"].GetFloat();
 
 				/*		writer.StartObject();
-						writer.Key("x");
-						writer.Double(x);
-						writer.Key("y");
-						writer.Double(y);
-						writer.Key("height");
-						writer.Double(height);
-						writer.Key("width");
-						writer.Double(width);
-						writer.EndObject();*/
+				writer.Key("x");
+				writer.Double(x);
+				writer.Key("y");
+				writer.Double(y);
+				writer.Key("height");
+				writer.Double(height);
+				writer.Key("width");
+				writer.Double(width);
+				writer.EndObject();*/
 
 				bound.left = x;
 				bound.top = y;
@@ -886,7 +925,6 @@ bool ObjectManager::load_list(const char * filename)
 
 				port->setActiveBound(bound);
 
-				object_list->push_back(port);
 
 				map_object.insert(std::pair<int, BaseObject*>(id, port));
 			}
@@ -909,12 +947,12 @@ bool ObjectManager::load_list(const char * filename)
 			mm->setPosition(VECTOR2(x + 2, y));
 
 			/*	writer.Key("MaruMari");
-				writer.StartObject();
-				writer.Key("x");
-				writer.Double(x);
-				writer.Key("y");
-				writer.Double(y);
-				writer.EndObject();*/
+			writer.StartObject();
+			writer.Key("x");
+			writer.Double(x);
+			writer.Key("y");
+			writer.Double(y);
+			writer.EndObject();*/
 
 			bound.left = x;
 			bound.top = y;
@@ -924,7 +962,6 @@ bool ObjectManager::load_list(const char * filename)
 
 			mm->setActiveBound(bound);
 
-			object_list->push_back(mm);
 			map_object.insert(std::pair<int, BaseObject*>(id, mm));
 		}
 
@@ -945,11 +982,11 @@ bool ObjectManager::load_list(const char * filename)
 
 
 				/*	writer.StartObject();
-					writer.Key("x");
-					writer.Double(x);
-					writer.Key("y");
-					writer.Double(y);
-					writer.EndObject();*/
+				writer.Key("x");
+				writer.Double(x);
+				writer.Key("y");
+				writer.Double(y);
+				writer.EndObject();*/
 
 				bound.left = x;
 				bound.top = y;
@@ -959,7 +996,6 @@ bool ObjectManager::load_list(const char * filename)
 
 				ib->setActiveBound(bound);
 
-				object_list->push_back(ib);
 
 				map_object.insert(std::pair<int, BaseObject*>(id, ib));
 			}
@@ -982,11 +1018,11 @@ bool ObjectManager::load_list(const char * filename)
 				bm->setPosition(VECTOR2(x, y));
 
 				/*	writer.StartObject();
-					writer.Key("x");
-					writer.Double(x);
-					writer.Key("y");
-					writer.Double(y);
-					writer.EndObject();*/
+				writer.Key("x");
+				writer.Double(x);
+				writer.Key("y");
+				writer.Double(y);
+				writer.EndObject();*/
 
 
 				bound.left = x;
@@ -997,7 +1033,6 @@ bool ObjectManager::load_list(const char * filename)
 
 				bm->setActiveBound(bound);
 
-				object_list->push_back(bm);
 
 				map_object.insert(std::pair<int, BaseObject*>(id, bm));
 			}
@@ -1035,7 +1070,6 @@ bool ObjectManager::load_list(const char * filename)
 
 				energyT->setActiveBound(bound);
 
-				object_list->push_back(energyT);
 
 				map_object.insert(std::pair<int, BaseObject*>(id, energyT));
 			}
@@ -1043,7 +1077,7 @@ bool ObjectManager::load_list(const char * filename)
 		//writer.EndArray();
 
 		// create Long Beam
-	/*	writer.Key("LongBeam");
+		/*	writer.Key("LongBeam");
 		writer.StartArray();*/
 		const Value& longBeam = jSon["LongBeam"];
 		if (longBeam.IsArray())
@@ -1073,7 +1107,6 @@ bool ObjectManager::load_list(const char * filename)
 
 				lb->setActiveBound(bound);
 
-				object_list->push_back(lb);
 
 				map_object.insert(std::pair<int, BaseObject*>(id, lb));
 			}
@@ -1097,11 +1130,11 @@ bool ObjectManager::load_list(const char * filename)
 				rocket->setPosition(VECTOR2(x, y));
 
 				/*			writer.StartObject();
-							writer.Key("x");
-							writer.Double(x);
-							writer.Key("y");
-							writer.Double(y);
-							writer.EndObject();*/
+				writer.Key("x");
+				writer.Double(x);
+				writer.Key("y");
+				writer.Double(y);
+				writer.EndObject();*/
 
 
 				bound.left = x;
@@ -1112,7 +1145,6 @@ bool ObjectManager::load_list(const char * filename)
 
 				rocket->setActiveBound(bound);
 
-				object_list->push_back(rocket);
 
 				map_object.insert(std::pair<int, BaseObject*>(id, rocket));
 			}
@@ -1120,7 +1152,7 @@ bool ObjectManager::load_list(const char * filename)
 		//writer.EndArray();
 
 		// create Varia
-	/*	writer.Key("Varia");
+		/*	writer.Key("Varia");
 		writer.StartArray();*/
 
 		const Value& varia = jSon["Varia"];
@@ -1136,11 +1168,11 @@ bool ObjectManager::load_list(const char * filename)
 				va->setPosition(VECTOR2(x, y));
 
 				/*			writer.StartObject();
-							writer.Key("x");
-							writer.Double(x);
-							writer.Key("y");
-							writer.Double(y);
-							writer.EndObject();*/
+				writer.Key("x");
+				writer.Double(x);
+				writer.Key("y");
+				writer.Double(y);
+				writer.EndObject();*/
 
 
 				bound.left = x;
@@ -1151,7 +1183,6 @@ bool ObjectManager::load_list(const char * filename)
 
 				va->setActiveBound(bound);
 
-				object_list->push_back(va);
 
 				map_object.insert(std::pair<int, BaseObject*>(id, va));
 			}
@@ -1170,6 +1201,9 @@ bool ObjectManager::load_list(const char * filename)
 			id = alienBig["id"].GetInt();
 			x = alienBig["x"].GetFloat();
 			y = alienBig["y"].GetFloat();
+
+			x += alienB->getSprite()->getWidth()*0.5f;
+			y -= alienB->getSprite()->getHeight()*0.5f;
 			alienB->setPosition(VECTOR2(x, y));
 
 			const Value& arrayWall = alienBig["ListBrickID"];
@@ -1190,7 +1224,6 @@ bool ObjectManager::load_list(const char * filename)
 
 			alienB->setActiveBound(alienB->getBoundCollision());
 
-			object_list->push_back(alienB);
 
 			map_object.insert(std::pair<int, BaseObject*>(id, alienB));
 		}
@@ -1199,20 +1232,16 @@ bool ObjectManager::load_list(const char * filename)
 		const Value& alienSmall = jSon["AlienSmall"];
 		if (alienSmall.IsObject())
 		{
-			
 
+			AlienBig* big = NULL;
+			big = static_cast<AlienBig*>((map_object.find(alienSmall["AlienBigID"].GetInt())->second));
+
+			AlienSmall *alienS = new AlienSmall(this->textureManager, this->graphics, big);
 			id = alienSmall["id"].GetInt();
 			x = alienSmall["x"].GetFloat();
 			y = alienSmall["y"].GetFloat();
-
-			const Value& alienBigID = alienSmall["AlienBigID"];
-			AlienBig* big = NULL;
-
-			
-			big = static_cast<AlienBig*>((map_object.find(alienSmall["AlienBigID"].GetInt())->second));
-			
-
-			AlienSmall *alienS = new AlienSmall(this->textureManager, this->graphics,big);
+			x += alienS->getSprite()->getWidth()*0.5f;
+			y -= alienS->getSprite()->getHeight()*0.5f;
 			alienS->setPosition(VECTOR2(x, y));
 
 			//writer.Key("AlienSmall");
@@ -1227,17 +1256,16 @@ bool ObjectManager::load_list(const char * filename)
 			bound.top = y;
 			bound.right = bound.left + alienS->getSprite()->getWidth();
 			bound.bottom = bound.top - alienS->getSprite()->getHeight();
-			
+
 			alienS->setBoundCollision();
 			alienS->setActiveBound(alienS->getBoundCollision());
 
-			object_list->push_back(alienS);
 
 			map_object.insert(std::pair<int, BaseObject*>(id, alienS));
 		}
 
 		// create ZommerYellow
-	/*	writer.Key("ZommerYellow");
+		/*	writer.Key("ZommerYellow");
 		writer.StartArray();*/
 		const Value& listZommerYellow = jSon["ZommerYellow"];
 		if (listZommerYellow.IsArray())
@@ -1251,20 +1279,21 @@ bool ObjectManager::load_list(const char * filename)
 				y = listZommerYellow[i]["y"].GetFloat();
 
 				/*	x += zmy->getSprite()->getWidth()*0.5f;
-					y = y - 16 + zmy->getSprite()->getHeight()*0.5f;*/
+				y = y - 16 + zmy->getSprite()->getHeight()*0.5f;*/
 
 				zmy->setPosition(VECTOR2(x, y));
 
 				zmy->setStartPosition(VECTOR2(x, y));
 
-				const Value& arrayWall = listZommerYellow[i]["ListCollideID"];
+				/*const Value& arrayWall = listZommerYellow[i]["ListCollideID"];
 				for (SizeType t = 0; t < arrayWall.Size(); t++)
 				{
 					zmy->getListWallCanCollide()->push_back(map_object.find(arrayWall[t].GetInt())->second);
 				}
-
+*/
 				zmy->setBoundCollision();
 				zmy->setStartBound(zmy->getBoundCollision());
+
 				bound.bottom = listZommerYellow[i]["ba"].GetFloat();
 				bound.top = listZommerYellow[i]["ta"].GetFloat();
 				bound.left = listZommerYellow[i]["la"].GetFloat();
@@ -1287,7 +1316,6 @@ bool ObjectManager::load_list(const char * filename)
 				//writer.EndObject();
 
 
-				object_list->push_back(zmy);
 
 				map_object.insert(std::pair<int, BaseObject*>(id, zmy));
 			}
@@ -1295,7 +1323,7 @@ bool ObjectManager::load_list(const char * filename)
 		//writer.EndArray();
 
 		// create ZommerBrown
-	/*	writer.Key("ZommerBrown");
+		/*	writer.Key("ZommerBrown");
 		writer.StartArray();*/
 		const Value& listZommerBrown = jSon["ZommerBrown"];
 		if (listZommerBrown.IsArray())
@@ -1312,11 +1340,11 @@ bool ObjectManager::load_list(const char * filename)
 				y = y - 16 + zmb->getSprite()->getHeight()*0.5f;*/
 				zmb->setPosition(VECTOR2(x, y));
 				zmb->setStartPosition(VECTOR2(x, y));
-				const Value& arrayWall = listZommerBrown[i]["ListCollideID"];
+			/*	const Value& arrayWall = listZommerBrown[i]["ListCollideID"];
 				for (SizeType t = 0; t < arrayWall.Size(); t++)
 				{
 					zmb->getListWallCanCollide()->push_back(map_object.find(arrayWall[t].GetInt())->second);
-				}
+				}*/
 				zmb->setBoundCollision();
 				zmb->setStartBound(zmb->getBoundCollision());
 				bound.bottom = listZommerBrown[i]["ba"].GetFloat();
@@ -1326,21 +1354,20 @@ bool ObjectManager::load_list(const char * filename)
 				zmb->setActiveBound(bound);
 
 				/*		writer.StartObject();
-						writer.Key("x");
-						writer.Double(x);
-						writer.Key("y");
-						writer.Double(y);
-						writer.Key("ba");
-						writer.Double(bound.bottom);
-						writer.Key("ta");
-						writer.Double(bound.top);
-						writer.Key("la");
-						writer.Double(bound.left);
-						writer.Key("ra");
-						writer.Double(bound.right);
-						writer.EndObject();*/
+				writer.Key("x");
+				writer.Double(x);
+				writer.Key("y");
+				writer.Double(y);
+				writer.Key("ba");
+				writer.Double(bound.bottom);
+				writer.Key("ta");
+				writer.Double(bound.top);
+				writer.Key("la");
+				writer.Double(bound.left);
+				writer.Key("ra");
+				writer.Double(bound.right);
+				writer.EndObject();*/
 
-				object_list->push_back(zmb);
 
 				map_object.insert(std::pair<int, BaseObject*>(id, zmb));
 			}
@@ -1348,7 +1375,7 @@ bool ObjectManager::load_list(const char * filename)
 		//writer.EndArray();
 
 		// create ZommerRed
-	/*	writer.Key("ZommerRed");
+		/*	writer.Key("ZommerRed");
 		writer.StartArray();*/
 		const Value& listZommerRed = jSon["ZommerRed"];
 		if (listZommerRed.IsArray())
@@ -1365,11 +1392,11 @@ bool ObjectManager::load_list(const char * filename)
 				y =y - 16 + zmr->getSprite()->getHeight()*0.5f;*/
 				zmr->setPosition(VECTOR2(x, y));
 				zmr->setStartPosition(VECTOR2(x, y));
-				const Value& arrayWall = listZommerRed[i]["ListCollideID"];
+				/*const Value& arrayWall = listZommerRed[i]["ListCollideID"];
 				for (SizeType t = 0; t < arrayWall.Size(); t++)
 				{
 					zmr->getListWallCanCollide()->push_back(map_object.find(arrayWall[t].GetInt())->second);
-				}
+				}*/
 				zmr->setBoundCollision();
 				zmr->setStartBound(zmr->getBoundCollision());
 				bound.bottom = listZommerRed[i]["ba"].GetFloat();
@@ -1394,7 +1421,6 @@ bool ObjectManager::load_list(const char * filename)
 				//writer.EndObject();
 
 
-				object_list->push_back(zmr);
 
 				map_object.insert(std::pair<int, BaseObject*>(id, zmr));
 			}
@@ -1430,22 +1456,21 @@ bool ObjectManager::load_list(const char * filename)
 				zby->setActiveBound(bound);
 
 				/*	writer.StartObject();
-					writer.Key("x");
-					writer.Double(x);
-					writer.Key("y");
-					writer.Double(y);
-					writer.Key("ba");
-					writer.Double(bound.bottom);
-					writer.Key("ta");
-					writer.Double(bound.top);
-					writer.Key("la");
-					writer.Double(bound.left);
-					writer.Key("ra");
-					writer.Double(bound.right);
-					writer.EndObject();*/
+				writer.Key("x");
+				writer.Double(x);
+				writer.Key("y");
+				writer.Double(y);
+				writer.Key("ba");
+				writer.Double(bound.bottom);
+				writer.Key("ta");
+				writer.Double(bound.top);
+				writer.Key("la");
+				writer.Double(bound.left);
+				writer.Key("ra");
+				writer.Double(bound.right);
+				writer.EndObject();*/
 
 
-				object_list->push_back(zby);
 
 				map_object.insert(std::pair<int, BaseObject*>(id, zby));
 			}
@@ -1496,7 +1521,6 @@ bool ObjectManager::load_list(const char * filename)
 				//writer.EndObject();
 
 
-				object_list->push_back(zbb);
 
 				map_object.insert(std::pair<int, BaseObject*>(id, zbb));
 			}
@@ -1504,7 +1528,7 @@ bool ObjectManager::load_list(const char * filename)
 		//writer.EndArray();
 
 		// create ZebRed
-	/*	writer.Key("SpawnZebRed");
+		/*	writer.Key("SpawnZebRed");
 		writer.StartArray();*/
 		const Value& listZebRed = jSon["SpawnZebRed"];
 		if (listZebRed.IsArray())
@@ -1532,22 +1556,21 @@ bool ObjectManager::load_list(const char * filename)
 				zbr->setActiveBound(bound);
 
 				/*			writer.StartObject();
-							writer.Key("x");
-							writer.Double(x);
-							writer.Key("y");
-							writer.Double(y);
-							writer.Key("ba");
-							writer.Double(bound.bottom);
-							writer.Key("ta");
-							writer.Double(bound.top);
-							writer.Key("la");
-							writer.Double(bound.left);
-							writer.Key("ra");
-							writer.Double(bound.right);
-							writer.EndObject();*/
+				writer.Key("x");
+				writer.Double(x);
+				writer.Key("y");
+				writer.Double(y);
+				writer.Key("ba");
+				writer.Double(bound.bottom);
+				writer.Key("ta");
+				writer.Double(bound.top);
+				writer.Key("la");
+				writer.Double(bound.left);
+				writer.Key("ra");
+				writer.Double(bound.right);
+				writer.EndObject();*/
 
 
-				object_list->push_back(zbr);
 
 				map_object.insert(std::pair<int, BaseObject*>(id, zbr));
 			}
@@ -1576,11 +1599,11 @@ bool ObjectManager::load_list(const char * filename)
 				bound.bottom = bound.top - wvb->getSprite()->getHeight();
 				wvb->setBoundCollision();
 				wvb->setStartBound(wvb->getBoundCollision());
-				const Value& arrayWall = listWaverBrown[i]["ListCollideID"];
+				/*const Value& arrayWall = listWaverBrown[i]["ListCollideID"];
 				for (SizeType t = 0; t < arrayWall.Size(); t++)
 				{
 					wvb->getListWallCanCollide()->push_back(map_object.find(arrayWall[t].GetInt())->second);
-				}
+				}*/
 
 				bound.bottom = listWaverBrown[i]["ba"].GetFloat();
 				bound.top = listWaverBrown[i]["ta"].GetFloat();
@@ -1589,23 +1612,22 @@ bool ObjectManager::load_list(const char * filename)
 				wvb->setActiveBound(bound);
 
 				/*			writer.StartObject();
-							writer.Key("x");
-							writer.Double(x);
-							writer.Key("y");
-							writer.Double(y);
-							writer.Key("ba");
-							writer.Double(bound.bottom);
-							writer.Key("ta");
-							writer.Double(bound.top);
-							writer.Key("la");
-							writer.Double(bound.left);
-							writer.Key("ra");
-							writer.Double(bound.right);
-							writer.EndObject();*/
+				writer.Key("x");
+				writer.Double(x);
+				writer.Key("y");
+				writer.Double(y);
+				writer.Key("ba");
+				writer.Double(bound.bottom);
+				writer.Key("ta");
+				writer.Double(bound.top);
+				writer.Key("la");
+				writer.Double(bound.left);
+				writer.Key("ra");
+				writer.Double(bound.right);
+				writer.EndObject();*/
 
 
 
-				object_list->push_back(wvb);
 
 				map_object.insert(std::pair<int, BaseObject*>(id, wvb));
 			}
@@ -1634,11 +1656,11 @@ bool ObjectManager::load_list(const char * filename)
 				wvr->setBoundCollision();
 				wvr->setStartBound(wvr->getBoundCollision());
 
-				const Value& arrayWall = listWaverRed[i]["ListCollideID"];
+				/*const Value& arrayWall = listWaverRed[i]["ListCollideID"];
 				for (SizeType t = 0; t < arrayWall.Size(); t++)
 				{
 					wvr->getListWallCanCollide()->push_back(map_object.find(arrayWall[t].GetInt())->second);
-				}
+				}*/
 				bound.bottom = listWaverRed[i]["ba"].GetFloat();
 				bound.top = listWaverRed[i]["ta"].GetFloat();
 				bound.left = listWaverRed[i]["la"].GetFloat();
@@ -1661,7 +1683,6 @@ bool ObjectManager::load_list(const char * filename)
 				//writer.EndObject();
 
 
-				object_list->push_back(wvr);
 
 				map_object.insert(std::pair<int, BaseObject*>(id, wvr));
 			}
@@ -1669,7 +1690,7 @@ bool ObjectManager::load_list(const char * filename)
 		//writer.EndArray();
 
 		// create SkreeYellow
-	/*	writer.Key("SkreeYellow");
+		/*	writer.Key("SkreeYellow");
 		writer.StartArray();*/
 		const Value& listSkreeYellow = jSon["SkreeYellow"];
 		if (listSkreeYellow.IsArray())
@@ -1685,11 +1706,11 @@ bool ObjectManager::load_list(const char * filename)
 
 				sky->setBoundCollision();
 
-				const Value& arrayWall = listSkreeYellow[i]["ListCollideID"];
+				/*const Value& arrayWall = listSkreeYellow[i]["ListCollideID"];
 				for (SizeType t = 0; t < arrayWall.Size(); t++)
 				{
 					sky->getListWallCanCollide()->push_back(map_object.find(arrayWall[t].GetInt())->second);
-				}
+				}*/
 
 				bound.bottom = listSkreeYellow[i]["ba"].GetFloat();
 				bound.top = listSkreeYellow[i]["ta"].GetFloat();
@@ -1698,22 +1719,21 @@ bool ObjectManager::load_list(const char * filename)
 				sky->setActiveBound(bound);
 
 				/*		writer.StartObject();
-						writer.Key("x");
-						writer.Double(x);
-						writer.Key("y");
-						writer.Double(y);
-						writer.Key("ba");
-						writer.Double(bound.bottom);
-						writer.Key("ta");
-						writer.Double(bound.top);
-						writer.Key("la");
-						writer.Double(bound.left);
-						writer.Key("ra");
-						writer.Double(bound.right);
-						writer.EndObject();*/
+				writer.Key("x");
+				writer.Double(x);
+				writer.Key("y");
+				writer.Double(y);
+				writer.Key("ba");
+				writer.Double(bound.bottom);
+				writer.Key("ta");
+				writer.Double(bound.top);
+				writer.Key("la");
+				writer.Double(bound.left);
+				writer.Key("ra");
+				writer.Double(bound.right);
+				writer.EndObject();*/
 
 
-				object_list->push_back(sky);
 
 				map_object.insert(std::pair<int, BaseObject*>(id, sky));
 			}
@@ -1737,11 +1757,11 @@ bool ObjectManager::load_list(const char * filename)
 
 				skb->setBoundCollision();
 
-				const Value& arrayWall = listSkreeBrown[i]["ListCollideID"];
+				/*const Value& arrayWall = listSkreeBrown[i]["ListCollideID"];
 				for (SizeType t = 0; t < arrayWall.Size(); t++)
 				{
 					skb->getListWallCanCollide()->push_back(map_object.find(arrayWall[t].GetInt())->second);
-				}
+				}*/
 
 				bound.bottom = listSkreeBrown[i]["ba"].GetFloat();
 				bound.top = listSkreeBrown[i]["ta"].GetFloat();
@@ -1750,22 +1770,21 @@ bool ObjectManager::load_list(const char * filename)
 				skb->setActiveBound(bound);
 
 				/*			writer.StartObject();
-							writer.Key("x");
-							writer.Double(x);
-							writer.Key("y");
-							writer.Double(y);
-							writer.Key("ba");
-							writer.Double(bound.bottom);
-							writer.Key("ta");
-							writer.Double(bound.top);
-							writer.Key("la");
-							writer.Double(bound.left);
-							writer.Key("ra");
-							writer.Double(bound.right);
-							writer.EndObject();*/
+				writer.Key("x");
+				writer.Double(x);
+				writer.Key("y");
+				writer.Double(y);
+				writer.Key("ba");
+				writer.Double(bound.bottom);
+				writer.Key("ta");
+				writer.Double(bound.top);
+				writer.Key("la");
+				writer.Double(bound.left);
+				writer.Key("ra");
+				writer.Double(bound.right);
+				writer.EndObject();*/
 
 
-				object_list->push_back(skb);
 
 				map_object.insert(std::pair<int, BaseObject*>(id, skb));
 			}
@@ -1773,7 +1792,7 @@ bool ObjectManager::load_list(const char * filename)
 		//writer.EndArray();
 
 		// create RipperYellow
-	/*	writer.Key("RipperYellow");
+		/*	writer.Key("RipperYellow");
 		writer.StartArray();*/
 		const Value& listRipperYellow = jSon["RipperYellow"];
 		if (listRipperYellow.IsArray())
@@ -1789,10 +1808,10 @@ bool ObjectManager::load_list(const char * filename)
 				rpy->setPosition(VECTOR2(x, y));
 
 				const Value& arrayWall = listRipperYellow[i]["ListCollideID"];
-				for (SizeType t = 0; t < arrayWall.Size(); t++)
+			/*	for (SizeType t = 0; t < arrayWall.Size(); t++)
 				{
 					rpy->getListWallCanCollide()->push_back(map_object.find(arrayWall[t].GetInt())->second);
-				}
+				}*/
 
 				rpy->setBoundCollision();
 
@@ -1804,22 +1823,21 @@ bool ObjectManager::load_list(const char * filename)
 
 
 				/*			writer.StartObject();
-							writer.Key("x");
-							writer.Double(x);
-							writer.Key("y");
-							writer.Double(y);
-							writer.Key("ba");
-							writer.Double(bound.bottom);
-							writer.Key("ta");
-							writer.Double(bound.top);
-							writer.Key("la");
-							writer.Double(bound.left);
-							writer.Key("ra");
-							writer.Double(bound.right);
-							writer.EndObject();*/
+				writer.Key("x");
+				writer.Double(x);
+				writer.Key("y");
+				writer.Double(y);
+				writer.Key("ba");
+				writer.Double(bound.bottom);
+				writer.Key("ta");
+				writer.Double(bound.top);
+				writer.Key("la");
+				writer.Double(bound.left);
+				writer.Key("ra");
+				writer.Double(bound.right);
+				writer.EndObject();*/
 
 
-				object_list->push_back(rpy);
 
 				map_object.insert(std::pair<int, BaseObject*>(id, rpy));
 			}
@@ -1827,7 +1845,7 @@ bool ObjectManager::load_list(const char * filename)
 		//writer.EndArray();
 
 		// create RipperBrown
-	/*	writer.Key("RipperBrown");
+		/*	writer.Key("RipperBrown");
 		writer.StartArray();*/
 		const Value& listRipperBrown = jSon["RipperBrown"];
 		if (listRipperBrown.IsArray())
@@ -1842,12 +1860,12 @@ bool ObjectManager::load_list(const char * filename)
 
 				rpb->setPosition(VECTOR2(x, y));
 
-				const Value& arrayWall = listRipperBrown[i]["ListCollideID"];
+				/*const Value& arrayWall = listRipperBrown[i]["ListCollideID"];
 				for (SizeType t = 0; t < arrayWall.Size(); t++)
 				{
 					rpb->getListWallCanCollide()->push_back(map_object.find(arrayWall[t].GetInt())->second);
 				}
-
+*/
 
 				rpb->setBoundCollision();
 
@@ -1873,7 +1891,6 @@ bool ObjectManager::load_list(const char * filename)
 				//writer.EndObject();
 
 
-				object_list->push_back(rpb);
 
 				map_object.insert(std::pair<int, BaseObject*>(id, rpb));
 			}
@@ -1881,7 +1898,7 @@ bool ObjectManager::load_list(const char * filename)
 		//writer.EndArray();
 
 		// create RipperRed
-	/*	writer.Key("RipperRed");
+		/*	writer.Key("RipperRed");
 		writer.StartArray();*/
 		const Value& listRipperRed = jSon["RipperRed"];
 		if (listRipperRed.IsArray())
@@ -1896,12 +1913,12 @@ bool ObjectManager::load_list(const char * filename)
 
 				rpr->setPosition(VECTOR2(x, y));
 
-				const Value& arrayWall = listRipperRed[i]["ListCollideID"];
+				/*const Value& arrayWall = listRipperRed[i]["ListCollideID"];
 				for (SizeType t = 0; t < arrayWall.Size(); t++)
 				{
 					rpr->getListWallCanCollide()->push_back(map_object.find(arrayWall[t].GetInt())->second);
 				}
-
+*/
 				rpr->setBoundCollision();
 
 				bound.bottom = listRipperRed[i]["ba"].GetFloat();
@@ -1926,7 +1943,6 @@ bool ObjectManager::load_list(const char * filename)
 				//writer.EndObject();
 
 
-				object_list->push_back(rpr);
 
 				map_object.insert(std::pair<int, BaseObject*>(id, rpr));
 			}
@@ -1934,7 +1950,7 @@ bool ObjectManager::load_list(const char * filename)
 		//writer.EndArray();
 
 		// create RioYellow
-	/*	writer.Key("RioYellow");
+		/*	writer.Key("RioYellow");
 		writer.StartArray();*/
 		const Value& listRioYellow = jSon["RioYellow"];
 		if (listRioYellow.IsArray())
@@ -1958,22 +1974,21 @@ bool ObjectManager::load_list(const char * filename)
 				roy->setActiveBound(bound);
 
 				/*			writer.StartObject();
-							writer.Key("x");
-							writer.Double(x);
-							writer.Key("y");
-							writer.Double(y);
-							writer.Key("ba");
-							writer.Double(bound.bottom);
-							writer.Key("ta");
-							writer.Double(bound.top);
-							writer.Key("la");
-							writer.Double(bound.left);
-							writer.Key("ra");
-							writer.Double(bound.right);
-							writer.EndObject();*/
+				writer.Key("x");
+				writer.Double(x);
+				writer.Key("y");
+				writer.Double(y);
+				writer.Key("ba");
+				writer.Double(bound.bottom);
+				writer.Key("ta");
+				writer.Double(bound.top);
+				writer.Key("la");
+				writer.Double(bound.left);
+				writer.Key("ra");
+				writer.Double(bound.right);
+				writer.EndObject();*/
 
 
-				object_list->push_back(roy);
 
 				map_object.insert(std::pair<int, BaseObject*>(id, roy));
 			}
@@ -1981,7 +1996,7 @@ bool ObjectManager::load_list(const char * filename)
 		//writer.EndArray();
 
 		// create RioBrown
-	/*	writer.Key("RioBrown");
+		/*	writer.Key("RioBrown");
 		writer.StartArray();*/
 		const Value& listRioBrown = jSon["RioBrown"];
 		if (listRioBrown.IsArray())
@@ -2005,22 +2020,21 @@ bool ObjectManager::load_list(const char * filename)
 				rob->setActiveBound(bound);
 
 				/*			writer.StartObject();
-							writer.Key("x");
-							writer.Double(x);
-							writer.Key("y");
-							writer.Double(y);
-							writer.Key("ba");
-							writer.Double(bound.bottom);
-							writer.Key("ta");
-							writer.Double(bound.top);
-							writer.Key("la");
-							writer.Double(bound.left);
-							writer.Key("ra");
-							writer.Double(bound.right);
-							writer.EndObject();*/
+				writer.Key("x");
+				writer.Double(x);
+				writer.Key("y");
+				writer.Double(y);
+				writer.Key("ba");
+				writer.Double(bound.bottom);
+				writer.Key("ta");
+				writer.Double(bound.top);
+				writer.Key("la");
+				writer.Double(bound.left);
+				writer.Key("ra");
+				writer.Double(bound.right);
+				writer.EndObject();*/
 
 
-				object_list->push_back(rob);
 
 				map_object.insert(std::pair<int, BaseObject*>(id, rob));
 			}
@@ -2028,7 +2042,7 @@ bool ObjectManager::load_list(const char * filename)
 		//writer.EndArray();
 
 		// create RioRed
-	/*	writer.Key("RioRed");
+		/*	writer.Key("RioRed");
 		writer.StartArray();*/
 		const Value& listRioRed = jSon["RioRed"];
 		if (listRioRed.IsArray())
@@ -2054,22 +2068,21 @@ bool ObjectManager::load_list(const char * filename)
 				ror->setActiveBound(bound);
 
 				/*			writer.StartObject();
-							writer.Key("x");
-							writer.Double(x);
-							writer.Key("y");
-							writer.Double(y);
-							writer.Key("ba");
-							writer.Double(bound.bottom);
-							writer.Key("ta");
-							writer.Double(bound.top);
-							writer.Key("la");
-							writer.Double(bound.left);
-							writer.Key("ra");
-							writer.Double(bound.right);
-							writer.EndObject();*/
+				writer.Key("x");
+				writer.Double(x);
+				writer.Key("y");
+				writer.Double(y);
+				writer.Key("ba");
+				writer.Double(bound.bottom);
+				writer.Key("ta");
+				writer.Double(bound.top);
+				writer.Key("la");
+				writer.Double(bound.left);
+				writer.Key("ra");
+				writer.Double(bound.right);
+				writer.EndObject();*/
 
 
-				object_list->push_back(ror);
 
 				map_object.insert(std::pair<int, BaseObject*>(id, ror));
 			}
@@ -2107,22 +2120,22 @@ bool ObjectManager::load_list(const char * filename)
 
 				kraid->setBoundCollision();
 
-				const Value& arrayWall = listKraid[i]["ListCollideID"];
+				/*const Value& arrayWall = listKraid[i]["ListCollideID"];
 				for (SizeType t = 0; t < arrayWall.Size(); t++)
 				{
 					kraid->getListWallCanCollide()->push_back(map_object.find(arrayWall[t].GetInt())->second);
-				}
+				}*/
 				/*			writer.StartObject();
-							writer.Key("x");
-							writer.Double(x);
-							writer.Key("y");
-							writer.Double(y);
-							writer.EndObject();*/
+				writer.Key("x");
+				writer.Double(x);
+				writer.Key("y");
+				writer.Double(y);
+				writer.EndObject();*/
 
 
 				kraid->setActiveBound(bound);
 
-				object_list->push_back(kraid);
+
 
 				map_object.insert(std::pair<int, BaseObject*>(id, kraid));
 			}
@@ -2141,12 +2154,12 @@ bool ObjectManager::load_list(const char * filename)
 			dg->setPosition(VECTOR2(x, y));
 
 			/*		writer.Key("Dragon");
-					writer.StartObject();
-					writer.Key("x");
-					writer.Double(x);
-					writer.Key("y");
-					writer.Double(y);
-					writer.EndObject();*/
+			writer.StartObject();
+			writer.Key("x");
+			writer.Double(x);
+			writer.Key("y");
+			writer.Double(y);
+			writer.EndObject();*/
 
 			bound.left = x;
 			bound.top = y;
@@ -2156,7 +2169,7 @@ bool ObjectManager::load_list(const char * filename)
 
 			dg->setActiveBound(bound);
 
-			object_list->push_back(dg);
+
 
 			map_object.insert(std::pair<int, BaseObject*>(id, dg));
 		}
@@ -2176,12 +2189,12 @@ bool ObjectManager::load_list(const char * filename)
 			motherFacker->setPosition(VECTOR2(x, y));
 
 			/*		writer.Key("MotherBrain");
-					writer.StartObject();
-					writer.Key("x");
-					writer.Double(x);
-					writer.Key("y");
-					writer.Double(y);
-					writer.EndObject();*/
+			writer.StartObject();
+			writer.Key("x");
+			writer.Double(x);
+			writer.Key("y");
+			writer.Double(y);
+			writer.EndObject();*/
 
 			bound.left = x - motherFacker->getSprite()->getWidth();
 			bound.top = y + motherFacker->getSprite()->getHeight();
@@ -2195,7 +2208,7 @@ bool ObjectManager::load_list(const char * filename)
 			bound.bottom = bound.top - 65;
 			motherFacker->setBoundCollision();
 
-			object_list->push_back(motherFacker);
+
 
 			map_object.insert(std::pair<int, BaseObject*>(id, motherFacker));
 		}
@@ -2209,7 +2222,6 @@ bool ObjectManager::load_list(const char * filename)
 
 		// Create QuadTree
 		//MetroidRect rect(QUADTREE_H, 0, 0, QUADTREE_W);
-		//quadtree = Quadtree::createQuadTree(rect, this->object_list);
 
 		return true;
 	}
@@ -2221,16 +2233,6 @@ bool ObjectManager::load_list(const char * filename)
 }
 
 
-ObjectManager::ObjectManager()
-{
-	this->object_list = new list<BaseObject*>();
-	this->listNotWallCanCollideSamus = new list<BaseObject*>();
-	this->listObjectNotWallOnViewPort = new list<BaseObject*>();
-	this->listWallCanCollideSamus = new list<BaseObject*>();
-
-	this->totalObjectsPerFrame = 0;
-	this->timer = 0;
-}
 
 
 ObjectManager::~ObjectManager()
@@ -2238,23 +2240,4 @@ ObjectManager::~ObjectManager()
 }
 
 
-
-void ObjectManager::release()
-{
-	for (list<BaseObject*>::iterator i = object_list->begin(); i != object_list->end(); ++i)
-	{
-		delete *i;
-	}
-	object_list->clear();
-	delete object_list;
-
-	delete listNotWallCanCollideSamus;
-	delete listObjectNotWallOnViewPort;
-	delete listWallCanCollideSamus;
-
-	quadtree->clear();
-	delete quadtree;
-
-	delete instance;
-}
 

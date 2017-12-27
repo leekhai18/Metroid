@@ -36,7 +36,7 @@ Brick::Brick(TextureManager * textureM, Graphics * graphics, BrickStyle style) :
 	}
 	isActivity = true;
 	visible = true;
-	listCanCollide = new list<BaseObject*>();
+	listCanCollide = new map<int,BaseObject*>();
 }
 
 
@@ -65,7 +65,8 @@ void Brick::onCollision(float dt)
 	{
 		for (auto i = listCanCollide->begin(); i !=listCanCollide->end(); i++)
 		{
-			if(Collision::getInstance()->isCollide(this->boundCollision, (*i)->getBoundCollision()))
+			BaseObject* object = (*i).second;
+			if(Collision::getInstance()->isCollide(this->boundCollision, object->getBoundCollision()))
 			{
 				this->timeReset = 0;
 			}

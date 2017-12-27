@@ -5,7 +5,8 @@
 #include "Samus.h"
 #include "IFreezable.h"
 #include "IExplosible.h"
-class Skree : public BaseObject, public IFreezable,public IExplosible
+#include "IBonusable.h" 
+class Skree : public BaseObject, public IFreezable,public IExplosible,public IBonusable
 {
 private:
 	Animation *animationRotate;
@@ -19,7 +20,7 @@ private:
 	// support to reinit
 	VECTOR2 initPosition;
 
-	list<BaseObject*> *listWallCanCollide;
+	map<int,BaseObject*> *listWallCanCollide;
 	list<CollisionReturn> *listCollide;
 	bool beHit;
 	float timerHit;
@@ -53,7 +54,7 @@ public:
 	void setBeHit(bool flag);
 	void decreaseHealth(float dame);
 
-	list<BaseObject*>* getListWallCanCollide();
+	map<int, BaseObject*>* getListWallCanCollide();
 	list<CollisionReturn> *getListCollide();
 };
 

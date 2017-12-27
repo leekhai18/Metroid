@@ -3,6 +3,11 @@
 #include "Camera.h"
 #include "GameLog.h"
 
+#include "Skree.h"
+#include "Zommer.h"
+#include "Waver.h"
+#include "Zeb.h"
+#include "Rio.h"
 SamusStateFallRolling::SamusStateFallRolling()
 {
 }
@@ -105,9 +110,9 @@ void SamusStateFallRolling::onCollision(float dt)
 		bound.right = position.x + WIDTH_COLLISION*0.5f;
 		bound.top = position.y + HEIGHT_COLLISION*0.5f;
 		bound.bottom = position.y - HEIGHT_COLLISION*0.5f;
-		for (auto i = this->samus->getListCanCollide().begin(); i != this->samus->getListCanCollide().end(); i++)
+		for (map<int,BaseObject*>::iterator i = this->samus->getListCanCollide()->begin(); i != this->samus->getListCanCollide()->end(); ++i)
 		{
-			if (Collision::getInstance()->isCollide((*i)->getBoundCollision(), bound))
+			if (Collision::getInstance()->isCollide((*i).second->getBoundCollision(), bound))
 			{
 				this->samus->setStatus(eStatus::FALLING_ROLLING);
 			}
@@ -144,10 +149,76 @@ void SamusStateFallRolling::onCollision(float dt)
 			}
 			break;
 		case eID::ZOMMER:
+		{
+			Zommer* zommer = static_cast<Zommer*>(i->object);
+			if (zommer->getCold())
+			{
+				switch (i->direction)
+				{
+				case CollideDirection::LEFT:
+					this->samus->setVelocityX(0);
+					//not allow move left
+					this->samus->setCanMoveRight(false);
+					break;
+				case CollideDirection::RIGHT:
+					this->samus->setVelocityX(0);
+					//not allow move right
+					this->samus->setCanMoveLeft(false);
+					break;
+				case CollideDirection::TOP:
+					this->samus->setVelocityY(0);
+					break;
+				}
+			}
+			else if (zommer->getExplose())
+			{
+				zommer->setCanDraw(false);
+			}
+			else
+			{
+				SamusStateManager::getInstance()->setOldStatus(eStatus::RUNNING);
+				this->samus->setStatus(eStatus::INJURING);
+				SamusStateManager::getInstance()->setOldState(this);
+			}
+			break;
+		}
+		case eID::WAVER:
+		{
+			Waver* waver = static_cast<Waver*>(i->object);
+			if (waver->getCold())
+			{
+				switch (i->direction)
+				{
+				case CollideDirection::LEFT:
+					this->samus->setVelocityX(0);
+					//not allow move left
+					this->samus->setCanMoveRight(false);
+					break;
+				case CollideDirection::RIGHT:
+					this->samus->setVelocityX(0);
+					//not allow move right
+					this->samus->setCanMoveLeft(false);
+					break;
+				case CollideDirection::TOP:
+					this->samus->setVelocityY(0);
+					break;
+				}
+			}
+			else if (waver->getExplose())
+			{
+				waver->setCanDraw(false);
+			}
+			else
+			{
+				SamusStateManager::getInstance()->setOldStatus(eStatus::RUNNING);
+				this->samus->setStatus(eStatus::INJURING);
+				SamusStateManager::getInstance()->setOldState(this);
+			}
+			break;
+		}
 		case eID::SKREE:
 		case eID::RIO:
 		case eID::RIPPER:
-		case eID::WAVER:
 		case eID::ZEB:
 		case eID::BOSSKRAID:
 			switch (i->direction)

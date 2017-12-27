@@ -5,7 +5,7 @@
 
 
 #define DISTANCE_MOVE_FRONT_GATE 24
-
+#define ACTIVE 80
 //start position
 //#define SAMUS_POS_X 640
 //#define SAMUS_POS_Y 1267
@@ -25,6 +25,14 @@
 //waver postision
 #define SAMUS_POS_X 3911
 #define SAMUS_POS_Y 3000
+void Samus::setActiveBound()
+{
+	// Can 1 con so hop ly
+	this->activeBound.top = this->boundCollision.top + ACTIVE;
+	this->activeBound.left = this->boundCollision.left - ACTIVE;
+	this->activeBound.right = this->boundCollision.right + ACTIVE;
+	this->activeBound.bottom = this->boundCollision.bottom - ACTIVE;
+}
 Samus::Samus(TextureManager* textureM,Graphics* graphics, Input* input) : BaseObject(eID::SAMUS)
 {
 	this->input = input;
@@ -92,13 +100,42 @@ Samus::Samus(TextureManager* textureM,Graphics* graphics, Input* input) : BaseOb
 
 	this->textNumRocket = new Text("0", eFont::body, 8, VECTOR2(45, 30), GraphicsNS::WHITE, false, true);
 	this->textNumRocket->initialize(graphics);
-
+	//listCanCollide = new map<int, BaseObject*>();
+	listCollide = new list<CollisionReturn>();
 }
 
 Samus::Samus()
 {
 }
+void Samus::release()
+{
+	delete this->sprite;
+	delete runningNormalAnimation;
+	delete runningUpAnimation;
+	delete runningHittingRightAnimation;
+	delete rollingAnimation;
+	delete startingAnimation;
+	delete jumpingAnimation;
 
+	bulletPool->release();
+	boomPool->release();
+	rocketPool->release();
+
+	//delete this->listCanCollide;
+	delete this->listCollide;
+
+	delete this->labelIconHealth;
+	delete this->labelIconRoket;
+	delete this->textHealth;
+	delete this->textNumRocket;
+
+	for (list<Sprite*>::iterator i = listNumLives->begin(); i != listNumLives->end(); ++i)
+	{
+		delete *i;
+	}
+	listNumLives->clear();
+	delete listNumLives;
+}
 Samus::~Samus()
 {
 	this->release();
@@ -280,40 +317,14 @@ void Samus::setCanMoveToFrontGate(bool flag)
 	this->moveToFontGate = flag;
 }
 
-void Samus::setListCanCollide(list<BaseObject*> list)
+void Samus::setListCanCollide(map<int, BaseObject*>* list)
 {
 	this->listCanCollide = list;
 }
 
-void Samus::release()
-{
-	delete this->sprite;
-	delete runningNormalAnimation;
-	delete runningUpAnimation;
-	delete runningHittingRightAnimation;
-	delete rollingAnimation;
-	delete startingAnimation;
-	delete jumpingAnimation;
 
-	bulletPool->release();
-	boomPool->release();
-	rocketPool->release();
 
-	this->listCollide->clear();
-	delete this->listCollide;
 
-	delete this->labelIconHealth;
-	delete this->labelIconRoket;
-	delete this->textHealth;
-	delete this->textNumRocket;
-
-	for (list<Sprite*>::iterator i = listNumLives->begin(); i != listNumLives->end(); ++i)
-	{
-		delete *i;
-	}
-	listNumLives->clear();
-	delete listNumLives;
-}
 
 void Samus::updateHorizontal(float dt)
 {
@@ -376,14 +387,7 @@ void Samus::setBoundCollision(MetroidRect rect)
 	this->setActiveBound();
 }
 
-void Samus::setActiveBound()
-{
-	// Can 1 con so hop ly
-	this->activeBound.top = this->boundCollision.top + 80;
-	this->activeBound.left = this->boundCollision.left - 80;
-	this->activeBound.right = this->boundCollision.right + 80;
-	this->activeBound.bottom = this->boundCollision.bottom - 80;
-}
+
 
 void Samus::setVisible(bool visible)
 {
@@ -423,12 +427,15 @@ void Samus::setAcrobat(bool acrobat)
 	this->acrobat = acrobat;
 }
 
-list<BaseObject*>& Samus::getListCanCollide()
+map<int, BaseObject*>* Samus::getListCanCollide()
 {
 	return this->listCanCollide;
 
 }
-
+list<CollisionReturn>* Samus::getListCollide()
+{
+	return this->listCollide;
+}
 Animation * Samus::getStartingAnim()
 {
 	return this->startingAnimation;
@@ -459,10 +466,7 @@ Animation * Samus::getJumpingAnim()
 	return this->jumpingAnimation;
 }
 
-list<CollisionReturn>* Samus::getListCollide()
-{
-	return this->listCollide;
-}
+
 
 bool Samus::isHaveMariMaru()
 {

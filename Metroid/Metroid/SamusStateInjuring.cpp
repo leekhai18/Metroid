@@ -3,7 +3,7 @@
 #include "SamusStateManager.h"
 
 #define TIME_ANIMATION 0.1f
-#define TIME_TO_STANDING 0.5f
+#define TIME_TO_NORMAL 0.5f
 SamusStateInjuring::SamusStateInjuring()
 {
 }
@@ -24,7 +24,7 @@ SamusStateInjuring::~SamusStateInjuring()
 void SamusStateInjuring::init()
 {
 
-	this->samus->setVelocityY(-SAMUS_MIN_SPEED_Y);
+	//this->samus->setVelocityY(-SAMUS_MIN_SPEED_Y);
 
 	
 	setBoundCollision();
@@ -38,7 +38,7 @@ void SamusStateInjuring::init()
 void SamusStateInjuring::handleInput(float dt)
 {
 	this->samus->setVelocityY(-SAMUS_MIN_SPEED_Y);
-	this->samus->setVelocityX((float)(-SAMUS_VERLOCITY_X*this->samus->getDirection()));
+	this->samus->setVelocityX(-SAMUS_VERLOCITY_X*this->samus->getDirection());
 }
 
 void SamusStateInjuring::onCollision(float dt)
@@ -60,7 +60,21 @@ void SamusStateInjuring::onCollision(float dt)
 			{
 			case CollideDirection::TOP:
 				this->samus->setVelocityY(0);
-
+				if (SamusStateManager::getInstance()->getOldStatus() == eStatus::RUNNING ||
+					SamusStateManager::getInstance()->getOldStatus() == eStatus::STANDING)
+				{
+					this->samus->setPositionY(i->positionCollision + OFFSET_STAND);
+					//this->samus->setStatus(eStatus::STANDING);
+				}
+				else if(SamusStateManager::getInstance()->getOldStatus() == eStatus::JUMPING)
+				{
+					this->samus->setPositionY(i->positionCollision + OFFSET_STAND);
+				}
+				if(SamusStateManager::getInstance()->getOldStatus() == eStatus::ROLLING || 
+					SamusStateManager::getInstance()->getOldStatus() == eStatus::FALLING_ROLLING)
+				{
+					this->samus->setPositionY(i->positionCollision + OFFSET_ROLLING);
+				}
 				break;
 			case CollideDirection::LEFT:
 				if (SamusStateManager::getInstance()->getOldStatus() == eStatus::RUNNING ||
@@ -87,6 +101,9 @@ void SamusStateInjuring::onCollision(float dt)
 					}
 				}
 				this->samus->setVelocityX(0);
+				break;
+			case CollideDirection::BOTTOM:
+				this->samus->setVelocityY(0);
 				break;
 			}
 			break;
@@ -159,7 +176,7 @@ void SamusStateInjuring::update(float dt)
 		}
 		time_animation = time_animation - TIME_ANIMATION;
 	}
-	if(time_to_stand >= TIME_TO_STANDING)
+	if(time_to_stand >= TIME_TO_NORMAL)
 	{
 		//if(this->)
 		this->samus->setStatus(SamusStateManager::getInstance()->getOldStatus());

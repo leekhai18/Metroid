@@ -42,7 +42,6 @@ Rocket::Rocket()
 Rocket::~Rocket()
 {
 	delete this->sprite;
-	this->listCollide->clear();
 	delete this->listCollide;
 }
 

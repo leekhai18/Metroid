@@ -19,7 +19,11 @@ Zeb::Zeb(TextureManager * textureM, Graphics * graphics, EnemyColors color,Samus
 		throw GameError(GameErrorNS::FATAL_ERROR, "Can not init sprite Zeb");
 	}
 	this->samusPosition = VECTOR2ZERO;
-	initialize(this->sprite, IndexManager::getInstance()->samusYellowExplosion, NUM_FRAMES_EXPLOSION, EXPLOSION_TIME_FRAME_DELAY);
+
+	this->initExplosion(this->sprite, IndexManager::getInstance()->samusYellowExplosion, NUM_FRAMES_EXPLOSION, EXPLOSION_TIME_FRAME_DELAY);
+
+	this->initItem(this->sprite, IndexManager::getInstance()->en, NUM_FRAMES_BONUS, TIME_FRAME_DELAY);
+
 	switch (color)
 	{
 	case Yellow:
@@ -147,6 +151,20 @@ void Zeb::update(float dt)
 		this->setPosition(VECTOR2(this->getPosition().x + velocity.x*dt,
 			this->getPosition().y + velocity.y*dt));
 	}
+
+	if (isExplose)
+	{
+		IBonusable::update(dt);
+	}
+	else
+	{
+		IExplosible::update(dt);
+		if (isExplose)
+		{
+			IBonusable::start();
+		}
+	}
+
 	if (this->getPosition().x < Camera::getInstance()->getBound().left - 20 || this->getPosition().x > Camera::getInstance()->getBound().right + 20)
 	{
 		reInit();

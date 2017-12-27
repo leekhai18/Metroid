@@ -14,6 +14,7 @@ AlienBig::AlienBig(TextureManager * textureM, Graphics * graphics) : BaseObject(
 
 	this->sprite->setData(IndexManager::getInstance()->alienBigR);
 	listBrick = new list<Brick*>();
+	this->getSprite()->setOrigin(VECTOR2(0.5, 0.5));
 }
 
 void AlienBig::setBoundCollision()
@@ -27,6 +28,16 @@ void AlienBig::setBoundCollision()
 
 	this->boundCollision = rect;
 }
+//void AlienBig::setActiveBound()
+//{
+//	MetroidRect rect;
+//
+//	rect.left = boundCollision.left - 80;
+//	rect.right = boundCollision.right + 80;
+//	rect.top = boundCollision.top + 80;
+//	rect.bottom = boundCollision.bottom - 80;
+//	this->activeBound = rect;
+//}
 AlienBig::~AlienBig()
 {
 	delete this->sprite;

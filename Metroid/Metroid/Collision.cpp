@@ -238,6 +238,7 @@ bool Collision::checkCollision(BaseObject * myEntity, BaseObject * otherEntity, 
 
 bool Collision::checkCollision(BaseObject * myObj, Samus * samus, float dt)
 {
+
 	float _dxEntry, _dyEntry, _dxExit, _dyExit;
 	float _txEntry, _tyEntry, _txExit, _tyExit;
 	MetroidRect   myRect = samus->getBoundCollision();

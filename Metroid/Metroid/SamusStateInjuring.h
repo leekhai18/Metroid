@@ -6,6 +6,7 @@ private:
 	float time_to_stand;
 	float time_animation;
 	eStatus oldStatus;
+	float positionCollide;
 public:
 	void init();
 	void handleInput(float dt);

@@ -1,12 +1,13 @@
 #pragma once
 #include "BaseObject.h"
 #include <list>
+#include <map>
 class Brick : public BaseObject
 {
 private:
 	
 	float timeReset;
-	list<BaseObject*>* listCanCollide;
+	map<int,BaseObject*>* listCanCollide;
 	bool visible;
 public:
 	Brick();

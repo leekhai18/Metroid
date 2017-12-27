@@ -14,6 +14,7 @@ AlienSmall::AlienSmall(TextureManager * textureM, Graphics * graphics,AlienBig* 
 	}
 
 	this->sprite->setData(IndexManager::getInstance()->alienSmallR);
+	this->getSprite()->setOrigin(VECTOR2(0.5, 0.5));
 }
 
 
@@ -46,6 +47,18 @@ void AlienSmall::setBoundCollision()
 
 	this->boundCollision = rect;
 }
+
+//void AlienSmall::setActiveBound()
+//{
+//	MetroidRect rect;
+//
+//	rect.left = boundCollision.left - 80;
+//	rect.right = boundCollision.right + 80;
+//	rect.top = boundCollision.top + 80;
+//	rect.bottom = boundCollision.bottom - 80;
+//	this->activeBound = rect;
+//}
+//
 
 void AlienSmall::update(float dt)
 {

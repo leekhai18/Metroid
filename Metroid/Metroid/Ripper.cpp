@@ -2,7 +2,7 @@
 #define TIME_FRAME_DELAY 0.15f
 #define RIPPER_VELOCITY_X 40
 #define RIPPER_OFFSET_COLLISION 0.1f
-
+#define TIME_RETURN_NOMAL 5.0f
 Ripper::Ripper()
 {
 }
@@ -19,14 +19,17 @@ Ripper::Ripper(TextureManager * textureM, Graphics * graphics, EnemyColors color
 	{
 	case Yellow:
 		this->sprite->setData(IndexManager::getInstance()->ripperYellow);
+		resetFrame = IndexManager::getInstance()->ripperYellow;
 		break;
 
 	case Brown:
 		this->sprite->setData(IndexManager::getInstance()->ripperBrown);
+		resetFrame = IndexManager::getInstance()->ripperBrown;
 		break;
 
 	case Red:
 		this->sprite->setData(IndexManager::getInstance()->ripperRed);
+		resetFrame = IndexManager::getInstance()->ripperRed;
 		break;
 
 	default:
@@ -35,7 +38,7 @@ Ripper::Ripper(TextureManager * textureM, Graphics * graphics, EnemyColors color
 	this->setOrigin(VECTOR2(0.5, 0.5));
 	this->setVelocityX(-RIPPER_VELOCITY_X);
 	this->setVelocityY(0);
-	this->listWallCanCollide = new list<BaseObject*>();
+	this->listWallCanCollide = new map<int,BaseObject*>();
 	this->listCollide = new list<CollisionReturn>();
 
 }
@@ -46,6 +49,14 @@ Ripper::~Ripper()
 	delete this->sprite;
 	delete listWallCanCollide;
 	delete listCollide;
+}
+
+void Ripper::handleVelocity(float dt)
+{
+	if(!isCold)
+	{
+		this->velocity.x = RIPPER_VELOCITY_X*direction;
+	}
 }
 
 void Ripper::setBoundCollision()
@@ -63,10 +74,11 @@ void Ripper::setBoundCollision()
 
 void Ripper::onCollision(float dt)
 {
-	for (auto i = this->getListWallCanCollide()->begin(); i != this->getListWallCanCollide()->end(); i++)
+	/*for (auto i = this->listCanCollide->begin(); i != this->listCanCollide->end(); i++)
 	{
-		Collision::getInstance()->checkCollision(this, *i, dt);
-	}
+		BaseObject* x = (*i).second;
+		Collision::getInstance()->checkCollision(this, x, dt);
+	}*/
 
 	for (auto x = this->listCollide->begin(); x != this->listCollide->end(); x++)
 	{
@@ -74,11 +86,14 @@ void Ripper::onCollision(float dt)
 		{
 		case CollideDirection::LEFT:
 			this->sprite->setFlipX(false);
-			this->setVelocityX(-RIPPER_VELOCITY_X);
+			//this->setVelocityX(-RIPPER_VELOCITY_X);
+			this->velocity.x = 0;
+			direction = eDirection::left;
 			break;
 		case CollideDirection::RIGHT:
 			this->sprite->setFlipX(true);
-			this->setVelocityX(RIPPER_VELOCITY_X);
+			this->velocity.x = 0;
+			direction = eDirection::right;
 			break;
 		case CollideDirection::TOP:
 			
@@ -96,10 +111,20 @@ void Ripper::update(float dt)
 {
 	if (this->isCold)
 	{
-		this->sprite->setData(this->frameID[IndexManager::getInstance()->ripperBlue[0]]);
-		return;
-	}
+		timeReturnNormal += dt;
+		if (timeReturnNormal >= TIME_RETURN_NOMAL)
+		{
+			this->isCold = false;
+			this->sprite->setData(resetFrame);
+		}
+		else
+		{
+			this->sprite->setData(this->frameID[0]);
+			this->setVelocity(VECTOR2(0, 0));
+			return;
+		}
 
+	}
 	this->setPosition(VECTOR2(this->getPosition().x + this->velocity.x*dt, this->getPosition().y + this->velocity.y*dt));
 	setBoundCollision();
 }
@@ -108,7 +133,7 @@ void Ripper::draw()
 {
 	this->sprite->draw();
 }
-list<BaseObject*>* Ripper::getListWallCanCollide()
+map<int,BaseObject*>* Ripper::getListWallCanCollide()
 {
 	return this->listWallCanCollide;
 }

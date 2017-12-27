@@ -19,6 +19,7 @@ IFreezable::IFreezable()
 IFreezable::IFreezable(const int * frameID)
 {
 	this->frameID = frameID;
+	isCold = false;
 }
 
 

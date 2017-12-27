@@ -60,7 +60,7 @@ public:
 	const int ripperYellow = 31 ;
 	const int ripperBrown = 32;
 	const int ripperRed = 33;
-	const int ripperBlue[1] = { 34 };
+	const int ripperBlue[1] = { 35 };
 
 	const int mellow[2] = { 35,36 };
 

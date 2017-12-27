@@ -36,10 +36,10 @@ SamusStateStanding::~SamusStateStanding()
 void SamusStateStanding::init()
 {
 
-	if (this->samus->isFaling())
+	/*if (this->samus->isFaling())
 		this->samus->setVelocityY(SAMUS_V0_FALL_Y);
 	else
-		this->samus->setVelocityY(-SAMUS_MIN_SPEED_Y);
+		this->samus->setVelocityY(-SAMUS_MIN_SPEED_Y);*/
 
 	setBoundCollision();
 	timerToRunning = 0;
@@ -69,7 +69,7 @@ void SamusStateStanding::init()
 void SamusStateStanding::handleInput(float dt)
 {
 
-	this->samus->setVelocityY(-SAMUS_MIN_SPEED_Y);
+	this->samus->setVelocity(VECTOR2(0,-SAMUS_MIN_SPEED_Y));
 	if (!Camera::getInstance()->moveWhenSamusOnPort()) {
 		if (input->isKeyUp(VK_LEFT) && input->isKeyUp(VK_RIGHT))
 			timerToRunning = 0;
@@ -264,7 +264,7 @@ void SamusStateStanding::onCollision(float dt)
 		{
 		case eID::WALL:
 		case eID::BRICK:
-		case eID::FIRE: 
+		case eID::FIRE:
 		case eID::ELEVATOR:
 		case eID::ALIENBIG:
 		case eID::ALIENSMALL:
@@ -316,7 +316,7 @@ void SamusStateStanding::onCollision(float dt)
 				SamusStateManager::getInstance()->setOldState(this);
 			}
 			//this->samus->setVelocity(VECTOR2(0, 0));
-		
+
 			break;
 		}
 		case eID::RIO:
@@ -329,9 +329,14 @@ void SamusStateStanding::onCollision(float dt)
 			}
 
 			//this->samus->setVelocity(VECTOR2(0, 0));
-			SamusStateManager::getInstance()->setOldStatus(eStatus::STANDING);
-			this->samus->setStatus(eStatus::INJURING);
-			SamusStateManager::getInstance()->setOldState(this);
+			Rio* rio = static_cast<Rio*>(i->object);
+			if (!rio->getCold())
+			{
+				//this->samus->setVelocity(VECTOR2(0, 0));
+				SamusStateManager::getInstance()->setOldStatus(eStatus::STANDING);
+				this->samus->setStatus(eStatus::INJURING);
+				SamusStateManager::getInstance()->setOldState(this);
+			}
 			break;
 		}
 		case eID::RIPPER:
@@ -342,29 +347,35 @@ void SamusStateStanding::onCollision(float dt)
 				this->samus->setVelocityY(0);
 				break;
 			}
-
-			//this->samus->setVelocity(VECTOR2(0, 0));
-			SamusStateManager::getInstance()->setOldStatus(eStatus::STANDING);
-			this->samus->setStatus(eStatus::INJURING);
-			SamusStateManager::getInstance()->setOldState(this);
+			Ripper* ripper = static_cast<Ripper*>(i->object);
+			if (!ripper->getCold())
+			{
+				//this->samus->setVelocity(VECTOR2(0, 0));
+				SamusStateManager::getInstance()->setOldStatus(eStatus::STANDING);
+				this->samus->setStatus(eStatus::INJURING);
+				SamusStateManager::getInstance()->setOldState(this);
+			}
 			break;
 		}
 		case eID::WAVER:
 		{
-				switch (i->direction)
-				{
-				case CollideDirection::TOP:
-					this->samus->setVelocityY(0);
-					break;
-				}
-
-			//this->samus->setVelocity(VECTOR2(0, 0));
-			SamusStateManager::getInstance()->setOldStatus(eStatus::STANDING);
-			this->samus->setStatus(eStatus::INJURING);
-			SamusStateManager::getInstance()->setOldState(this);
-			break; 
+			switch (i->direction)
+			{
+			case CollideDirection::TOP:
+				this->samus->setVelocityY(0);
+				break;
+			}
+			Waver* waver = static_cast<Waver*>(i->object);
+			if (!waver->getCold())
+			{
+				//this->samus->setVelocity(VECTOR2(0, 0));
+				SamusStateManager::getInstance()->setOldStatus(eStatus::STANDING);
+				this->samus->setStatus(eStatus::INJURING);
+				SamusStateManager::getInstance()->setOldState(this);			
+			}
+			break;
 		}
-			
+
 		case eID::ZEB:
 		{
 			switch (i->direction)
@@ -373,14 +384,17 @@ void SamusStateStanding::onCollision(float dt)
 				this->samus->setVelocityY(0);
 				break;
 			}
-
-			//this->samus->setVelocity(VECTOR2(0, 0));
-			SamusStateManager::getInstance()->setOldStatus(eStatus::STANDING);
-			this->samus->setStatus(eStatus::INJURING);
-			SamusStateManager::getInstance()->setOldState(this);
+			Zeb* zeb = static_cast<Zeb*>(i->object);
+			if (!zeb->getCold())
+			{
+				//this->samus->setVelocity(VECTOR2(0, 0));
+				SamusStateManager::getInstance()->setOldStatus(eStatus::STANDING);
+				this->samus->setStatus(eStatus::INJURING);
+				SamusStateManager::getInstance()->setOldState(this);
+			}
 			break;
 		}
-			
+
 		case eID::BOSSKRAID:
 		{
 			switch (i->direction)
@@ -396,7 +410,7 @@ void SamusStateStanding::onCollision(float dt)
 			SamusStateManager::getInstance()->setOldState(this);
 			break;
 		}
-			
+
 		default:
 			break;
 		}
@@ -414,7 +428,7 @@ void SamusStateStanding::update(float dt)
 		switch (this->samus->getStatus())
 		{
 		case eStatus::JUMPING:
-		
+
 			//this->samus->setPositionX(this->samus->getPosition().x )
 			SamusStateManager::getInstance()->changeStateTo(this->samus->getStatus());
 			break;
@@ -422,10 +436,10 @@ void SamusStateStanding::update(float dt)
 			SamusStateManager::getInstance()->changeStateTo(this->samus->getStatus());
 			break;
 		case eStatus::ROLLING:
-			if(canRolling)
+			if (canRolling)
 			{
 				SamusStateManager::getInstance()->changeStateTo(this->samus->getStatus());
-			}			
+			}
 			break;
 		case eStatus::INJURING:
 			SamusStateManager::getInstance()->changeStateTo(this->samus->getStatus());
@@ -494,6 +508,6 @@ void SamusStateStanding::fireRocket()
 	}
 
 	rocket->init(stP);
-	
+
 	this->samus->setNumRocket(this->samus->getNumRocket() - 1);
 }

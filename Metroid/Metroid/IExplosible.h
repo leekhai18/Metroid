@@ -5,12 +5,17 @@ class IExplosible
 {
 protected:
 	Animation *explosion;
-	bool canDraw;
+
+	bool isExplose;
+
 public:
 	IExplosible();
-	void initialize(Sprite* sprite, const int* frames, int totalFrames, float frameDelay);
+	void initExplosion(Sprite* sprite, const int* frames, int totalFrames, float frameDelay);
+
+	void reInit();
 	void start();
 	void update(float dt);
+	bool getExplose();
 	~IExplosible();
 };
 

@@ -5,7 +5,7 @@
 #define ZOMMER_VELOCITY_Y 45
 #define ZOMMER_OFFSET_COLLISION 0.1f
 #define TIME_DELAY_BE_HIT 0.2f
-#define TIME_RETURN_NOMAL 1.0f
+#define TIME_RETURN_NOMAL 5.0f
 
 Zommer::Zommer(TextureManager * textureM, Graphics * graphics, EnemyColors color) : BaseObject(eID::ZOMMER),IFreezable(IndexManager::getInstance()->zoomerBlue)
 {
@@ -14,22 +14,26 @@ Zommer::Zommer(TextureManager * textureM, Graphics * graphics, EnemyColors color
 	{
 		throw GameError(GameErrorNS::FATAL_ERROR, "Can not init sprite Zommer");
 	}
-	initialize(this->sprite, IndexManager::getInstance()->samusYellowExplosion, NUM_FRAMES_EXPLOSION, EXPLOSION_TIME_FRAME_DELAY);
+	this->initExplosion(this->sprite, IndexManager::getInstance()->samusYellowExplosion, NUM_FRAMES_EXPLOSION, EXPLOSION_TIME_FRAME_DELAY);
 
+	this->initItem(this->sprite, IndexManager::getInstance()->en, NUM_FRAMES_BONUS, TIME_FRAME_DELAY);
 	switch (color)
 	{
 	case Yellow:
 		anim = new Animation(this->sprite, IndexManager::getInstance()->zoomerYellow, NUM_FRAMES_ZOOMER, TIME_FRAME_DELAY);
+		reset = IndexManager::getInstance()->zoomerYellow[0];
 		health = 2;
 		break;
 
 	case Brown:
 		anim = new Animation(this->sprite, IndexManager::getInstance()->zoomerBrown, NUM_FRAMES_ZOOMER, TIME_FRAME_DELAY);
+		reset = IndexManager::getInstance()->zoomerBrown[0];
 		health = 2;
 		break;
 
 	case Red:
 		anim = new Animation(this->sprite, IndexManager::getInstance()->zoomerRed, NUM_FRAMES_ZOOMER, TIME_FRAME_DELAY);
+		reset = IndexManager::getInstance()->zoomerRed[0];
 		health = 4;
 		break;
 
@@ -40,7 +44,7 @@ Zommer::Zommer(TextureManager * textureM, Graphics * graphics, EnemyColors color
 	//this->topSide=()
 	this->setOrigin(VECTOR2(0.5, 0.5));
 	
-	this->listWallCanCollide = new list<BaseObject*>();
+	this->listWallCanCollide = new map<int,BaseObject*>();
 	this->listCollide = new list<CollisionReturn>();
 	anim->start();
 
@@ -60,6 +64,8 @@ Zommer::Zommer(TextureManager * textureM, Graphics * graphics, EnemyColors color
 	setBoundCollision();
 	isUpdate = true;
 	isActivity = true;
+
+	isHandle = true;
 }
 
 Zommer::Zommer()
@@ -83,15 +89,26 @@ void Zommer::reInit()
 {
 	this->isActivity = true;
 	isUpdate = true;
+	isHandle = true;
 	this->setPosition(startPosition);
 
 	this->anim->setPause(false);
-	canDraw = true;
+
+	IBonusable::reInit();
+	IExplosible::reInit();
 	health = 2;
-	this->explosion->reInit();
+
+
 	zommer_direction = ZommerDirection::RIGHT_DIRECTION;
 	gravity = ZommerGravity::GRAVITY_BOTTOM;
-	//sprite->setData()
+
+	this->sprite->setRotate(0);
+	sprite->setData(reset);
+	
+}
+bool Zommer::getHandle()
+{
+	return this->isHandle;
 }
 void Zommer::setBoundCollision()
 {
@@ -110,7 +127,7 @@ void Zommer::setStartBound(MetroidRect rect)
 }
 void Zommer::handleVelocity(float dt)
 {
-	if (isActivity)
+	if (isHandle && !this->isCold)
 	{
 		switch (gravity)
 		{
@@ -172,12 +189,13 @@ void Zommer::handleVelocity(float dt)
 
 void Zommer::onCollision(float dt)
 {
-	if (isActivity)
+	if (isHandle && !this->isCold)
 	{
-		for (auto i = this->getListWallCanCollide()->begin(); i != this->getListWallCanCollide()->end(); i++)
+		/*for (auto i = this->listCanCollide->begin(); i != this->listCanCollide->end(); i++)
 		{
-			Collision::getInstance()->checkCollision(this, *i, dt);
-		}
+			BaseObject* x = (*i).second;
+			Collision::getInstance()->checkCollision(this, x, dt);
+		}*/
 		MetroidRect bound;
 		for (auto x = this->listCollide->begin(); x != this->listCollide->end(); x++)
 		{
@@ -369,7 +387,7 @@ void Zommer::onCollision(float dt)
 void Zommer::update(float dt)
 {
 
-	if (isActivity)
+	if (isHandle)
 	{
 		if (this->isCold)
 		{
@@ -382,7 +400,8 @@ void Zommer::update(float dt)
 			else
 			{
 				this->sprite->setData(this->frameID[anim->getCurrentFrame()]);
-				this->anim->setPause(true);
+				//this->anim->setPause(true);
+				this->setVelocity(VECTOR2(0, 0));
 				return;
 			}
 			
@@ -485,7 +504,9 @@ void Zommer::update(float dt)
 
 					IExplosible::start();
 					this->setVelocity(VECTOR2(0, 0));
-					this->isActivity = false;
+					//this->isActivity = false;
+					this->isHandle = false;
+					this->isCold = false;
 				}
 			}
 		}
@@ -500,7 +521,20 @@ void Zommer::update(float dt)
 		this->anim->update(dt);
 		isUpdate = true;
 	}
-	IExplosible::update(dt);
+
+	if(isExplose)
+	{
+		IBonusable::update(dt);
+	}
+	else
+	{
+		IExplosible::update(dt);
+		if (isExplose)
+		{
+			IBonusable::start();
+		}
+	}
+
 
 	if (!Collision::getInstance()->isCollide(Camera::getInstance()->getBound(), this->startBound)
 		&& !Collision::getInstance()->isCollide(Camera::getInstance()->getBound(), this->boundCollision))
@@ -534,7 +568,8 @@ void Zommer::decreaseHealth(float dame)
 }
 
 
-list<BaseObject*>* Zommer::getListWallCanCollide()
+
+map<int, BaseObject*>* Zommer::getListWallCanCollide()
 {
 	return this->listWallCanCollide;
 }

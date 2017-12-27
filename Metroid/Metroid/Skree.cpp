@@ -25,7 +25,9 @@ Skree::Skree(TextureManager * textureM, Graphics * graphics, EnemyColors color) 
 		throw GameError(GameErrorNS::FATAL_ERROR, "Can not init sprite Skree");
 	}
 
-	initialize(this->sprite, IndexManager::getInstance()->samusYellowExplosion, NUM_FRAMES_EXPLOSION, EXPLOSION_TIME_FRAME_DELAY);
+	this->initExplosion(this->sprite, IndexManager::getInstance()->samusYellowExplosion, NUM_FRAMES_EXPLOSION, EXPLOSION_TIME_FRAME_DELAY);
+
+	this->initItem(this->sprite, IndexManager::getInstance()->en, NUM_FRAMES_BONUS, TIME_FRAME_DELAY);
 
 	this->sprite->setOrigin(VECTOR2(0.5f, 0));
 
@@ -51,7 +53,7 @@ Skree::Skree(TextureManager * textureM, Graphics * graphics, EnemyColors color) 
 	default:
 		break;
 	}
-	this->listWallCanCollide = new list<BaseObject*>();
+	this->listWallCanCollide = new map<int,BaseObject*>();
 	this->listCollide = new list<CollisionReturn>();
 	animationRotate->start();
 
@@ -93,10 +95,11 @@ void Skree::onCollision(Samus* sam) // handle collide with skree's bullet
 
 void Skree::onCollision(float dt)
 {
-	for (auto i = this->getListWallCanCollide()->begin(); i != this->getListWallCanCollide()->end(); i++)
+	/*for (auto i = this->listCanCollide->begin(); i != this->listCanCollide->end(); i++)
 	{
-		Collision::getInstance()->checkCollision(this, *i, dt);
-	}
+		BaseObject* x = (*i).second;
+		Collision::getInstance()->checkCollision(this, x, dt);
+	}*/
 
 	if (listCollide->size() != 0)
 	{
@@ -203,7 +206,18 @@ void Skree::update(float dt)
 			reInit();
 	}
 
-	IExplosible::update(dt);
+	if (isExplose)
+	{
+		IBonusable::update(dt);
+	}
+	else
+	{
+		IExplosible::update(dt);
+		if (isExplose)
+		{
+			IBonusable::start();
+		}
+	}
 	
 }
 
@@ -286,7 +300,7 @@ void Skree::decreaseHealth(float dame)
 	this->health = this->health - dame;
 }
 
-list<BaseObject*>* Skree::getListWallCanCollide()
+map<int,BaseObject*>* Skree::getListWallCanCollide()
 {
 	return this->listWallCanCollide;
 }

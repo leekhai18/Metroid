@@ -30,7 +30,7 @@ Quadtree::Quadtree()
 {
 }
 
-list<BaseObject*>& Quadtree::getObjectList()
+map<int, BaseObject*>& Quadtree::getObjectList()
 {
 	return this->objects_list;
 }
@@ -81,7 +81,8 @@ void Quadtree::clear()
 
 
 
-void Quadtree::retrieve(list<BaseObject*>* listNotWallCanCollideSamus, list<BaseObject*>* listObjectNotWallOnViewPort, list<BaseObject*>* listWallCanCollideSamus, MetroidRect rect, BaseObject* samus)
+void Quadtree::retrieve(map<int, BaseObject*>* listNotWallCanCollideSamus, map<int, BaseObject*>* listObjectNotWallOnViewPort, 
+	map<int, BaseObject*>* listWallCanCollideSamus, map<int, BaseObject*>* listWallEnermy,MetroidRect rect, BaseObject* samus)
 {
 	if (nodes)
 	{
@@ -89,7 +90,7 @@ void Quadtree::retrieve(list<BaseObject*>* listNotWallCanCollideSamus, list<Base
 		{
 			if ((*node)->isContain(rect))
 			{
-				(*node)->retrieve(listNotWallCanCollideSamus, listObjectNotWallOnViewPort, listWallCanCollideSamus, rect, samus);
+				(*node)->retrieve(listNotWallCanCollideSamus, listObjectNotWallOnViewPort, listWallCanCollideSamus, listWallEnermy,rect, samus);
 			}
 		}
 
@@ -97,45 +98,61 @@ void Quadtree::retrieve(list<BaseObject*>* listNotWallCanCollideSamus, list<Base
 	}
 
 	//Add all entities in current region into return_objects_list
-	if (this->isContain(rect))
-	{
+	/*if (this->isContain(rect))
+	{*/
 		for (auto i = objects_list.begin(); i != objects_list.end(); i++)
 		{
-			bool found1 = (std::find(listNotWallCanCollideSamus->begin(), listNotWallCanCollideSamus->end(), *i) != listNotWallCanCollideSamus->end());
-			bool found2 = (std::find(listWallCanCollideSamus->begin(), listWallCanCollideSamus->end(), *i) != listWallCanCollideSamus->end());
-			bool found3 = (std::find(listObjectNotWallOnViewPort->begin(), listObjectNotWallOnViewPort->end(), *i) != listObjectNotWallOnViewPort->end());
-
-			if (!found1)
+			
+			if (((*i).second)->getId() != eID::WALL)
 			{
-				if (Collision::getInstance()->isCollide(samus->getActiveBound(), (*i)->getActiveBound()))
-				{
-					if ((*i)->getId() != eID::WALL)
+				/*if (listNotWallCanCollideSamus->find((*i).first) == listNotWallCanCollideSamus->end())
+				{*/
+					if (Collision::getInstance()->isCollide(samus->getActiveBound(), ((*i).second)->getBoundCollision()))
 					{
-						listNotWallCanCollideSamus->push_back(*i);
+						listNotWallCanCollideSamus->insert((*i));
 					}
-				}
+				//}
+				//if (listObjectNotWallOnViewPort->find((*i).first) == listObjectNotWallOnViewPort->end())
+				//{
+					if (Collision::getInstance()->isCollide(rect, ((*i).second)->getBoundCollision())) // Must bound collision, will fixed after
+					{
+						listObjectNotWallOnViewPort->insert(*i);
+					}
+				//}
+					if(((*i).second)->getId()== eID::GATEBLUE || ((*i).second)->getId() == eID::GATERED)
+					{
+						if (Collision::getInstance()->isCollide(rect, ((*i).second)->getBoundCollision()))
+						{
+							listWallEnermy->insert(*i);
+						}
+					}
 			}
-
-			if (!found2)
+			else
 			{
-				if (Collision::getInstance()->isCollide(samus->getActiveBound(), (*i)->getBoundCollision()))
+				//if (listWallCanCollideSamus->find((*i).first) == listWallCanCollideSamus->end())
+				//{
+				if (Collision::getInstance()->isCollide(samus->getActiveBound(), ((*i).second)->getBoundCollision()))
 				{
-					if ((*i)->getId() == eID::WALL)
-						listWallCanCollideSamus->push_back(*i);
+					listWallCanCollideSamus->insert(*i);
 				}
-			}
-
-			if (!found3)
-			{
-				if (Collision::getInstance()->isCollide(rect, (*i)->getBoundCollision())) // Must bound collision, will fixed after
+				//}
+				//if (listWallEnermy->find((*i).first) == listWallEnermy->end())
+				//{
+				if (Collision::getInstance()->isCollide(rect, ((*i).second)->getBoundCollision()))
 				{
+					listWallEnermy->insert(*i);
+				}
+
+				//}
+			}
+			/*if (((*i).second)->getId() == eID::WALL )
+			{
 				
-					if ((*i)->getId() != eID::WALL)
-						listObjectNotWallOnViewPort->push_back(*i);
-				}
-			}
+			}*/
+
+
 		}
-	}
+	//}
 }
 
 

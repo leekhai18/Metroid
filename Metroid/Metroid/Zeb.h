@@ -9,10 +9,11 @@
 #include <map>
 #include "IFreezable.h"
 #include "IExplosible.h"
+#include "IBonusable.h"
 #include <list>
 #include "Samus.h"
 
-class Zeb : public BaseObject,public IFreezable,public IExplosible
+class Zeb : public BaseObject,public IFreezable,public IExplosible,public IBonusable
 {
 private:
 	Animation *anim;

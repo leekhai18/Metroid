@@ -13,6 +13,7 @@
 #include "MotherBrain.h"
 #include "AlienBig.h"
 #include "AlienSmall.h"
+#include "Ripper.h"
 #define WIDTH_BULLET_HALF 1
 #define HEIGHT_BULLET_HALF 1
 
@@ -52,7 +53,6 @@ Bullet::Bullet()
 Bullet::~Bullet()
 {
 	delete this->sprite;
-	this->listCollide->clear();
 	delete this->listCollide;
 }
 
@@ -106,84 +106,170 @@ void Bullet::onCollision()
 				
 				case eID::SKREE:
 				{
+					
+					this->isCollided = true;
+					this->velocity = VECTOR2ZERO;
 					Skree* skr = static_cast<Skree*>(i->object);
 					if(BulletPool::getInstance()->getCurrentIceBullet())
 					{
-						skr->setCold(true);
+						if (skr->getCold())
+						{
+							skr->setCold(false);
+							this->sprite->setData(indexEffect);
+						}
+						else
+						{
+							skr->setCold(true);
+						}
 					}					
 					skr->setBeHit(true);
 					skr->decreaseHealth(this->dame);
-					this->velocity = VECTOR2ZERO;
 					break;
 				}
 
-
-				case eID::ZOMMER:
+				case eID::RIPPER:
 				{
-					Zommer* zommer = static_cast<Zommer*>((*i).object);
+					
+					this->isCollided = true;
+					this->velocity = VECTOR2ZERO;
+					Ripper* ripper = static_cast<Ripper*>((*i).object);
+
 					if (BulletPool::getInstance()->getCurrentIceBullet())
 					{
-						zommer->setCold(true);
+						if (ripper->getCold())
+						{
+							ripper->setCold(false);
+							this->sprite->setData(indexEffect);
+						}
+						else
+						{
+							ripper->setCold(true);
+						}
 					}
+
+					break;
+				}
+				case eID::ZOMMER:
+				{
+					
+					this->isCollided = true;
 					this->velocity = VECTOR2ZERO;
-					zommer->setBeHit(true);
-					zommer->decreaseHealth(this->dame);
+					Zommer* zommer = static_cast<Zommer*>((*i).object);
+					if(!zommer->getHandle())
+					{
+						break;
+					}
+					if (!zommer->getCold())
+					{
+						zommer->setBeHit(true);
+						zommer->decreaseHealth(this->dame);
+						this->sprite->setData(indexEffect);
+					}
+					if (BulletPool::getInstance()->getCurrentIceBullet())
+					{
+						if (zommer->getCold())
+						{
+							zommer->setCold(false);
+							this->sprite->setData(indexEffect);
+						}
+						else
+						{
+							zommer->setCold(true);
+						}
+					}
+				
 					break;
 				}
 				case eID::WAVER:
 				{
+					
+					this->isCollided = true;
+					this->velocity = VECTOR2ZERO;
 					Waver* waver = static_cast<Waver*>(i->object);
+					if (!waver->getHandle())
+					{
+						break;
+					}
+					if (!waver->getCold())
+					{
+						waver->setBeHit(true);
+						waver->decreaseHealth(this->dame);
+						this->sprite->setData(indexEffect);
+					}
 					if (BulletPool::getInstance()->getCurrentIceBullet())
 					{
-						waver->setCold(true);
+						if (waver->getCold())
+						{
+							waver->setCold(false);
+							this->sprite->setData(indexEffect);
+						}
+						else
+						{
+							waver->setCold(true);
+						}
+						
 					}
-					waver->setBeHit(true);
-					waver->decreaseHealth(this->dame);
-					this->velocity = VECTOR2ZERO;
+					
 					break;
 				}
 				case eID::ZEB:
 				{
+					this->velocity = VECTOR2ZERO;
+					this->isCollided = true;
 					Zeb* zeb = static_cast<Zeb*>(i->object);
 					if (BulletPool::getInstance()->getCurrentIceBullet())
 					{
-						zeb->setCold(true);
+						if (zeb->getCold())
+						{
+							zeb->setCold(false);
+							this->sprite->setData(indexEffect);
+						}
+						else
+						{
+							zeb->setCold(true);
+						}
 					}
 					zeb->setBeHit(true);
 					zeb->decreaseHealth(this->dame);
-					this->velocity = VECTOR2ZERO;
+					
 					break;
 				}
 				case eID::BOSSKRAID:
 				{
+					this->isCollided = true;
+					this->velocity = VECTOR2ZERO;
 					BossKraid* bossKraid = static_cast<BossKraid*>(i->object);
 
 					bossKraid->setBeHit(true);
 					bossKraid->decreaseHealth(this->dame);
-					this->velocity = VECTOR2ZERO;
 					break;
 				}
 				case eID::MOTHERBRAIN:
 				{
+					this->isCollided = true;
+					this->velocity = VECTOR2ZERO;
 					MotherBrain* motherBrain = static_cast<MotherBrain*>(i->object);
 
 					//motherBrain->setBeHit(true);
 					//motherBrain->decreaseHealth(this->dame);
-					this->velocity = VECTOR2ZERO;
 					break;
 				}
 				case eID::ALIENBIG:
 				{
+					this->sprite->setData(indexEffect);
+					this->isCollided = true;
+					this->velocity = VECTOR2ZERO;
 					AlienBig* alienBig = static_cast<AlienBig*>(i->object);
 					alienBig->setBeHit();
-					this->velocity = VECTOR2ZERO;
 					break;
 				}
 				case eID::ALIENSMALL:
 				{
+					this->sprite->setData(indexEffect);
+					this->isCollided = true;
+					this->velocity = VECTOR2ZERO;
 					AlienSmall* alienSmall = static_cast<AlienSmall*>(i->object);
 					alienSmall->setBeHit();
-					this->velocity = VECTOR2ZERO;
 					break;
 				}
 				default:

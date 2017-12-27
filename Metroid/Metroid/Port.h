@@ -5,7 +5,7 @@ class Port : public BaseObject
 {
 private:
 	bool isSetUpPosition;
-
+	bool isReset;
 public:
 	Port();
 	~Port();

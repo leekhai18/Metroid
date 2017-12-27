@@ -2,14 +2,16 @@
 #include "BaseObject.h"
 #include "Animation.h"
 #include <list>
+#include <map>
 #include "IFreezable.h"
 #include "IExplosible.h"
-class Waver : public BaseObject,public IFreezable, public IExplosible
+#include "IBonusable.h"
+class Waver : public BaseObject, public IFreezable, public IExplosible, public IBonusable
 {
 private:
 	Animation* anim;
 	int health;
-	list<BaseObject*> *listWallCanCollide;
+	map<int,BaseObject*>* listWallCanCollide;
 	list<CollisionReturn> *listCollide;
 	float velocity_frame;
 	eDirection directionX;
@@ -19,12 +21,14 @@ private:
 	bool beHit;
 	float timerHit;
 	MetroidRect startBound;
+	bool isHandle;
+	int resetFrame;
 public:
 	Waver();
 	Waver(TextureManager* textureM, Graphics* graphics, EnemyColors color);
 	~Waver();
 
-	list<BaseObject*>* getListWallCanCollide();
+	map<int, BaseObject*>* getListWallCanCollide();
 	list<CollisionReturn> *getListCollide();
 	void setStartPosition(VECTOR2 position);
 	void reInit();
@@ -36,6 +40,6 @@ public:
 	void update(float dt);
 	void onCollision(float dt);
 	void draw();
-
+	bool getHandle();
 };
 

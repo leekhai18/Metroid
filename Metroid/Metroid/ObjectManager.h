@@ -29,22 +29,22 @@ private:
 	Quadtree* quadtree;
 	int tempOK;
 	Samus* samus;
-	list<BaseObject*>* object_list;
+	//list<BaseObject*>* object_list;
 
 	int totalObjectsPerFrame;
-	list<BaseObject*>* listNotWallCanCollideSamus;
-	list<BaseObject*>* listObjectNotWallOnViewPort;
-	list<BaseObject*>* listWallCanCollideSamus;
-
+	map<int,BaseObject*>* listNotWallCanCollideSamus;
+	map<int, BaseObject*>* listObjectNotWallOnViewPort;
+	map<int, BaseObject*>* listWallCanCollideSamus;
+	map<int, BaseObject*>* listWallEmnermy;
 	map<int, BaseObject*> map_object;
-
+	map<int, BaseObject*>* bullet_object;
 	float timer;
 
 	void insertQuadTreeNode(const Value& value,Quadtree* quadtree);
 public:
 	static ObjectManager* getInstance();
 
-	list<BaseObject*> *getListWallOnViewPort() { return listWallCanCollideSamus; };
+	map<int, BaseObject*>* getListWallOnViewPort() { return listWallCanCollideSamus; };
 
 	void init(TextureManager* textureM, Graphics* graphics, Samus* samus);
 	bool load_list(const char *filename);

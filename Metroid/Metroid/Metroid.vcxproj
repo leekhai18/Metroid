@@ -147,6 +147,7 @@
     <ClInclude Include="GateBlue.h" />
     <ClInclude Include="GateRed.h" />
     <ClInclude Include="Graphics.h" />
+    <ClInclude Include="IBonusable.h" />
     <ClInclude Include="IceBeam.h" />
     <ClInclude Include="IExplosible.h" />
     <ClInclude Include="IFreezable.h" />
@@ -218,6 +219,7 @@
     <ClCompile Include="GateBlue.cpp" />
     <ClCompile Include="GateRed.cpp" />
     <ClCompile Include="Graphics.cpp" />
+    <ClCompile Include="IBonusable.cpp" />
     <ClCompile Include="IceBeam.cpp" />
     <ClCompile Include="IExplosible.cpp" />
     <ClCompile Include="IFreezable.cpp" />

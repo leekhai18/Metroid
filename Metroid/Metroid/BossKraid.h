@@ -12,11 +12,10 @@ private:
 	VECTOR2 P1;
 	VECTOR2 P2;
 	VECTOR2 P3;
-	list<BaseObject*> *listWallCanCollide;
+	map<int,BaseObject*> *listWallCanCollide;
 	list<CollisionReturn> *listCollide;
 	float time;
 	bool isDown;
-	bool isActivity;
 	VECTOR2 beforePosition;
 	VECTOR2 afterPosition;
 	VECTOR2 startPosition;
@@ -34,7 +33,7 @@ public:
 	BossKraid(TextureManager* textureM, Graphics* graphics, Samus* samus);
 	~BossKraid();
 
-	list<BaseObject*>* getListWallCanCollide();
+	map<int, BaseObject*>* getListWallCanCollide();
 	list<CollisionReturn> *getListCollide();
 	void setStartPosition(VECTOR2 position);
 	void setBoundCollision();

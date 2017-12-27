@@ -12,6 +12,13 @@
 #include "IceBeam.h"
 #include "Varia.h"
 
+
+#include "Skree.h"
+#include "Zommer.h"
+#include "Waver.h"
+#include "Zeb.h"
+#include "Rio.h"
+#include "Ripper.h"
 SamusStateJumping::SamusStateJumping()
 {
 }
@@ -38,7 +45,10 @@ void SamusStateJumping::init()
 {
 	time = 0;
 	if (this->samus->isFaling() == false)
+	{
 		this->samus->setVelocityY(SAMUS_MAX_SPEED_Y);
+	}
+		
 	
 	this->samus->setDataSuiteSkin(
 		IndexManager::getInstance()->samusYellowJumpRight,
@@ -321,10 +331,161 @@ void SamusStateJumping::onCollision(float dt)
 
 #pragma region enemies
 		case eID::ZOMMER:
+		{
+			Zommer* zommer = static_cast<Zommer*>(i->object);
+			if (zommer->getCold())
+			{
+				switch (i->direction)
+				{
+				case CollideDirection::LEFT:
+
+					this->samus->setCanMoveRight(false);
+					this->samus->setVelocityX(0);
+					break;
+				case CollideDirection::RIGHT:
+					this->samus->setCanMoveLeft(false);
+					this->samus->setVelocityX(0);
+					break;
+				case CollideDirection::TOP:
+					jumpDistance = 0;
+					//set jump = false, when user release jump button set to true
+					this->samus->setCanJump(false);
+					//set fall to false
+					this->samus->setFall(false);
+					//reset velocity
+					this->samus->setVelocityY(0);
+					positionCollide = i->positionCollision;
+					this->samus->setStatus(eStatus::STANDING);
+					break;
+				case CollideDirection::BOTTOM:
+					jumpDistance = 0;
+					this->samus->setFall(true);
+					addY = i->positionCollision;
+					this->samus->setVelocityY(0);
+					this->samus->setPositionY(addY - OFFSET_JUMP);
+					break;
+				}
+			}
+			else if (zommer->getExplose())
+			{
+				zommer->setCanDraw(false);
+				zommer->setActivity(false);
+			}
+			else
+			{
+				SamusStateManager::getInstance()->setOldStatus(eStatus::JUMPING);
+				this->samus->setStatus(eStatus::INJURING);
+				SamusStateManager::getInstance()->setOldState(this);
+			}
+			break;
+		}
+		case eID::WAVER:
+		{
+			Waver* waver = static_cast<Waver*>(i->object);
+			if (waver->getCold())
+			{
+				switch (i->direction)
+				{
+				case CollideDirection::LEFT:
+
+					this->samus->setCanMoveRight(false);
+					this->samus->setVelocityX(0);
+					break;
+				case CollideDirection::RIGHT:
+					this->samus->setCanMoveLeft(false);
+					this->samus->setVelocityX(0);
+					break;
+				case CollideDirection::TOP:
+					jumpDistance = 0;
+					//set jump = false, when user release jump button set to true
+					this->samus->setCanJump(false);
+					//set fall to false
+					this->samus->setFall(false);
+					//reset velocity
+					this->samus->setVelocityY(0);
+					positionCollide = i->positionCollision;
+					this->samus->setStatus(eStatus::STANDING);
+					break;
+				case CollideDirection::BOTTOM:
+					/*if(this->samus->isFaling())
+					{
+						break;
+					}*/
+					jumpDistance = 0;
+					this->samus->setFall(true);
+					addY = i->positionCollision;
+					this->samus->setVelocityY(0);
+
+					this->samus->setPositionY(addY - OFFSET_JUMP);
+					break;
+				}
+				break;
+			}
+			else if (waver->getExplose())
+			{
+				waver->setCanDraw(false);
+				waver->setActivity(false);
+			}
+			else
+			{
+				SamusStateManager::getInstance()->setOldStatus(eStatus::JUMPING);
+				this->samus->setStatus(eStatus::INJURING);
+				SamusStateManager::getInstance()->setOldState(this);
+			}
+			break;
+		}
 		case eID::SKREE:
 		case eID::RIO:
 		case eID::RIPPER:
-		case eID::WAVER:
+		{
+			Ripper* ripper = static_cast<Ripper*>(i->object);
+			if (ripper->getCold())
+			{
+				switch (i->direction)
+				{
+				case CollideDirection::LEFT:
+
+					this->samus->setCanMoveRight(false);
+					this->samus->setVelocityX(0);
+					break;
+				case CollideDirection::RIGHT:
+					this->samus->setCanMoveLeft(false);
+					this->samus->setVelocityX(0);
+					break;
+				case CollideDirection::TOP:
+					jumpDistance = 0;
+					//set jump = false, when user release jump button set to true
+					this->samus->setCanJump(false);
+					//set fall to false
+					this->samus->setFall(false);
+					//reset velocity
+					this->samus->setVelocityY(0);
+					positionCollide = i->positionCollision;
+					this->samus->setStatus(eStatus::STANDING);
+					break;
+				case CollideDirection::BOTTOM:
+					/*if(this->samus->isFaling())
+					{
+					break;
+					}*/
+					jumpDistance = 0;
+					this->samus->setFall(true);
+					addY = i->positionCollision;
+					this->samus->setVelocityY(0);
+
+					this->samus->setPositionY(addY - OFFSET_JUMP);
+					break;
+				}
+				break;
+			}
+			else
+			{
+				SamusStateManager::getInstance()->setOldStatus(eStatus::JUMPING);
+				this->samus->setStatus(eStatus::INJURING);
+				SamusStateManager::getInstance()->setOldState(this);
+			}
+			break;
+		}
 		case eID::ZEB:
 		case eID::BOSSKRAID:
 			switch (i->direction)
@@ -459,7 +620,6 @@ void SamusStateJumping::update(float dt)
 	setBoundCollision();
 
 #pragma region ChangeState
-	int test;
 	if (this->samus->getStatus() != eStatus::JUMPING)
 	{
 		switch (this->samus->getStatus())
@@ -470,7 +630,6 @@ void SamusStateJumping::update(float dt)
 
 			break;
 		case eStatus::ACROBAT:
-			test = 0;
 			break;
 		case eStatus::INJURING:
 			/*if(this->samus->isFaling())
