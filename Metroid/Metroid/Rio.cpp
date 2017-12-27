@@ -1,4 +1,6 @@
 #include "Rio.h"
+#include "Camera.h"
+#include "Collision.h"
 #define RATE_BEZIER 0.45f
 #define TIME_FRAME_DELAY 0.15f
 #define WIDTH_AREA_ACTIVE 100
@@ -53,6 +55,88 @@ Rio::~Rio()
 	delete this->sprite;
 }
 
+void Rio::handleVelocity(float dt)
+{
+	positionBefore = this->getPosition();
+
+
+	if (this->target != VECTOR2ZERO && this->isInStatus(eStatus::START))
+	{
+		if (P1.x < target.x && target.x < P3.x)
+		{
+			flag = 0;
+			this->setStatus(eStatus::FALLING);
+			start = true;
+		}
+		if (start == true && P3.x < target.x && target.x < P5.x)
+		{
+			flag = 1;
+			this->setStatus(eStatus::FALLING);
+		}
+
+	}
+
+	if (this->isInStatus(eStatus::FALLING))
+	{
+		if (flag == 0) // target is the left area
+		{
+			if (t < 1)
+			{
+				t += dt * RATE_BEZIER;
+				this->P2 = VECTOR2((this->P1.x + this->P3.x) / 2, target.y - HEIGHT_AREA_ACTIVE);
+				this->positionAfter=((1 - t)*(1 - t)*P1 + 2 * (1 - t)*t*P2 + t*t*P3);
+				if (P3.x < target.x && target.x < P5.x && this->positionAfter.x > P3.x - 1) {
+					flag = 1;
+					t = 0;
+				}
+				t1 = 0;
+			}
+			else
+			{
+				if (t1 < 1) {
+					t1 += dt * RATE_BEZIER;
+					this->P2 = VECTOR2((this->P3.x + this->P1.x) / 2, target.y - HEIGHT_AREA_ACTIVE);
+					this->positionAfter=((1 - t1)*(1 - t1)*P3 + 2 * (1 - t1)*t1*P2 + t1*t1*P1);
+				}
+				else {
+					t = 0;
+				}
+			}
+		}
+		if (flag == 1)// target is the right area
+		{
+			if (t < 1)
+			{
+				t += dt * RATE_BEZIER;
+				this->P4 = VECTOR2((this->P3.x + this->P5.x) / 2, target.y - HEIGHT_AREA_ACTIVE);
+				this->positionAfter=((1 - t)*(1 - t)*P3 + 2 * (1 - t)*t*P4 + t*t*P5);
+				t1 = 0;
+			}
+			else
+			{
+				if (t1 < 1) {
+					t1 += dt * RATE_BEZIER;
+					this->P4 = VECTOR2((this->P3.x + this->P5.x) / 2, target.y - HEIGHT_AREA_ACTIVE);
+					this->positionAfter=((1 - t1)*(1 - t1)*P5 + 2 * (1 - t1)*t1*P4 + t1*t1*P3);
+					if (P1.x < target.x && target.x < P3.x && positionAfter.x < P3.x + 1) {
+						flag = 0;
+						t1 = 0;
+					}
+				}
+				else {
+					t = 0;
+				}
+			}
+		}
+
+	}
+
+	positionAfter = this->getPosition();
+
+	this->velocity = (positionAfter - positionBefore) / dt;
+
+}
+
 void Rio::update(float dt)
 {
 	if (this->isCold)
@@ -68,84 +152,11 @@ void Rio::update(float dt)
 
 	this->anim->update(dt);
 
-	positionBeforeX = this->getPosition().x;
-	positionBeforeY = this->getPosition().y;
-
-	if (this->target != VECTOR2ZERO && this->isInStatus(eStatus::START))
+	if (!Collision::getInstance()->isCollide(Camera::getInstance()->getBound(), this->startBound)
+		&& !Collision::getInstance()->isCollide(Camera::getInstance()->getBound(), this->boundCollision))
 	{
-		if (P1.x < target.x && target.x < P3.x )
-		{
-			flag = 0;
-			this->setStatus(eStatus::FALLING);
-			start = true;
-		}
-		if (start == true && P3.x < target.x && target.x < P5.x)
-		{
-			flag = 1;
-			this->setStatus(eStatus::FALLING);
-		}
-		
+		initPositions(startPosition);
 	}
-
-	if (this->isInStatus(eStatus::FALLING))
-	{
-		if (flag == 0) // target is the left area
-		{
-			if (t < 1)
-			{
-				t += dt * RATE_BEZIER;
-				this->P2 = VECTOR2((this->P1.x + this->P3.x) / 2, target.y - HEIGHT_AREA_ACTIVE);
-				this->setPosition((1 - t)*(1 - t)*P1 + 2 * (1 - t)*t*P2 + t*t*P3);
-				if (P3.x < target.x && target.x < P5.x && this->getPosition().x > P3.x - 1) {
-					flag = 1;
-					t = 0;
-				}
-				t1 = 0;
-			}
-			else
-			{
-				if (t1 < 1) {
-					t1 += dt * RATE_BEZIER;
-					this->P2 = VECTOR2((this->P3.x + this->P1.x) / 2, target.y - HEIGHT_AREA_ACTIVE);
-					this->setPosition((1 - t1)*(1 - t1)*P3 + 2 * (1 - t1)*t1*P2 + t1*t1*P1);
-				}
-				else {
-					t = 0;
-				}
-			}
-		}
-		if (flag == 1)// target is the right area
-		{
-			if (t < 1)
-			{
-				t += dt * RATE_BEZIER;
-				this->P4 = VECTOR2((this->P3.x + this->P5.x) / 2, target.y - HEIGHT_AREA_ACTIVE);
-				this->setPosition((1 - t)*(1 - t)*P3 + 2 * (1 - t)*t*P4 + t*t*P5);
-				t1 = 0;
-			}
-			else
-			{
-				if (t1 < 1) {
-					t1 += dt * RATE_BEZIER;
-					this->P4 = VECTOR2((this->P3.x + this->P5.x) / 2, target.y - HEIGHT_AREA_ACTIVE);
-					this->setPosition((1 - t1)*(1 - t1)*P5 + 2 * (1 - t1)*t1*P4 + t1*t1*P3);
-					if (P1.x < target.x && target.x < P3.x && this->getPosition().x < P3.x + 1) {
-						flag = 0;
-						t1 = 0;
-					}
-				}
-				else {
-					t = 0;
-				}
-			}
-		}
-		
-	}
-
-	positionAfterX = this->getPosition().x;
-	positionAfterY = this->getPosition().y;
-	this->velocity.x = (positionAfterX - positionBeforeX) / dt;
-	this->velocity.y = (positionAfterY - positionBeforeY) / dt;
 	
 }
 
@@ -169,6 +180,16 @@ void Rio::draw()
 VECTOR2 Rio::getTarget()
 {
 	return this->target;
+}
+
+void Rio::setStartPosition(VECTOR2 position)
+{
+	this->startPosition = position;
+}
+
+void Rio::setStartBound(MetroidRect rect)
+{
+	this->startBound = rect;
 }
 
 void Rio::setTarget(VECTOR2 target)

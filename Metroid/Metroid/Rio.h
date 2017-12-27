@@ -24,24 +24,26 @@ private:
 	float t1;
 	int flag = 1;
 	bool start = false;
-	float positionBeforeX;
-	float positionAfterX;
+	
 
-	float positionBeforeY;
-	float positionAfterY;
+	VECTOR2 positionBefore;
+	VECTOR2 positionAfter;
 
 	int health;
-
+	MetroidRect startBound;
+	
 public:
 	Rio(TextureManager* textureM, Graphics* graphics, EnemyColors color);
 	Rio();
 	~Rio();
-
+	void handleVelocity(float dt);
 	void update(float dt);
 	void draw();
 	void setBoundCollision();
 
 	VECTOR2 getTarget();
+	void setStartPosition(VECTOR2 position);
+	void setStartBound(MetroidRect rect);
 	void setTarget(VECTOR2 target);
 
 	void initPositions(VECTOR2 stP);

@@ -134,6 +134,12 @@ void ObjectManager::handleVelocity(float dt)
 			ripper->handleVelocity(dt);
 			break;
 		}
+		case eID::RIO:
+		{
+			Rio* rio = static_cast<Rio*>((*i).second);
+			rio->handleVelocity(dt);
+			break;
+		}
 		default:
 			break;
 		}
@@ -1966,7 +1972,7 @@ bool ObjectManager::load_list(const char * filename)
 				roy->initPositions(VECTOR2(x, y));
 
 				roy->setBoundCollision();
-
+				roy->setStartBound(roy->getBoundCollision());
 				bound.bottom = listRioYellow[i]["ba"].GetFloat();
 				bound.top = listRioYellow[i]["ta"].GetFloat();
 				bound.left = listRioYellow[i]["la"].GetFloat();
@@ -2012,7 +2018,7 @@ bool ObjectManager::load_list(const char * filename)
 				rob->initPositions(VECTOR2(x, y));
 
 				rob->setBoundCollision();
-
+				rob->setStartBound(rob->getBoundCollision());
 				bound.bottom = listRioBrown[i]["ba"].GetFloat();
 				bound.top = listRioBrown[i]["ta"].GetFloat();
 				bound.left = listRioBrown[i]["la"].GetFloat();
@@ -2060,7 +2066,7 @@ bool ObjectManager::load_list(const char * filename)
 				ror->initPositions(VECTOR2(x, y));
 
 				ror->setBoundCollision();
-
+				ror->setStartBound(ror->getBoundCollision());
 				bound.bottom = listRioRed[i]["ba"].GetFloat();
 				bound.top = listRioRed[i]["ta"].GetFloat();
 				bound.left = listRioRed[i]["la"].GetFloat();
