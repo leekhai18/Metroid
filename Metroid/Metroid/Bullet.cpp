@@ -107,7 +107,9 @@ void Bullet::onCollision()
 				case eID::SKREE:
 				{
 					this->isCollided = true;
+
 					this->velocity = VECTOR2ZERO;
+
 					this->sprite->setData(indexEffect);
 					Skree* skree = static_cast<Skree*>((*i).object);
 					/*if (!skree->getHandle())
@@ -321,22 +323,24 @@ void Bullet::onCollision()
 }
 
 
-void Bullet::update(float dt)
+void Bullet::handleVelocity(float dt)
 {
-	if (!this->isCollided)
+	if (this->distance < this->distanceShoot)
 	{
-		if (this->distance < this->distanceShoot)
-		{
-			this->distance += VELOCITY_BULLET*dt;
-			this->setPosition(this->getPosition().x + this->getVelocity().x*dt, this->getPosition().y + this->getVelocity().y*dt);
-			setBoundCollision();
-		}
-		else
-		{
-			BulletPool::getInstance()->returnPool(this);
-		}
+		this->distance += VELOCITY_BULLET*dt;
+
+		setBoundCollision();
 	}
 	else
+	{
+		BulletPool::getInstance()->returnPool(this);
+	}
+
+}
+
+void Bullet::update(float dt)
+{
+	if(this->isCollided)
 	{
 		timer += dt;
 		if (timer > 0.1)
@@ -344,6 +348,7 @@ void Bullet::update(float dt)
 			BulletPool::getInstance()->returnPool(this);
 		}
 	}
+	this->setPosition(this->getPosition().x + this->getVelocity().x*dt, this->getPosition().y + this->getVelocity().y*dt);
 }
 
 void Bullet::draw()

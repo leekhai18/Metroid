@@ -438,7 +438,7 @@ void SamusStateJumping::onCollision(float dt)
 		{
 			Skree* skree = static_cast<Skree*>(i->object);
 			
-			if (skree->getCold())
+			if (skree->getCold()&& skree->getHandle())
 			{
 				switch (i->direction)
 				{

@@ -102,8 +102,8 @@ void Port::draw()
 	{
 		Camera::getInstance()->setPosition(VECTOR2(Camera::getInstance()->getPosition().x, this->boundCollision.top - OFFSET_Y_CAM));
 		isSetUpPosition = false;
-		Camera::getInstance()->setCanFollowOnLeft(true);
-		Camera::getInstance()->setCanFollowOnRight(true);
+		//Camera::getInstance()->setCanFollowOnLeft(true);
+		//Camera::getInstance()->setCanFollowOnRight(true);
 		isReset = true;
 	}
 #pragma endregion

@@ -5,10 +5,15 @@
 
 
 #define DISTANCE_MOVE_FRONT_GATE 24
-#define ACTIVE 80
+#define ACTIVE 120
+
+//Rio position
+#define SAMUS_POS_X 2522
+#define SAMUS_POS_Y 1251
+
 //start position
-#define SAMUS_POS_X 640
-#define SAMUS_POS_Y 1267
+//#define SAMUS_POS_X 640
+//#define SAMUS_POS_Y 1267
 
 //Boss
 //#define SAMUS_POS_X 960
@@ -166,6 +171,8 @@ void Samus::handleInput(float dt)
 		}
 	}
 
+	for (unsigned i = 0; i < this->bulletPool->getListUsing().size(); i++)
+		this->bulletPool->getListUsing().at(i)->handleVelocity(dt);
 	//if (input->isKeyDown(VK_LEFT))
 	//	Camera::getInstance()->setVelocity(VECTOR2(-150, 0));	
 	//if (input->isKeyDown(VK_RIGHT))

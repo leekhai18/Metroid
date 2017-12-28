@@ -49,6 +49,7 @@ Zeb::Zeb(TextureManager * textureM, Graphics * graphics, EnemyColors color,Samus
 	this->anim->start();
 	isActivity = true;
 	//canDraw = false;
+	isHandle = true;
 }
 
 
@@ -60,8 +61,11 @@ void Zeb::reInit()
 {
 	allowFly = false;
 	isActivity = true;
+	isHandle = true;
 	health = 2;
 	this->setPosition(startPosition);
+	this->explosion->setPause(false);
+	this->anim->setPause(false);
 	canDraw = true;
 	samusPosition = samus->getPosition();
 }

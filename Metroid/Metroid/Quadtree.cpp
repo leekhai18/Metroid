@@ -119,12 +119,19 @@ void Quadtree::retrieve(map<int, BaseObject*>* listNotWallCanCollideSamus, map<i
 						listObjectNotWallOnViewPort->insert(*i);
 					}
 				//}
-					if(((*i).second)->getId()== eID::GATEBLUE || ((*i).second)->getId() == eID::GATERED)
+					switch (((*i).second)->getId())
 					{
+					case eID::WALL:
+					case eID::BRICK:
+					case eID::GATERED:
+					case eID::GATEBLUE:
+					case eID::PORT:
 						if (Collision::getInstance()->isCollide(rect, ((*i).second)->getBoundCollision()))
 						{
 							listWallEnermy->insert(*i);
 						}
+					default:
+						break;
 					}
 			}
 			else

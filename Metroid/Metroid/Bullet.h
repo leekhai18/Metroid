@@ -26,6 +26,7 @@ public:
 	Bullet();
 	~Bullet();
 
+	void handleVelocity(float dt);
 	void update(float dt);
 	void draw();
 

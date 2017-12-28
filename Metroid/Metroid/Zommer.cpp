@@ -17,6 +17,7 @@ Zommer::Zommer(TextureManager * textureM, Graphics * graphics, EnemyColors color
 	this->initExplosion(this->sprite, IndexManager::getInstance()->samusYellowExplosion, NUM_FRAMES_EXPLOSION, EXPLOSION_TIME_FRAME_DELAY);
 
 	this->initItem(this->sprite, IndexManager::getInstance()->en, NUM_FRAMES_BONUS, TIME_FRAME_DELAY);
+	this->color = color;
 	switch (color)
 	{
 	case Yellow:
@@ -50,12 +51,12 @@ Zommer::Zommer(TextureManager * textureM, Graphics * graphics, EnemyColors color
 
 	//this->setPosition(VECTOR2(679, 1367));
 
-	zommer_direction = ZommerDirection::RIGHT_DIRECTION;
+	zommer_direction = ZommerDirection::LEFT_DIRECTION;
 	gravity = ZommerGravity::GRAVITY_BOTTOM;
 
-	this->velocity.x = ZOMMER_VELOCITY_Y;
+	/*this->velocity.x = ZOMMER_VELOCITY_Y;
 
-	this->velocity.y = -ZOMMER_VELOCITY_X;
+	this->velocity.y = -ZOMMER_VELOCITY_X;*/
 	
 	for (size_t i = 0; i < 4; i++)
 	{
@@ -87,6 +88,8 @@ ZommerGravity Zommer::getGravity()
 
 void Zommer::reInit()
 {
+	this->velocity = VECTOR2(0, 0);
+
 	this->isActivity = true;
 	isUpdate = true;
 	isHandle = true;
@@ -99,7 +102,7 @@ void Zommer::reInit()
 	health = 2;
 
 
-	zommer_direction = ZommerDirection::RIGHT_DIRECTION;
+	zommer_direction = ZommerDirection::LEFT_DIRECTION;
 	gravity = ZommerGravity::GRAVITY_BOTTOM;
 
 	this->sprite->setRotate(0);
@@ -127,8 +130,13 @@ void Zommer::setStartBound(MetroidRect rect)
 }
 void Zommer::handleVelocity(float dt)
 {
+	
 	if (isHandle && !this->isCold&&isActivity)
 	{
+		if (startPosition.x == 600)
+		{
+			int test = 0;
+		}
 		switch (gravity)
 		{
 		case ZommerGravity::GRAVITY_RIGHT:
@@ -189,13 +197,21 @@ void Zommer::handleVelocity(float dt)
 
 void Zommer::onCollision(float dt)
 {
+	if(startPosition.x == 600 )
+	{
+		int test = 0;
+	}
 	if (isHandle && !this->isCold&&isActivity)
 	{
-		/*for (auto i = this->listCanCollide->begin(); i != this->listCanCollide->end(); i++)
+		for (auto i = this->listWallCanCollide->begin(); i != this->listWallCanCollide->end(); i++)
 		{
 			BaseObject* x = (*i).second;
 			Collision::getInstance()->checkCollision(this, x, dt);
-		}*/
+		}
+		if (startPosition.x == 600)
+		{
+			int test = 0;
+		}
 		MetroidRect bound;
 		for (auto x = this->listCollide->begin(); x != this->listCollide->end(); x++)
 		{
@@ -357,24 +373,31 @@ void Zommer::onCollision(float dt)
 
 		this->listCollide->clear();
 
+		
 		switch (zommer_direction)
 		{
+
 		case ZommerDirection::LEFT_DIRECTION:
-		case ZommerDirection::TOP_DIRECTION: 
-			if (boundCollision.left + velocity.x*dt <= Camera::getInstance()->getBound().left)
+		
+			if (boundCollision.left + velocity.x*dt < Camera::getInstance()->getBound().left&&
+				boundCollision.left  > Camera::getInstance()->getBound().left)
 			{
+
 				this->zommer_direction = ZommerDirection::RIGHT_DIRECTION;
 				this->velocity.x = 0;
 
 			}
 			break;
+
+	
 		case ZommerDirection::RIGHT_DIRECTION:
-		case ZommerDirection::BOTTOM_DIRECTION:
-			if (boundCollision.right + velocity.x*dt >= Camera::getInstance()->getBound().right)
+		
+			if (boundCollision.right + velocity.x*dt > Camera::getInstance()->getBound().right
+				&&boundCollision.right < Camera::getInstance()->getBound().right)
 			{
 				this->zommer_direction = ZommerDirection::LEFT_DIRECTION;
 				this->velocity.x = 0;
-					
+						
 			}
 			break;
 		
@@ -386,13 +409,16 @@ void Zommer::onCollision(float dt)
 }
 void Zommer::update(float dt)
 {
-
+	if (startPosition.x == 600)
+	{
+		int test = 0;
+	}
 	if (isHandle)
 	{
 		if (this->isCold)
 		{
 			timeReturnNormal += dt;
-			if(timeReturnNormal >=TIME_RETURN_NOMAL)
+			if(timeReturnNormal >= TIME_RETURN_NOMAL)
 			{
 				this->anim->setPause(false);
 				this->isCold = false;
@@ -522,6 +548,23 @@ void Zommer::update(float dt)
 		isUpdate = true;
 	}
 
+	if (!Collision::getInstance()->isCollide(Camera::getInstance()->getBound(), this->startBound)
+		&& !Collision::getInstance()->isCollide(Camera::getInstance()->getBound(), this->boundCollision))
+	{
+		reInit();
+		isActivity = false;
+		setBoundCollision();
+		gravity_bool[gravity] = true;
+
+		if (startPosition.x == 600)
+		{
+			int test = 0;
+		}
+	}
+	else
+	{
+		isActivity = true;
+	}
 	if(isExplose)
 	{
 		IBonusable::update(dt);
@@ -535,12 +578,8 @@ void Zommer::update(float dt)
 		}
 	}
 
-
-	if (!Collision::getInstance()->isCollide(Camera::getInstance()->getBound(), this->startBound)
-		&& !Collision::getInstance()->isCollide(Camera::getInstance()->getBound(), this->boundCollision))
-	{
-		reInit();
-	}
+	
+	
 	
 }
 

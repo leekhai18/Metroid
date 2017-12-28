@@ -53,5 +53,6 @@ public:
 	void setTarget(VECTOR2 target);
 
 	void reInit(VECTOR2 stP);
+	void reInit();
 };
 

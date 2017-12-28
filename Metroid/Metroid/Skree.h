@@ -28,6 +28,7 @@ private:
 	float timerHit;
 	float health;
 
+	MetroidRect startBound;
 public:
 	Skree(TextureManager* textureM, Graphics* graphics, EnemyColors color);
 	Skree();
@@ -42,6 +43,7 @@ public:
 	void draw();
 	void release();
 
+	void setStartBound(MetroidRect rect);
 
 	bool getHandle();
 	VECTOR2 getTarget();

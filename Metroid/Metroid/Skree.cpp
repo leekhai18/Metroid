@@ -100,9 +100,13 @@ void Skree::handleVelocity(float dt)
 	{
 		if (this->target != VECTOR2ZERO && this->isInStatus(eStatus::START)) // check init
 		{
-			this->setStatus(eStatus::FALLING);
-			this->animationRotate->setTimeFrameDelay(TIME_FRAME_DELAY_FALLING);
-			this->setVelocityY(-VELOCITY_Y);
+			/*if(abs(target.x - initPosition.x) <= 1)
+			{*/
+				this->setStatus(eStatus::FALLING);
+				this->animationRotate->setTimeFrameDelay(TIME_FRAME_DELAY_FALLING);
+				this->setVelocityY(-VELOCITY_Y);
+			//}
+
 		}
 
 		if (this->isInStatus(eStatus::FALLING))
@@ -121,11 +125,11 @@ void Skree::handleVelocity(float dt)
 
 void Skree::onCollision(float dt)
 {
-	/*for (auto i = this->listCanCollide->begin(); i != this->listCanCollide->end(); i++)
+	for (auto i = this->listWallCanCollide->begin(); i != this->listWallCanCollide->end(); i++)
 	{
 		BaseObject* x = (*i).second;
 		Collision::getInstance()->checkCollision(this, x, dt);
-	}*/
+	}
 	if (isActivity&&isHandle && !this->isCold)
 	{
 		for (auto i = listCollide->begin(); i != listCollide->end(); i++)
@@ -195,6 +199,8 @@ void Skree::update(float dt)
 				{
 					this->finish();
 					isHandle = false;
+					//target = VECTOR2ZERO;
+					//isCold = false;
 					//IBonusable::start();
 				}
 					
@@ -223,21 +229,24 @@ void Skree::update(float dt)
 					//isReleaseBullet = true;
 					IExplosible::start();
 					isHandle = false;
+					//target = VECTOR2ZERO;
+					//isCold = false;
 				}
 			}
 		}
 		this->setPosition(this->getPosition().x + this->getVelocity().x*dt, this->getPosition().y + this->getVelocity().y*dt);
 		setBoundCollision();
 	}
-	else
-	{
-		if (this->initPosition.x < Camera::getInstance()->getBound().left - 20 || this->initPosition.x > Camera::getInstance()->getBound().right + 20)
-			reInit();
-	}
 
+	if (!Collision::getInstance()->isCollide(Camera::getInstance()->getBound(), this->startBound)
+		&& !Collision::getInstance()->isCollide(Camera::getInstance()->getBound(), this->boundCollision))
+	{
+		reInit();
+	}
 	if (isExplose)
 	{
 		IBonusable::update(dt);
+		//target = VECTOR2ZERO;
 	}
 	else
 	{
@@ -266,6 +275,11 @@ void Skree::release()
 	delete this->sprite;
 }
 
+void Skree::setStartBound(MetroidRect rect)
+{
+	this->startBound = rect;
+}
+
 
 bool Skree::getHandle()
 {
@@ -286,9 +300,11 @@ void Skree::setTarget(VECTOR2 target)
 			if (abs(target.x - this->getPosition().x) < AREA_ACTIVE_X)
 			{
 				this->target = target;
+				
 			}
 		}
 	}
+
 }
 
 void Skree::setBoundCollision()
@@ -329,6 +345,7 @@ void Skree::reInit()
 void Skree::finish()
 {
 	isHandle = false;
+	this->velocity = VECTOR2ZERO;
 	this->effectDeath->setPosition(VECTOR2ZERO);
 }
 

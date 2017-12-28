@@ -40,6 +40,7 @@ private:
 	bool isHandle;
 
 	int reset;
+	EnemyColors color;
 public:
 	Zommer(TextureManager* textureM, Graphics* graphics, EnemyColors color);
 	Zommer();

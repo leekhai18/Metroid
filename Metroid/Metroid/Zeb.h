@@ -25,6 +25,7 @@ private:
 	bool beHit;	
 	float timerHit;
 	Samus* samus;
+	bool isHandle;
 public:
 	Zeb();
 	Zeb(TextureManager* textureM, Graphics* graphics, EnemyColors color, Samus* samus);

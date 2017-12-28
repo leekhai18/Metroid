@@ -62,7 +62,56 @@ Rio::~Rio()
 	delete this->anim;
 	delete this->sprite;
 }
+void Rio::reInit(VECTOR2 stP)
+{
+	this->startPosition = stP;
+	this->P1 = this->startPosition;
+	this->P3 = VECTOR2(P1.x + WIDTH_AREA_ACTIVE, startPosition.y + 17);
+	this->P5 = VECTOR2(P3.x + WIDTH_AREA_ACTIVE, startPosition.y + 16);
 
+	this->setPosition(stP);
+	this->target = VECTOR2ZERO;
+	this->sprite->setData(resetFrame);
+
+	this->isActivity = true;
+	isHandle = true;
+	isCold = false;
+
+	this->setPosition(startPosition);
+	this->explosion->setPause(false);
+	this->anim->setPause(false);
+
+	IBonusable::reInit();
+	IExplosible::reInit();
+	this->setStatus(eStatus::START);
+	health = 2;
+
+}
+void Rio::reInit()
+{
+	this->P1 = this->startPosition;
+	this->P3 = VECTOR2(P1.x + WIDTH_AREA_ACTIVE, startPosition.y + 17);
+	this->P5 = VECTOR2(P3.x + WIDTH_AREA_ACTIVE, startPosition.y + 16);
+
+	//this->setPosition(stP);
+	this->target = VECTOR2ZERO;
+	this->sprite->setData(resetFrame);
+
+	this->isActivity = true;
+	isHandle = true;
+	isCold = false;
+	this->setPosition(startPosition);
+	this->explosion->setPause(false);
+	this->anim->setPause(false);
+
+	IBonusable::reInit();
+	IExplosible::reInit();
+	this->setStatus(eStatus::START);
+	t = 0;
+	t1 = 0;
+	start = false;
+	health = 2;
+}
 void Rio::handleVelocity(float dt)
 {
 	if (isHandle && !this->isCold&&isActivity)
@@ -214,8 +263,13 @@ void Rio::update(float dt)
 	if (!Collision::getInstance()->isCollide(Camera::getInstance()->getBound(), this->startBound)
 		&& !Collision::getInstance()->isCollide(Camera::getInstance()->getBound(), this->boundCollision))
 	{
-		reInit(startPosition);
+		reInit();
+		//isActivity = false;
 	}
+	/*else
+	{
+		isActivity = true;
+	}*/
 	
 }
 
@@ -268,26 +322,4 @@ void Rio::setTarget(VECTOR2 target)
 	this->target = target;
 }
 
-void Rio::reInit(VECTOR2 stP)
-{
-	this->startPosition = stP;
-	this->P1 = this->startPosition;
-	this->P3 = VECTOR2(P1.x + WIDTH_AREA_ACTIVE, startPosition.y + 17);
-	this->P5 = VECTOR2(P3.x + WIDTH_AREA_ACTIVE, startPosition.y + 16);
 
-	this->setPosition(stP);
-	this->target = VECTOR2ZERO;
-	this->sprite->setData(resetFrame);
-	
-	this->isActivity = true;
-	isHandle = true;
-	this->setPosition(startPosition);
-	this->explosion->setPause(false);
-	this->anim->setPause(false);
-	
-	IBonusable::reInit();
-	IExplosible::reInit();
-	this->setStatus(eStatus::START);
-	health = 2;
-
-}

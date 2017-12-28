@@ -3,8 +3,14 @@
 #include <d3d9.h>
 #include "Constants.h"
 ////start position
-#define CAM_POS_X 640
-#define CAM_POS_Y 1320
+//#define CAM_POS_X 640
+//#define CAM_POS_Y 1320
+
+
+////Rio
+#define CAM_POS_X 2432.00000
+#define CAM_POS_Y 1320.00000
+
 
 //#define CAM_POS_X 640//6144
 //#define CAM_POS_Y 3656//2992//
