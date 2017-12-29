@@ -6,7 +6,7 @@
 #define ZOMMER_OFFSET_COLLISION 0.1f
 #define TIME_DELAY_BE_HIT 0.2f
 #define TIME_RETURN_NOMAL 5.0f
-
+#include "Sound.h"
 Zommer::Zommer(TextureManager * textureM, Graphics * graphics, EnemyColors color) : BaseObject(eID::ZOMMER),IFreezable(IndexManager::getInstance()->zoomerBlue)
 {
 	this->sprite = new Sprite();
@@ -560,6 +560,7 @@ void Zommer::update(float dt)
 				if (this->health <= 0)
 				{
 
+					Sound::getInstance()->play(SOUND_EXPLOSION, false);
 					IExplosible::start();
 					this->setVelocity(VECTOR2(0, 0));
 					//this->isActivity = false;

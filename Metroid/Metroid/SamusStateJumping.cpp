@@ -19,6 +19,7 @@
 #include "Ripper.h"
 #include "Port.h"
 #include "ScenceManager.h"
+#include "Sound.h"
 SamusStateJumping::SamusStateJumping()
 {
 }
@@ -43,6 +44,7 @@ void SamusStateJumping::setBoundCollision()
 }
 void SamusStateJumping::init()
 {
+	Sound::getInstance()->play(SOUND_JUMP, false);
 	time = 0;
 	if (this->samus->isFaling() == false)
 	{
@@ -352,6 +354,7 @@ void SamusStateJumping::onCollision(float dt)
 			Port* port = static_cast<Port*>(i->object);
 			if(port->Win()==true)
 			{
+				this->samus->setVelocity(VECTOR2ZERO);
 				ScenceManager::getInstance()->goToScence(ScenceType::END);
 				return;
 			}
@@ -752,8 +755,7 @@ void SamusStateJumping::onCollision(float dt)
 				this->samus->setVelocityY(0);
 				break;
 			}
-			this->samus->setFlipX(true);
-			this->samus->setDirection(eDirection::right);
+
 			SamusStateManager::getInstance()->setOldStatus(eStatus::JUMPING);
 			this->samus->setStatus(eStatus::INJURING);
 			SamusStateManager::getInstance()->setOldState(this);
@@ -920,6 +922,7 @@ void SamusStateJumping::fire()
 {
 	VECTOR2 stP;
 	Bullet* bullet = BulletPool::getInstance()->getBullet();
+	Sound::getInstance()->play(SOUND_BULLET, false);
 
 	if (isUp)
 	{

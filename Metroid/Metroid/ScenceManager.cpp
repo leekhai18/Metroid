@@ -2,6 +2,7 @@
 #include "OptionScence.h"
 #include "PlayScence.h"
 #include "Constants.h"
+#include "EndScence.h"
 ScenceManager* ScenceManager::instance;
 
 ScenceManager * ScenceManager::getInstance()
@@ -56,52 +57,6 @@ void ScenceManager::run()
 	}
 }
 
-void ScenceManager::update()
-{
-	
-}
-void ScenceManager::draw()
-{
-	if (SUCCEEDED(graphics->beginScene()))
-	{
-		currentScence->draw();
-
-		graphics->endScene();
-	}
-	handleLostGraphicsDevice();
-
-	graphics->showBackbuffer();
-}
-
-void ScenceManager::handleLostGraphicsDevice()
-{
-	// test for and handle lost device
-	HRESULT hr = graphics->getDeviceState();
-	if (FAILED(hr))                  // if graphics device is not in a valid state
-	{
-		// if the device is lost and not available for reset
-		if (hr == D3DERR_DEVICELOST)
-		{
-			Sleep(100);             // yield cpu time (100 mili-seconds)
-			return;
-		}
-		// the device was lost but is now available for reset
-		else if (hr == D3DERR_DEVICENOTRESET)
-		{
-			//del();
-			hr = graphics->reset(); // attempt to reset graphics device
-			if (FAILED(hr))          // if reset failed
-				return;
-			//resetAll();
-		}
-		else
-			return;                 // other device error
-	}
-}
-
-
-
-
 void ScenceManager::init(HWND hwnd)
 {
 	this->handle = hwnd;
@@ -117,11 +72,13 @@ void ScenceManager::init(HWND hwnd)
 	OptionScence* optionS = new OptionScence(graphics, input);
 	optionS->init();
 	PlayScence* playS = new PlayScence(graphics, input);
-
+	EndScence* endS = new EndScence(graphics, input);
+	endS->init();
 
 	currentScence = optionS;
 	this->scenceContainer->insert(pair<ScenceType, Scence*>(ScenceType::OPTION,optionS));
 	this->scenceContainer->insert(pair<ScenceType, Scence*>(ScenceType::PLAY, playS) );
+	this->scenceContainer->insert(pair<ScenceType, Scence*>(ScenceType::END, endS));
 }
 
 void ScenceManager::deleteAll()

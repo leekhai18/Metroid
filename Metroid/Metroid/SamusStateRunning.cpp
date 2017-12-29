@@ -12,6 +12,7 @@
 #include "Rio.h"
 #include "Ripper.h"
 #include "MotherBrain.h"
+#include "Sound.h"
 SamusStateRunning::SamusStateRunning()
 {
 }
@@ -576,8 +577,7 @@ void SamusStateRunning::onCollision(float dt)
 				this->samus->setVelocityY(0);
 				break;
 			}
-			this->samus->setFlipX(true);
-			this->samus->setDirection(eDirection::right);
+			
 			SamusStateManager::getInstance()->setOldStatus(eStatus::RUNNING);
 			this->samus->setStatus(eStatus::INJURING);
 			SamusStateManager::getInstance()->setOldState(this);
@@ -658,7 +658,7 @@ void SamusStateRunning::fire()
 {
 	VECTOR2 stP;
 	Bullet* bullet = BulletPool::getInstance()->getBullet();
-
+	Sound::getInstance()->play(SOUND_BULLET, false);
 	if (isUp)
 	{
 		stP = VECTOR2(this->samus->getPosition().x + this->samus->getDirection(), this->samus->getPosition().y + this->samus->getSprite()->getHeight()*0.4f);

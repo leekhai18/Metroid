@@ -2194,7 +2194,8 @@ bool ObjectManager::load_list(const char * filename)
 
 			motherFacker->setPosition(VECTOR2(x, y));
 			
-			motherFacker->setPort(static_cast<Port*>(map_object.find(878)->second));
+			int brickID = mother["PortID"].GetInt();
+			motherFacker->setPort(static_cast<Port*>(map_object.find(brickID)->second));
 			/*		writer.Key("MotherBrain");
 			writer.StartObject();
 			writer.Key("x");

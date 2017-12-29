@@ -9,6 +9,7 @@
 #include "Ripper.h"
 #include "Rio.h"
 #include "Waver.h"
+#include "Sound.h"
 #define TIME_TO_RUNNING 0.1f
 
 SamusStateStanding::SamusStateStanding()
@@ -308,7 +309,7 @@ void SamusStateStanding::onCollision(float dt)
 			Zommer* zommer = static_cast<Zommer*>(i->object);
 			if (!zommer->getCold())
 			{
-				//this->samus->setVelocity(VECTOR2(0, 0));
+				
 				SamusStateManager::getInstance()->setOldStatus(eStatus::STANDING);
 				this->samus->setStatus(eStatus::INJURING);
 				SamusStateManager::getInstance()->setOldState(this);
@@ -443,7 +444,7 @@ void SamusStateStanding::update(float dt)
 		switch (this->samus->getStatus())
 		{
 		case eStatus::JUMPING:
-
+			
 			//this->samus->setPositionX(this->samus->getPosition().x )
 			SamusStateManager::getInstance()->changeStateTo(this->samus->getStatus());
 			break;
@@ -482,7 +483,7 @@ void SamusStateStanding::fire()
 {
 	VECTOR2 stP;
 	Bullet* bullet = BulletPool::getInstance()->getBullet();
-
+	Sound::getInstance()->play(SOUND_BULLET, false);
 	if (isUp)
 	{
 		stP = VECTOR2(this->samus->getPosition().x + this->samus->getDirection(), this->samus->getPosition().y + this->samus->getSprite()->getHeight()*0.4f);
@@ -501,7 +502,7 @@ void SamusStateStanding::fireRocket()
 {
 	VECTOR2 stP;
 	Rocket* rocket = RocketPool::getInstance()->getRocket();
-
+	Sound::getInstance()->play(SOUND_ROCKET, false);
 	if (isUp)
 	{
 		stP = VECTOR2(this->samus->getPosition().x + this->samus->getDirection(), this->samus->getPosition().y + this->samus->getSprite()->getHeight()*0.4f);

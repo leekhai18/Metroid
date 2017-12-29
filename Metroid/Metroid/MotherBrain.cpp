@@ -25,10 +25,11 @@ MotherBrain::MotherBrain(TextureManager * textureM, Graphics * graphics,Samus* s
 	this->getSprite()->setOrigin(VECTOR2(0.5, 0.5));
 
 
-	isActivity = false;
+	isActivity = true;
 	this->samus = samus;
 	health = 50;
 	bulletPool = new MBulletPool(textureM, graphics, samus, NUMBER_BULLET);
+
 }
 
 
@@ -115,17 +116,18 @@ void MotherBrain::update(float dt)
 					IExplosible::start();
 					this->setVelocity(VECTOR2(0, 0));
 					this->isActivity = false;
+					this->port->setWin(true);
 				}
 			}
 		}
+
 		if (isHandle)
 		{
 			bulletPool->update(dt);
 		}
-		this->anim->update(dt);
-
-		IExplosible::update(dt);
+		this->anim->update(dt);		
 	}
+	IExplosible::update(dt);
 }
 
 void MotherBrain::draw()

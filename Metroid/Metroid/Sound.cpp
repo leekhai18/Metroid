@@ -341,5 +341,20 @@ void Sound :: unMute()
 
 void Sound :: cleanUp()
 {
-	delete this;
+	delete this->instance;
+}
+
+void Sound::loadAllSound()
+{
+	loadSound("Resources/Sounds/bullet.wav", SOUND_BULLET);
+	loadSound("Resources/Sounds/explosion.wav", SOUND_EXPLOSION);
+	loadSound("Resources/Sounds/jump.wav", SOUND_JUMP);
+	loadSound("Resources/Sounds/missile.wav", SOUND_ROCKET);
+	loadSound("Resources/Sounds/bossMotherHit.wav", SOUND_BOSSMOTHER_HIT);
+	loadSound("Resources/Sounds/collectionBonus.wav", SOUND_COLLECTION_BONUS);
+	loadSound("Resources/Sounds/collectionItem.wav", SOUND_COLLECTION_ITEMS);
+	loadSound("Resources/Sounds/collideEnemies.wav", SOUND_COLLIDE_ENEMIES);
+	loadSound("Resources/Sounds/die.wav", SOUND_DEATH);
+	loadSound("Resources/Sounds/nearDie.wav", SOUND_NEAR_DEATH);
+	loadSound("Resources/Sounds/putBomb.wav", SOUND_PUT_BOMB);
 }

@@ -4,6 +4,7 @@
 #include "Collision.h"
 #include "GameDebug.h"
 #include "BulletPool.h"
+#include "Sound.h"
 #define TIME_DELAY_WHEN_COLLECT_ITEM 1
 
 Metroid::Metroid()
@@ -37,6 +38,7 @@ Metroid::~Metroid()
 
 	ObjectManager::getInstance()->release();
 	Collision::getInstance()->release();
+	Sound::getInstance()->cleanUp();
 	//GameDebug::getInstance()->release();
 }
 
@@ -77,6 +79,8 @@ void Metroid::initialize(HWND hwnd)
 	{
 		throw GameError(GameErrorNS::FATAL_ERROR, "Can not initalize map brinstar");
 	}
+
+	Sound::getInstance()->loadAllSound();
 
 	camera = new Camera(VIEWPORT_WIDTH, VIEWPORT_HEIGHT);
 	camera->setPosition(VECTOR2(CAM_POS_X, CAM_POS_Y));

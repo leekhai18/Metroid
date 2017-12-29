@@ -310,6 +310,7 @@ void SamusStateAcrobat::onCollision(float dt)
 			Port* port = static_cast<Port*>(i->object);
 			if (port->Win() == true)
 			{
+				this->samus->setVelocity(VECTOR2ZERO);
 				ScenceManager::getInstance()->goToScence(ScenceType::END);
 				return;
 			}
@@ -692,6 +693,31 @@ void SamusStateAcrobat::onCollision(float dt)
 			SamusStateManager::getInstance()->setOldStatus(eStatus::ACROBAT);
 			SamusStateManager::getInstance()->setOldState(this);
 			this->samus->setStatus(eStatus::INJURING);
+
+			break;
+		}
+		case eID::MOTHERBRAIN:
+		{
+			switch (i->direction)
+			{
+			case CollideDirection::LEFT:
+				this->samus->setVelocityX(0);
+				//not allow move left
+				//this->samus->setCanMoveRight(false);
+				break;
+			case CollideDirection::RIGHT:
+				this->samus->setVelocityX(0);
+				//not allow move right
+				//this->samus->setCanMoveLeft(false);
+				break;
+			case CollideDirection::TOP:
+				this->samus->setVelocityY(0);
+				break;
+			}
+
+			SamusStateManager::getInstance()->setOldStatus(eStatus::RUNNING);
+			this->samus->setStatus(eStatus::INJURING);
+			SamusStateManager::getInstance()->setOldState(this);
 
 			break;
 		}

@@ -16,11 +16,10 @@
 //#define CAM_POS_X 2432.00000
 //#define CAM_POS_Y 1320.00000
 
-//#define CAM_POS_X 640//6144
-//#define CAM_POS_Y 3656//2992//
-
-//#define CAM_POS_X 912//6144
-//#define CAM_POS_Y 4208//2992//
+//MotherBrain
+//boss
+//#define CAM_POS_X 912
+//#define CAM_POS_Y 4208
 
 //zeb position
 //#define CAM_POS_X 3810

@@ -1,7 +1,7 @@
 
 #include "SamusStateInjuring.h"
 #include "SamusStateManager.h"
-
+#include "Sound.h"
 #define TIME_ANIMATION 0.1f
 #define TIME_TO_NORMAL 0.5f
 SamusStateInjuring::SamusStateInjuring()
@@ -26,7 +26,7 @@ void SamusStateInjuring::init()
 
 	//this->samus->setVelocityY(-SAMUS_MIN_SPEED_Y);
 
-	
+	Sound::getInstance()->play(SOUND_COLLIDE_ENEMIES, false);
 	setBoundCollision();
 
 	time_to_stand = 0;

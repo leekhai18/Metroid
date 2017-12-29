@@ -14,6 +14,7 @@
 #include "AlienBig.h"
 #include "AlienSmall.h"
 #include "Ripper.h"
+#include "Sound.h"
 #define WIDTH_BULLET_HALF 1
 #define HEIGHT_BULLET_HALF 1
 
@@ -341,6 +342,7 @@ void Bullet::onCollision()
 
 void Bullet::handleVelocity(float dt)
 {
+
 	if (this->distance < this->distanceShoot)
 	{
 		this->distance += VELOCITY_BULLET*dt;

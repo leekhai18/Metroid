@@ -12,8 +12,9 @@
 #include "Waver.h"
 #include "Zeb.h"
 #include "Rio.h"
-#define TIME_START_BOMB 0.1f
 
+#include "Sound.h"
+#define TIME_START_BOMB 0.5f
 SamusStateRolling::SamusStateRolling()
 {
 }
@@ -107,6 +108,7 @@ void SamusStateRolling::handleInput(float dt)
 		timerToStartBoom += dt;
 		if (timerToStartBoom > TIME_START_BOMB)
 		{
+			Sound::getInstance()->play(SOUND_PUT_BOMB, false);
 			BoomBombPool::getInstance()->getBoom()->start(this->samus->getPosition());
 			timerToStartBoom = 0;
 		}

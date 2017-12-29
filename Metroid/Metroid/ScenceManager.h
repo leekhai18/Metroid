@@ -39,11 +39,6 @@ public:
 
 	void run();
 
-	void update();
-
-	void handleLostGraphicsDevice();
-
-	void draw();
 
 	void init(HWND hwnd);
 
