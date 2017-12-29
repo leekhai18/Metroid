@@ -18,6 +18,7 @@
 #include "Rio.h"
 #include "Ripper.h"
 #include "Port.h"
+#include "ScenceManager.h"
 SamusStateJumping::SamusStateJumping()
 {
 }
@@ -255,7 +256,8 @@ void SamusStateJumping::onCollision(float dt)
 #pragma endregion
 
 		case eID::ELEVATOR:
-			if(samus->getCanMoveElevator())
+		{
+			if (samus->getCanMoveElevator())
 			{
 				return;
 			}
@@ -292,7 +294,8 @@ void SamusStateJumping::onCollision(float dt)
 				this->samus->setPositionY(addY - OFFSET_JUMP);
 				break;
 			}
-			break;
+			break; 
+		}
 #pragma region GATE and PORT
 		case eID::GATEBLUE: case eID::GATERED:
 		{
@@ -349,6 +352,7 @@ void SamusStateJumping::onCollision(float dt)
 			Port* port = static_cast<Port*>(i->object);
 			if(port->Win()==true)
 			{
+				ScenceManager::getInstance()->goToScence(ScenceType::END);
 				return;
 			}
 			switch (i->direction)

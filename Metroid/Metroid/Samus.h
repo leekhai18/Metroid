@@ -93,6 +93,7 @@ private:
 
 	map<int,BaseObject*>* listCanCollide;
 
+
 	bool visible;
 	
 #pragma region items

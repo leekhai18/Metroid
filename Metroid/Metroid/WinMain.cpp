@@ -32,14 +32,14 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 	MSG msg;
 
 	// Create the game, sets up message handler
-	game = new Metroid;
+	//game = new Metroid;
 
 	// Create the window
 	if (!CreateMainWindow(hwnd, hInstance, nCmdShow))
 		return 1;
 
 	try {
-		game->initialize(hwnd);     // throws GameError
+		//game->initialize(hwnd);     // throws GameError
 		ScenceManager::getInstance()->init(hwnd);
 									// main message loop
 		int done = 0;
@@ -57,30 +57,30 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 			}
 			else
 			{
-				game->run(hwnd);    // run the game loop
-				//ScenceManager::getInstance()->run();
+				//game->run(hwnd);    // run the game loop
+				ScenceManager::getInstance()->run();
 			}
 		}
-		SAFE_DELETE(game);     // free memory before exit
+		//SAFE_DELETE(game);     // free memory before exit
 		ScenceManager::getInstance()->deleteAll();
 		return msg.wParam;
 	}
 	catch (const GameError &err)
 	{
 		ScenceManager::getInstance()->deleteAll();
-		game->deleteAll();
+		//game->deleteAll();
 		DestroyWindow(hwnd);
 		MessageBox(NULL, err.getMessage(), "Error", MB_OK);
 	}
 	catch (...)
 	{
 		ScenceManager::getInstance()->deleteAll();
-		game->deleteAll();
+		//game->deleteAll();
 		DestroyWindow(hwnd);
 		MessageBox(NULL, "Unknown error occured in game.", "Error", MB_OK);
 	}
 
-	SAFE_DELETE(game);     // free memory before exit
+	//SAFE_DELETE(game);     // free memory before exit
 	return 0;
 }
 
@@ -89,8 +89,8 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 //=============================================================================
 LRESULT WINAPI WinProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 {
-	return (game->messageHandler(hwnd, msg, wParam, lParam));
-	//return (ScenceManager::getInstance()->messageHandler(hwnd, msg, wParam, lParam));
+	//return (game->messageHandler(hwnd, msg, wParam, lParam));
+	return (ScenceManager::getInstance()->messageHandler(hwnd, msg, wParam, lParam));
 }
 
 //=============================================================================

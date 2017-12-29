@@ -17,8 +17,8 @@ GameManager::GameManager()
 // Destructor
 GameManager::~GameManager()
 {
-	deleteAll();                // free all reserved memory
-	ShowCursor(true);           // show cursor
+	//deleteAll();                // free all reserved memory
+	//ShowCursor(true);           // show cursor
 }
 
 
@@ -62,6 +62,21 @@ void GameManager::initialize(HWND hw)
 	input->initialize(hwnd, false);             // throws GameError
 
 												// attempt to set up high resolution timer
+	if (QueryPerformanceFrequency(&timerFreq) == false)
+		throw(GameError(GameErrorNS::FATAL_ERROR, "Error initializing high resolution timer"));
+
+	QueryPerformanceCounter(&timeStart);        // get starting time
+
+	initialized = true;
+
+	fps = FRAME_RATE;
+}
+
+void GameManager::initialize(Graphics * graphics, Input * input)
+{
+	this->graphics = graphics;
+	this->input = input;
+
 	if (QueryPerformanceFrequency(&timerFreq) == false)
 		throw(GameError(GameErrorNS::FATAL_ERROR, "Error initializing high resolution timer"));
 
@@ -160,6 +175,47 @@ void GameManager::run(HWND hwnd)
 									// Clear input
 									// Call this after all key checks are done
 	input->clear(InputNS::KEYS_PRESSED);
+}
+
+void GameManager::run()
+{
+	if (graphics == NULL)            // if graphics not initialized
+		return;
+
+	// calculate elapsed time of last frame, save in frameTime
+	QueryPerformanceCounter(&timeEnd);
+	deltaTime = (float)(timeEnd.QuadPart - timeStart.QuadPart) / (float)timerFreq.QuadPart;
+
+	// Power saving code, requires winmm.lib
+	// if not enough time has elapsed for desired frame rate
+	if (deltaTime < MIN_FRAME_TIME)
+	{
+		sleepTime = (DWORD)((MIN_FRAME_TIME - deltaTime) * 1000);
+		timeBeginPeriod(1);         // Request 1mS resolution for windows timer
+		Sleep(sleepTime);           // release cpu for sleepTime
+		timeEndPeriod(1);           // End 1mS timer resolution
+		return;
+	}
+	if (deltaTime > MAX_FRAME_TIME) // if frame rate is very slow
+		deltaTime = MAX_FRAME_TIME; // limit maximum frameTime
+	if (deltaTime > 0.0)
+		fps = (fps * 0.99f) + (0.01f / deltaTime);  // average fps
+	timeStart = timeEnd;
+
+	// update(), ai(), and collisions() are pure virtual functions.
+	// These functions must be provided in the class that inherits from Game.
+	if (!paused)                    // if not paused
+	{
+		handleInput(deltaTime);
+		collisions(deltaTime);               // handle collisions
+		update(deltaTime);                   // update all game items
+
+	}
+	renderGame();                   // draw all game items
+
+									// Clear input
+									// Call this after all key checks are done
+	//input->clear(InputNS::KEYS_PRESSED);
 }
 
 

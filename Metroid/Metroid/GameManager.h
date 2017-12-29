@@ -33,9 +33,10 @@ public:
 	// Pre: hwnd is handle to window
 	virtual void initialize(HWND hwnd);
 
+	virtual void initialize(Graphics* graphics ,Input* input);
 	// Call run repeatedly by the main message loop in WinMain
 	virtual void run(HWND);
-
+	virtual void run();
 	// Call when the graphics device was lost.
 	// Release all reserved video memory so graphics device may be reset.
 	virtual void releaseAll();

@@ -1,19 +1,21 @@
 #pragma once
 #include "Scence.h"
 #include "TextureManager.h"
-#include "Sprite.h"
-class OptionScence :public Scence
+class EndScence:public Scence
 {
 private:
 	TextureManager* textureM;
 	SpriteData data;
 public:
 	void init();
+
 	void update();
+
 	void draw();
+
+	EndScence(Graphics* graphics, Input* input);
 	void run();
-	OptionScence();
-	OptionScence(Graphics* graphics, Input* input);
-	~OptionScence();
+	EndScence();
+	~EndScence();
 };
 

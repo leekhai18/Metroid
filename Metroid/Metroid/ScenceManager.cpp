@@ -1,6 +1,7 @@
 #include "ScenceManager.h"
 #include "OptionScence.h"
-
+#include "PlayScence.h"
+#include "Constants.h"
 ScenceManager* ScenceManager::instance;
 
 ScenceManager * ScenceManager::getInstance()
@@ -12,12 +13,13 @@ ScenceManager * ScenceManager::getInstance()
 	return instance;
 }
 
-Scence * ScenceManager::getScence(ScenceType)
+Scence * ScenceManager::getScence(ScenceType type)
 {
-	return nullptr;
+	return (*scenceContainer->find(type)).second;
 }
-void ScenceManager::goToScence(const char * name)
+void ScenceManager::goToScence(ScenceType type)
 {
+	currentScence = (*scenceContainer->find(type)).second;
 }
 LRESULT ScenceManager::messageHandler(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 {
@@ -46,10 +48,12 @@ void ScenceManager::insertScence(const char * name, Scence * scence)
 
 void ScenceManager::run()
 {
-	update();
-	draw();
-
+	this->currentScence->run();
 	input->clear(InputNS::KEYS_PRESSED);
+	if(input->isKeyDown(VK_RETURN))
+	{
+		this->goToScence(ScenceType::PLAY);
+	}
 }
 
 void ScenceManager::update()
@@ -68,6 +72,7 @@ void ScenceManager::draw()
 
 	graphics->showBackbuffer();
 }
+
 void ScenceManager::handleLostGraphicsDevice()
 {
 	// test for and handle lost device
@@ -108,23 +113,26 @@ void ScenceManager::init(HWND hwnd)
 
 	input->initialize(hwnd, false);
 
-	this->scences = new map<ScenceType, Scence*>();
+	this->scenceContainer = new map<ScenceType, Scence*>();
 	OptionScence* optionS = new OptionScence(graphics, input);
 	optionS->init();
+	PlayScence* playS = new PlayScence(graphics, input);
 
 
 	currentScence = optionS;
-	this->scences->insert(pair<ScenceType, Scence*>(OPTION,optionS));
+	this->scenceContainer->insert(pair<ScenceType, Scence*>(ScenceType::OPTION,optionS));
+	this->scenceContainer->insert(pair<ScenceType, Scence*>(ScenceType::PLAY, playS) );
 }
 
 void ScenceManager::deleteAll()
 {
-	for (auto i = scences->begin(); i != scences->end(); ++i)
+	for (auto i = scenceContainer->begin(); i != scenceContainer->end(); ++i)
 	{
 		delete (*i).second;
 	}
-	delete scences;
+	delete scenceContainer;
 	graphics->releaseAll();
+	ShowCursor(true);
 	delete input;
 	delete instance;
 }

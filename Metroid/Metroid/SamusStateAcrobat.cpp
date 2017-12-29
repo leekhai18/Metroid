@@ -19,6 +19,7 @@
 #include "Rio.h"
 #include "Ripper.h"
 #include "Port.h"
+#include "ScenceManager.h"
 SamusStateAcrobat::SamusStateAcrobat()
 {
 }
@@ -132,14 +133,51 @@ void SamusStateAcrobat::onCollision(float dt)
 
 	for (auto i = this->samus->getListCollide()->begin(); i != this->samus->getListCollide()->end(); i++)
 	{
+		
 		switch (i->object->getId())
 		{
 #pragma region Wall
 		case eID::WALL:
 		case eID::BRICK:
-		case eID::FIRE:
 		case eID::ALIENBIG:
 		case eID::ALIENSMALL:
+			switch (i->direction)
+			{
+			case CollideDirection::LEFT:
+				this->samus->setCanMoveRight(false);
+				this->samus->setVelocityX(0);
+				break;
+
+			case CollideDirection::RIGHT:
+				this->samus->setCanMoveLeft(false);
+				this->samus->setVelocityX(0);
+				break;
+
+			case CollideDirection::TOP:
+				jumpDistance = 0;
+				//set jump = false, when user release jump button set to true
+				this->samus->setCanJump(false);
+				//set fall to false
+				this->samus->setFall(false);
+				//reset velocity
+				this->samus->setVelocityY(0);
+				positionCollide = i->positionCollision;
+				this->samus->setStatus(eStatus::STANDING);
+				break;
+
+			case CollideDirection::BOTTOM:
+				jumpDistance = 0;
+				this->samus->setFall(true);
+				this->samus->setVelocityY(0);
+				addY = i->positionCollision;
+				this->samus->setPositionY(addY - OFFSET_JUMP);
+				break;
+			}
+
+			break;
+#pragma endregion
+#pragma region Fire
+		case eID::FIRE:
 			switch (i->direction)
 			{
 			case CollideDirection::LEFT:
@@ -272,6 +310,7 @@ void SamusStateAcrobat::onCollision(float dt)
 			Port* port = static_cast<Port*>(i->object);
 			if (port->Win() == true)
 			{
+				ScenceManager::getInstance()->goToScence(ScenceType::END);
 				return;
 			}
 			switch (i->direction)

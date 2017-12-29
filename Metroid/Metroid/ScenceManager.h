@@ -8,11 +8,11 @@
 #include "resource.h"
 #include "Scence.h"
 #include <map>
-#include "Graphics.h"
+
 class ScenceManager
 {
 private:
-	map<ScenceType, Scence*>* scences;
+	map<ScenceType, Scence*>* scenceContainer;
 
 	Scence* currentScence;
 
@@ -28,9 +28,10 @@ private:
 public:
 	static ScenceManager* getInstance();
 
-	Scence* getScence(ScenceType);
+	Scence* getScence(ScenceType type);
 
-	void goToScence(const char* name);
+	void goToScence(ScenceType type);
+
 
 	LRESULT messageHandler(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam);
 

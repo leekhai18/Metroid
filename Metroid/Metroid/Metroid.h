@@ -45,12 +45,14 @@ public:
 	static Metroid* getInstance();
 
 	void initialize(HWND hwnd);
+	void initialize(Graphics* graphics, Input* input);
 	void update(float dt);      // must override pure virtual from Game
 	void handleInput(float dt);
 	void collisions(float dt);  // "
 	void render();      // "
 	void releaseAll();
 	void resetAll();
+
 
 	HWND getCurrentHWND();
 

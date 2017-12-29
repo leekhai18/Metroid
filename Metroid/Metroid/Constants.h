@@ -50,6 +50,7 @@ const UCHAR ENTER_KEY = VK_RETURN;       // Enter key
 #define VK_F 0x46
 #define VK_G 0x47
 // Source
+const char ENDGAME_IMAGE[] = "Resources\\SpriteSheets\\EndGame.png";
 const char STARTGAME_IMAGE[] = "Resources\\SpriteSheets\\StartGame.png";
 const char SOURCE_IMAGE[] = "Resources\\SpriteSheets\\MetroidTexture.png";//character of game
 const char SOURCE_JSON[] = "json\\MetroidTexture.json"; //json file of metroid sprite

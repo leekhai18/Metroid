@@ -140,7 +140,7 @@ void SamusStateRolling::onCollision(float dt)
 		
 #pragma region Wall			
 		case eID::WALL:	
-		case eID::FIRE:
+		
 		case eID::ALIENBIG:
 		case eID::ALIENSMALL:
 			switch (i->direction)
@@ -173,6 +173,21 @@ void SamusStateRolling::onCollision(float dt)
 				break;
 			}
 			break;
+#pragma endregion
+#pragma region Fire	
+		case eID::FIRE:
+		{
+			switch (i->direction)
+			{
+			case CollideDirection::TOP:
+				this->samus->setVelocityY(0);
+
+				this->samus->setPositionY(i->positionCollision + OFFSET_ROLLING);
+				canStanding = true;
+				move_to_fall = false;
+				break;
+			}
+		}
 #pragma endregion
 #pragma region Elevator	
 		case eID::ELEVATOR:

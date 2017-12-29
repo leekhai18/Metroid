@@ -82,7 +82,7 @@ void Quadtree::clear()
 
 
 void Quadtree::retrieve(map<int, BaseObject*>* listNotWallCanCollideSamus, map<int, BaseObject*>* listObjectNotWallOnViewPort, 
-	map<int, BaseObject*>* listWallCanCollideSamus, map<int, BaseObject*>* listWallEnermy,MetroidRect rect, BaseObject* samus)
+	map<int, BaseObject*>* listWallCanCollideSamus,MetroidRect rect, BaseObject* samus)
 {
 	if (nodes)
 	{
@@ -90,7 +90,7 @@ void Quadtree::retrieve(map<int, BaseObject*>* listNotWallCanCollideSamus, map<i
 		{
 			if ((*node)->isContain(rect))
 			{
-				(*node)->retrieve(listNotWallCanCollideSamus, listObjectNotWallOnViewPort, listWallCanCollideSamus, listWallEnermy,rect, samus);
+				(*node)->retrieve(listNotWallCanCollideSamus, listObjectNotWallOnViewPort, listWallCanCollideSamus,rect, samus);
 			}
 		}
 
@@ -119,20 +119,20 @@ void Quadtree::retrieve(map<int, BaseObject*>* listNotWallCanCollideSamus, map<i
 						listObjectNotWallOnViewPort->insert(*i);
 					}
 				//}
-					switch (((*i).second)->getId())
-					{
-					case eID::WALL:
-					case eID::BRICK:
-					case eID::GATERED:
-					case eID::GATEBLUE:
-					case eID::PORT:
-						if (Collision::getInstance()->isCollide(rect, ((*i).second)->getBoundCollision()))
-						{
-							listWallEnermy->insert(*i);
-						}
-					default:
-						break;
-					}
+					//switch (((*i).second)->getId())
+					//{
+					//case eID::WALL:
+					//case eID::BRICK:
+					//case eID::GATERED:
+					//case eID::GATEBLUE:
+					//case eID::PORT:
+					//	if (Collision::getInstance()->isCollide(rect, ((*i).second)->getBoundCollision()))
+					//	{
+					//		listWallEnermy->insert(*i);
+					//	}
+					//default:
+					//	break;
+					//}
 			}
 			else
 			{
@@ -145,10 +145,10 @@ void Quadtree::retrieve(map<int, BaseObject*>* listNotWallCanCollideSamus, map<i
 				//}
 				//if (listWallEnermy->find((*i).first) == listWallEnermy->end())
 				//{
-				if (Collision::getInstance()->isCollide(rect, ((*i).second)->getBoundCollision()))
+			/*	if (Collision::getInstance()->isCollide(rect, ((*i).second)->getBoundCollision()))
 				{
 					listWallEnermy->insert(*i);
-				}
+				}*/
 
 				//}
 			}

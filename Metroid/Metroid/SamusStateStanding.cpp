@@ -262,12 +262,13 @@ void SamusStateStanding::onCollision(float dt)
 	{
 		switch (i->object->getId())
 		{
+			
 		case eID::WALL:
 		case eID::BRICK:
-		case eID::FIRE:
 		case eID::ELEVATOR:
 		case eID::ALIENBIG:
 		case eID::ALIENSMALL:
+		{
 			switch (i->direction)
 			{
 			case CollideDirection::TOP:
@@ -279,9 +280,23 @@ void SamusStateStanding::onCollision(float dt)
 
 			}
 			break;
+		}
+		case eID::FIRE:
+		{
+			switch (i->direction)
+			{
+				
+			case CollideDirection::TOP:
+				this->samus->setVelocityY(0);
+				this->samus->setPositionY(i->positionCollision + OFFSET_STAND);
 
+				this->samus->setHealth(this->samus->getHealth() - 8);
+				canRolling = true;
+				break;
 
-
+			}
+			break;
+		}
 		case eID::ZOMMER:
 		{
 			switch (i->direction)

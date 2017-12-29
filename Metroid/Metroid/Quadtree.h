@@ -31,7 +31,7 @@ public:
 	void clear();
 
 	void retrieve(map<int, BaseObject*>* listNotWallCanCollideSamus, map<int, BaseObject*>* listObjectNotWallOnViewPort, 
-		map<int, BaseObject*>* listWallCanCollideSamus, map<int, BaseObject*>* listWallEnermy,MetroidRect rect, BaseObject * samus);
+		map<int, BaseObject*>* listWallCanCollideSamus,MetroidRect rect, BaseObject * samus);
 	
 	//void retrieve(list<BaseObject*>* listCanCollideSamus, list<BaseObject*>* listObjectNotWallOnViewPort, list<BaseObject*>* listWallCanCollideSamus, MetroidRect rect, BaseObject* samus);
 

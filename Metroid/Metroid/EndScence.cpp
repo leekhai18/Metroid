@@ -1,11 +1,10 @@
-#include "OptionScence.h"
+#include "EndScence.h"
 
 
-
-void OptionScence::init()
+void EndScence::init()
 {
 	textureM = new TextureManager();
-	if(!textureM->initialize(graphics, STARTGAME_IMAGE))
+	if (!textureM->initialize(graphics, ENDGAME_IMAGE))
 	{
 		throw GameError(GameErrorNS::FATAL_ERROR, "Can not load image start game");
 	}
@@ -17,7 +16,7 @@ void OptionScence::init()
 	RECT rect;
 	rect.top = 0;
 	rect.left = 0;
-	rect.right= textureM->getWidth();
+	rect.right = textureM->getWidth();
 	rect.bottom = textureM->getHeight();
 	data.rect = rect;
 	data.position = VECTOR2(0, 0);
@@ -26,15 +25,17 @@ void OptionScence::init()
 	data.flipHorizontal = false;
 }
 
-void OptionScence::update()
+
+
+void EndScence::update()
 {
 }
 
-void OptionScence::draw()
+void EndScence::draw()
 {
 	if (SUCCEEDED(graphics->beginScene()))
 	{
-		
+
 		graphics->spriteBegin();
 
 
@@ -50,31 +51,29 @@ void OptionScence::draw()
 	handleLostGraphicsDevice();
 
 	graphics->showBackbuffer();
-
-	
 }
 
-void OptionScence::run()
-{
-	update();
-	draw();
-}
-
-OptionScence::OptionScence()
-{
-
-}
-
-OptionScence::OptionScence(Graphics * graphics, Input * input)
+EndScence::EndScence(Graphics * graphics, Input * input)
 {
 	this->graphics = graphics;
 	this->input = input;
 }
 
+void EndScence::run()
+{
+	update();
+	draw();
 
-OptionScence::~OptionScence()
+
+}
+
+EndScence::EndScence()
+{
+}
+
+
+EndScence::~EndScence()
 {
 	textureM->onLostDevice();
 	delete textureM;
-	//delete data;
 }

@@ -139,6 +139,7 @@
     <ClInclude Include="Camera.h" />
     <ClInclude Include="Collision.h" />
     <ClInclude Include="Constants.h" />
+    <ClInclude Include="EndScence.h" />
     <ClInclude Include="EnergyTank.h" />
     <ClInclude Include="GameDebug.h" />
     <ClInclude Include="GameError.h" />
@@ -165,6 +166,7 @@
     <ClInclude Include="MotherBrainBullet.h" />
     <ClInclude Include="ObjectManager.h" />
     <ClInclude Include="OptionScence.h" />
+    <ClInclude Include="PlayScence.h" />
     <ClInclude Include="Port.h" />
     <ClInclude Include="Quadtree.h" />
     <ClInclude Include="resource.h" />
@@ -212,6 +214,7 @@
     <ClCompile Include="Bullet.cpp" />
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="Collision.cpp" />
+    <ClCompile Include="EndScence.cpp" />
     <ClCompile Include="EnergyTank.cpp" />
     <ClCompile Include="GameDebug.cpp" />
     <ClCompile Include="GameLog.cpp" />
@@ -237,6 +240,7 @@
     <ClCompile Include="MotherBrainBullet.cpp" />
     <ClCompile Include="ObjectManager.cpp" />
     <ClCompile Include="OptionScence.cpp" />
+    <ClCompile Include="PlayScence.cpp" />
     <ClCompile Include="Port.cpp" />
     <ClCompile Include="Quadtree.cpp" />
     <ClCompile Include="Rio.cpp" />

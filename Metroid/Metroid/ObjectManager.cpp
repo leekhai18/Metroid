@@ -84,12 +84,10 @@ void ObjectManager::handleVelocity(float dt)
 		listNotWallCanCollideSamus->clear();
 		listObjectNotWallOnViewPort->clear();
 		listWallCanCollideSamus->clear();
-		listWallEmnermy->clear();
 		MetroidRect r = Camera::getInstance()->getBound();
 
 		//Get all objects that can collide with current obj
-		quadtree->retrieve(listNotWallCanCollideSamus, listObjectNotWallOnViewPort, listWallCanCollideSamus,
-			listWallEmnermy, MetroidRect(r.top + 20, r.bottom - 40, r.left - 50, r.right + 50), samus);
+		quadtree->retrieve(listNotWallCanCollideSamus, listObjectNotWallOnViewPort, listWallCanCollideSamus, MetroidRect(r.top + 20, r.bottom - 40, r.left - 50, r.right + 50), samus);
 		//quadtree->retrieve(listNotWallCanCollideSamus, listObjectNotWallOnViewPort, listWallCanCollideSamus, MetroidRect(r.top + 40, r.bottom - 40, r.left - 40, r.right + 40), samus);
 	}
 
@@ -146,7 +144,9 @@ void ObjectManager::handleVelocity(float dt)
 			Skree* skr = static_cast<Skree*>((*i).second);
 			skr->setTarget(samus->getPosition());
 			skr->handleVelocity(dt);
+			break;
 		}
+	
 		default:
 			break;
 		}

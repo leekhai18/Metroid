@@ -436,6 +436,7 @@ void Samus::setHealth(int heal)
 		else
 		{
 			// GAME OVER
+			health = 30;
 		}
 	}
 }
