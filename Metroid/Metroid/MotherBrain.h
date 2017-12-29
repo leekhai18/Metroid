@@ -3,8 +3,9 @@
 #include "Animation.h"
 #include "Samus.h"
 #include "MBulletPool.h"
-
-class MotherBrain : public BaseObject
+#include "Port.h"
+#include "IExplosible.h"
+class MotherBrain : public BaseObject,public IExplosible
 {
 private:
 	Animation *anim;
@@ -15,13 +16,19 @@ private:
 
 	bool isDead;
 
+	Port* port;
+	bool beHit;
+	float timerHit;
+	int health;
+
+	bool isHandle;
 public:
 	MotherBrain();
 	MotherBrain(TextureManager* textureM, Graphics* graphics,Samus* samus);
 	~MotherBrain();
 
 	void initStartBulletPool(VECTOR2 position);
-
+	void setPort(Port* port);
 	void setBoundCollision();
 	void reInit();
 	void handleVelocity(float dt);
@@ -29,5 +36,7 @@ public:
 	void update(float dt);
 	
 	void draw();
+	void setBeHit(bool hit);
+	void decreaseHealth(float dame);
 };
 

@@ -2126,11 +2126,11 @@ bool ObjectManager::load_list(const char * filename)
 
 				kraid->setBoundCollision();
 
-				/*const Value& arrayWall = listKraid[i]["ListCollideID"];
+				const Value& arrayWall = listKraid[i]["ListCollideID"];
 				for (SizeType t = 0; t < arrayWall.Size(); t++)
 				{
-					kraid->getListWallCanCollide()->push_back(map_object.find(arrayWall[t].GetInt())->second);
-				}*/
+					kraid->getListWallCanCollide()->insert(*map_object.find(arrayWall[t].GetInt()));
+				}
 				/*			writer.StartObject();
 				writer.Key("x");
 				writer.Double(x);
@@ -2193,7 +2193,8 @@ bool ObjectManager::load_list(const char * filename)
 			y -= motherFacker->getSprite()->getHeight()*0.5f;
 
 			motherFacker->setPosition(VECTOR2(x, y));
-
+			
+			motherFacker->setPort(static_cast<Port*>(map_object.find(878)->second));
 			/*		writer.Key("MotherBrain");
 			writer.StartObject();
 			writer.Key("x");

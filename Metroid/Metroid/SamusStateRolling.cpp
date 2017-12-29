@@ -176,7 +176,7 @@ void SamusStateRolling::onCollision(float dt)
 #pragma endregion
 #pragma region Elevator	
 		case eID::ELEVATOR:
-			if (samus->canGo_Elevator())
+			if (samus->getCanMoveElevator())
 			{
 				return;
 			}

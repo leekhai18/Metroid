@@ -285,22 +285,30 @@ void Bullet::onCollision()
 				}
 				case eID::BOSSKRAID:
 				{
-					this->isCollided = true;
-					this->velocity = VECTOR2ZERO;
 					BossKraid* bossKraid = static_cast<BossKraid*>(i->object);
+					if (bossKraid->isActivitied()) 
+					{
+						this->isCollided = true;
+						this->velocity = VECTOR2ZERO;
+						this->sprite->setData(indexEffect);
 
-					bossKraid->setBeHit(true);
-					bossKraid->decreaseHealth(this->dame);
+
+						bossKraid->setBeHit(true);
+						bossKraid->decreaseHealth(this->dame);
+					}
 					break;
 				}
 				case eID::MOTHERBRAIN:
-				{
-					this->isCollided = true;
-					this->velocity = VECTOR2ZERO;
+				{				
 					MotherBrain* motherBrain = static_cast<MotherBrain*>(i->object);
-
-					//motherBrain->setBeHit(true);
-					//motherBrain->decreaseHealth(this->dame);
+					if (motherBrain->isActivitied())
+					{
+						this->isCollided = true;
+						this->sprite->setData(indexEffect);
+						this->velocity = VECTOR2ZERO;
+						motherBrain->setBeHit(true);
+						motherBrain->decreaseHealth(this->dame);
+					}
 					break;
 				}
 				case eID::ALIENBIG:

@@ -11,6 +11,7 @@
 #include "Zeb.h"
 #include "Rio.h"
 #include "Ripper.h"
+#include "MotherBrain.h"
 SamusStateRunning::SamusStateRunning()
 {
 }
@@ -165,7 +166,6 @@ void SamusStateRunning::onCollision(float dt)
 			switch (i->direction)
 			{
 			case CollideDirection::LEFT:
-				//bound = Collision::getInstance()->getSweptBroadphaseRect(this->samus->getBoundCollision(), VECTOR2(this->samus->getVelocity().x, 0), dt);
 				if (this->samus->getBoundCollision().bottom< i->object->getBoundCollision().top)
 				{
 					this->samus->setVelocityX(0);
@@ -192,14 +192,14 @@ void SamusStateRunning::onCollision(float dt)
 #pragma endregion
 #pragma region Elevator
 		case eID::ELEVATOR:
-			if (samus->canGo_Elevator())
+			if (samus->getCanMoveElevator())
 			{
 				return;
 			}
 			switch (i->direction)
 			{
 			case CollideDirection::LEFT:
-				//bound = Collision::getInstance()->getSweptBroadphaseRect(this->samus->getBoundCollision(), VECTOR2(this->samus->getVelocity().x, 0), dt);
+				
 				if (this->samus->getBoundCollision().bottom< i->object->getBoundCollision().top)
 				{
 					this->samus->setVelocityX(0);
@@ -543,7 +543,32 @@ void SamusStateRunning::onCollision(float dt)
 
 			break;
 		}
+		case eID::MOTHERBRAIN:
+		{
+			switch (i->direction)
+			{
+			case CollideDirection::LEFT:
+				this->samus->setVelocityX(0);
+				//not allow move left
+				//this->samus->setCanMoveRight(false);
+				break;
+			case CollideDirection::RIGHT:
+				this->samus->setVelocityX(0);
+				//not allow move right
+				//this->samus->setCanMoveLeft(false);
+				break;
+			case CollideDirection::TOP:
+				this->samus->setVelocityY(0);
+				break;
+			}
+			this->samus->setFlipX(true);
+			this->samus->setDirection(eDirection::right);
+			SamusStateManager::getInstance()->setOldStatus(eStatus::RUNNING);
+			this->samus->setStatus(eStatus::INJURING);
+			SamusStateManager::getInstance()->setOldState(this);
 
+			break;
+		}
 
 #pragma endregion
 		default:

@@ -335,7 +335,7 @@ void Samus::setCanMoveElevator(bool flag)
 	this->canGoElevator = flag;
 }
 
-bool Samus::canGo_Elevator()
+bool Samus::getCanMoveElevator()
 {
 	return this->canGoElevator;
 }

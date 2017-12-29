@@ -18,6 +18,7 @@
 #include "Zeb.h"
 #include "Rio.h"
 #include "Ripper.h"
+#include "Port.h"
 SamusStateAcrobat::SamusStateAcrobat()
 {
 }
@@ -176,7 +177,7 @@ void SamusStateAcrobat::onCollision(float dt)
 #pragma endregion
 #pragma region Wall
 		case eID::ELEVATOR:
-			if (samus->canGo_Elevator())
+			if (samus->getCanMoveElevator())
 			{
 				return;
 			}
@@ -268,6 +269,11 @@ void SamusStateAcrobat::onCollision(float dt)
 
 		case eID::PORT:
 		{
+			Port* port = static_cast<Port*>(i->object);
+			if (port->Win() == true)
+			{
+				return;
+			}
 			switch (i->direction)
 			{
 			case LEFT:

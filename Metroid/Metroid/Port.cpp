@@ -13,6 +13,16 @@ Port::~Port()
 {
 }
 
+bool Port::Win()
+{
+	return isWin;
+}
+
+void Port::setWin(bool win)
+{
+	this->isWin = win;
+}
+
 void Port::update(float dt)
 {
 	Camera::getInstance()->setNumPort(Camera::getInstance()->getNumPort() + 1);

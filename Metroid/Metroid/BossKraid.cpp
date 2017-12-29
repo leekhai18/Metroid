@@ -38,7 +38,7 @@ BossKraid::BossKraid(TextureManager * textureM, Graphics * graphics, Samus* samu
 
 	direction = eDirection::right;
 
-	health = 2;
+	health = 40;
 }
 
 
@@ -123,7 +123,6 @@ void BossKraid::handleVelocity(float dt)
 
 			this->afterPosition = ((1 - time)*(1 - time)*P1 + 2 * (1 - time)*time*P2 + time*time*P3);
 
-			//if(time !=0)
 			if (direction == eDirection::right)
 			{
 				this->velocity = (this->afterPosition - this->beforePosition) / dt;
@@ -140,22 +139,18 @@ void BossKraid::handleVelocity(float dt)
 			reInit();
 		}
 	}
-	//else
-	//{
-	//	reInit();
-	//}
 }
 
 void BossKraid::onCollision(float dt)
 {
 	if (isActivity)
 	{
-		/*for (auto i = this->listCanCollide->begin(); i != this->listCanCollide->end(); i++)
+		for (auto i = this->listWallCanCollide->begin(); i != this->listWallCanCollide->end(); i++)
 		{
 			BaseObject* x = (*i).second;
 			Collision::getInstance()->checkCollision(this, x, dt);
 		}
-*/
+
 		for (auto x = this->listCollide->begin(); x != this->listCollide->end(); x++)
 		{
 			switch (x->direction)
@@ -202,6 +197,7 @@ void BossKraid::update(float dt)
 				IExplosible::start();
 				this->setVelocity(VECTOR2(0, 0));
 				this->isActivity = false;
+				samus->setCanMoveElevator(true);
 			}
 
 		}

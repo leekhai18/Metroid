@@ -168,7 +168,7 @@ public:
 	bool isColliedPort();
 	void setCanMoveToFrontGate(bool flag);
 	void setCanMoveElevator(bool flag);
-	bool canGo_Elevator();
+	bool getCanMoveElevator();
 	void setListCanCollide(map<int,BaseObject*>* list);
 
 

@@ -11,14 +11,13 @@
 #include "MissileRocket.h"
 #include "IceBeam.h"
 #include "Varia.h"
-
-
 #include "Skree.h"
 #include "Zommer.h"
 #include "Waver.h"
 #include "Zeb.h"
 #include "Rio.h"
 #include "Ripper.h"
+#include "Port.h"
 SamusStateJumping::SamusStateJumping()
 {
 }
@@ -256,7 +255,7 @@ void SamusStateJumping::onCollision(float dt)
 #pragma endregion
 
 		case eID::ELEVATOR:
-			if(samus->canGo_Elevator())
+			if(samus->getCanMoveElevator())
 			{
 				return;
 			}
@@ -347,9 +346,16 @@ void SamusStateJumping::onCollision(float dt)
 
 		case eID::PORT:
 		{
+			Port* port = static_cast<Port*>(i->object);
+			if(port->Win()==true)
+			{
+				return;
+			}
 			switch (i->direction)
 			{
+				
 			case LEFT:
+				
 				Camera::getInstance()->setVelocity(VECTOR2(SAMUS_VERLOCITY_X, 0));
 				Camera::getInstance()->setOnPort(true);
 				this->samus->setIsCollidingPort(true);
@@ -698,6 +704,7 @@ void SamusStateJumping::onCollision(float dt)
 			break;
 		}
 		case eID::BOSSKRAID:
+		{
 			switch (i->direction)
 			{
 			case CollideDirection::LEFT:
@@ -722,7 +729,33 @@ void SamusStateJumping::onCollision(float dt)
 			SamusStateManager::getInstance()->setOldState(this);
 			this->samus->setStatus(eStatus::INJURING);
 			break;
+		}
+		case eID::MOTHERBRAIN:
+		{
+			switch (i->direction)
+			{
+			case CollideDirection::LEFT:
+				this->samus->setVelocityX(0);
+				//not allow move left
+				//this->samus->setCanMoveRight(false);
+				break;
+			case CollideDirection::RIGHT:
+				this->samus->setVelocityX(0);
+				//not allow move right
+				//this->samus->setCanMoveLeft(false);
+				break;
+			case CollideDirection::TOP:
+				this->samus->setVelocityY(0);
+				break;
+			}
+			this->samus->setFlipX(true);
+			this->samus->setDirection(eDirection::right);
+			SamusStateManager::getInstance()->setOldStatus(eStatus::JUMPING);
+			this->samus->setStatus(eStatus::INJURING);
+			SamusStateManager::getInstance()->setOldState(this);
 
+			break;
+		}
 
 #pragma endregion
 
@@ -805,8 +838,6 @@ void SamusStateJumping::onCollision(float dt)
 		}
 
 #pragma endregion
-
-
 		default:
 			break;
 		}

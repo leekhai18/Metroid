@@ -115,6 +115,7 @@ void SamusStateInjuring::onCollision(float dt)
 		case eID::WAVER:
 		case eID::ZEB:
 		case eID::BOSSKRAID:
+		case eID::MOTHERBRAIN:
 			switch (i->direction)
 			{
 			case CollideDirection::TOP:
