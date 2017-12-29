@@ -15,9 +15,9 @@
 #define TIME_DELAY_BE_HIT 0.2f
 #define TIME_RETURN_NOMAL 5.0f
 
-Skree::Skree(TextureManager * textureM, Graphics * graphics, EnemyColors color) : 
+Skree::Skree(TextureManager * textureM, Graphics * graphics, EnemyColors color) :
 	BaseObject(eID::SKREE), IFreezable(IndexManager::getInstance()->skreeBlue)
-	
+
 {
 	this->sprite = new Sprite();
 	if (!this->sprite->initialize(graphics, textureM, SpriteManager::getInstance()))
@@ -53,7 +53,7 @@ Skree::Skree(TextureManager * textureM, Graphics * graphics, EnemyColors color) 
 	default:
 		break;
 	}
-	this->listWallCanCollide = new map<int,BaseObject*>();
+	this->listWallCanCollide = new map<int, BaseObject*>();
 	this->listCollide = new list<CollisionReturn>();
 	animationRotate->start();
 
@@ -96,16 +96,15 @@ void Skree::onCollision(Samus* sam) // handle collide with skree's bullet
 
 void Skree::handleVelocity(float dt)
 {
-	if (isActivity&&isHandle&&!this->isCold)
+	if (isActivity&&isHandle && !this->isCold)
 	{
 		if (this->target != VECTOR2ZERO && this->isInStatus(eStatus::START)) // check init
 		{
-			/*if(abs(target.x - initPosition.x) <= 1)
-			{*/
-				this->setStatus(eStatus::FALLING);
-				this->animationRotate->setTimeFrameDelay(TIME_FRAME_DELAY_FALLING);
-				this->setVelocityY(-VELOCITY_Y);
-			//}
+
+			this->setStatus(eStatus::FALLING);
+			this->animationRotate->setTimeFrameDelay(TIME_FRAME_DELAY_FALLING);
+			this->setVelocityY(-VELOCITY_Y);
+
 
 		}
 
@@ -118,7 +117,7 @@ void Skree::handleVelocity(float dt)
 			if (this->getPosition().x > target.x - OFFSET_FOLLOW && this->getPosition().x < target.x + OFFSET_FOLLOW) // in bound offset
 				this->setVelocityX(0);
 
-			
+
 		}
 	}
 }
@@ -153,7 +152,7 @@ void Skree::onCollision(float dt)
 void Skree::update(float dt)
 {
 	//call this  in object class and set cold to true in bullet class 
-	
+
 
 	if (isActivity&&isHandle)
 	{
@@ -179,7 +178,7 @@ void Skree::update(float dt)
 			this->animationRotate->update(dt);
 		}
 
-		
+
 
 		if (this->isInStatus(eStatus::ENDING))
 		{
@@ -199,11 +198,8 @@ void Skree::update(float dt)
 				{
 					this->finish();
 					isHandle = false;
-					//target = VECTOR2ZERO;
-					//isCold = false;
-					//IBonusable::start();
 				}
-					
+
 			}
 		}
 
@@ -213,7 +209,6 @@ void Skree::update(float dt)
 			timerHit += dt;
 			if (timerHit < TIME_DELAY_BE_HIT)
 			{
-				//this->animationRotate->setPause(true);
 				this->setVelocity(VECTOR2(0, 0));
 			}
 			else
@@ -226,11 +221,8 @@ void Skree::update(float dt)
 				if (this->health <= 0)
 				{
 					this->finish();
-					//isReleaseBullet = true;
 					IExplosible::start();
 					isHandle = false;
-					//target = VECTOR2ZERO;
-					//isCold = false;
 				}
 			}
 		}
@@ -251,12 +243,12 @@ void Skree::update(float dt)
 	else
 	{
 		IExplosible::update(dt);
-		if(isExplose)
+		if (isExplose)
 		{
 			IBonusable::start();
 		}
 	}
-	
+
 }
 
 void Skree::draw()
@@ -300,7 +292,7 @@ void Skree::setTarget(VECTOR2 target)
 			if (abs(target.x - this->getPosition().x) < AREA_ACTIVE_X)
 			{
 				this->target = target;
-				
+
 			}
 		}
 	}
@@ -359,7 +351,7 @@ void Skree::decreaseHealth(float dame)
 	this->health = this->health - dame;
 }
 
-map<int,BaseObject*>* Skree::getListWallCanCollide()
+map<int, BaseObject*>* Skree::getListWallCanCollide()
 {
 	return this->listWallCanCollide;
 }

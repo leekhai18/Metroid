@@ -84,7 +84,7 @@ void Rio::reInit(VECTOR2 stP)
 	IBonusable::reInit();
 	IExplosible::reInit();
 	this->setStatus(eStatus::START);
-	health = 2;
+	health = 4;
 
 }
 void Rio::reInit()
@@ -93,7 +93,6 @@ void Rio::reInit()
 	this->P3 = VECTOR2(P1.x + WIDTH_AREA_ACTIVE, startPosition.y + 17);
 	this->P5 = VECTOR2(P3.x + WIDTH_AREA_ACTIVE, startPosition.y + 16);
 
-	//this->setPosition(stP);
 	this->target = VECTOR2ZERO;
 	this->sprite->setData(resetFrame);
 
@@ -101,16 +100,16 @@ void Rio::reInit()
 	isHandle = true;
 	isCold = false;
 	this->setPosition(startPosition);
-	this->explosion->setPause(false);
 	this->anim->setPause(false);
 
+	canDraw = true;
 	IBonusable::reInit();
 	IExplosible::reInit();
 	this->setStatus(eStatus::START);
 	t = 0;
 	t1 = 0;
 	start = false;
-	health = 2;
+	health = 4;
 }
 void Rio::handleVelocity(float dt)
 {
@@ -237,9 +236,8 @@ void Rio::update(float dt)
 
 					IExplosible::start();
 					this->setVelocity(VECTOR2(0, 0));
-					//this->isActivity = false;
 					this->isHandle = false;
-					this->isCold = false;
+					//this->isCold = false;
 				}
 			}
 		}
@@ -264,12 +262,12 @@ void Rio::update(float dt)
 		&& !Collision::getInstance()->isCollide(Camera::getInstance()->getBound(), this->boundCollision))
 	{
 		reInit();
-		//isActivity = false;
+		isActivity = false;
 	}
-	/*else
+	else
 	{
 		isActivity = true;
-	}*/
+	}
 	
 }
 
@@ -292,7 +290,8 @@ bool Rio::getHandle()
 
 void Rio::draw()
 {
-	this->sprite->draw();
+	if(canDraw)
+		this->sprite->draw();
 }
 
 VECTOR2 Rio::getTarget()

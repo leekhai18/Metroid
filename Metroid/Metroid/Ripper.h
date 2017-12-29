@@ -21,10 +21,12 @@ private:
 	int resetFrame;
 
 	bool isHandle;
+
 public:
 	Ripper();
 	Ripper(TextureManager* textureM, Graphics* graphics, EnemyColors color);
 	~Ripper();
+	void reInit();
 	void handleVelocity(float dt);
 	void setBoundCollision();
 	void onCollision(float dt);

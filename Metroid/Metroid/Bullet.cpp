@@ -106,16 +106,18 @@ void Bullet::onCollision()
 				
 				case eID::SKREE:
 				{
+
+				
+					Skree* skree = static_cast<Skree*>((*i).object);
+					if (!skree->getHandle())
+					{
+						break;
+					}
 					this->isCollided = true;
 
 					this->velocity = VECTOR2ZERO;
 
 					this->sprite->setData(indexEffect);
-					Skree* skree = static_cast<Skree*>((*i).object);
-					/*if (!skree->getHandle())
-					{
-						break;
-					}*/
 					if (!skree->getCold())
 					{
 						skree->setBeHit(true);
@@ -139,14 +141,15 @@ void Bullet::onCollision()
 				}
 				case eID::RIO:
 				{
+					
+					Rio* rio = static_cast<Rio*>((*i).object);
+					if (!rio->getHandle())
+					{
+						break;
+					}
 					this->isCollided = true;
 					this->velocity = VECTOR2ZERO;
 					this->sprite->setData(indexEffect);
-					Rio* rio = static_cast<Rio*>((*i).object);
-					/*if (!skree->getHandle())
-					{
-					break;
-					}*/
 					if (!rio->getCold())
 					{
 						rio->setBeHit(true);
@@ -173,6 +176,7 @@ void Bullet::onCollision()
 					
 					this->isCollided = true;
 					this->velocity = VECTOR2ZERO;
+					this->sprite->setData(indexEffect);
 					Ripper* ripper = static_cast<Ripper*>((*i).object);
 
 					if (BulletPool::getInstance()->getCurrentIceBullet())
@@ -180,7 +184,7 @@ void Bullet::onCollision()
 						if (ripper->getCold())
 						{
 							ripper->setCold(false);
-							this->sprite->setData(indexEffect);
+							ripper->reInit();
 						}
 						else
 						{
@@ -258,6 +262,10 @@ void Bullet::onCollision()
 					this->velocity = VECTOR2ZERO;
 					this->isCollided = true;
 					Zeb* zeb = static_cast<Zeb*>(i->object);
+					if (!zeb->getHandle())
+					{
+						break;
+					}
 					if (BulletPool::getInstance()->getCurrentIceBullet())
 					{
 						if (zeb->getCold())

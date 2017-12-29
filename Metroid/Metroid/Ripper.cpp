@@ -52,6 +52,11 @@ Ripper::~Ripper()
 	delete listCollide;
 }
 
+void Ripper::reInit()
+{
+	this->sprite->setData(resetFrame);
+}
+
 void Ripper::handleVelocity(float dt)
 {
 	if(!isCold)
@@ -75,37 +80,39 @@ void Ripper::setBoundCollision()
 
 void Ripper::onCollision(float dt)
 {
-	/*for (auto i = this->listCanCollide->begin(); i != this->listCanCollide->end(); i++)
+	if (!this->isCold)
 	{
-		BaseObject* x = (*i).second;
-		Collision::getInstance()->checkCollision(this, x, dt);
-	}*/
-
-	for (auto x = this->listCollide->begin(); x != this->listCollide->end(); x++)
-	{
-		switch (x->direction)
+		for (auto i = this->listWallCanCollide->begin(); i != this->listWallCanCollide->end(); i++)
 		{
-		case CollideDirection::LEFT:
-			this->sprite->setFlipX(false);
-			//this->setVelocityX(-RIPPER_VELOCITY_X);
-			this->velocity.x = 0;
-			direction = eDirection::left;
-			break;
-		case CollideDirection::RIGHT:
-			this->sprite->setFlipX(true);
-			this->velocity.x = 0;
-			direction = eDirection::right;
-			break;
-		case CollideDirection::TOP:
-			
-			break;
-		case CollideDirection::BOTTOM:
-			
-			break;
+			BaseObject* x = (*i).second;
+			Collision::getInstance()->checkCollision(this, x, dt);
 		}
-	}
 
-	this->listCollide->clear();
+		for (auto x = this->listCollide->begin(); x != this->listCollide->end(); x++)
+		{
+			switch (x->direction)
+			{
+			case CollideDirection::LEFT:
+				this->sprite->setFlipX(false);
+				this->velocity.x = 0;
+				direction = eDirection::left;
+				break;
+			case CollideDirection::RIGHT:
+				this->sprite->setFlipX(true);
+				this->velocity.x = 0;
+				direction = eDirection::right;
+				break;
+			case CollideDirection::TOP:
+
+				break;
+			case CollideDirection::BOTTOM:
+
+				break;
+			}
+		}
+
+		this->listCollide->clear();
+	}
 }
 
 void Ripper::update(float dt)
@@ -115,7 +122,8 @@ void Ripper::update(float dt)
 		timeReturnNormal += dt;
 		if (timeReturnNormal >= TIME_RETURN_NOMAL)
 		{
-			this->isCold = false;
+			this->isCold = false;	
+			timeReturnNormal = 0;
 			this->sprite->setData(resetFrame);
 		}
 		else
@@ -126,6 +134,7 @@ void Ripper::update(float dt)
 		}
 
 	}
+	
 	this->setPosition(VECTOR2(this->getPosition().x + this->velocity.x*dt, this->getPosition().y + this->velocity.y*dt));
 	setBoundCollision();
 }

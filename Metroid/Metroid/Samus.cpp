@@ -7,9 +7,13 @@
 #define DISTANCE_MOVE_FRONT_GATE 24
 #define ACTIVE 120
 
+//zeb position
+#define SAMUS_POS_X 2529
+#define SAMUS_POS_Y 4211
+
 //Rio position
-#define SAMUS_POS_X 2522
-#define SAMUS_POS_Y 1251
+//#define SAMUS_POS_X 2522
+//#define SAMUS_POS_Y 1251
 
 //start position
 //#define SAMUS_POS_X 640

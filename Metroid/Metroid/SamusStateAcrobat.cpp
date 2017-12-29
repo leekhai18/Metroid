@@ -263,19 +263,36 @@ void SamusStateAcrobat::onCollision(float dt)
 				switch (i->direction)
 				{
 				case CollideDirection::LEFT:
-					this->samus->setVelocityX(0);
-					//not allow move left
+
 					this->samus->setCanMoveRight(false);
+					this->samus->setVelocityX(0);
 					break;
 				case CollideDirection::RIGHT:
-					this->samus->setVelocityX(0);
-					//not allow move right
 					this->samus->setCanMoveLeft(false);
+					this->samus->setVelocityX(0);
 					break;
 				case CollideDirection::TOP:
+					jumpDistance = 0;
+					//set jump = false, when user release jump button set to true
+					this->samus->setCanJump(false);
+					//set fall to false
+					this->samus->setFall(false);
+					//reset velocity
 					this->samus->setVelocityY(0);
+					positionCollide = i->positionCollision;
+					this->samus->setStatus(eStatus::STANDING);
+					break;
+				case CollideDirection::BOTTOM:
+
+					jumpDistance = 0;
+					this->samus->setFall(true);
+					addY = i->positionCollision;
+					this->samus->setVelocityY(0);
+
+					this->samus->setPositionY(addY - OFFSET_JUMP);
 					break;
 				}
+				break;
 			}
 			else if (zommer->getExplose())
 			{
@@ -283,6 +300,10 @@ void SamusStateAcrobat::onCollision(float dt)
 			}
 			else
 			{
+				if (!zommer->getHandle())
+				{
+					return;
+				}
 				SamusStateManager::getInstance()->setOldStatus(eStatus::ACROBAT);
 				this->samus->setStatus(eStatus::INJURING);
 				SamusStateManager::getInstance()->setOldState(this);
@@ -297,19 +318,36 @@ void SamusStateAcrobat::onCollision(float dt)
 				switch (i->direction)
 				{
 				case CollideDirection::LEFT:
-					this->samus->setVelocityX(0);
-					//not allow move left
+
 					this->samus->setCanMoveRight(false);
+					this->samus->setVelocityX(0);
 					break;
 				case CollideDirection::RIGHT:
-					this->samus->setVelocityX(0);
-					//not allow move right
 					this->samus->setCanMoveLeft(false);
+					this->samus->setVelocityX(0);
 					break;
 				case CollideDirection::TOP:
+					jumpDistance = 0;
+					//set jump = false, when user release jump button set to true
+					this->samus->setCanJump(false);
+					//set fall to false
+					this->samus->setFall(false);
+					//reset velocity
 					this->samus->setVelocityY(0);
+					positionCollide = i->positionCollision;
+					this->samus->setStatus(eStatus::STANDING);
+					break;
+				case CollideDirection::BOTTOM:
+
+					jumpDistance = 0;
+					this->samus->setFall(true);
+					addY = i->positionCollision;
+					this->samus->setVelocityY(0);
+
+					this->samus->setPositionY(addY - OFFSET_JUMP);
 					break;
 				}
+				break;
 			}
 			else if (waver->getExplose())
 			{
@@ -317,6 +355,10 @@ void SamusStateAcrobat::onCollision(float dt)
 			}
 			else
 			{
+				if (!waver->getHandle())
+				{
+					return;
+				}
 				SamusStateManager::getInstance()->setOldStatus(eStatus::ACROBAT);
 				this->samus->setStatus(eStatus::INJURING);
 				SamusStateManager::getInstance()->setOldState(this);
@@ -351,10 +393,7 @@ void SamusStateAcrobat::onCollision(float dt)
 					this->samus->setStatus(eStatus::STANDING);
 					break;
 				case CollideDirection::BOTTOM:
-					/*if(this->samus->isFaling())
-					{
-					break;
-					}*/
+
 					jumpDistance = 0;
 					this->samus->setFall(true);
 					addY = i->positionCollision;
@@ -402,10 +441,7 @@ void SamusStateAcrobat::onCollision(float dt)
 					this->samus->setStatus(eStatus::STANDING);
 					break;
 				case CollideDirection::BOTTOM:
-					/*if(this->samus->isFaling())
-					{
-					break;
-					}*/
+
 					jumpDistance = 0;
 					this->samus->setFall(true);
 					addY = i->positionCollision;
@@ -433,8 +469,120 @@ void SamusStateAcrobat::onCollision(float dt)
 			}
 			break;
 		}
-		case eID::RIO: 
+		case eID::RIO:
+		{
+			Rio* rio = static_cast<Rio*>(i->object);
+
+			if (rio->getCold())
+			{
+				switch (i->direction)
+				{
+				case CollideDirection::LEFT:
+
+					this->samus->setCanMoveRight(false);
+					this->samus->setVelocityX(0);
+					break;
+				case CollideDirection::RIGHT:
+					this->samus->setCanMoveLeft(false);
+					this->samus->setVelocityX(0);
+					break;
+				case CollideDirection::TOP:
+					jumpDistance = 0;
+					//set jump = false, when user release jump button set to true
+					this->samus->setCanJump(false);
+					//set fall to false
+					this->samus->setFall(false);
+					//reset velocity
+					this->samus->setVelocityY(0);
+					positionCollide = i->positionCollision;
+					this->samus->setStatus(eStatus::STANDING);
+					break;
+				case CollideDirection::BOTTOM:
+
+					jumpDistance = 0;
+					this->samus->setFall(true);
+					addY = i->positionCollision;
+					this->samus->setVelocityY(0);
+
+					this->samus->setPositionY(addY - OFFSET_JUMP);
+					break;
+				}
+				break;
+			}
+			else if (rio->getExplose())
+			{
+				rio->setCanDraw(false);
+				rio->setActivity(false);
+			}
+			else
+			{
+				if (!rio->getHandle())
+				{
+					return;
+				}
+				SamusStateManager::getInstance()->setOldStatus(eStatus::ACROBAT);
+				this->samus->setStatus(eStatus::INJURING);
+				SamusStateManager::getInstance()->setOldState(this);
+			}
+			break;
+		}
 		case eID::ZEB:
+		{
+			Zeb* zeb = static_cast<Zeb*>(i->object);
+
+			if (zeb->getCold())
+			{
+				switch (i->direction)
+				{
+				case CollideDirection::LEFT:
+
+					this->samus->setCanMoveRight(false);
+					this->samus->setVelocityX(0);
+					break;
+				case CollideDirection::RIGHT:
+					this->samus->setCanMoveLeft(false);
+					this->samus->setVelocityX(0);
+					break;
+				case CollideDirection::TOP:
+					jumpDistance = 0;
+					//set jump = false, when user release jump button set to true
+					this->samus->setCanJump(false);
+					//set fall to false
+					this->samus->setFall(false);
+					//reset velocity
+					this->samus->setVelocityY(0);
+					positionCollide = i->positionCollision;
+					this->samus->setStatus(eStatus::STANDING);
+					break;
+				case CollideDirection::BOTTOM:
+
+					jumpDistance = 0;
+					this->samus->setFall(true);
+					addY = i->positionCollision;
+					this->samus->setVelocityY(0);
+
+					this->samus->setPositionY(addY - OFFSET_JUMP);
+					break;
+				}
+				break;
+			}
+			else if (zeb->getExplose())
+			{
+				zeb->setCanDraw(false);
+				zeb->setActivity(false);
+			}
+			else
+			{
+				if (!zeb->getHandle())
+				{
+					return;
+				}
+				SamusStateManager::getInstance()->setOldStatus(eStatus::ACROBAT);
+				this->samus->setStatus(eStatus::INJURING);
+				SamusStateManager::getInstance()->setOldState(this);
+			}
+			break;
+		}
 		case eID::BOSSKRAID:
 		{
 			switch (i->direction)

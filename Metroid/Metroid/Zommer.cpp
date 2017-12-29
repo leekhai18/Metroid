@@ -1,8 +1,8 @@
 #include "Zommer.h"
 #include "Camera.h"
 #define TIME_FRAME_DELAY 0.15f
-#define ZOMMER_VELOCITY_X 45
-#define ZOMMER_VELOCITY_Y 45
+#define ZOMMER_VELOCITY_X 40
+#define ZOMMER_VELOCITY_Y 40
 #define ZOMMER_OFFSET_COLLISION 0.1f
 #define TIME_DELAY_BE_HIT 0.2f
 #define TIME_RETURN_NOMAL 5.0f
@@ -130,13 +130,9 @@ void Zommer::setStartBound(MetroidRect rect)
 }
 void Zommer::handleVelocity(float dt)
 {
-	
+	dt = 1.0f / 60;
 	if (isHandle && !this->isCold&&isActivity)
 	{
-		if (startPosition.x == 600)
-		{
-			int test = 0;
-		}
 		switch (gravity)
 		{
 		case ZommerGravity::GRAVITY_RIGHT:
@@ -197,20 +193,15 @@ void Zommer::handleVelocity(float dt)
 
 void Zommer::onCollision(float dt)
 {
-	if(startPosition.x == 600 )
-	{
-		int test = 0;
-	}
+	dt = 1.0f / 60;
+
 	if (isHandle && !this->isCold&&isActivity)
 	{
 		for (auto i = this->listWallCanCollide->begin(); i != this->listWallCanCollide->end(); i++)
 		{
 			BaseObject* x = (*i).second;
 			Collision::getInstance()->checkCollision(this, x, dt);
-		}
-		if (startPosition.x == 600)
-		{
-			int test = 0;
+
 		}
 		MetroidRect bound;
 		for (auto x = this->listCollide->begin(); x != this->listCollide->end(); x++)
@@ -221,9 +212,13 @@ void Zommer::onCollision(float dt)
 
 			case CollideDirection::LEFT:
 
-				bound = Collision::getInstance()->getSweptBroadphaseRect(this->boundCollision, VECTOR2(velocity.x, 0), dt);
-				if (Collision::getInstance()->isCollide(bound, x->object->getBoundCollision()))
+				if ((gravity == ZommerGravity::GRAVITY_TOP&&this->getBoundCollision().top < x->object->getBoundCollision().bottom)
+					|| (gravity == ZommerGravity::GRAVITY_BOTTOM&&this->getBoundCollision().bottom > x->object->getBoundCollision().top))
 				{
+					break;
+				}
+
+				
 					positionCollide = x->object->getBoundCollision();
 
 					this->velocity.x = 0;
@@ -253,16 +248,20 @@ void Zommer::onCollision(float dt)
 						break;
 					}
 					gravity_bool[gravity] = true;
-				}
+				
 
 				break;
 			case CollideDirection::RIGHT:
 
 
-				bound = Collision::getInstance()->getSweptBroadphaseRect(this->boundCollision, VECTOR2(velocity.x, 0), dt);
 
-				if (Collision::getInstance()->isCollide(bound, x->object->getBoundCollision()))
+				if ((gravity == ZommerGravity::GRAVITY_TOP&&this->getBoundCollision().top < x->object->getBoundCollision().bottom)
+					|| (gravity == ZommerGravity::GRAVITY_BOTTOM&&this->getBoundCollision().bottom > x->object->getBoundCollision().top))
 				{
+					break;
+				}
+
+			
 					positionCollide = x->object->getBoundCollision();
 
 					this->velocity.x = 0;
@@ -293,14 +292,17 @@ void Zommer::onCollision(float dt)
 						break;
 					}
 					gravity_bool[gravity] = true;
-				}
+				
 
 				break;
 			case CollideDirection::TOP:
-				bound = Collision::getInstance()->getSweptBroadphaseRect(this->boundCollision, VECTOR2(0, velocity.y), dt);
 
-				if (Collision::getInstance()->isCollide(bound, x->object->getBoundCollision()))
+				if ((gravity == ZommerGravity::GRAVITY_LEFT&&this->getBoundCollision().left > x->object->getBoundCollision().right)
+					|| (gravity == ZommerGravity::GRAVITY_RIGHT&&this->getBoundCollision().right < x->object->getBoundCollision().left))
 				{
+					break;
+				}
+			
 					positionCollide = x->object->getBoundCollision();
 
 					this->velocity.y = 0;
@@ -330,13 +332,16 @@ void Zommer::onCollision(float dt)
 						break;
 					}
 					gravity_bool[gravity] = true;
-				}
+				
 				break;
 			case CollideDirection::BOTTOM:
-				bound = Collision::getInstance()->getSweptBroadphaseRect(this->boundCollision, VECTOR2(0, velocity.y), dt);
-
-				if (Collision::getInstance()->isCollide(bound, x->object->getBoundCollision()))
+				if ((gravity == ZommerGravity::GRAVITY_LEFT&&this->getBoundCollision().left > x->object->getBoundCollision().right)
+					|| (gravity == ZommerGravity::GRAVITY_RIGHT&&this->getBoundCollision().right < x->object->getBoundCollision().left))
 				{
+					break;
+				}
+
+				
 					this->velocity.y = 0;
 					positionCollide = x->object->getBoundCollision();
 
@@ -366,7 +371,7 @@ void Zommer::onCollision(float dt)
 						break;
 					}
 					gravity_bool[gravity] = true;
-				}
+				
 				break;
 			}
 		}
@@ -376,25 +381,52 @@ void Zommer::onCollision(float dt)
 		
 		switch (zommer_direction)
 		{
+		//case ZommerDirection::TOP_DIRECTION:
+		//case ZommerDirection::BOTTOM_DIRECTION:
+		//	//this->velocity.y = 0;
+		//	int test;
+		//	if (boundCollision.left + velocity.x*dt < Camera::getInstance()->getBound().left)
+		//	{
 
+		//		//this->zommer_direction = ZommerDirection::RIGHT_DIRECTION;
+		//		//this->velocity.x = 0;
+		//		test = 0;
+		//	}
+		//	if (boundCollision.right + velocity.x*dt > Camera::getInstance()->getBound().right)
+		//	{
+		//		//this->zommer_direction = ZommerDirection::LEFT_DIRECTION;
+		//		//this->velocity.x = 0;
+		//		test = 0;
+
+		//	}
+		//	break;
 		case ZommerDirection::LEFT_DIRECTION:
 		
-			if (boundCollision.left + velocity.x*dt < Camera::getInstance()->getBound().left&&
-				boundCollision.left  > Camera::getInstance()->getBound().left)
+			if (boundCollision.left + velocity.x*dt < Camera::getInstance()->getBound().left
+				&&boundCollision.right  < Camera::getInstance()->getBound().left)
 			{
-
+				if (startPosition.x == 2440)
+				{
+					int test = 0;
+				}
+				if(gravity!=ZommerGravity::GRAVITY_TOP)
+				{
+					int test = 0;
+				}
 				this->zommer_direction = ZommerDirection::RIGHT_DIRECTION;
 				this->velocity.x = 0;
 
 			}
-			break;
+			
 
+			break;
 	
 		case ZommerDirection::RIGHT_DIRECTION:
 		
 			if (boundCollision.right + velocity.x*dt > Camera::getInstance()->getBound().right
-				&&boundCollision.right < Camera::getInstance()->getBound().right)
+				&&boundCollision.left > Camera::getInstance()->getBound().right)
 			{
+
 				this->zommer_direction = ZommerDirection::LEFT_DIRECTION;
 				this->velocity.x = 0;
 						
@@ -409,10 +441,8 @@ void Zommer::onCollision(float dt)
 }
 void Zommer::update(float dt)
 {
-	if (startPosition.x == 600)
-	{
-		int test = 0;
-	}
+	dt = 1.0f / 60;
+
 	if (isHandle)
 	{
 		if (this->isCold)
@@ -445,8 +475,6 @@ void Zommer::update(float dt)
 					gravity = ZommerGravity::GRAVITY_BOTTOM;
 					this->sprite->setRotate(0);
 					this->setPositionY(positionCollide.top + ZOMMER_COLLISION *0.5f);
-
-
 				}
 				else
 				{
@@ -455,6 +483,7 @@ void Zommer::update(float dt)
 					this->sprite->setRotate(180);
 					this->setPositionY(positionCollide.bottom - ZOMMER_COLLISION *0.5f);
 				}
+
 				zommer_direction = ZommerDirection::LEFT_DIRECTION;
 				break;
 			case ZommerGravity::GRAVITY_RIGHT:
@@ -471,6 +500,7 @@ void Zommer::update(float dt)
 					this->sprite->setRotate(180);
 					this->setPositionY(positionCollide.bottom - ZOMMER_COLLISION *0.5f);
 				}
+
 				zommer_direction = ZommerDirection::RIGHT_DIRECTION;
 				break;
 			case ZommerGravity::GRAVITY_TOP:
@@ -487,6 +517,7 @@ void Zommer::update(float dt)
 					this->sprite->setRotate(270);
 					this->setPositionX(positionCollide.left - ZOMMER_COLLISION *0.5f);
 				}
+
 				zommer_direction = ZommerDirection::TOP_DIRECTION;
 				break;
 			case ZommerGravity::GRAVITY_BOTTOM:
@@ -503,6 +534,7 @@ void Zommer::update(float dt)
 					this->setPositionX(this->positionCollide.left - ZOMMER_COLLISION *0.5f);
 					this->sprite->setRotate(270);
 				}
+
 				zommer_direction = ZommerDirection::BOTTOM_DIRECTION;
 				break;
 			default:
@@ -552,19 +584,14 @@ void Zommer::update(float dt)
 		&& !Collision::getInstance()->isCollide(Camera::getInstance()->getBound(), this->boundCollision))
 	{
 		reInit();
-		isActivity = false;
+		//isActivity = false;
 		setBoundCollision();
 		gravity_bool[gravity] = true;
-
-		if (startPosition.x == 600)
-		{
-			int test = 0;
-		}
 	}
-	else
+	/*else
 	{
 		isActivity = true;
-	}
+	}*/
 	if(isExplose)
 	{
 		IBonusable::update(dt);

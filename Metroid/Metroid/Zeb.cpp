@@ -28,15 +28,18 @@ Zeb::Zeb(TextureManager * textureM, Graphics * graphics, EnemyColors color,Samus
 	{
 	case Yellow:
 		anim = new Animation(this->sprite, IndexManager::getInstance()->zebYellow, NUM_FRAMES_ZEB, TIME_FRAME_DELAY);
-		health = 1;
+		reset = IndexManager::getInstance()->zebYellow[0];
+		health = 2;
 		break;
 
 	case Brown:
 		anim = new Animation(this->sprite, IndexManager::getInstance()->zebBrown, NUM_FRAMES_ZEB, TIME_FRAME_DELAY);
-		health = 1;
+		reset = IndexManager::getInstance()->zebBrown[0];
+		health = 2;
 		break;
 	case Red:
 		anim = new Animation(this->sprite, IndexManager::getInstance()->zebRed, NUM_FRAMES_ZEB, TIME_FRAME_DELAY);
+		reset = IndexManager::getInstance()->zebRed[0];
 		health = 2;
 		break;
 
@@ -57,6 +60,10 @@ Zeb::~Zeb()
 {
 	delete this->anim;
 }
+bool Zeb::getHandle()
+{
+	return isHandle;
+}
 void Zeb::reInit()
 {
 	allowFly = false;
@@ -64,23 +71,30 @@ void Zeb::reInit()
 	isHandle = true;
 	health = 2;
 	this->setPosition(startPosition);
-	this->explosion->setPause(false);
+
 	this->anim->setPause(false);
 	canDraw = true;
 	samusPosition = samus->getPosition();
+	this->velocity = VECTOR2ZERO;
+	IExplosible::reInit();
+	IBonusable::reInit();
+	this->isCold = false;
+	sprite->setData(reset);
+	canMoveHorizontal = false;
 }
 void Zeb::handleVelocity(float dt)
 {
-	if (isActivity == true)
+	if (isActivity && isHandle &&!isCold)
 	{
-		this->velocity.x = 0;
-
+		//this->velocity.x = 0;
+		
 		this->anim->update(dt);
 
 		if(!allowFly)
 		{
 			samusPosition = samus->getPosition();
 		}
+
 		if (this->getPosition().y + 50 <= this->samusPosition.y)
 		{
 			this->velocity.y = VELOCITY_Y;
@@ -89,17 +103,15 @@ void Zeb::handleVelocity(float dt)
 
 			direction = this->getPosition().x > this->samusPosition.x ? eDirection::left: eDirection::right ;
 
-			allowFly = true;
+			allowFly = true; 
+			canMoveHorizontal = true;
 			return;
 		}
-		else
-		{
-			
-		}
-		if (this->getPosition().y  >= this->samusPosition.y)
+		if (this->getPosition().y  >= this->samusPosition.y&&canMoveHorizontal )
 		{
 			this->velocity.x = VELOCITY_X*direction;
 			this->velocity.y = 0;
+			//canMoveHorizontal = false;
 			//allowFly = true;
 			
 		}
@@ -110,7 +122,7 @@ void Zeb::handleVelocity(float dt)
 
 void Zeb::update(float dt)
 {
-	if (isActivity)
+	if (isActivity && isHandle )
 	{
 		if (this->isCold)
 		{
@@ -119,6 +131,7 @@ void Zeb::update(float dt)
 			{
 				this->anim->setPause(false);
 				this->isCold = false;
+				timeReturnNormal = 0;
 			}
 			else
 			{
@@ -148,12 +161,14 @@ void Zeb::update(float dt)
 
 					IExplosible::start();
 					this->setVelocity(VECTOR2(0, 0));
-					this->isActivity = false;
+					//this->isActivity = false;
+					isHandle = false;
 				}
 			}
 		}
 		this->setPosition(VECTOR2(this->getPosition().x + velocity.x*dt,
 			this->getPosition().y + velocity.y*dt));
+		setBoundCollision();
 	}
 
 	if (isExplose)

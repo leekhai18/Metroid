@@ -290,6 +290,7 @@ void SamusStateRunning::onCollision(float dt)
 					break;
 				case CollideDirection::TOP:
 					this->samus->setVelocityY(0);
+					this->samus->setFall(false);
 					break;
 				}
 			}
@@ -324,6 +325,7 @@ void SamusStateRunning::onCollision(float dt)
 					this->samus->setCanMoveLeft(false);
 					break;
 				case CollideDirection::TOP:
+					this->samus->setFall(false);
 					this->samus->setVelocityY(0);
 					break;
 				}
@@ -360,6 +362,7 @@ void SamusStateRunning::onCollision(float dt)
 					this->samus->setCanMoveLeft(false);
 					break;
 				case CollideDirection::TOP:
+					this->samus->setFall(false);
 					this->samus->setVelocityY(0);
 					break;
 				}
@@ -399,6 +402,7 @@ void SamusStateRunning::onCollision(float dt)
 					this->samus->setCanMoveLeft(false);
 					break;
 				case CollideDirection::TOP:
+					this->samus->setFall(false);
 					this->samus->setVelocityY(0);
 					break;
 				}
@@ -434,6 +438,7 @@ void SamusStateRunning::onCollision(float dt)
 					this->samus->setCanMoveLeft(false);
 					break;
 				case CollideDirection::TOP:
+					this->samus->setFall(false);
 					this->samus->setVelocityY(0);
 					break;
 				}
@@ -464,6 +469,7 @@ void SamusStateRunning::onCollision(float dt)
 					this->samus->setCanMoveLeft(false);
 					break;
 				case CollideDirection::TOP:
+					this->samus->setFall(false);
 					this->samus->setVelocityY(0);
 					break;
 				}

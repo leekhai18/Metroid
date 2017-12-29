@@ -26,11 +26,14 @@ private:
 	float timerHit;
 	Samus* samus;
 	bool isHandle;
+	bool canMoveHorizontal;
+	int reset;
+
 public:
 	Zeb();
 	Zeb(TextureManager* textureM, Graphics* graphics, EnemyColors color, Samus* samus);
 	~Zeb();
-
+	bool getHandle();
 	void update(float dt);
 	void draw();
 	void setBeHit(bool hit);
