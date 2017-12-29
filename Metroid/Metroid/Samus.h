@@ -167,8 +167,8 @@ public:
 	void setIsCollidingPort(bool flag);
 	bool isColliedPort();
 	void setCanMoveToFrontGate(bool flag);
-
-	
+	void setCanMoveElevator(bool flag);
+	bool canGo_Elevator();
 	void setListCanCollide(map<int,BaseObject*>* list);
 
 
@@ -196,7 +196,7 @@ public:
 
 	int getNumRocket();
 	void setNumRocket(int num);
-
+	
 	eSkin getCurrentSkin();
 	void setNewSkin(eSkin skin);
 	void setDataSuiteSkin(int yellow, int yellowIce, int pink, int pinkIce);

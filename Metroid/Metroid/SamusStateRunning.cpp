@@ -160,7 +160,6 @@ void SamusStateRunning::onCollision(float dt)
 		case eID::WALL:
 		case eID::BRICK:
 		case eID::FIRE:
-		case eID::ELEVATOR:
 		case eID::ALIENBIG:
 		case eID::ALIENSMALL:
 			switch (i->direction)
@@ -190,6 +189,39 @@ void SamusStateRunning::onCollision(float dt)
 			}
 			break;
 
+#pragma endregion
+#pragma region Elevator
+		case eID::ELEVATOR:
+			if (samus->canGo_Elevator())
+			{
+				return;
+			}
+			switch (i->direction)
+			{
+			case CollideDirection::LEFT:
+				//bound = Collision::getInstance()->getSweptBroadphaseRect(this->samus->getBoundCollision(), VECTOR2(this->samus->getVelocity().x, 0), dt);
+				if (this->samus->getBoundCollision().bottom< i->object->getBoundCollision().top)
+				{
+					this->samus->setVelocityX(0);
+					this->samus->setCanMoveRight(false);
+					this->samus->setStatus(eStatus::STANDING);
+				}
+				break;
+			case CollideDirection::RIGHT:
+
+				if (this->samus->getBoundCollision().bottom< i->object->getBoundCollision().top)
+				{
+					this->samus->setVelocityX(0);
+					this->samus->setCanMoveLeft(false);
+					this->samus->setStatus(eStatus::STANDING);
+				}
+				break;
+			case CollideDirection::TOP:
+				this->samus->setFall(false);
+				this->samus->setVelocityY(0);
+				break;
+			}
+			break;
 #pragma endregion
 
 #pragma region GATE and PORT

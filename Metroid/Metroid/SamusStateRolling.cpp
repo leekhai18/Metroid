@@ -138,10 +138,9 @@ void SamusStateRolling::onCollision(float dt)
 		switch (i->object->getId())
 		{
 		
-			
+#pragma region Wall			
 		case eID::WALL:	
 		case eID::FIRE:
-		case eID::ELEVATOR:
 		case eID::ALIENBIG:
 		case eID::ALIENSMALL:
 			switch (i->direction)
@@ -174,8 +173,45 @@ void SamusStateRolling::onCollision(float dt)
 				break;
 			}
 			break;
+#pragma endregion
+#pragma region Elevator	
+		case eID::ELEVATOR:
+			if (samus->canGo_Elevator())
+			{
+				return;
+			}
 
+			switch (i->direction)
+			{
+			case CollideDirection::LEFT:
 
+				if (this->samus->getBoundCollision().bottom< i->object->getBoundCollision().top)
+				{
+					this->samus->setVelocityX(0);
+					//not allow move left
+					this->samus->setCanMoveRight(false);
+				}
+
+				break;
+			case CollideDirection::RIGHT:
+
+				if (this->samus->getBoundCollision().bottom< i->object->getBoundCollision().top)
+				{
+					this->samus->setVelocityX(0);
+					//not allow move right
+					this->samus->setCanMoveLeft(false);
+				}
+				break;
+			case CollideDirection::TOP:
+				this->samus->setVelocityY(0);
+
+				this->samus->setPositionY(i->positionCollision + OFFSET_ROLLING);
+				canStanding = true;
+				move_to_fall = false;
+				break;
+			}
+			break;
+#pragma endregion
 		case eID::BRICK: 
 		{
 			Brick* brick = static_cast<Brick*>(i->object);

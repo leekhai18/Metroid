@@ -81,6 +81,8 @@ Samus::Samus(TextureManager* textureM,Graphics* graphics, Input* input) : BaseOb
 	boomPool = new BoomBombPool(textureM, graphics, 10);
 	rocketPool = new RocketPool(textureM, graphics, 5);
 
+	this->canGoElevator = false;
+
 	visible = true;
 	this->numLives = 0;
 	this->listNumLives = new list<Sprite*>();
@@ -326,6 +328,16 @@ bool Samus::isColliedPort()
 void Samus::setCanMoveToFrontGate(bool flag)
 {
 	this->moveToFontGate = flag;
+}
+
+void Samus::setCanMoveElevator(bool flag)
+{
+	this->canGoElevator = flag;
+}
+
+bool Samus::canGo_Elevator()
+{
+	return this->canGoElevator;
 }
 
 void Samus::setListCanCollide(map<int, BaseObject*>* list)

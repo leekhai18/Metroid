@@ -216,7 +216,7 @@ void SamusStateJumping::onCollision(float dt)
 		case eID::WALL:
 		case eID::BRICK:
 		case eID::FIRE:
-		case eID::ELEVATOR:
+		
 		case eID::ALIENBIG:
 		case eID::ALIENSMALL:
 			switch (i->direction)
@@ -255,6 +255,45 @@ void SamusStateJumping::onCollision(float dt)
 
 #pragma endregion
 
+		case eID::ELEVATOR:
+			if(samus->canGo_Elevator())
+			{
+				return;
+			}
+
+			switch (i->direction)
+			{
+			case CollideDirection::LEFT:
+
+				this->samus->setCanMoveRight(false);
+				this->samus->setVelocityX(0);
+				break;
+			case CollideDirection::RIGHT:
+				this->samus->setCanMoveLeft(false);
+				this->samus->setVelocityX(0);
+				break;
+			case CollideDirection::TOP:
+				jumpDistance = 0;
+				//set jump = false, when user release jump button set to true
+				this->samus->setCanJump(false);
+				//set fall to false
+				this->samus->setFall(false);
+				//reset velocity
+				this->samus->setVelocityY(0);
+				positionCollide = i->positionCollision;
+				this->samus->setStatus(eStatus::STANDING);
+				break;
+			case CollideDirection::BOTTOM:
+				jumpDistance = 0;
+				this->samus->setFall(true);
+				this->samus->setVelocityY(0);
+				addY = i->positionCollision;
+				this->samus->setVelocityY(0);
+
+				this->samus->setPositionY(addY - OFFSET_JUMP);
+				break;
+			}
+			break;
 #pragma region GATE and PORT
 		case eID::GATEBLUE: case eID::GATERED:
 		{

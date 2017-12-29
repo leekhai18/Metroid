@@ -154,11 +154,11 @@ void Waver::onCollision(float dt)
 {
 	if (isHandle&&!this->isCold&&isActivity)
 	{
-		/*for (auto i = this->listCanCollide->begin(); i != this->listCanCollide->end(); i++)
+		for (auto i = this->listWallCanCollide->begin(); i != this->listWallCanCollide->end(); i++)
 		{
 			BaseObject* x = (*i).second;
 			Collision::getInstance()->checkCollision(this, x, dt);
-		}*/
+		}
 		for (auto x = this->listCollide->begin(); x != this->listCollide->end(); x++)
 		{
 

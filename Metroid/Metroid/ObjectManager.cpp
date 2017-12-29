@@ -1602,11 +1602,11 @@ bool ObjectManager::load_list(const char * filename)
 				bound.bottom = bound.top - wvb->getSprite()->getHeight();
 				wvb->setBoundCollision();
 				wvb->setStartBound(wvb->getBoundCollision());
-				/*const Value& arrayWall = listWaverBrown[i]["ListCollideID"];
+				const Value& arrayWall = listWaverBrown[i]["ListCollideID"];
 				for (SizeType t = 0; t < arrayWall.Size(); t++)
 				{
-					wvb->getListWallCanCollide()->push_back(map_object.find(arrayWall[t].GetInt())->second);
-				}*/
+					wvb->getListWallCanCollide()->insert(*map_object.find(arrayWall[t].GetInt()));
+				}
 
 				bound.bottom = listWaverBrown[i]["ba"].GetFloat();
 				bound.top = listWaverBrown[i]["ta"].GetFloat();
@@ -1659,11 +1659,11 @@ bool ObjectManager::load_list(const char * filename)
 				wvr->setBoundCollision();
 				wvr->setStartBound(wvr->getBoundCollision());
 
-				/*const Value& arrayWall = listWaverRed[i]["ListCollideID"];
+				const Value& arrayWall = listWaverRed[i]["ListCollideID"];
 				for (SizeType t = 0; t < arrayWall.Size(); t++)
 				{
-					wvr->getListWallCanCollide()->push_back(map_object.find(arrayWall[t].GetInt())->second);
-				}*/
+					wvr->getListWallCanCollide()->insert(*map_object.find(arrayWall[t].GetInt()));
+				}
 				bound.bottom = listWaverRed[i]["ba"].GetFloat();
 				bound.top = listWaverRed[i]["ta"].GetFloat();
 				bound.left = listWaverRed[i]["la"].GetFloat();
