@@ -11,7 +11,7 @@
 #include "BossKraid.h"
 #include "MotherBrain.h"
 #define TIME_BOM 2
-#define W_H_BOOM_HALF 8
+#define W_H_BOOM_HALF 12
 
 BoomBomb::BoomBomb(TextureManager * textureM, Graphics * graphics) : BaseObject(eID::BOOMBOMB)
 {
@@ -64,10 +64,10 @@ void BoomBomb::onCollision()
 			case eID::SKREE:
 			{
 				Skree* skr = static_cast<Skree*>(*i);
-				if (BulletPool::getInstance()->getCurrentIceBullet())
+				/*if (BulletPool::getInstance()->getCurrentIceBullet())
 				{
 					skr->setCold(true);
-				}
+				}*/
 				skr->setBeHit(true);
 				skr->decreaseHealth(this->dame);
 				this->velocity = VECTOR2ZERO;
@@ -78,10 +78,10 @@ void BoomBomb::onCollision()
 			case eID::ZOMMER:
 			{
 				Zommer* zommer = static_cast<Zommer*>((*i));
-				if (BulletPool::getInstance()->getCurrentIceBullet())
+				/*if (BulletPool::getInstance()->getCurrentIceBullet())
 				{
 					zommer->setCold(true);
-				}
+				}*/
 				this->velocity = VECTOR2ZERO;
 				zommer->setBeHit(true);
 				zommer->decreaseHealth(this->dame);
@@ -90,10 +90,7 @@ void BoomBomb::onCollision()
 			case eID::WAVER:
 			{
 				Waver* waver = static_cast<Waver*>(*i);
-				if (BulletPool::getInstance()->getCurrentIceBullet())
-				{
-					waver->setCold(true);
-				}
+				
 				waver->setBeHit(true);
 				waver->decreaseHealth(this->dame);
 				this->velocity = VECTOR2ZERO;
@@ -102,10 +99,7 @@ void BoomBomb::onCollision()
 			case eID::ZEB:
 			{
 				Zeb* zeb = static_cast<Zeb*>(*i);
-				if (BulletPool::getInstance()->getCurrentIceBullet())
-				{
-					zeb->setCold(true);
-				}
+				
 				zeb->setBeHit(true);
 				zeb->decreaseHealth(this->dame);
 				this->velocity = VECTOR2ZERO;

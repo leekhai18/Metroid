@@ -29,7 +29,7 @@
 #include "rapidjson-master\include\rapidjson\ostreamwrapper.h"
 
 
-#define TIME_RETRIEVE 0.5f
+#define TIME_RETRIEVE 0.65f
 
 ObjectManager* ObjectManager::instance = nullptr;
 

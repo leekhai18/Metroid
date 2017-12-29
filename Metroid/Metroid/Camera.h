@@ -4,13 +4,13 @@
 #include "Constants.h"
 
 //start position
-//#define CAM_POS_X 640
-//#define CAM_POS_Y 1320
+#define CAM_POS_X 640
+#define CAM_POS_Y 1320
 
 
 //zeb
-#define CAM_POS_X 2432
-#define CAM_POS_Y 4200
+//#define CAM_POS_X 2432
+//#define CAM_POS_Y 4200
 
 //Rio
 //#define CAM_POS_X 2432.00000

@@ -5,7 +5,6 @@
 class Brick : public BaseObject
 {
 private:
-	
 	float timeReset;
 	map<int,BaseObject*>* listCanCollide;
 	bool visible;
