@@ -1,7 +1,7 @@
 #pragma once
 // Class used to manage Index Sprites in Texture
 
-#define MAX_INDEX 263
+#define MAX_INDEX 305
 
 // Define NUM_FRAMES
 #define NUM_FRAMES_ZOOMER 2
@@ -182,8 +182,40 @@ public:
 	const int gateRedROpen[5] = { 188, 196, 197, 198, 199 };
 	const int gateRedRClose[5] = { 199, 198, 197, 196, 188 };
 	const int bossKraidR[2] = { 189,190 };
-	const int motherBrain[4] = { 202,203,204,205 };
+	const int motherBrain[8] = { 264,265,266,267,268,269,270,271 };
+	const int motherBrainOpening[8] = { 272,273,274,275,276,277,278,279 };
+	const int motherBrainOpened[2] = { 280,281 };
 	const int bulletMotherBrain[4] = { 256,257,258,259 };
+
+	const int canonUp = 282;
+	const int canonRightUp = 283;
+	const int canonRight = 284;
+	const int canonRightDown = 285;
+	const int canonDown = 286;
+	const int canonLeftDown = 287;
+	const int canonLeft = 288;
+	const int canonLeftUp = 289;
+
+	const int canonUNKNOW1 = 290;
+	const int canonUNKNOW2 = 291;
+
+	const int canonBulletUp = 292;
+	const int canonBulletRightUp = 293;
+	const int canonBulletRight = 294;
+	const int canonBulletRightDown = 295;
+	const int canonBulletDown = 296;
+	const int canonBulletLeftDown = 297;
+	const int canonBulletLeft = 298;
+	const int canonBulletLeftUp = 299;
+
+	const int canonBulletUNKNOW1 = 300;
+	const int canonBulletUNKNOW2 = 301;
+
+	const int wallFrontMotherBrain[4] = { 302,303,304,305 };
+
+
+
+	
 
 	const int enIcon = 201;
 	const int liveIcon = 200;
