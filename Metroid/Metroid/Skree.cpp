@@ -27,7 +27,7 @@ Skree::Skree(TextureManager * textureM, Graphics * graphics, EnemyColors color) 
 
 	this->initExplosion(this->sprite, IndexManager::getInstance()->samusYellowExplosion, NUM_FRAMES_EXPLOSION, EXPLOSION_TIME_FRAME_DELAY);
 
-	this->initItem(this->sprite, IndexManager::getInstance()->en, NUM_FRAMES_BONUS, TIME_FRAME_DELAY);
+	this->initItem(this->sprite, IndexManager::getInstance()->bonusHealth, NUM_FRAMES_BONUS, TIME_FRAME_DELAY);
 
 	this->sprite->setOrigin(VECTOR2(0.5f, 0));
 

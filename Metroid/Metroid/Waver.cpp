@@ -23,7 +23,7 @@ Waver::Waver(TextureManager * textureM, Graphics * graphics, EnemyColors color) 
 		throw GameError(GameErrorNS::FATAL_ERROR, "Can not init sprite Waver");
 	}
 	initExplosion(this->sprite, IndexManager::getInstance()->samusYellowExplosion, NUM_FRAMES_EXPLOSION, EXPLOSION_TIME_FRAME_DELAY);
-	this->initItem(this->sprite, IndexManager::getInstance()->en, NUM_FRAMES_BONUS, TIME_FRAME_DELAY);
+	this->initItem(this->sprite, IndexManager::getInstance()->bonusHealth, NUM_FRAMES_BONUS, TIME_FRAME_DELAY);
 	switch (color)
 	{
 	case Brown:

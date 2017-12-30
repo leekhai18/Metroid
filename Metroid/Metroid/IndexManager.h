@@ -86,7 +86,7 @@ public:
 	const int scremAttack[4] = { 88,89,90,91 };
 
 
-	const int en[2] = { 92,93 };
+	const int bonusHealth[2] = { 92,93 };
 	const int rocket[2] = { 95,96 };
 	const int rocketYellowR = 260;
 	const int rocketYellowUp = 261;
