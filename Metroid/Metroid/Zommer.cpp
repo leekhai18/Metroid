@@ -211,168 +211,171 @@ void Zommer::onCollision(float dt)
 			{
 
 			case CollideDirection::LEFT:
-
+			{
 				if ((gravity == ZommerGravity::GRAVITY_TOP&&this->getBoundCollision().top < x->object->getBoundCollision().bottom)
 					|| (gravity == ZommerGravity::GRAVITY_BOTTOM&&this->getBoundCollision().bottom > x->object->getBoundCollision().top))
 				{
 					break;
 				}
 
-				
-					positionCollide = x->object->getBoundCollision();
 
-					this->velocity.x = 0;
-					switch (gravity)
+				positionCollide = x->object->getBoundCollision();
+
+				this->velocity.x = 0;
+				switch (gravity)
+				{
+				case ZommerGravity::GRAVITY_BOTTOM:
+
+					if (!this->gravity_bool[ZommerGravity::GRAVITY_RIGHT] && zommer_direction == ZommerDirection::RIGHT_DIRECTION)
 					{
-					case ZommerGravity::GRAVITY_BOTTOM:
+						gravity = ZommerGravity::GRAVITY_RIGHT;
 
-						if (!this->gravity_bool[ZommerGravity::GRAVITY_RIGHT] && zommer_direction == ZommerDirection::RIGHT_DIRECTION)
-						{
-							gravity = ZommerGravity::GRAVITY_RIGHT;
-
-							zommer_direction = ZommerDirection::TOP_DIRECTION;
-							this->sprite->setRotate(270);
-						}
-
-
-						break;
-					case ZommerGravity::GRAVITY_TOP:
-						if (!this->gravity_bool[ZommerGravity::GRAVITY_RIGHT] && zommer_direction == ZommerDirection::RIGHT_DIRECTION)
-						{
-							gravity = ZommerGravity::GRAVITY_RIGHT;
-
-							zommer_direction = ZommerDirection::BOTTOM_DIRECTION;
-							this->sprite->setRotate(270);
-						}
-
-						break;
+						zommer_direction = ZommerDirection::TOP_DIRECTION;
+						this->sprite->setRotate(270);
 					}
-					gravity_bool[gravity] = true;
-				
+
+
+					break;
+				case ZommerGravity::GRAVITY_TOP:
+					if (!this->gravity_bool[ZommerGravity::GRAVITY_RIGHT] && zommer_direction == ZommerDirection::RIGHT_DIRECTION)
+					{
+						gravity = ZommerGravity::GRAVITY_RIGHT;
+
+						zommer_direction = ZommerDirection::BOTTOM_DIRECTION;
+						this->sprite->setRotate(270);
+					}
+
+					break;
+				}
+				gravity_bool[gravity] = true;
+
 
 				break;
+			}
 			case CollideDirection::RIGHT:
-
-
-
+			{
 				if ((gravity == ZommerGravity::GRAVITY_TOP&&this->getBoundCollision().top < x->object->getBoundCollision().bottom)
 					|| (gravity == ZommerGravity::GRAVITY_BOTTOM&&this->getBoundCollision().bottom > x->object->getBoundCollision().top))
 				{
 					break;
 				}
 
-			
-					positionCollide = x->object->getBoundCollision();
 
-					this->velocity.x = 0;
+				positionCollide = x->object->getBoundCollision();
 
-					switch (gravity)
+				this->velocity.x = 0;
+
+				switch (gravity)
+				{
+				case ZommerGravity::GRAVITY_BOTTOM:
+					if (!this->gravity_bool[ZommerGravity::GRAVITY_LEFT] && zommer_direction == ZommerDirection::LEFT_DIRECTION)
 					{
-					case ZommerGravity::GRAVITY_BOTTOM:
-						if (!this->gravity_bool[ZommerGravity::GRAVITY_LEFT] && zommer_direction == ZommerDirection::LEFT_DIRECTION)
-						{
-							gravity = ZommerGravity::GRAVITY_LEFT;
+						gravity = ZommerGravity::GRAVITY_LEFT;
 
-							zommer_direction = ZommerDirection::TOP_DIRECTION;
+						zommer_direction = ZommerDirection::TOP_DIRECTION;
 
-							this->sprite->setRotate(90);
-						}
-
-						break;
-					case ZommerGravity::GRAVITY_TOP:
-						if (!this->gravity_bool[ZommerGravity::GRAVITY_LEFT] && zommer_direction == ZommerDirection::LEFT_DIRECTION)
-						{
-							gravity = ZommerGravity::GRAVITY_LEFT;
-
-							zommer_direction = ZommerDirection::BOTTOM_DIRECTION;
-							this->sprite->setRotate(90);
-
-						}
-
-						break;
+						this->sprite->setRotate(90);
 					}
-					gravity_bool[gravity] = true;
-				
+
+					break;
+				case ZommerGravity::GRAVITY_TOP:
+					if (!this->gravity_bool[ZommerGravity::GRAVITY_LEFT] && zommer_direction == ZommerDirection::LEFT_DIRECTION)
+					{
+						gravity = ZommerGravity::GRAVITY_LEFT;
+
+						zommer_direction = ZommerDirection::BOTTOM_DIRECTION;
+						this->sprite->setRotate(90);
+
+					}
+
+					break;
+				}
+				gravity_bool[gravity] = true;
+
 
 				break;
+			}
 			case CollideDirection::TOP:
-
+			{
 				if ((gravity == ZommerGravity::GRAVITY_LEFT&&this->getBoundCollision().left > x->object->getBoundCollision().right)
 					|| (gravity == ZommerGravity::GRAVITY_RIGHT&&this->getBoundCollision().right < x->object->getBoundCollision().left))
 				{
 					break;
 				}
-			
-					positionCollide = x->object->getBoundCollision();
 
-					this->velocity.y = 0;
+				positionCollide = x->object->getBoundCollision();
+
+				this->velocity.y = 0;
 
 
-					switch (gravity)
+				switch (gravity)
+				{
+				case ZommerGravity::GRAVITY_RIGHT:
+					if (!this->gravity_bool[ZommerGravity::GRAVITY_BOTTOM] && zommer_direction == ZommerDirection::BOTTOM_DIRECTION)
 					{
-					case ZommerGravity::GRAVITY_RIGHT:
-						if (!this->gravity_bool[ZommerGravity::GRAVITY_BOTTOM] && zommer_direction == ZommerDirection::BOTTOM_DIRECTION)
-						{
-							gravity = ZommerGravity::GRAVITY_BOTTOM;
+						gravity = ZommerGravity::GRAVITY_BOTTOM;
 
-							zommer_direction = ZommerDirection::LEFT_DIRECTION;
-							this->sprite->setRotate(0);
-						}
-
-						break;
-					case ZommerGravity::GRAVITY_LEFT:
-						if (!this->gravity_bool[ZommerGravity::GRAVITY_BOTTOM] && zommer_direction == ZommerDirection::BOTTOM_DIRECTION)
-						{
-							gravity = ZommerGravity::GRAVITY_BOTTOM;
-
-							zommer_direction = ZommerDirection::RIGHT_DIRECTION;
-							this->sprite->setRotate(0);
-						}
-
-						break;
+						zommer_direction = ZommerDirection::LEFT_DIRECTION;
+						this->sprite->setRotate(0);
 					}
-					gravity_bool[gravity] = true;
-				
+
+					break;
+				case ZommerGravity::GRAVITY_LEFT:
+					if (!this->gravity_bool[ZommerGravity::GRAVITY_BOTTOM] && zommer_direction == ZommerDirection::BOTTOM_DIRECTION)
+					{
+						gravity = ZommerGravity::GRAVITY_BOTTOM;
+
+						zommer_direction = ZommerDirection::RIGHT_DIRECTION;
+						this->sprite->setRotate(0);
+					}
+
+					break;
+				}
+				gravity_bool[gravity] = true;
+
 				break;
+			}
 			case CollideDirection::BOTTOM:
+			{
 				if ((gravity == ZommerGravity::GRAVITY_LEFT&&this->getBoundCollision().left > x->object->getBoundCollision().right)
 					|| (gravity == ZommerGravity::GRAVITY_RIGHT&&this->getBoundCollision().right < x->object->getBoundCollision().left))
 				{
 					break;
 				}
 
-				
-					this->velocity.y = 0;
-					positionCollide = x->object->getBoundCollision();
+
+				this->velocity.y = 0;
+				positionCollide = x->object->getBoundCollision();
 
 
-					switch (gravity)
+				switch (gravity)
+				{
+				case ZommerGravity::GRAVITY_RIGHT:
+					if (!this->gravity_bool[ZommerGravity::GRAVITY_TOP] && zommer_direction == ZommerDirection::TOP_DIRECTION)
 					{
-					case ZommerGravity::GRAVITY_RIGHT:
-						if (!this->gravity_bool[ZommerGravity::GRAVITY_TOP] && zommer_direction == ZommerDirection::TOP_DIRECTION)
-						{
-							gravity = ZommerGravity::GRAVITY_TOP;
+						gravity = ZommerGravity::GRAVITY_TOP;
 
-							zommer_direction = ZommerDirection::LEFT_DIRECTION;
+						zommer_direction = ZommerDirection::LEFT_DIRECTION;
 
-							this->sprite->setRotate(180);
-						}
-
-						break;
-					case ZommerGravity::GRAVITY_LEFT:
-						if (!this->gravity_bool[ZommerGravity::GRAVITY_TOP] && zommer_direction == ZommerDirection::TOP_DIRECTION)
-						{
-							gravity = ZommerGravity::GRAVITY_TOP;
-
-							zommer_direction = ZommerDirection::RIGHT_DIRECTION;
-
-							this->sprite->setRotate(180);
-						}
-						break;
+						this->sprite->setRotate(180);
 					}
-					gravity_bool[gravity] = true;
-				
-				break;
+
+					break;
+				case ZommerGravity::GRAVITY_LEFT:
+					if (!this->gravity_bool[ZommerGravity::GRAVITY_TOP] && zommer_direction == ZommerDirection::TOP_DIRECTION)
+					{
+						gravity = ZommerGravity::GRAVITY_TOP;
+
+						zommer_direction = ZommerDirection::RIGHT_DIRECTION;
+
+						this->sprite->setRotate(180);
+					}
+					break;
+				}
+				gravity_bool[gravity] = true;
+
+				break; 
+			}
 			}
 		}
 
@@ -381,38 +384,12 @@ void Zommer::onCollision(float dt)
 		
 		switch (zommer_direction)
 		{
-		//case ZommerDirection::TOP_DIRECTION:
-		//case ZommerDirection::BOTTOM_DIRECTION:
-		//	//this->velocity.y = 0;
-		//	int test;
-		//	if (boundCollision.left + velocity.x*dt < Camera::getInstance()->getBound().left)
-		//	{
-
-		//		//this->zommer_direction = ZommerDirection::RIGHT_DIRECTION;
-		//		//this->velocity.x = 0;
-		//		test = 0;
-		//	}
-		//	if (boundCollision.right + velocity.x*dt > Camera::getInstance()->getBound().right)
-		//	{
-		//		//this->zommer_direction = ZommerDirection::LEFT_DIRECTION;
-		//		//this->velocity.x = 0;
-		//		test = 0;
-
-		//	}
-		//	break;
 		case ZommerDirection::LEFT_DIRECTION:
 		
 			if (boundCollision.left + velocity.x*dt < Camera::getInstance()->getBound().left
 				&&boundCollision.right  < Camera::getInstance()->getBound().left)
 			{
-				if (startPosition.x == 2440)
-				{
-					int test = 0;
-				}
-				if(gravity!=ZommerGravity::GRAVITY_TOP)
-				{
-					int test = 0;
-				}
+
 				this->zommer_direction = ZommerDirection::RIGHT_DIRECTION;
 				this->velocity.x = 0;
 

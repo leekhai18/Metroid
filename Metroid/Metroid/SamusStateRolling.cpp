@@ -14,7 +14,7 @@
 #include "Rio.h"
 
 #include "Sound.h"
-#define TIME_START_BOMB 0.5f
+#define TIME_START_BOMB 0.1f
 SamusStateRolling::SamusStateRolling()
 {
 }
@@ -48,7 +48,7 @@ void SamusStateRolling::init()
 
 	setBoundCollision();
 
-	this->samus->setVelocityY(-SAMUS_MIN_SPEED_Y);
+	//this->samus->setVelocityY(-SAMUS_MIN_SPEED_Y);
 
 
 	move_to_fall = true;

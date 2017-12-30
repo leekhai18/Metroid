@@ -77,29 +77,31 @@ void SamusStateInjuring::onCollision(float dt)
 				}
 				break;
 			case CollideDirection::LEFT:
-				if (SamusStateManager::getInstance()->getOldStatus() == eStatus::RUNNING ||
-					SamusStateManager::getInstance()->getOldStatus() == eStatus::ROLLING|| 
-					SamusStateManager::getInstance()->getOldStatus() == eStatus::STANDING)
-				{
-					
+				//if (SamusStateManager::getInstance()->getOldStatus() == eStatus::RUNNING ||
+				//	SamusStateManager::getInstance()->getOldStatus() == eStatus::ROLLING|| 
+				//	SamusStateManager::getInstance()->getOldStatus() == eStatus::STANDING)
+				//{
+				//	
 					if (!(this->samus->getBoundCollision().bottom < i->object->getBoundCollision().top))
 					{
+						this->samus->setVelocityY(0);
 						return;
 					}
-				}
+				//}
 				this->samus->setVelocityX(0);
 				break;
 			case CollideDirection::RIGHT:
-				if (SamusStateManager::getInstance()->getOldStatus() == eStatus::RUNNING ||
+			/*	if (SamusStateManager::getInstance()->getOldStatus() == eStatus::RUNNING ||
 					SamusStateManager::getInstance()->getOldStatus() == eStatus::ROLLING ||
 					SamusStateManager::getInstance()->getOldStatus() == eStatus::STANDING)
 				{
-					
+					*/
 					if (!(this->samus->getBoundCollision().bottom< i->object->getBoundCollision().top))
 					{
+						this->samus->setVelocityY(0);
 						return;
 					}
-				}
+				//}
 				this->samus->setVelocityX(0);
 				break;
 			case CollideDirection::BOTTOM:
@@ -124,10 +126,11 @@ void SamusStateInjuring::onCollision(float dt)
 
 				break;
 			case CollideDirection::LEFT:
-				if (SamusStateManager::getInstance()->getOldStatus() == eStatus::RUNNING || SamusStateManager::getInstance()->getOldStatus() == eStatus::ROLLING)
+				if (SamusStateManager::getInstance()->getOldStatus() == eStatus::RUNNING 
+					|| SamusStateManager::getInstance()->getOldStatus() == eStatus::ROLLING
+					|| SamusStateManager::getInstance()->getOldStatus() == eStatus::STANDING)
 				{
-					bound = Collision::getInstance()->getSweptBroadphaseRect(this->samus->getBoundCollision(), VECTOR2(this->samus->getVelocity().x, 0), dt);
-					if (!Collision::getInstance()->isCollide(bound, i->object->getBoundCollision()))
+					if (!(this->samus->getBoundCollision().bottom < i->object->getBoundCollision().top))
 					{
 						return;
 					}
@@ -135,10 +138,12 @@ void SamusStateInjuring::onCollision(float dt)
 				this->samus->setVelocityX(0);
 				break;
 			case CollideDirection::RIGHT:
-				if (SamusStateManager::getInstance()->getOldStatus() == eStatus::RUNNING || SamusStateManager::getInstance()->getOldStatus() == eStatus::ROLLING)
+				if (SamusStateManager::getInstance()->getOldStatus() == eStatus::RUNNING
+					|| SamusStateManager::getInstance()->getOldStatus() == eStatus::ROLLING
+					|| SamusStateManager::getInstance()->getOldStatus() == eStatus::STANDING)
 				{
-					bound = Collision::getInstance()->getSweptBroadphaseRect(this->samus->getBoundCollision(), VECTOR2(this->samus->getVelocity().x, 0), dt);
-					if (!Collision::getInstance()->isCollide(bound, i->object->getBoundCollision()))
+					if (!(this->samus->getBoundCollision().bottom < i->object->getBoundCollision().top))
+					
 					{
 						return;
 					}

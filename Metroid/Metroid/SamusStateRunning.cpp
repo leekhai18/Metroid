@@ -186,6 +186,8 @@ void SamusStateRunning::onCollision(float dt)
 				break;
 			case CollideDirection::TOP:
 				this->samus->setFall(false);
+				//this->samus->setPositionY()
+				this->samus->setPositionY(i->positionCollision + OFFSET_STAND);
 				this->samus->setVelocityY(0);
 				break;
 			}
