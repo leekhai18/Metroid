@@ -12,6 +12,7 @@ private:
 
 	float timerToStartBoom;
 
+	float offsetY;
 public:
 	SamusStateRolling();
 	SamusStateRolling(Samus* samus, Input* input);
