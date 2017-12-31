@@ -2,7 +2,7 @@
 #include <iostream>
 #include <vector>
 #include "BoomBomb.h"
-
+class Samus;
 class BoomBombPool
 {
 private:
@@ -11,13 +11,13 @@ private:
 
 	std::vector<BoomBomb*> list;
 	std::vector<BoomBomb*> listUsing;
-
+	Samus* samus;
 	static BoomBombPool* instance;
 public:
 	static BoomBombPool* getInstance();
-
-	BoomBombPool(TextureManager* textureM, Graphics* graphics);
-	BoomBombPool(TextureManager* textureM, Graphics* graphics, int startNumberElement);
+	void setSamus(Samus* samus);
+	BoomBombPool(TextureManager* textureM, Graphics* graphics, Samus* samus);
+	BoomBombPool(TextureManager* textureM,Graphics* graphics, Samus* samus, int startNumberElement);
 	~BoomBombPool();
 
 	BoomBomb* getBoom();

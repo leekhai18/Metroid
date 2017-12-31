@@ -13,13 +13,14 @@
 #define TIME_BOM 2
 #define W_H_BOOM_HALF 12
 
-BoomBomb::BoomBomb(TextureManager * textureM, Graphics * graphics) : BaseObject(eID::BOOMBOMB)
+BoomBomb::BoomBomb(TextureManager * textureM, Graphics * graphics, Samus* samus) : BaseObject(eID::BOOMBOMB)
 {
 	this->sprite = new Sprite();
 	if (!this->sprite->initialize(graphics, textureM, SpriteManager::getInstance()))
 	{
 		throw GameError(GameErrorNS::FATAL_ERROR, "Can not init sprite BOOMBOMB");
 	}
+	this->samus = samus;
 	this->setOrigin(VECTOR2(0.5f, 0.5f));
 
 	this->explosion = new Animation(this->sprite, IndexManager::getInstance()->samusYellowExplosion, NUM_FRAMES_EXPLOSION, EXPLOSION_TIME_FRAME_DELAY, false);
@@ -32,6 +33,11 @@ BoomBomb::BoomBomb(TextureManager * textureM, Graphics * graphics) : BaseObject(
 	this->listCollide = new list<BaseObject*>();
 
 	this->dame = 2; // se setup lai sau
+}
+
+void BoomBomb::setSamus(Samus * samus)
+{
+	this->samus = samus;
 }
 
 BoomBomb::BoomBomb()
@@ -60,7 +66,7 @@ void BoomBomb::onCollision()
 				Brick* brick = static_cast<Brick*>(*i);
 				brick->setActivity(false);
 			}
-				break;
+			break;
 			case eID::SKREE:
 			{
 				Skree* skr = static_cast<Skree*>(*i);
@@ -90,7 +96,7 @@ void BoomBomb::onCollision()
 			case eID::WAVER:
 			{
 				Waver* waver = static_cast<Waver*>(*i);
-				
+
 				waver->setBeHit(true);
 				waver->decreaseHealth(this->dame);
 				this->velocity = VECTOR2ZERO;
@@ -99,7 +105,7 @@ void BoomBomb::onCollision()
 			case eID::ZEB:
 			{
 				Zeb* zeb = static_cast<Zeb*>(*i);
-				
+
 				zeb->setBeHit(true);
 				zeb->decreaseHealth(this->dame);
 				this->velocity = VECTOR2ZERO;
@@ -118,8 +124,38 @@ void BoomBomb::onCollision()
 				break;
 			}
 		}
+		MetroidRect bound = samus->getBoundCollision();
+		if (Collision::getInstance()->isCollide(bound, this->boundCollision))
+		{
+			if (this->boundCollision.bottom >= bound.bottom)
+			{
 
+				if (bound.right < this->boundCollision.left - 2)
+				{
+					samus->setBoomVelocity(VECTOR2(-100, 100));
+					samus->setVelocity(VECTOR2(-100, 100));
+					samus->setBoomExplose(true);
+				}
+				else if (bound.left > this->boundCollision.left + 2)
+				{
+					samus->setBoomVelocity(VECTOR2(100, 100));
+					samus->setVelocity(VECTOR2(100, 100));
+					samus->setBoomExplose(true);
+				}
+			}
+			else
+			{
+				samus->setBoomVelocity(VECTOR2(this->samus->getVelocity().x, 100));
+				samus->setVelocity(VECTOR2(100, 100));
+				samus->setBoomExplose(true);
+			}
+		}
+		else
+		{
+			samus->setBoomExplose(false);
+		}
 		canHandledCollision = false;
+		
 	}
 
 	this->listCollide->clear();

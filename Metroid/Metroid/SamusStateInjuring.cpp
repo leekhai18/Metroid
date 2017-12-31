@@ -184,7 +184,6 @@ void SamusStateInjuring::update(float dt)
 	}
 	if(time_to_stand >= TIME_TO_NORMAL)
 	{
-		//if(this->)
 		this->samus->setStatus(SamusStateManager::getInstance()->getOldStatus());
 	}
 

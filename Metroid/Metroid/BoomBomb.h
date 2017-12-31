@@ -2,7 +2,7 @@
 #include "BaseObject.h"
 #include <list>
 #include "Animation.h"
-
+class Samus;
 
 class BoomBomb : public BaseObject
 {
@@ -17,8 +17,10 @@ private:
 
 	bool canHandledCollision;
 
+	Samus* samus;
 public:
-	BoomBomb(TextureManager* textureM, Graphics* graphics);
+	BoomBomb(TextureManager* textureM, Graphics* graphics,Samus* samus);
+	void setSamus(Samus* samus);
 	BoomBomb();
 	~BoomBomb();
 

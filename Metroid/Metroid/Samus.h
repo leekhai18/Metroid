@@ -95,7 +95,9 @@ private:
 
 
 	bool visible;
-	
+	//when boom explose in samus, boomVelocity is set based on side of samus and boom
+	VECTOR2 boomVelocity;
+	bool isBoomExplose;
 #pragma region items
 	bool isMariMaru;
 
@@ -172,7 +174,10 @@ public:
 	bool getCanMoveElevator();
 	void setListCanCollide(map<int,BaseObject*>* list);
 
-
+	void setBoomVelocity(VECTOR2 boomVelocity);
+	VECTOR2 getBoomVelocity();
+	void setBoomExplose(bool boomExplose);
+	bool getBoomExplose();
 	Animation* getStartingAnim();
 	Animation* getRunningNormalAnim();
 	Animation* getRunningUpAnim();

@@ -31,8 +31,8 @@ void SamusStateFallRolling::setBoundCollision()
 	VECTOR2 position(this->samus->getPosition().x, samus->getPosition().y);
 	rect.left = position.x - WIDTH_COLLISION*0.5f;
 	rect.right = position.x + WIDTH_COLLISION*0.5f;
-	rect.top = position.y + JUMP_HEIGHT*0.5f;
-	rect.bottom = position.y - JUMP_HEIGHT*0.5f;
+	rect.top = position.y + ROLL_HEIGHT*0.5f;
+	rect.bottom = position.y - ROLL_HEIGHT*0.5f;
 	samus->setBoundCollision(rect);
 }
 
@@ -352,6 +352,7 @@ void SamusStateFallRolling::update(float dt)
 			break;
 		}
 		SamusStateManager::getInstance()->changeStateTo(this->samus->getStatus());
+
 	}
 
 	this->samus->setCanMoveLeft(true);

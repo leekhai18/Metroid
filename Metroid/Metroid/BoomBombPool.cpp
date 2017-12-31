@@ -7,7 +7,12 @@ BoomBombPool * BoomBombPool::getInstance()
 	return instance;
 }
 
-BoomBombPool::BoomBombPool(TextureManager* textureM, Graphics* graphics)
+void BoomBombPool::setSamus(Samus * samus)
+{
+	this->samus = samus;
+}
+
+BoomBombPool::BoomBombPool(TextureManager* textureM, Graphics* graphics, Samus* samus)
 {
 	this->textureManager = textureM;
 	this->graphics = graphics;
@@ -15,14 +20,15 @@ BoomBombPool::BoomBombPool(TextureManager* textureM, Graphics* graphics)
 	instance = this;
 }
 
-BoomBombPool::BoomBombPool(TextureManager * textureM, Graphics * graphics, int startNumberElement)
+BoomBombPool::BoomBombPool(TextureManager * textureM, Graphics * graphics,Samus* samus, int startNumberElement)
 {
 	this->textureManager = textureM; 
 	this->graphics = graphics;
 
+	this->samus = samus;
 	for (int i = 0; i < startNumberElement; i++)
 	{
-		this->list.push_back(new BoomBomb(textureM, graphics));
+		this->list.push_back(new BoomBomb(textureM, graphics,samus));
 	}
 
 	instance = this;
@@ -36,7 +42,7 @@ BoomBomb * BoomBombPool::getBoom()
 {
 	if (this->list.empty())
 	{
-		BoomBomb* boom = new BoomBomb(textureManager, graphics);
+		BoomBomb* boom = new BoomBomb(textureManager, graphics, this->samus);
 		this->listUsing.push_back(boom);
 
 		return boom;
@@ -53,7 +59,7 @@ BoomBomb * BoomBombPool::getBoom()
 			return bom;
 		}	
 
-		BoomBomb* boom = new BoomBomb(textureManager, graphics);
+		BoomBomb* boom = new BoomBomb(textureManager, graphics, this->samus);
 		this->listUsing.push_back(boom);
 		return boom;
 	}

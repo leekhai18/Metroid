@@ -78,7 +78,7 @@ Samus::Samus(TextureManager* textureM,Graphics* graphics, Input* input) : BaseOb
 	bulletPool = new BulletPool(textureM, graphics, 15);
 	this->listCollide = new list<CollisionReturn>();
 
-	boomPool = new BoomBombPool(textureM, graphics, 10);
+	boomPool = new BoomBombPool(textureM, graphics,this, 10);
 	rocketPool = new RocketPool(textureM, graphics, 5);
 
 	this->canGoElevator = false;
@@ -343,6 +343,25 @@ bool Samus::getCanMoveElevator()
 void Samus::setListCanCollide(map<int, BaseObject*>* list)
 {
 	this->listCanCollide = list;
+}
+
+void Samus::setBoomVelocity(VECTOR2 boomVelocity)
+{
+}
+
+VECTOR2 Samus::getBoomVelocity()
+{
+	return boomVelocity;
+}
+
+void Samus::setBoomExplose(bool boomExplose)
+{
+	this->isBoomExplose = boomExplose;
+}
+
+bool Samus::getBoomExplose()
+{
+	return isBoomExplose;
 }
 
 

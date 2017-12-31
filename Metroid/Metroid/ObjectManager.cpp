@@ -169,6 +169,39 @@ void ObjectManager::onCheckCollision(float dt)
 		}
 	}
 
+//we must check boom collision first because samus can collide with wall when boom change velocity of samus
+#pragma region handle Boom
+	//get list collide
+	for (auto x = listNotWallCanCollideSamus->begin(); x != listNotWallCanCollideSamus->end(); x++)
+	{
+		BaseObject* object = (*x).second;
+
+		for (unsigned i = 0; i < BoomBombPool::getInstance()->getListUsing().size(); i++)
+		{
+			if (Collision::getInstance()->isCollide(BoomBombPool::getInstance()->getListUsing().at(i)->getBoundCollision(), object->getBoundCollision()))
+			{
+				BoomBombPool::getInstance()->getListUsing().at(i)->getListCollide()->push_back(object);
+			}
+		}
+		for (unsigned i = 0; i < BulletPool::getInstance()->getListUsing().size(); i++)
+			Collision::getInstance()->checkCollision(BulletPool::getInstance()->getListUsing().at(i), object, dt);
+
+		for (unsigned i = 0; i < RocketPool::getInstance()->getListUsing().size(); i++)
+			Collision::getInstance()->checkCollision(RocketPool::getInstance()->getListUsing().at(i), object, dt);
+
+	}
+	//handle collide
+	for (unsigned i = 0; i < BulletPool::getInstance()->getListUsing().size(); i++)
+		BulletPool::getInstance()->getListUsing().at(i)->onCollision();
+
+	for (unsigned i = 0; i < RocketPool::getInstance()->getListUsing().size(); i++)
+		RocketPool::getInstance()->getListUsing().at(i)->onCollision();
+
+	for (unsigned i = 0; i < BoomBombPool::getInstance()->getListUsing().size(); i++)
+		BoomBombPool::getInstance()->getListUsing().at(i)->onCollision();
+#pragma endregion
+
+
 #pragma region handle Wall
 	for (auto x = listWallCanCollideSamus->begin(); x != listWallCanCollideSamus->end(); x++)
 	{
@@ -203,22 +236,6 @@ void ObjectManager::onCheckCollision(float dt)
 		samus->setListCanCollide(listNotWallCanCollideSamus);
 		Collision::getInstance()->checkCollision(samus, object, dt);
 
-		for (unsigned i = 0; i < BulletPool::getInstance()->getListUsing().size(); i++)
-			Collision::getInstance()->checkCollision(BulletPool::getInstance()->getListUsing().at(i), object, dt);
-
-		for (unsigned i = 0; i < RocketPool::getInstance()->getListUsing().size(); i++)
-			Collision::getInstance()->checkCollision(RocketPool::getInstance()->getListUsing().at(i), object, dt);
-
-
-		for (unsigned i = 0; i < BoomBombPool::getInstance()->getListUsing().size(); i++)
-		{
-			if (Collision::getInstance()->isCollide(BoomBombPool::getInstance()->getListUsing().at(i)->getBoundCollision(), object->getBoundCollision()))
-			{
-				BoomBombPool::getInstance()->getListUsing().at(i)->getListCollide()->push_back(object);
-			}
-		}
-
-
 		if (object->getId() == eID::SKREE)
 		{
 			Skree* skr = static_cast<Skree*>(object);
@@ -228,16 +245,6 @@ void ObjectManager::onCheckCollision(float dt)
 				skr->onCollision(samus);
 			}
 		}
-
-		/*if ((*x)->getId() == eID::BOSSKRAID)
-		{
-		BossKraid* bossKraid = static_cast<BossKraid*>(*x);
-
-		if (bossKraid->checkCollision(samus, dt))
-		{
-		bossKraid->onCollision(samus);
-		}
-		}*/
 
 		if (object->getId() == eID::MOTHERBRAIN)
 		{
@@ -249,14 +256,7 @@ void ObjectManager::onCheckCollision(float dt)
 
 	// handle on listCollide
 	samus->onCollision(dt);
-	for (unsigned i = 0; i < BulletPool::getInstance()->getListUsing().size(); i++)
-		BulletPool::getInstance()->getListUsing().at(i)->onCollision();
 
-	for (unsigned i = 0; i < RocketPool::getInstance()->getListUsing().size(); i++)
-		RocketPool::getInstance()->getListUsing().at(i)->onCollision();
-
-	for (unsigned i = 0; i < BoomBombPool::getInstance()->getListUsing().size(); i++)
-		BoomBombPool::getInstance()->getListUsing().at(i)->onCollision();
 
 #pragma endregion
 
