@@ -1,4 +1,4 @@
-#include "SamusStateStanding.h"
+#include "SamusStateBoom.h"
 #include "SamusStateManager.h"
 #include "BulletPool.h"
 #include "GameLog.h"
@@ -10,12 +10,12 @@
 #include "Rio.h"
 #include "Waver.h"
 #include "Sound.h"
-#define TIME_TO_NORMAL 0.1f
+#define TIME_TO_NORMAL 0.5f
 
-SamusStateStanding::SamusStateStanding()
+SamusStateBoom::SamusStateBoom()
 {
 }
-void SamusStateStanding::setBoundCollision()
+void SamusStateBoom::setBoundCollision()
 {
 	MetroidRect rect;
 	VECTOR2 position(this->samus->getPosition().x, samus->getPosition().y - OFFSET_COLLISION_Y + 1);
@@ -25,16 +25,16 @@ void SamusStateStanding::setBoundCollision()
 	rect.bottom = position.y - HEIGHT_COLLISION*0.5f;
 	samus->setBoundCollision(rect);
 }
-SamusStateStanding::SamusStateStanding(Samus * samus, Input * input) : BaseState(samus, input)
+SamusStateBoom::SamusStateBoom(Samus * samus, Input * input) : BaseState(samus, input)
 {
 	isUp = false;
 }
 
-SamusStateStanding::~SamusStateStanding()
+SamusStateBoom::~SamusStateBoom()
 {
 }
 
-void SamusStateStanding::init()
+void SamusStateBoom::init()
 {
 
 	/*if (this->samus->isFaling())
@@ -67,7 +67,7 @@ void SamusStateStanding::init()
 	canRolling = false;
 }
 
-void SamusStateStanding::handleInput(float dt)
+void SamusStateBoom::handleInput(float dt)
 {
 
 	this->samus->setVelocity(VECTOR2(0,-SAMUS_MIN_SPEED_Y));
@@ -257,7 +257,7 @@ void SamusStateStanding::handleInput(float dt)
 	}
 }
 
-void SamusStateStanding::onCollision(float dt)
+void SamusStateBoom::onCollision(float dt)
 {
 	for (auto i = this->samus->getListCollide()->begin(); i != this->samus->getListCollide()->end(); i++)
 	{
@@ -433,7 +433,7 @@ void SamusStateStanding::onCollision(float dt)
 	}
 }
 
-void SamusStateStanding::update(float dt)
+void SamusStateBoom::update(float dt)
 {
 
 	this->samus->updateVertical(dt);
@@ -471,15 +471,15 @@ void SamusStateStanding::update(float dt)
 	canRolling = false;
 }
 
-void SamusStateStanding::onStart()
+void SamusStateBoom::onStart()
 {
 }
 
-void SamusStateStanding::onExit()
+void SamusStateBoom::onExit()
 {
 }
 
-void SamusStateStanding::fire()
+void SamusStateBoom::fire()
 {
 	VECTOR2 stP;
 	Bullet* bullet = BulletPool::getInstance()->getBullet();
@@ -498,7 +498,7 @@ void SamusStateStanding::fire()
 	bullet->init(stP);
 }
 
-void SamusStateStanding::fireRocket()
+void SamusStateBoom::fireRocket()
 {
 	VECTOR2 stP;
 	Rocket* rocket = RocketPool::getInstance()->getRocket();

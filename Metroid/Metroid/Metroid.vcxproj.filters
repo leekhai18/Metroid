@@ -73,6 +73,10 @@
     <ClCompile Include="IBonusable.cpp" />
     <ClCompile Include="PlayScence.cpp" />
     <ClCompile Include="EndScence.cpp" />
+    <ClCompile Include="SamusStateBoom.cpp" />
+    <ClCompile Include="BossKraidRocket.cpp" />
+    <ClCompile Include="BossRocketPool.cpp" />
+    <ClCompile Include="MaChineGun.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AlienBig.h" />
@@ -149,6 +153,10 @@
     <ClInclude Include="IBonusable.h" />
     <ClInclude Include="PlayScence.h" />
     <ClInclude Include="EndScence.h" />
+    <ClInclude Include="SamusStateBoom.h" />
+    <ClInclude Include="BossKraidRocket.h" />
+    <ClInclude Include="BossRocketPool.h" />
+    <ClInclude Include="MaChineGun.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Metroid.rc" />

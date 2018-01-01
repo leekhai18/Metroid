@@ -9,6 +9,10 @@
 
 #define TIME_DELAY_BE_HIT 0.2f
 #define TIME_RETURN_NOMAL 1.0f
+#define TIME_TO_FIRE 1.0f
+#define TIME_TO_JUMP 3.0f
+#define TIME_TO_RUN 5.0f
+#define BOSS_VELOCITY_X 20
 BossKraid::BossKraid()
 {
 }
@@ -27,18 +31,26 @@ BossKraid::BossKraid(TextureManager * textureM, Graphics * graphics, Samus* samu
 	this->anim->start();
 	this->listWallCanCollide = new map<int,BaseObject*>();
 	this->listCollide = new list<CollisionReturn>();
+	
 
-	time = 0;
+	rocketPool = new BossRocketPool(graphics, textureM, samus, this);
+	timeToFire = 0;
 	this->samus = samus;
-	isDown = true;
+	
 	isActivity = true;
 
 	this->getSprite()->setOrigin(VECTOR2(0.5, 0.5));
-	setBoundCollision();
+	
 
 	direction = eDirection::right;
 
 	health = 40;
+
+	rocketBoss = new BossKraidRocket(graphics, textureM, samus, this);
+	
+	this->rocket1 = new BossKraidRocket(graphics, textureM, samus, this);
+
+	timeJump = 0;
 }
 
 
@@ -50,6 +62,9 @@ BossKraid::~BossKraid()
 	delete this->sprite;
 	delete this->listCollide;
 	delete this->listWallCanCollide;
+	delete this->rocketBoss;
+	delete this->rocket1;
+	BossRocketPool::getInstance()->release();
 }
 
 map<int,BaseObject*>* BossKraid::getListWallCanCollide()
@@ -77,66 +92,80 @@ void BossKraid::setBoundCollision()
 	rect.bottom = position.y - this->getSprite()->getHeight() *0.5f + BOSSKRAID_OFFSET;
 
 	this->boundCollision = rect;
+	
 }
 
 void BossKraid::reInit()
 {
-	floor = this->getPosition().y - this->getSprite()->getHeight() *0.5f;
-	if (samus->getPosition().x - this->getPosition().x <= WIDTH_ACTIVE && (this->samus->isInStatus(eStatus::STANDING)
-		|| this->samus->isInStatus(eStatus::RUNNING) || this->samus->isInStatus(eStatus::ROLLING)))
-	{
-		this->samus->getPosition().x > this->getPosition().x ? this->sprite->setFlipX(false) : this->sprite->setFlipX(true);
-		//isActivity = true;
-		P1 = VECTOR2(this->getPosition().x, floor);
+	//floor = this->getPosition().y - this->getSprite()->getHeight() *0.5f;
+	//if (samus->getPosition().x - this->getPosition().x <= WIDTH_ACTIVE && (this->samus->isInStatus(eStatus::STANDING)
+	//	|| this->samus->isInStatus(eStatus::RUNNING) || this->samus->isInStatus(eStatus::ROLLING)))
+	//{
+	//	this->samus->getPosition().x > this->getPosition().x ? this->sprite->setFlipX(false) : this->sprite->setFlipX(true);
+	//	//isActivity = true;
+	//	P1 = VECTOR2(this->getPosition().x, floor);
 
-		P3 = VECTOR2(samus->getPosition().x, floor);
+	//	P3 = VECTOR2(samus->getPosition().x, floor);
 
-		float center = P1.x > P3.x ? (P1.x - P3.x)*0.5f : (P3.x - P1.x)*0.5f;
-		this->P2 = VECTOR2(P1.x + center, P1.y + BOSSKRAID_JUMP_HEIGHT);
-		isDown = false;
-		time = 0;
-	}
+	//	float center = P1.x > P3.x ? (P1.x - P3.x)*0.5f : (P3.x - P1.x)*0.5f;
+	//	this->P2 = VECTOR2(P1.x + center, P1.y + BOSSKRAID_JUMP_HEIGHT);
+	//	isDown = false;
+	//	time = 0;
+	//}
+	rocket1->returnPool();
 }
 
 void BossKraid::calculateBezier()
 {
 
 }
-void BossKraid::handleVelocity(float dt)
+void BossKraid::runToSamus()
 {
 
+}
+void BossKraid::lauchRocket()
+{
+	BossKraidRocket* rocket = BossRocketPool::getInstance()->getRocket();
+	setBoundCollision();
+	rocket->setListWallCanCollide(this->listWallCanCollide);
+	rocket->init();
+}
+
+void BossKraid::handleVelocity(float dt)
+{
+	
 	if (isActivity)
 	{
-
-		if (!isDown)
+		if(samus->getPosition().x >= this->getPosition().x)
 		{
-			this->beforePosition = this->getPosition();
-			if (time > 1)
-			{
-				int test = 0;
-			}
-			time += dt * RATE_BEZIER;
-			if (time >= 1.0f)
-			{
-				time = 1.0f;
-			}
-
-			this->afterPosition = ((1 - time)*(1 - time)*P1 + 2 * (1 - time)*time*P2 + time*time*P3);
-
-			if (direction == eDirection::right)
-			{
-				this->velocity = (this->afterPosition - this->beforePosition) / dt;
-			}
-			else
-			{
-				this->velocity = (this->beforePosition - this->afterPosition) / dt;
-			}
-
+			direction = eDirection::right;
+			this->sprite->setFlipX(false);
+			this->velocity.x = BOSS_VELOCITY_X;
 		}
 		else
 		{
+			direction = eDirection::left;
+			this->sprite->setFlipX(true);
+			this->velocity.x = -BOSS_VELOCITY_X;
+		}
+		this->timeToFire += dt;
+		this->timeJump += dt;
+		this->timeRun += dt;
+		if(this->timeToFire >=TIME_TO_FIRE)
+		{
+			this->timeToFire = 0;
+			lauchRocket();
+		}
+		
+		if(this->timeRun >= TIME_TO_RUN)
+		{
+			stopRun = false;
+			
+		}
 
-			reInit();
+		for (int i = 0; i < BossRocketPool::getInstance()->getListRocketUsing().size(); i++)
+		{
+			BossRocketPool::getInstance()->getListRocketUsing()[i]->handleVelocity(dt);
 		}
 	}
 }
@@ -175,8 +204,14 @@ void BossKraid::onCollision(float dt)
 		}
 
 		this->listCollide->clear();
+
+		for (int i = 0; i < BossRocketPool::getInstance()->getListRocketUsing().size(); i++)
+		{
+			BossRocketPool::getInstance()->getListRocketUsing()[i]->onCollision(dt);
+		}
 	}
 }
+
 
 
 void BossKraid::update(float dt)
@@ -201,20 +236,28 @@ void BossKraid::update(float dt)
 			}
 
 		}
+	
 
 		this->setPosition(this->getPosition().x + this->velocity.x*dt, this->getPosition().y + this->velocity.y*dt);
 		setBoundCollision();
-		if (time == 1.0f)
-		{
-			isDown = true;
-			this->velocity.x = 0;
-		}
-		//if (this->getPosition().x - this->getSprite()->getWidth() *0.5f  < Camera::getInstance()->getBound().left ||
-		//	this->getPosition().x + this->getSprite()->getWidth() *0.5f> Camera::getInstance()->getBound().right)
-		//{
 
-		//	reInit();
-		//}
+		if(direction==eDirection::right)
+		{
+			rocketBoss->getSprite()->setRotate(270);
+			rocketBoss->setPosition(VECTOR2(boundCollision.left, boundCollision.bottom + this->getSprite()->getHeight() *0.5f));
+		}
+		else
+		{
+			rocketBoss->getSprite()->setRotate(270);
+			rocketBoss->setPosition(VECTOR2(boundCollision.right, boundCollision.bottom + this->getSprite()->getHeight() *0.5f));
+		}
+		
+
+		for (int i = 0; i < BossRocketPool::getInstance()->getListRocketUsing().size(); i++)
+		{
+			BossRocketPool::getInstance()->getListRocketUsing()[i]->update(dt);
+		}
+	
 	}
 	IExplosible::update(dt);
 }
@@ -225,6 +268,12 @@ void BossKraid::draw()
 	if (!isExplose)
 	{
 		this->sprite->draw();
+		this->rocketBoss->draw();
+		
+		for (int i = 0; i < BossRocketPool::getInstance()->getListRocketUsing().size(); i++)
+		{
+			BossRocketPool::getInstance()->getListRocketUsing()[i]->draw();
+		}
 	}
 }
 void BossKraid::setBeHit(bool hit)

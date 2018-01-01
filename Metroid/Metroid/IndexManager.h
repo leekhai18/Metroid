@@ -23,7 +23,7 @@
 #define NUM_FRAMES_GATE_ANIM 5
 #define NUM_FRAMES_MOTHER 4
 
-
+#define NUM_ROCKET_BOSS_EXPLOSE 4
 
 class IndexManager
 {
@@ -214,7 +214,7 @@ public:
 	const int wallFrontMotherBrain[4] = { 302,303,304,305 };
 
 
-	const int explosionBoss[4] = { 307,308,309,306 };
+	const int explosionRocketBoss[4] = { 307,308,309,306 };
 	const int rocketBoss = 310;
 	
 

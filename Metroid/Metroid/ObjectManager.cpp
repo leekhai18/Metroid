@@ -320,7 +320,11 @@ void ObjectManager::insertQuadTreeNode(const Value & value, Quadtree* quadtree)
 	{
 		int id = objectList[i]["Id"].GetInt();
 		//BaseObject* obj = (*map_object.find(id)).second;
+		string temp = std::to_string(id);
+		const char *pchar = temp.c_str();
+		GAMELOG(pchar);
 		node->getObjectList().insert(pair<int, BaseObject*>(*map_object.find(id)));
+	
 	}
 	if (!nodes.IsNull())
 	{
@@ -409,16 +413,83 @@ bool ObjectManager::load_list(const char * filename)
 
 		//writer.StartObject();
 
+		const Value& listMachineGun = jSon["MaChineGun"];
+		for (SizeType i = 0; i < listMachineGun.Size(); i++)
+		{
+			BaseObject *maChineGun = new BaseObject(eID::MACHINE_GUN);
 
+			id = listMachineGun[i]["id"].GetInt();
+			x = listMachineGun[i]["x"].GetFloat();
+			y = listMachineGun[i]["y"].GetFloat();
+			height = listMachineGun[i]["height"].GetFloat();
+			width = listMachineGun[i]["width"].GetFloat();
+
+			/*			writer.StartObject();
+			writer.Key("x");
+			writer.Double(x);
+			writer.Key("y");
+			writer.Double(y);
+			writer.Key("height");
+			writer.Double(height);
+			writer.Key("width");
+			writer.Double(width);
+			writer.EndObject();*/
+
+			bound.left = x;
+			bound.top = y;
+			bound.right = bound.left + width;
+			bound.bottom = bound.top - height;
+			maChineGun->setBoundCollision(bound);
+
+			maChineGun->setActiveBound(bound);
+
+
+			map_object.insert(std::pair<int, BaseObject*>(id, maChineGun));
+		}
+
+		const Value& listDefense = jSon["DefenseBoss"];
+		for (SizeType i = 0; i < listDefense.Size(); i++)
+		{
+			BaseObject *defense = new BaseObject(eID::DEFENSEBOSS);
+
+			id = listDefense[i]["id"].GetInt();
+			x = listDefense[i]["x"].GetFloat();
+			y = listDefense[i]["y"].GetFloat();
+			height = listDefense[i]["height"].GetFloat();
+			width = listDefense[i]["width"].GetFloat();
+
+			/*			writer.StartObject();
+			writer.Key("x");
+			writer.Double(x);
+			writer.Key("y");
+			writer.Double(y);
+			writer.Key("height");
+			writer.Double(height);
+			writer.Key("width");
+			writer.Double(width);
+			writer.EndObject();*/
+
+			bound.left = x;
+			bound.top = y;
+			bound.right = bound.left + width;
+			bound.bottom = bound.top - height;
+			defense->setBoundCollision(bound);
+
+			defense->setActiveBound(bound);
+
+
+			map_object.insert(std::pair<int, BaseObject*>(id, defense));
+		}
 
 #pragma region Wall
 		// Load Wall POS , 650 
 		/*	writer.Key("Wall");
+
+
 		writer.StartArray();*/
 		const Value& listWall = jSon["Wall"];
 
-		if (listWall.IsArray())
-		{
+		
 
 			for (SizeType i = 0; i < listWall.Size(); i++)
 			{
@@ -452,7 +523,7 @@ bool ObjectManager::load_list(const char * filename)
 
 				map_object.insert(std::pair<int, BaseObject*>(id, wall));
 			}
-		}
+		
 
 		//writer.EndArray();	
 #pragma endregion
@@ -462,8 +533,7 @@ bool ObjectManager::load_list(const char * filename)
 		/*writer.Key("Elevator");
 		writer.StartArray();*/
 		const Value& elevator = jSon["Elevator"];
-		if (elevator.IsArray())
-		{
+		
 			for (SizeType i = 0; i < elevator.Size(); i++)
 			{
 				BaseObject *elev = new BaseObject(eID::ELEVATOR);
@@ -496,15 +566,14 @@ bool ObjectManager::load_list(const char * filename)
 
 				map_object.insert(std::pair<int, BaseObject*>(id, elev));
 			}
-		}
+		
 		//writer.EndArray();
 
 		// create Fire
 		/*writer.Key("Fire");
 		writer.StartArray();*/
 		const Value& listFire = jSon["Fire"];
-		if (listFire.IsArray())
-		{
+		
 			for (SizeType i = 0; i < listFire.Size(); i++)
 			{
 				BaseObject *fire = new BaseObject(eID::FIRE);
@@ -537,7 +606,7 @@ bool ObjectManager::load_list(const char * filename)
 
 				map_object.insert(std::pair<int, BaseObject*>(id, fire));
 			}
-		}
+		
 		//writer.EndArray();
 
 #pragma endregion
@@ -548,8 +617,7 @@ bool ObjectManager::load_list(const char * filename)
 		//writer.StartArray();
 
 		const Value& listBrickSecretBlue = jSon["BrickSecretBlue"];
-		if (listBrickSecretBlue.IsArray())
-		{
+		
 			for (SizeType i = 0; i < listBrickSecretBlue.Size(); i++)
 			{
 				Brick *bsb = new Brick(this->textureManager, this->graphics, BrickStyle::BrickSecretBlue);
@@ -578,7 +646,7 @@ bool ObjectManager::load_list(const char * filename)
 
 				map_object.insert(std::pair<int, BaseObject*>(id, bsb));
 			}
-		}
+		
 		//writer.EndArray();
 
 		// BrickSerectGreen, 9
@@ -586,8 +654,7 @@ bool ObjectManager::load_list(const char * filename)
 		writer.StartArray();*/
 
 		const Value& listBrickSerectGreen = jSon["BrickSerectGreen"];
-		if (listBrickSerectGreen.IsArray())
-		{
+		
 			for (SizeType i = 0; i < listBrickSerectGreen.Size(); i++)
 			{
 				Brick *bsg = new Brick(this->textureManager, this->graphics, BrickStyle::BrickSerectGreen);
@@ -615,7 +682,7 @@ bool ObjectManager::load_list(const char * filename)
 
 				map_object.insert(std::pair<int, BaseObject*>(id, bsg));
 			}
-		}
+		
 		//writer.EndArray();
 
 
@@ -623,8 +690,7 @@ bool ObjectManager::load_list(const char * filename)
 		/*writer.Key("BrickGreen");
 		writer.StartArray();*/
 		const Value& listBrickGreen = jSon["BrickGreen"];
-		if (listBrickGreen.IsArray())
-		{
+		
 			for (SizeType i = 0; i < listBrickGreen.Size(); i++)
 			{
 				Brick *bg = new Brick(this->textureManager, this->graphics, BrickStyle::BrickGreen);
@@ -652,7 +718,7 @@ bool ObjectManager::load_list(const char * filename)
 
 				map_object.insert(std::pair<int, BaseObject*>(id, bg));
 			}
-		}
+		
 		//writer.EndArray();
 
 
@@ -662,8 +728,7 @@ bool ObjectManager::load_list(const char * filename)
 
 		bool isVisible;
 		const Value& listBrickBlue = jSon["BrickBlue"];
-		if (listBrickBlue.IsArray())
-		{
+		
 			for (SizeType i = 0; i < listBrickBlue.Size(); i++)
 			{
 				Brick *bb = new Brick(this->textureManager, this->graphics, BrickStyle::BrickBlue);
@@ -696,15 +761,14 @@ bool ObjectManager::load_list(const char * filename)
 
 				map_object.insert(std::pair<int, BaseObject*>(id, bb));
 			}
-		}
+		
 		//	writer.EndArray();
 
 		// BrickRed, 63
 		/*	writer.Key("BrickRed");
 		writer.StartArray();*/
 		const Value& listBrickRed = jSon["BrickRed"];
-		if (listBrickRed.IsArray())
-		{
+	
 			for (SizeType i = 0; i < listBrickRed.Size(); i++)
 			{
 				Brick *br = new Brick(this->textureManager, this->graphics, BrickStyle::BrickRed);
@@ -732,7 +796,7 @@ bool ObjectManager::load_list(const char * filename)
 
 				map_object.insert(std::pair<int, BaseObject*>(id, br));
 			}
-		}
+		
 		//writer.EndArray();
 
 #pragma endregion
@@ -742,8 +806,7 @@ bool ObjectManager::load_list(const char * filename)
 		/*	writer.Key("GateBlueR");
 		writer.StartArray();*/
 		const Value& listGateBlueR = jSon["GateBlueR"];
-		if (listGateBlueR.IsArray())
-		{
+		
 			for (SizeType i = 0; i < listGateBlueR.Size(); i++)
 			{
 				GateBlue *gateBlueR = new GateBlue(this->textureManager, this->graphics);
@@ -771,15 +834,14 @@ bool ObjectManager::load_list(const char * filename)
 
 				map_object.insert(std::pair<int, BaseObject*>(id, gateBlueR));
 			}
-		}
+		
 		//writer.EndArray();
 
 		// create GateBlue L, 25 
 		/*writer.Key("GateBuleL");
 		writer.StartArray();*/
 		const Value& listGateBlueL = jSon["GateBuleL"];
-		if (listGateBlueL.IsArray())
-		{
+		
 			for (SizeType i = 0; i < listGateBlueL.Size(); i++)
 			{
 				GateBlue *gateBlueL = new GateBlue(this->textureManager, this->graphics);
@@ -808,15 +870,14 @@ bool ObjectManager::load_list(const char * filename)
 
 				map_object.insert(std::pair<int, BaseObject*>(id, gateBlueL));
 			}
-		}
+		
 		//writer.EndArray();
 
 		// create GateRed R, 4
 		/*	writer.Key("GateRedR");
 		writer.StartArray();*/
 		const Value& listGateRedR = jSon["GateRedR"];
-		if (listGateRedR.IsArray())
-		{
+		
 			for (SizeType i = 0; i < listGateRedR.Size(); i++)
 			{
 				GateRed *gateRedR = new GateRed(this->textureManager, this->graphics);
@@ -844,15 +905,14 @@ bool ObjectManager::load_list(const char * filename)
 
 				map_object.insert(std::pair<int, BaseObject*>(id, gateRedR));
 			}
-		}
+		
 		//writer.EndArray();
 
 		// create GateRed L, 4
 		/*	writer.Key("GateRedL");
 		writer.StartArray();*/
 		const Value& listGateRedL = jSon["GateRedL"];
-		if (listGateRedL.IsArray())
-		{
+		
 			for (SizeType i = 0; i < listGateRedL.Size(); i++)
 			{
 				GateRed *gateRedL = new GateRed(this->textureManager, this->graphics);
@@ -881,7 +941,7 @@ bool ObjectManager::load_list(const char * filename)
 
 				map_object.insert(std::pair<int, BaseObject*>(id, gateRedL));
 			}
-		}
+		
 		//writer.EndArray();
 
 
@@ -889,8 +949,7 @@ bool ObjectManager::load_list(const char * filename)
 		//writer.Key("Port");
 		//writer.StartArray();
 		const Value& listPort = jSon["Port"];
-		if (listPort.IsArray())
-		{
+		
 
 			for (SizeType i = 0; i < listPort.Size(); i++)
 			{
@@ -924,7 +983,7 @@ bool ObjectManager::load_list(const char * filename)
 
 				map_object.insert(std::pair<int, BaseObject*>(id, port));
 			}
-		}
+		
 		//writer.EndArray();
 
 
@@ -933,8 +992,7 @@ bool ObjectManager::load_list(const char * filename)
 #pragma region Items
 		// create maru mari
 		const Value& maruMari = jSon["MaruMari"];
-		if (maruMari.IsObject())
-		{
+		
 			MaruMari *mm = new MaruMari(this->textureManager, this->graphics);
 
 			id = maruMari["id"].GetInt();
@@ -959,14 +1017,13 @@ bool ObjectManager::load_list(const char * filename)
 			mm->setActiveBound(bound);
 
 			map_object.insert(std::pair<int, BaseObject*>(id, mm));
-		}
+		
 
 		// create ice beam
 		/*writer.Key("IceBeam");
 		writer.StartArray();*/
 		const Value& iceBeam = jSon["IceBeam"];
-		if (iceBeam.IsArray())
-		{
+		
 			for (SizeType i = 0; i < iceBeam.Size(); i++)
 			{
 				IceBeam *ib = new IceBeam(this->textureManager, this->graphics);
@@ -995,15 +1052,14 @@ bool ObjectManager::load_list(const char * filename)
 
 				map_object.insert(std::pair<int, BaseObject*>(id, ib));
 			}
-		}
+		
 		//writer.EndArray();
 
 		// create Bomb
 		/*writer.Key("Bomb");
 		writer.StartArray();*/
 		const Value& bomb = jSon["Bomb"];
-		if (bomb.IsArray())
-		{
+		
 			for (SizeType i = 0; i < bomb.Size(); i++)
 			{
 				Bomb *bm = new Bomb(this->textureManager, this->graphics);
@@ -1032,15 +1088,14 @@ bool ObjectManager::load_list(const char * filename)
 
 				map_object.insert(std::pair<int, BaseObject*>(id, bm));
 			}
-		}
+		
 		//writer.EndArray();
 
 		// create EnergyTank, 3
 		/*writer.Key("EnergyTank");
 		writer.StartArray();*/
 		const Value& listEnergyTank = jSon["EnergyTank"];
-		if (listEnergyTank.IsArray())
-		{
+	
 			for (SizeType i = 0; i < listEnergyTank.Size(); i++)
 			{
 
@@ -1069,15 +1124,14 @@ bool ObjectManager::load_list(const char * filename)
 
 				map_object.insert(std::pair<int, BaseObject*>(id, energyT));
 			}
-		}
+		
 		//writer.EndArray();
 
 		// create Long Beam
 		/*	writer.Key("LongBeam");
 		writer.StartArray();*/
 		const Value& longBeam = jSon["LongBeam"];
-		if (longBeam.IsArray())
-		{
+		
 			for (SizeType i = 0; i < longBeam.Size(); i++)
 			{
 				LongBeam *lb = new LongBeam(this->textureManager, this->graphics);
@@ -1106,7 +1160,7 @@ bool ObjectManager::load_list(const char * filename)
 
 				map_object.insert(std::pair<int, BaseObject*>(id, lb));
 			}
-		}
+		
 		//writer.EndArray();
 
 		// create MissileRocket
@@ -1114,8 +1168,7 @@ bool ObjectManager::load_list(const char * filename)
 		//writer.StartArray();
 
 		const Value& listRocket = jSon["MissileRocket"];
-		if (listRocket.IsArray())
-		{
+		
 			for (SizeType i = 0; i < listRocket.Size(); i++)
 			{
 				MissileRocket *rocket = new MissileRocket(this->textureManager, this->graphics);
@@ -1144,7 +1197,7 @@ bool ObjectManager::load_list(const char * filename)
 
 				map_object.insert(std::pair<int, BaseObject*>(id, rocket));
 			}
-		}
+		
 		//writer.EndArray();
 
 		// create Varia
@@ -1152,8 +1205,7 @@ bool ObjectManager::load_list(const char * filename)
 		writer.StartArray();*/
 
 		const Value& varia = jSon["Varia"];
-		if (varia.IsArray())
-		{
+		
 			for (SizeType i = 0; i < varia.Size(); i++)
 			{
 				Varia *va = new Varia(this->textureManager, this->graphics);
@@ -1182,7 +1234,7 @@ bool ObjectManager::load_list(const char * filename)
 
 				map_object.insert(std::pair<int, BaseObject*>(id, va));
 			}
-		}
+		
 		//writer.EndArray();
 
 #pragma endregion
@@ -1190,8 +1242,7 @@ bool ObjectManager::load_list(const char * filename)
 #pragma region Enemies
 		// create AlienBig
 		const Value& alienBig = jSon["AlienBig"];
-		if (alienBig.IsObject())
-		{
+	
 			AlienBig *alienB = new AlienBig(this->textureManager, this->graphics);
 
 			id = alienBig["id"].GetInt();
@@ -1222,12 +1273,11 @@ bool ObjectManager::load_list(const char * filename)
 
 
 			map_object.insert(std::pair<int, BaseObject*>(id, alienB));
-		}
+		
 
 		// create AlienSmall
 		const Value& alienSmall = jSon["AlienSmall"];
-		if (alienSmall.IsObject())
-		{
+		
 
 			AlienBig* big = NULL;
 			big = static_cast<AlienBig*>((map_object.find(alienSmall["AlienBigID"].GetInt())->second));
@@ -1258,14 +1308,13 @@ bool ObjectManager::load_list(const char * filename)
 
 
 			map_object.insert(std::pair<int, BaseObject*>(id, alienS));
-		}
+		
 
 		// create ZommerYellow
 		/*	writer.Key("ZommerYellow");
 		writer.StartArray();*/
 		const Value& listZommerYellow = jSon["ZommerYellow"];
-		if (listZommerYellow.IsArray())
-		{
+
 			for (SizeType i = 0; i < listZommerYellow.Size(); i++)
 			{
 				Zommer *zmy = new Zommer(this->textureManager, this->graphics, EnemyColors::Yellow);
@@ -1315,98 +1364,110 @@ bool ObjectManager::load_list(const char * filename)
 
 				map_object.insert(std::pair<int, BaseObject*>(id, zmy));
 			}
-		}
+		
 		//writer.EndArray();
 
 		// create ZommerBrown
 		/*	writer.Key("ZommerBrown");
 		writer.StartArray();*/
 		const Value& listZommerBrown = jSon["ZommerBrown"];
-		if (listZommerBrown.IsArray())
-		{
+	
 			for (SizeType i = 0; i < listZommerBrown.Size(); i++)
 			{
-				Zommer *zmb = new Zommer(this->textureManager, this->graphics, EnemyColors::Brown);
+					Zommer *zmb = new Zommer(this->textureManager, this->graphics, EnemyColors::Brown);
 
-				id = listZommerBrown[i]["id"].GetInt();
-				x = listZommerBrown[i]["x"].GetFloat();
-				y = listZommerBrown[i]["y"].GetFloat();
+					id = listZommerBrown[i]["id"].GetInt();
+					x = listZommerBrown[i]["x"].GetFloat();
+					y = listZommerBrown[i]["y"].GetFloat();
+
+					//x += zmb->getSprite()->getWidth()*0.5f;
+					//y = y +1;
+
+					zmb->setPosition(VECTOR2(x, y));
+					zmb->setStartPosition(VECTOR2(x, y));
+					const Value& arrayWall = listZommerBrown[i]["ListCollideID"];
+					for (SizeType t = 0; t < arrayWall.Size(); t++)
+					{
+						zmb->getListWallCanCollide()->insert(*map_object.find(arrayWall[t].GetInt()));
+					}
+					zmb->setBoundCollision();
+					zmb->setStartBound(zmb->getBoundCollision());
+					if (id == 912)
+					{
+						int test = 0;
+					}
+					bound.bottom = listZommerBrown[i]["ba"].GetFloat();
+					string temp = std::to_string(id);
+					const char *pchar = temp.c_str();
+					GAMELOG(pchar);
+					bound.top = listZommerBrown[i]["ta"].GetFloat();
+					bound.left = listZommerBrown[i]["la"].GetFloat();
+					bound.right = listZommerBrown[i]["ra"].GetFloat();
+					zmb->setActiveBound(bound);
+
+					/*		writer.StartObject();
+					writer.Key("x");
+					writer.Double(x);
+					writer.Key("y");
+					writer.Double(y);
+					writer.Key("ba");
+					writer.Double(bound.bottom);
+					writer.Key("ta");
+					writer.Double(bound.top);
+					writer.Key("la");
+					writer.Double(bound.left);
+					writer.Key("ra");
+					writer.Double(bound.right);
+					writer.EndObject();*/
+
+
+					map_object.insert(std::pair<int, BaseObject*>(id, zmb));
 				
-				//x += zmb->getSprite()->getWidth()*0.5f;
-				y = y +1;
-
-				zmb->setPosition(VECTOR2(x, y));
-				zmb->setStartPosition(VECTOR2(x, y));
-				const Value& arrayWall = listZommerBrown[i]["ListCollideID"];
-				for (SizeType t = 0; t < arrayWall.Size(); t++)
-				{
-					zmb->getListWallCanCollide()->insert(*map_object.find(arrayWall[t].GetInt()));
-				}
-				zmb->setBoundCollision();
-				zmb->setStartBound(zmb->getBoundCollision());
-				bound.bottom = listZommerBrown[i]["ba"].GetFloat();
-				bound.top = listZommerBrown[i]["ta"].GetFloat();
-				bound.left = listZommerBrown[i]["la"].GetFloat();
-				bound.right = listZommerBrown[i]["ra"].GetFloat();
-				zmb->setActiveBound(bound);
-
-				/*		writer.StartObject();
-				writer.Key("x");
-				writer.Double(x);
-				writer.Key("y");
-				writer.Double(y);
-				writer.Key("ba");
-				writer.Double(bound.bottom);
-				writer.Key("ta");
-				writer.Double(bound.top);
-				writer.Key("la");
-				writer.Double(bound.left);
-				writer.Key("ra");
-				writer.Double(bound.right);
-				writer.EndObject();*/
-
-
-				map_object.insert(std::pair<int, BaseObject*>(id, zmb));
 			}
-		}
+		
 		//writer.EndArray();
 
 		// create ZommerRed
 		/*	writer.Key("ZommerRed");
 		writer.StartArray();*/
 		const Value& listZommerRed = jSon["ZommerRed"];
-		if (listZommerRed.IsArray())
-		{
+	
 			for (SizeType i = 0; i < listZommerRed.Size(); i++)
 			{
-				Zommer *zmr = new Zommer(this->textureManager, this->graphics, EnemyColors::Red);
+			
+					Zommer *zmr = new Zommer(this->textureManager, this->graphics, EnemyColors::Red);
 
-				id = listZommerRed[i]["id"].GetInt();
-				x = listZommerRed[i]["x"].GetFloat();
-				y = listZommerRed[i]["y"].GetFloat();
+					id = listZommerRed[i]["id"].GetInt();
+					x = listZommerRed[i]["x"].GetFloat();
+					y = listZommerRed[i]["y"].GetFloat();
 
-				if(id == 1057)
-				{
-					int re = 0;
-				}
-				//x += zmr->getSprite()->getWidth()*0.5f;
-				//y =y - 16 + zmr->getSprite()->getHeight()*0.5f;*
-				y = y +1;
-				zmr->setPosition(VECTOR2(x, y));
-				zmr->setStartPosition(VECTOR2(x, y));
-				const Value& arrayWall = listZommerRed[i]["ListCollideID"];
 
-				for (SizeType t = 0; t < arrayWall.Size(); t++)
-				{
-					zmr->getListWallCanCollide()->insert( *map_object.find(arrayWall[t].GetInt()) );
-				}
-				zmr->setBoundCollision();
-				zmr->setStartBound(zmr->getBoundCollision());
-				bound.bottom = listZommerRed[i]["ba"].GetFloat();
-				bound.top = listZommerRed[i]["ta"].GetFloat();
-				bound.left = listZommerRed[i]["la"].GetFloat();
-				bound.right = listZommerRed[i]["ra"].GetFloat();
-				zmr->setActiveBound(bound);
+					//x += zmr->getSprite()->getWidth()*0.5f;
+					//y =y - 16 + zmr->getSprite()->getHeight()*0.5f;*
+					y = y + 1;
+					zmr->setPosition(VECTOR2(x, y));
+					zmr->setStartPosition(VECTOR2(x, y));
+					const Value& arrayWall = listZommerRed[i]["ListCollideID"];
+
+					for (SizeType t = 0; t < arrayWall.Size(); t++)
+					{
+						zmr->getListWallCanCollide()->insert(*map_object.find(arrayWall[t].GetInt()));
+					}
+					string temp = std::to_string(id);
+					const char *pchar = temp.c_str();
+					GAMELOG(pchar);
+					zmr->setBoundCollision();
+
+					zmr->setStartBound(zmr->getBoundCollision());
+	
+						bound.bottom = listZommerRed[i]["ba"].GetFloat();
+						bound.top = listZommerRed[i]["ta"].GetFloat();
+						bound.left = listZommerRed[i]["la"].GetFloat();
+						bound.right = listZommerRed[i]["ra"].GetFloat();
+						zmr->setActiveBound(bound);
+				
+
+				
 
 				//writer.StartObject();
 				//writer.Key("x");
@@ -1425,167 +1486,173 @@ bool ObjectManager::load_list(const char * filename)
 
 
 
-				map_object.insert(std::pair<int, BaseObject*>(id, zmr));
+					map_object.insert(std::pair<int, BaseObject*>(id, zmr));
+				
 			}
-		}
+		
 		//writer.EndArray();
 
 		// create ZebYellow
 		/*writer.Key("SpawnZebYellow");
 		writer.StartArray();*/
 		const Value& listZebYellow = jSon["SpawnZebYellow"];
-		if (listZebYellow.IsArray())
-		{
+	
 			for (SizeType i = 0; i < listZebYellow.Size(); i++)
 			{
-				Zeb *zby = new Zeb(this->textureManager, this->graphics, EnemyColors::Yellow, samus);
+			
+					Zeb *zby = new Zeb(this->textureManager, this->graphics, EnemyColors::Yellow, samus);
 
-				id = listZebYellow[i]["id"].GetInt();
-				x = listZebYellow[i]["x"].GetFloat();
-				y = listZebYellow[i]["y"].GetFloat();
+					id = listZebYellow[i]["id"].GetInt();
+					x = listZebYellow[i]["x"].GetFloat();
+					y = listZebYellow[i]["y"].GetFloat();
 
-				y = y - 16 + zby->getSprite()->getHeight()*0.5f;
-				x += 8;
+					y = y - 16 + zby->getSprite()->getHeight()*0.5f;
+					x += 8;
 
-				zby->setStartPosition(VECTOR2(x, y));
-				zby->setPosition(VECTOR2(x, y));
+					zby->setStartPosition(VECTOR2(x, y));
+					zby->setPosition(VECTOR2(x, y));
 
-				zby->setBoundCollision();
+					zby->setBoundCollision();
+					string temp = std::to_string(id);
+					const char *pchar = temp.c_str();
+					GAMELOG(pchar);
+					/*bound.bottom = listZebYellow[i]["ba"].GetFloat();
+					bound.top = listZebYellow[i]["ta"].GetFloat();
+					bound.left = listZebYellow[i]["la"].GetFloat();
+					bound.right = listZebYellow[i]["ra"].GetFloat();*/
+					zby->setActiveBound(zby->getBoundCollision());
 
-				bound.bottom = listZebYellow[i]["ba"].GetFloat();
-				bound.top = listZebYellow[i]["ta"].GetFloat();
-				bound.left = listZebYellow[i]["la"].GetFloat();
-				bound.right = listZebYellow[i]["ra"].GetFloat();
-				zby->setActiveBound(bound);
-
-				/*	writer.StartObject();
-				writer.Key("x");
-				writer.Double(x);
-				writer.Key("y");
-				writer.Double(y);
-				writer.Key("ba");
-				writer.Double(bound.bottom);
-				writer.Key("ta");
-				writer.Double(bound.top);
-				writer.Key("la");
-				writer.Double(bound.left);
-				writer.Key("ra");
-				writer.Double(bound.right);
-				writer.EndObject();*/
+					/*	writer.StartObject();
+					writer.Key("x");
+					writer.Double(x);
+					writer.Key("y");
+					writer.Double(y);
+					writer.Key("ba");
+					writer.Double(bound.bottom);
+					writer.Key("ta");
+					writer.Double(bound.top);
+					writer.Key("la");
+					writer.Double(bound.left);
+					writer.Key("ra");
+					writer.Double(bound.right);
+					writer.EndObject();*/
 
 
 
-				map_object.insert(std::pair<int, BaseObject*>(id, zby));
+					map_object.insert(std::pair<int, BaseObject*>(id, zby));
+				
 			}
-		}
+		
 		//writer.EndArray();
 
 		// create ZebBrown
 		/*writer.Key("SpawnZebBrown");
 		writer.StartArray();*/
 		const Value& listZebBrown = jSon["SpawnZebBrown"];
-		if (listZebBrown.IsArray())
-		{
+	
 			for (SizeType i = 0; i < listZebBrown.Size(); i++)
 			{
-				Zeb *zbb = new Zeb(this->textureManager, this->graphics, EnemyColors::Brown, samus);
+			
+					Zeb *zbb = new Zeb(this->textureManager, this->graphics, EnemyColors::Brown, samus);
 
-				id = listZebBrown[i]["id"].GetInt();
-				x = listZebBrown[i]["x"].GetFloat();
-				y = listZebBrown[i]["y"].GetFloat();
+					id = listZebBrown[i]["id"].GetInt();
+					x = listZebBrown[i]["x"].GetFloat();
+					y = listZebBrown[i]["y"].GetFloat();
 
-				y = y - 16 + zbb->getSprite()->getHeight()*0.5f;
-				x += 8;
+					y = y - 16 + zbb->getSprite()->getHeight()*0.5f;
+					x += 8;
 
-				zbb->setStartPosition(VECTOR2(x, y));
-				zbb->setPosition(VECTOR2(x, y));
+					zbb->setStartPosition(VECTOR2(x, y));
+					zbb->setPosition(VECTOR2(x, y));
 
-				zbb->setBoundCollision();
+					zbb->setBoundCollision();
 
-				bound.bottom = listZebBrown[i]["ba"].GetFloat();
-				bound.top = listZebBrown[i]["ta"].GetFloat();
-				bound.left = listZebBrown[i]["la"].GetFloat();
-				bound.right = listZebBrown[i]["ra"].GetFloat();
-				zbb->setActiveBound(bound);
+					/*bound.bottom = listZebBrown[i]["ba"].GetFloat();
+					bound.top = listZebBrown[i]["ta"].GetFloat();
+					bound.left = listZebBrown[i]["la"].GetFloat();
+					bound.right = listZebBrown[i]["ra"].GetFloat();*/
+					zbb->setActiveBound(zbb->getBoundCollision());
 
-				//writer.StartObject();
-				//writer.Key("x");
-				//writer.Double(x);
-				//writer.Key("y");
-				//writer.Double(y);
-				//writer.Key("ba");
-				//writer.Double(bound.bottom);
-				//writer.Key("ta");
-				//writer.Double(bound.top);
-				//writer.Key("la");
-				//writer.Double(bound.left);
-				//writer.Key("ra");
-				//writer.Double(bound.right);
-				//writer.EndObject();
+					//writer.StartObject();
+					//writer.Key("x");
+					//writer.Double(x);
+					//writer.Key("y");
+					//writer.Double(y);
+					//writer.Key("ba");
+					//writer.Double(bound.bottom);
+					//writer.Key("ta");
+					//writer.Double(bound.top);
+					//writer.Key("la");
+					//writer.Double(bound.left);
+					//writer.Key("ra");
+					//writer.Double(bound.right);
+					//writer.EndObject();
 
 
 
-				map_object.insert(std::pair<int, BaseObject*>(id, zbb));
+					map_object.insert(std::pair<int, BaseObject*>(id, zbb));
+				
 			}
-		}
+		
 		//writer.EndArray();
 
 		// create ZebRed
 		/*	writer.Key("SpawnZebRed");
 		writer.StartArray();*/
 		const Value& listZebRed = jSon["SpawnZebRed"];
-		if (listZebRed.IsArray())
-		{
+		
 			for (SizeType i = 0; i < listZebRed.Size(); i++)
 			{
-				Zeb *zbr = new Zeb(this->textureManager, this->graphics, EnemyColors::Red, samus);
+			
+					Zeb *zbr = new Zeb(this->textureManager, this->graphics, EnemyColors::Red, samus);
 
-				id = listZebRed[i]["id"].GetInt();
-				x = listZebRed[i]["x"].GetFloat();
-				y = listZebRed[i]["y"].GetFloat();
+					id = listZebRed[i]["id"].GetInt();
+					x = listZebRed[i]["x"].GetFloat();
+					y = listZebRed[i]["y"].GetFloat();
 
-				y = y - 16 + zbr->getSprite()->getHeight()*0.5f;
-				x += 8;
+					y = y - 16 + zbr->getSprite()->getHeight()*0.5f;
+					x += 8;
 
-				zbr->setStartPosition(VECTOR2(x, y));
-				zbr->setPosition(VECTOR2(x, y));
+					zbr->setStartPosition(VECTOR2(x, y));
+					zbr->setPosition(VECTOR2(x, y));
 
-				zbr->setBoundCollision();
+					zbr->setBoundCollision();
 
-				bound.bottom = listZebRed[i]["ba"].GetFloat();
-				bound.top = listZebRed[i]["ta"].GetFloat();
-				bound.left = listZebRed[i]["la"].GetFloat();
-				bound.right = listZebRed[i]["ra"].GetFloat();
-				zbr->setActiveBound(bound);
-
-				/*			writer.StartObject();
-				writer.Key("x");
-				writer.Double(x);
-				writer.Key("y");
-				writer.Double(y);
-				writer.Key("ba");
-				writer.Double(bound.bottom);
-				writer.Key("ta");
-				writer.Double(bound.top);
-				writer.Key("la");
-				writer.Double(bound.left);
-				writer.Key("ra");
-				writer.Double(bound.right);
-				writer.EndObject();*/
+					/*bound.bottom = listZebRed[i]["ba"].GetFloat();
+					bound.top = listZebRed[i]["ta"].GetFloat();
+					bound.left = listZebRed[i]["la"].GetFloat();
+					bound.right = listZebRed[i]["ra"].GetFloat();*/
+					zbr->setActiveBound(zbr->getBoundCollision());
 
 
+					/*			writer.StartObject();
+					writer.Key("x");
+					writer.Double(x);
+					writer.Key("y");
+					writer.Double(y);
+					writer.Key("ba");
+					writer.Double(bound.bottom);
+					writer.Key("ta");
+					writer.Double(bound.top);
+					writer.Key("la");
+					writer.Double(bound.left);
+					writer.Key("ra");
+					writer.Double(bound.right);
+					writer.EndObject();*/
 
-				map_object.insert(std::pair<int, BaseObject*>(id, zbr));
+
+
+					map_object.insert(std::pair<int, BaseObject*>(id, zbr));
+				
 			}
-		}
+		
 		//writer.EndArray();
 
 		// create WaverBrown
 		/*writer.Key("WaverGreen");
 		writer.StartArray();*/
 		const Value& listWaverBrown = jSon["WaverGreen"];
-		if (listWaverBrown.IsArray())
-		{
+	
 			for (SizeType i = 0; i < listWaverBrown.Size(); i++)
 			{
 				Waver *wvb = new Waver(this->textureManager, this->graphics, EnemyColors::Brown);
@@ -1634,15 +1701,14 @@ bool ObjectManager::load_list(const char * filename)
 
 				map_object.insert(std::pair<int, BaseObject*>(id, wvb));
 			}
-		}
+		
 		//writer.EndArray();
 
 		// create WaverRed
 		/*writer.Key("WaverBlue");
 		writer.StartArray();*/
 		const Value& listWaverRed = jSon["WaverBlue"];
-		if (listWaverRed.IsArray())
-		{
+	
 			for (SizeType i = 0; i < listWaverRed.Size(); i++)
 			{
 				Waver *wvr = new Waver(this->textureManager, this->graphics, EnemyColors::Red);
@@ -1689,15 +1755,14 @@ bool ObjectManager::load_list(const char * filename)
 
 				map_object.insert(std::pair<int, BaseObject*>(id, wvr));
 			}
-		}
+		
 		//writer.EndArray();
 
 		// create SkreeYellow
 		/*	writer.Key("SkreeYellow");
 		writer.StartArray();*/
 		const Value& listSkreeYellow = jSon["SkreeYellow"];
-		if (listSkreeYellow.IsArray())
-		{
+	
 			for (SizeType i = 0; i < listSkreeYellow.Size(); i++)
 			{
 				Skree *sky = new Skree(this->textureManager, this->graphics, EnemyColors::Yellow);
@@ -1740,15 +1805,14 @@ bool ObjectManager::load_list(const char * filename)
 
 				map_object.insert(std::pair<int, BaseObject*>(id, sky));
 			}
-		}
+		
 		//writer.EndArray();
 
 		// create SkreeBrown
 		/*writer.Key("SkreeBrown");
 		writer.StartArray();*/
 		const Value& listSkreeBrown = jSon["SkreeBrown"];
-		if (listSkreeBrown.IsArray())
-		{
+	
 			for (SizeType i = 0; i < listSkreeBrown.Size(); i++)
 			{
 				Skree *skb = new Skree(this->textureManager, this->graphics, EnemyColors::Brown);
@@ -1791,15 +1855,14 @@ bool ObjectManager::load_list(const char * filename)
 
 				map_object.insert(std::pair<int, BaseObject*>(id, skb));
 			}
-		}
+		
 		//writer.EndArray();
 
 		// create RipperYellow
 		/*	writer.Key("RipperYellow");
 		writer.StartArray();*/
 		const Value& listRipperYellow = jSon["RipperYellow"];
-		if (listRipperYellow.IsArray())
-		{
+	
 			for (SizeType i = 0; i < listRipperYellow.Size(); i++)
 			{
 				Ripper *rpy = new Ripper(this->textureManager, this->graphics, EnemyColors::Yellow);
@@ -1817,7 +1880,9 @@ bool ObjectManager::load_list(const char * filename)
 				}
 
 				rpy->setBoundCollision();
-
+				string temp = std::to_string(id);
+				const char *pchar = temp.c_str();
+				GAMELOG(pchar);
 				bound.bottom = listRipperYellow[i]["ba"].GetFloat();
 				bound.top = listRipperYellow[i]["ta"].GetFloat();
 				bound.left = listRipperYellow[i]["la"].GetFloat();
@@ -1844,68 +1909,70 @@ bool ObjectManager::load_list(const char * filename)
 
 				map_object.insert(std::pair<int, BaseObject*>(id, rpy));
 			}
-		}
+		
 		//writer.EndArray();
 
 		// create RipperBrown
 		/*	writer.Key("RipperBrown");
 		writer.StartArray();*/
 		const Value& listRipperBrown = jSon["RipperBrown"];
-		if (listRipperBrown.IsArray())
-		{
+		
 			for (SizeType i = 0; i < listRipperBrown.Size(); i++)
 			{
-				Ripper *rpb = new Ripper(this->textureManager, this->graphics, EnemyColors::Brown);
+			
+					Ripper *rpb = new Ripper(this->textureManager, this->graphics, EnemyColors::Brown);
 
-				id = listRipperBrown[i]["id"].GetInt();
-				x = listRipperBrown[i]["x"].GetFloat();
-				y = listRipperBrown[i]["y"].GetFloat();
+					id = listRipperBrown[i]["id"].GetInt();
+					x = listRipperBrown[i]["x"].GetFloat();
+					y = listRipperBrown[i]["y"].GetFloat();
 
-				rpb->setPosition(VECTOR2(x, y));
+					rpb->setPosition(VECTOR2(x, y));
 
-				const Value& arrayWall = listRipperBrown[i]["ListCollideID"];
-				for (SizeType t = 0; t < arrayWall.Size(); t++)
-				{
-					rpb->getListWallCanCollide()->insert(*map_object.find(arrayWall[t].GetInt()));
-				}
-
-
-				rpb->setBoundCollision();
-
-				bound.bottom = listRipperBrown[i]["ba"].GetFloat();
-				bound.top = listRipperBrown[i]["ta"].GetFloat();
-				bound.left = listRipperBrown[i]["la"].GetFloat();
-				bound.right = listRipperBrown[i]["ra"].GetFloat();
-				rpb->setActiveBound(bound);
-
-				//writer.StartObject();
-				//writer.Key("x");
-				//writer.Double(x);
-				//writer.Key("y");
-				//writer.Double(y);
-				//writer.Key("ba");
-				//writer.Double(bound.bottom);
-				//writer.Key("ta");
-				//writer.Double(bound.top);
-				//writer.Key("la");
-				//writer.Double(bound.left);
-				//writer.Key("ra");
-				//writer.Double(bound.right);
-				//writer.EndObject();
+					const Value& arrayWall = listRipperBrown[i]["ListCollideID"];
+					for (SizeType t = 0; t < arrayWall.Size(); t++)
+					{
+						rpb->getListWallCanCollide()->insert(*map_object.find(arrayWall[t].GetInt()));
+					}
 
 
+					rpb->setBoundCollision();
+					string temp = std::to_string(id);
+					const char *pchar = temp.c_str();
+					GAMELOG(pchar);
+					bound.bottom = listRipperBrown[i]["ba"].GetFloat();
+					bound.top = listRipperBrown[i]["ta"].GetFloat();
+					bound.left = listRipperBrown[i]["la"].GetFloat();
+					bound.right = listRipperBrown[i]["ra"].GetFloat();
+					rpb->setActiveBound(bound);
 
-				map_object.insert(std::pair<int, BaseObject*>(id, rpb));
+					//writer.StartObject();
+					//writer.Key("x");
+					//writer.Double(x);
+					//writer.Key("y");
+					//writer.Double(y);
+					//writer.Key("ba");
+					//writer.Double(bound.bottom);
+					//writer.Key("ta");
+					//writer.Double(bound.top);
+					//writer.Key("la");
+					//writer.Double(bound.left);
+					//writer.Key("ra");
+					//writer.Double(bound.right);
+					//writer.EndObject();
+
+
+
+					map_object.insert(std::pair<int, BaseObject*>(id, rpb));
+				
 			}
-		}
+		
 		//writer.EndArray();
 
 		// create RipperRed
 		/*	writer.Key("RipperRed");
 		writer.StartArray();*/
 		const Value& listRipperRed = jSon["RipperRed"];
-		if (listRipperRed.IsArray())
-		{
+		
 			for (SizeType i = 0; i < listRipperRed.Size(); i++)
 			{
 				Ripper *rpr = new Ripper(this->textureManager, this->graphics, EnemyColors::Red);
@@ -1923,7 +1990,9 @@ bool ObjectManager::load_list(const char * filename)
 				}
 
 				rpr->setBoundCollision();
-
+				string temp = std::to_string(id);
+				const char *pchar = temp.c_str();
+				GAMELOG(pchar);
 				bound.bottom = listRipperRed[i]["ba"].GetFloat();
 				bound.top = listRipperRed[i]["ta"].GetFloat();
 				bound.left = listRipperRed[i]["la"].GetFloat();
@@ -1949,15 +2018,14 @@ bool ObjectManager::load_list(const char * filename)
 
 				map_object.insert(std::pair<int, BaseObject*>(id, rpr));
 			}
-		}
+		
 		//writer.EndArray();
 
 		// create RioYellow
 		/*	writer.Key("RioYellow");
 		writer.StartArray();*/
 		const Value& listRioYellow = jSon["RioYellow"];
-		if (listRioYellow.IsArray())
-		{
+		
 			for (SizeType i = 0; i < listRioYellow.Size(); i++)
 			{
 				Rio *roy = new Rio(this->textureManager, this->graphics, EnemyColors::Yellow);
@@ -1997,62 +2065,66 @@ bool ObjectManager::load_list(const char * filename)
 
 				map_object.insert(std::pair<int, BaseObject*>(id, roy));
 			}
-		}
+		
 		//writer.EndArray();
 
 		// create RioBrown
 		/*	writer.Key("RioBrown");
 		writer.StartArray();*/
 		const Value& listRioBrown = jSon["RioBrown"];
-		if (listRioBrown.IsArray())
-		{
+	
 			for (SizeType i = 0; i < listRioBrown.Size(); i++)
 			{
-				Rio *rob = new Rio(this->textureManager, this->graphics, EnemyColors::Brown);
+				
+					Rio *rob = new Rio(this->textureManager, this->graphics, EnemyColors::Brown);
 
-				id = listRioBrown[i]["id"].GetInt();
-				x = listRioBrown[i]["x"].GetFloat();
-				y = listRioBrown[i]["y"].GetFloat();
+					id = listRioBrown[i]["id"].GetInt();
+					x = listRioBrown[i]["x"].GetFloat();
+					y = listRioBrown[i]["y"].GetFloat();
 
-				rob->reInit(VECTOR2(x, y));
+					rob->reInit(VECTOR2(x, y));
 
-				rob->setBoundCollision();
-				rob->setStartBound(rob->getBoundCollision());
-				rob->setStartPosition(VECTOR2(x, y));
-				bound.bottom = listRioBrown[i]["ba"].GetFloat();
-				bound.top = listRioBrown[i]["ta"].GetFloat();
-				bound.left = listRioBrown[i]["la"].GetFloat();
-				bound.right = listRioBrown[i]["ra"].GetFloat();
-				rob->setActiveBound(bound);
+					rob->setBoundCollision();
+					rob->setStartBound(rob->getBoundCollision());
+					rob->setStartPosition(VECTOR2(x, y));
 
-				/*			writer.StartObject();
-				writer.Key("x");
-				writer.Double(x);
-				writer.Key("y");
-				writer.Double(y);
-				writer.Key("ba");
-				writer.Double(bound.bottom);
-				writer.Key("ta");
-				writer.Double(bound.top);
-				writer.Key("la");
-				writer.Double(bound.left);
-				writer.Key("ra");
-				writer.Double(bound.right);
-				writer.EndObject();*/
+					string temp = std::to_string(id);
+					const char *pchar = temp.c_str();
+					GAMELOG(pchar);
+					/*bound.bottom = listRioBrown[i]["ba"].GetFloat();
+					bound.top = listRioBrown[i]["ta"].GetFloat();
+					bound.left = listRioBrown[i]["la"].GetFloat();
+					bound.right = listRioBrown[i]["ra"].GetFloat();*/
+					rob->setActiveBound(rob->getBoundCollision());
+
+					/*			writer.StartObject();
+					writer.Key("x");
+					writer.Double(x);
+					writer.Key("y");
+					writer.Double(y);
+					writer.Key("ba");
+					writer.Double(bound.bottom);
+					writer.Key("ta");
+					writer.Double(bound.top);
+					writer.Key("la");
+					writer.Double(bound.left);
+					writer.Key("ra");
+					writer.Double(bound.right);
+					writer.EndObject();*/
 
 
 
-				map_object.insert(std::pair<int, BaseObject*>(id, rob));
+					map_object.insert(std::pair<int, BaseObject*>(id, rob));
+				
 			}
-		}
+		
 		//writer.EndArray();
 
 		// create RioRed
 		/*	writer.Key("RioRed");
 		writer.StartArray();*/
 		const Value& listRioRed = jSon["RioRed"];
-		if (listRioRed.IsArray())
-		{
+	
 			for (SizeType i = 0; i < listRioRed.Size(); i++)
 			{
 				Rio *ror = new Rio(this->textureManager, this->graphics, EnemyColors::Red);
@@ -2067,11 +2139,11 @@ bool ObjectManager::load_list(const char * filename)
 				ror->setStartPosition(VECTOR2(x, y));
 				ror->setBoundCollision();
 				ror->setStartBound(ror->getBoundCollision());
-				bound.bottom = listRioRed[i]["ba"].GetFloat();
+				/*bound.bottom = listRioRed[i]["ba"].GetFloat();
 				bound.top = listRioRed[i]["ta"].GetFloat();
 				bound.left = listRioRed[i]["la"].GetFloat();
-				bound.right = listRioRed[i]["ra"].GetFloat();
-				ror->setActiveBound(bound);
+				bound.right = listRioRed[i]["ra"].GetFloat();*/
+				ror->setActiveBound(ror->getBoundCollision());
 
 				/*			writer.StartObject();
 				writer.Key("x");
@@ -2092,7 +2164,7 @@ bool ObjectManager::load_list(const char * filename)
 
 				map_object.insert(std::pair<int, BaseObject*>(id, ror));
 			}
-		}
+		
 		//	writer.EndArray();
 
 
@@ -2105,8 +2177,7 @@ bool ObjectManager::load_list(const char * filename)
 		/*writer.Key("BossKraid");
 		writer.StartArray();*/
 		const Value& listKraid = jSon["BossKraid"];
-		if (listKraid.IsArray())
-		{
+		
 			for (SizeType i = 0; i < listKraid.Size(); i++)
 			{
 				BossKraid *kraid = new BossKraid(this->textureManager, this->graphics, this->samus);
@@ -2145,13 +2216,12 @@ bool ObjectManager::load_list(const char * filename)
 
 				map_object.insert(std::pair<int, BaseObject*>(id, kraid));
 			}
-		}
+		
 		//writer.EndArray();
 
 		// create Dragon
 		const Value& dragon = jSon["Dragon"];
-		if (dragon.IsObject())
-		{
+		
 			BossDragon *dg = new BossDragon(this->textureManager, this->graphics);
 
 			id = dragon["id"].GetInt();
@@ -2178,12 +2248,11 @@ bool ObjectManager::load_list(const char * filename)
 
 
 			map_object.insert(std::pair<int, BaseObject*>(id, dg));
-		}
+		
 
 		// create Mother Facker
 		const Value& mother = jSon["MotherBrain"];
-		if (mother.IsObject())
-		{
+		
 			MotherBrain *motherFacker = new MotherBrain(this->textureManager, this->graphics, samus);
 
 			id = mother["id"].GetInt();
@@ -2219,7 +2288,7 @@ bool ObjectManager::load_list(const char * filename)
 
 
 			map_object.insert(std::pair<int, BaseObject*>(id, motherFacker));
-		}
+		
 
 #pragma endregion
 

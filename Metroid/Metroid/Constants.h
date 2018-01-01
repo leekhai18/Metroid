@@ -107,6 +107,9 @@ enum eID {
 	GATEBLUE,
 	GATERED,
 	BRICK,
+	BOSSKRAID_ROCKET,
+	DEFENSEBOSS,
+	MACHINE_GUN
 };
 
 // collision direction

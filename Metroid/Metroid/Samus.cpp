@@ -16,8 +16,8 @@
 //#define SAMUS_POS_Y 1251
 
 //start position
-#define SAMUS_POS_X 640
-#define SAMUS_POS_Y 1267
+//#define SAMUS_POS_X 640
+//#define SAMUS_POS_Y 1267
 
 //Boss
 //#define SAMUS_POS_X 960
@@ -28,8 +28,8 @@
 //#define SAMUS_POS_Y 3656
 
 //Zeb position
-//#define SAMUS_POS_X 3810
-//#define SAMUS_POS_Y 1985
+#define SAMUS_POS_X 810
+#define SAMUS_POS_Y 4211
 
 //waver postision
 //#define SAMUS_POS_X 3911
