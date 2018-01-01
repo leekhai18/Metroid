@@ -139,6 +139,7 @@
     <ClInclude Include="Brick.h" />
     <ClInclude Include="Bullet.h" />
     <ClInclude Include="Camera.h" />
+    <ClInclude Include="CanonBullet.h" />
     <ClInclude Include="Collision.h" />
     <ClInclude Include="Constants.h" />
     <ClInclude Include="EndScence.h" />
@@ -157,7 +158,7 @@
     <ClInclude Include="IndexManager.h" />
     <ClInclude Include="Input.h" />
     <ClInclude Include="LongBeam.h" />
-    <ClInclude Include="MaChineGun.h" />
+    <ClInclude Include="MachineCanon.h" />
     <ClInclude Include="Map.h" />
     <ClInclude Include="MapInfo.h" />
     <ClInclude Include="MaruMari.h" />
@@ -219,6 +220,7 @@
     <ClCompile Include="Brick.cpp" />
     <ClCompile Include="Bullet.cpp" />
     <ClCompile Include="Camera.cpp" />
+    <ClCompile Include="CanonBullet.cpp" />
     <ClCompile Include="Collision.cpp" />
     <ClCompile Include="EndScence.cpp" />
     <ClCompile Include="EnergyTank.cpp" />
@@ -235,7 +237,7 @@
     <ClCompile Include="IndexManager.cpp" />
     <ClCompile Include="Input.cpp" />
     <ClCompile Include="LongBeam.cpp" />
-    <ClCompile Include="MaChineGun.cpp" />
+    <ClCompile Include="MachineCanon.cpp" />
     <ClCompile Include="Map.cpp" />
     <ClCompile Include="MapInfo.cpp" />
     <ClCompile Include="MaruMari.cpp" />

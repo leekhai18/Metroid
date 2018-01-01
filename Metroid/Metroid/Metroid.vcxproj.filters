@@ -76,7 +76,8 @@
     <ClCompile Include="SamusStateBoom.cpp" />
     <ClCompile Include="BossKraidRocket.cpp" />
     <ClCompile Include="BossRocketPool.cpp" />
-    <ClCompile Include="MaChineGun.cpp" />
+    <ClCompile Include="CanonBullet.cpp" />
+    <ClCompile Include="MachineCanon.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AlienBig.h" />
@@ -156,7 +157,8 @@
     <ClInclude Include="SamusStateBoom.h" />
     <ClInclude Include="BossKraidRocket.h" />
     <ClInclude Include="BossRocketPool.h" />
-    <ClInclude Include="MaChineGun.h" />
+    <ClInclude Include="CanonBullet.h" />
+    <ClInclude Include="MachineCanon.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Metroid.rc" />
