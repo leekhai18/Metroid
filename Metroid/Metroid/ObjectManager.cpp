@@ -25,6 +25,7 @@
 #include "Camera.h"
 #include "Collision.h"
 #include "BossKraid.h"
+#include "MachineCanon.h"
 #include "rapidjson-master\include\rapidjson\writer.h"
 #include "rapidjson-master\include\rapidjson\ostreamwrapper.h"
 
@@ -146,7 +147,13 @@ void ObjectManager::handleVelocity(float dt)
 			skr->handleVelocity(dt);
 			break;
 		}
-	
+		case eID::MACHINE_CANON:
+		{
+			MachineCanon* canon = static_cast<MachineCanon*>((*i).second);
+			
+			canon->handleVelocity(dt);
+			break;
+		}
 		default:
 			break;
 		}
@@ -416,14 +423,20 @@ bool ObjectManager::load_list(const char * filename)
 		const Value& listMachineGun = jSon["MaChineGun"];
 		for (SizeType i = 0; i < listMachineGun.Size(); i++)
 		{
-			BaseObject *maChineGun = new BaseObject(eID::MACHINE_GUN);
-
+			
+			
 			id = listMachineGun[i]["id"].GetInt();
 			x = listMachineGun[i]["x"].GetFloat();
 			y = listMachineGun[i]["y"].GetFloat();
 			height = listMachineGun[i]["height"].GetFloat();
 			width = listMachineGun[i]["width"].GetFloat();
-
+			x =x + 16*0.5 ;
+			y =y - 16*0.5  ;
+			//int type = listMachineGun[i]["type"].GetInt();
+			CanonType type= static_cast<CanonType>(listMachineGun[i]["type"].GetInt());
+			MachineCanon *maChineGun = new MachineCanon(graphics, textureManager, samus,type);
+			maChineGun->setPosition(VECTOR2(x, y));
+			maChineGun->setStartPosition(VECTOR2(x, y));
 			/*			writer.StartObject();
 			writer.Key("x");
 			writer.Double(x);
@@ -435,13 +448,10 @@ bool ObjectManager::load_list(const char * filename)
 			writer.Double(width);
 			writer.EndObject();*/
 
-			bound.left = x;
-			bound.top = y;
-			bound.right = bound.left + width;
-			bound.bottom = bound.top - height;
-			maChineGun->setBoundCollision(bound);
-
-			maChineGun->setActiveBound(bound);
+			
+			maChineGun->setBoundCollision();
+			maChineGun->reInit();
+			maChineGun->setActiveBound(maChineGun->getBoundCollision());
 
 
 			map_object.insert(std::pair<int, BaseObject*>(id, maChineGun));

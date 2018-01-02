@@ -19,6 +19,8 @@ Animation::Animation(Sprite *sprite, const int* list, int totalFrames, float tim
 	this->sprite->setData(this->listFrames[0]);
 }
 
+
+
 Animation::Animation(Sprite *sprite, const int * list, int totalFrames, float timeFrameDelay)
 {
 	this->sprite = sprite;
@@ -42,9 +44,24 @@ Animation::~Animation()
 {
 }
 
+void Animation::reverse()
+{
+}
+
+void Animation::previousFrame()
+{
+}
+
+
+
 void Animation::nextFrame()
 {
 	this->setValueOfCurrentFrame(currentFrame + 1);
+}
+
+void Animation::nextFrameReverse()
+{
+	this->setValueOfCurrentFrameReverse(currentFrame + 1);
 }
 
 void Animation::setValueOfCurrentFrame(int index)
@@ -66,6 +83,28 @@ void Animation::setValueOfCurrentFrame(int index)
 		this->sprite->setData(this->listFrames[currentFrame]);
 }
 
+void Animation::setValueOfCurrentFrameReverse(int index)
+{
+	if (totalFrames == 0 || isPause)
+		return;
+
+	currentFrame = index;
+
+	if (currentFrame > totalFrames - 1)
+	{
+		currentFrame = totalFrames - 2;
+	}
+		
+
+	//Finshed
+	/*if (!isloop && currentFrame == startFrame)
+		this->stop();
+*/
+	// Get data of sprite
+	if (!isFinish)
+		this->sprite->setData(this->listFrames[currentFrame]);
+}
+
 int Animation::getCurrentFrame()
 {
 	return currentFrame;
@@ -81,6 +120,24 @@ void Animation::update(float dt)
 	{
 		if (canAnimate)
 			this->nextFrame();
+
+		timerAnim -= frameDelay;
+	}
+}
+
+void Animation::updateWithReverse(float dt)
+{
+	if (!canAnimate)
+		return;
+
+	timerAnim += dt;
+	if (timerAnim > frameDelay)
+	{
+		if (canAnimate)
+		{
+			this->nextFrameReverse();
+		}
+		
 
 		timerAnim -= frameDelay;
 	}

@@ -5,35 +5,40 @@
       "width": 16,
       "x": 224,
       "y": 3696.0,
-      "id": 0
+      "id": 0,
+	  "type": 2
     },
     {
       "height": 16,
       "width": 16,
       "x": 192,
       "y": 3696.0,
-      "id": 1
+      "id": 1,
+	  "type": 1
     },
     {
       "height": 16,
       "width": 16,
       "x": 272,
       "y": 3728.0,
-      "id": 2
+      "id": 2,
+	  "type": 0
     },
     {
       "height": 16,
       "width": 16,
       "x": 320,
       "y": 3696.0,
-      "id": 3
+      "id": 3,
+	  "type": 1
     },
     {
       "height": 16,
       "width": 16,
       "x": 352,
       "y": 3696.0,
-      "id": 4
+      "id": 4,
+	  "type": 2
     }
   ],
   "DefenseBoss": [

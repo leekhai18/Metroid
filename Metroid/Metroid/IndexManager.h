@@ -196,6 +196,11 @@ public:
 	const int canonLeft = 288;
 	const int canonLeftUp = 289;
 
+	const int canonTypeRight[5] = { canonDown,canonLeftDown ,canonLeft ,canonLeftUp ,canonUp };
+
+	const int canonTypeLeft[5] = { canonDown,canonRightDown ,canonRight ,canonRightUp ,canonUp };
+
+	const int canonTypeTop[5] = { canonRight,canonRightDown ,canonDown ,canonLeftDown ,canonLeft };
 	const int canonUNKNOW1 = 290;
 	const int canonUNKNOW2 = 291;
 

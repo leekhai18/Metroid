@@ -109,7 +109,7 @@ enum eID {
 	BRICK,
 	BOSSKRAID_ROCKET,
 	DEFENSEBOSS,
-	MACHINE_GUN
+	MACHINE_CANON
 };
 
 // collision direction
@@ -202,5 +202,24 @@ enum ScenceType
 	OPTION,
 	PLAY,
 	END
+};
+
+enum CanonType
+{
+	CANON_TOP,
+	CANON_RIGHT,
+	CANON_LEFT
+};
+
+enum CanonDirection
+{
+	DUP = 282,
+	DDOWN = 286,
+	DLEFT_DOWN = 287,
+	DRIGHT_DOWN = 285,
+	DLEFT = 288,
+	DRIGHT = 284,
+	DLEFT_UP = 289,
+	DRIGHT_UP = 283
 };
 
