@@ -1,6 +1,7 @@
 ﻿#include "Collision.h"
 #include "Waver.h"
 #include "Camera.h"
+#include "Samus.h"
 #define TIME_FRAME_DELAY 0.5f
 #define MAX_WAVER_VELOCITY_Y 100
 #define WAVER_VELOCITY_X 50
@@ -15,15 +16,17 @@ Waver::Waver()
 
 }
 
-Waver::Waver(TextureManager * textureM, Graphics * graphics, EnemyColors color) : BaseObject(eID::WAVER), IFreezable(IndexManager::getInstance()->waverBlue)
+Waver::Waver(TextureManager * textureM, Graphics * graphics, Samus* samus, EnemyColors color) : BaseObject(eID::WAVER), IFreezable(IndexManager::getInstance()->waverBlue)
 {
 	this->sprite = new Sprite();
 	if (!this->sprite->initialize(graphics, textureM, SpriteManager::getInstance()))
 	{
 		throw GameError(GameErrorNS::FATAL_ERROR, "Can not init sprite Waver");
 	}
+	this->samus = samus;
 	initExplosion(this->sprite, IndexManager::getInstance()->samusYellowExplosion, NUM_FRAMES_EXPLOSION, EXPLOSION_TIME_FRAME_DELAY);
 	this->initItem(this->sprite, IndexManager::getInstance()->bonusHealth, NUM_FRAMES_BONUS, TIME_FRAME_DELAY);
+	this->initRocket(this->sprite, IndexManager::getInstance()->rocket, NUM_FRAMES_BONUS, TIME_FRAME_DELAY);
 	switch (color)
 	{
 	case Brown:
@@ -269,7 +272,7 @@ void Waver::update(float dt)
 		IExplosible::update(dt);
 		if (isExplose)
 		{
-			IBonusable::start();
+			IBonusable::start(samus->getRocket());
 		}
 	}
 

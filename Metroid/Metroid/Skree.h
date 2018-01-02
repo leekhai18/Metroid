@@ -6,12 +6,13 @@
 #include "IFreezable.h"
 #include "IExplosible.h"
 #include "IBonusable.h" 
+class Samus;
 class Skree : public BaseObject, public IFreezable,public IExplosible,public IBonusable
 {
 private:
 	Animation *animationRotate;
 	SkreeEffectDeath *effectDeath;
-
+	Samus* samus;
 
 	VECTOR2 target;
 
@@ -20,7 +21,7 @@ private:
 	// support to reinit
 	VECTOR2 initPosition;
 	bool isHandle;
-
+	
 
 	map<int,BaseObject*> *listWallCanCollide;
 	list<CollisionReturn> *listCollide;
@@ -30,7 +31,7 @@ private:
 
 	MetroidRect startBound;
 public:
-	Skree(TextureManager* textureM, Graphics* graphics, EnemyColors color);
+	Skree(TextureManager* textureM, Graphics* graphics, Samus* samus, EnemyColors color);
 	Skree();
 	~Skree();
 

@@ -1,6 +1,7 @@
 #include "Rio.h"
 #include "Camera.h"
 #include "Collision.h"
+#include "Samus.h"
 #define RATE_BEZIER 0.45f
 #define TIME_FRAME_DELAY 0.15f
 #define WIDTH_AREA_ACTIVE 100
@@ -8,7 +9,7 @@
 #define VELOCITY_X 60
 #define TIME_DELAY_BE_HIT 0.2f
 #define TIME_RETURN_NOMAL 5.0f
-Rio::Rio(TextureManager * textureM, Graphics * graphics, EnemyColors color) : BaseObject(eID::RIO), IFreezable(IndexManager::getInstance()->rioBlue)
+Rio::Rio(TextureManager * textureM, Graphics * graphics, Samus* samus,EnemyColors color) : BaseObject(eID::RIO), IFreezable(IndexManager::getInstance()->rioBlue)
 {
 	this->sprite = new Sprite();
 	if (!this->sprite->initialize(graphics, textureM, SpriteManager::getInstance()))
@@ -18,9 +19,9 @@ Rio::Rio(TextureManager * textureM, Graphics * graphics, EnemyColors color) : Ba
 
 	t = 0;
 	t1 = 0;
-
+	this->samus = samus;
 	this->initExplosion(this->sprite, IndexManager::getInstance()->samusYellowExplosion, NUM_FRAMES_EXPLOSION, EXPLOSION_TIME_FRAME_DELAY);
-
+	this->initRocket(this->sprite, IndexManager::getInstance()->rocket, NUM_FRAMES_BONUS, TIME_FRAME_DELAY);
 	this->initItem(this->sprite, IndexManager::getInstance()->bonusHealth, NUM_FRAMES_BONUS, TIME_FRAME_DELAY);
 	switch (color)
 	{
@@ -255,7 +256,7 @@ void Rio::update(float dt)
 		IExplosible::update(dt);
 		if (isExplose)
 		{
-			IBonusable::start();
+			IBonusable::start(samus->getRocket());
 		}
 	}
 	if (!Collision::getInstance()->isCollide(Camera::getInstance()->getBound(), this->startBound)

@@ -5,6 +5,7 @@
 #include "IFreezable.h"
 #include "IExplosible.h"
 #include "IBonusable.h"
+class Samus;
 class Rio: public BaseObject,public IFreezable,public IExplosible,public IBonusable
 {
 private:
@@ -18,7 +19,7 @@ private:
 	VECTOR2 P4;// P4 in Bézier curve
 	VECTOR2 P5;// P1 in Bézier curve
 
-
+	Samus* samus;
 	// Use Bézier curve
 	float t;
 	float t1;
@@ -37,7 +38,7 @@ private:
 	bool beHit;
 	float timerHit;
 public:
-	Rio(TextureManager* textureM, Graphics* graphics, EnemyColors color);
+	Rio(TextureManager* textureM, Graphics* graphics,Samus* samus, EnemyColors color);
 	Rio();
 	~Rio();
 	void handleVelocity(float dt);

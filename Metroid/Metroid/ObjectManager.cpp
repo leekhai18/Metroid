@@ -1327,14 +1327,14 @@ bool ObjectManager::load_list(const char * filename)
 
 			for (SizeType i = 0; i < listZommerYellow.Size(); i++)
 			{
-				Zommer *zmy = new Zommer(this->textureManager, this->graphics, EnemyColors::Yellow);
+				Zommer *zmy = new Zommer(this->textureManager, this->graphics, samus,EnemyColors::Yellow);
 
 				id = listZommerYellow[i]["id"].GetInt();
 				x = listZommerYellow[i]["x"].GetFloat();
 				y = listZommerYellow[i]["y"].GetFloat();
 
-				/*	x += zmy->getSprite()->getWidth()*0.5f;
-				y = y - 16 + zmy->getSprite()->getHeight()*0.5f;*/
+				x += zmy->getSprite()->getWidth()*0.5f;
+				y = y - 16 + zmy->getSprite()->getHeight()*0.5f;
 
 				zmy->setPosition(VECTOR2(x, y));
 
@@ -1384,14 +1384,14 @@ bool ObjectManager::load_list(const char * filename)
 	
 			for (SizeType i = 0; i < listZommerBrown.Size(); i++)
 			{
-					Zommer *zmb = new Zommer(this->textureManager, this->graphics, EnemyColors::Brown);
+					Zommer *zmb = new Zommer(this->textureManager, this->graphics, samus, EnemyColors::Brown);
 
 					id = listZommerBrown[i]["id"].GetInt();
 					x = listZommerBrown[i]["x"].GetFloat();
 					y = listZommerBrown[i]["y"].GetFloat();
 
-					//x += zmb->getSprite()->getWidth()*0.5f;
-					//y = y +1;
+					x += zmb->getSprite()->getWidth()*0.5f;
+					y = y - 16 + zmb->getSprite()->getHeight()*0.5f;
 
 					zmb->setPosition(VECTOR2(x, y));
 					zmb->setStartPosition(VECTOR2(x, y));
@@ -1445,16 +1445,16 @@ bool ObjectManager::load_list(const char * filename)
 			for (SizeType i = 0; i < listZommerRed.Size(); i++)
 			{
 			
-					Zommer *zmr = new Zommer(this->textureManager, this->graphics, EnemyColors::Red);
+					Zommer *zmr = new Zommer(this->textureManager, this->graphics, samus, EnemyColors::Red);
 
 					id = listZommerRed[i]["id"].GetInt();
 					x = listZommerRed[i]["x"].GetFloat();
 					y = listZommerRed[i]["y"].GetFloat();
 
 
-					//x += zmr->getSprite()->getWidth()*0.5f;
-					//y =y - 16 + zmr->getSprite()->getHeight()*0.5f;*
-					y = y + 1;
+					x += zmr->getSprite()->getWidth()*0.5f;
+					y = y - 16 + zmr->getSprite()->getHeight()*0.5f;
+					
 					zmr->setPosition(VECTOR2(x, y));
 					zmr->setStartPosition(VECTOR2(x, y));
 					const Value& arrayWall = listZommerRed[i]["ListCollideID"];
@@ -1665,7 +1665,7 @@ bool ObjectManager::load_list(const char * filename)
 	
 			for (SizeType i = 0; i < listWaverBrown.Size(); i++)
 			{
-				Waver *wvb = new Waver(this->textureManager, this->graphics, EnemyColors::Brown);
+				Waver *wvb = new Waver(this->textureManager, this->graphics, samus, EnemyColors::Brown);
 
 				id = listWaverBrown[i]["id"].GetInt();
 				x = listWaverBrown[i]["x"].GetFloat();
@@ -1721,7 +1721,7 @@ bool ObjectManager::load_list(const char * filename)
 	
 			for (SizeType i = 0; i < listWaverRed.Size(); i++)
 			{
-				Waver *wvr = new Waver(this->textureManager, this->graphics, EnemyColors::Red);
+				Waver *wvr = new Waver(this->textureManager, this->graphics, samus,EnemyColors::Red);
 
 				id = listWaverRed[i]["id"].GetInt();
 				x = listWaverRed[i]["x"].GetFloat();
@@ -1775,7 +1775,7 @@ bool ObjectManager::load_list(const char * filename)
 	
 			for (SizeType i = 0; i < listSkreeYellow.Size(); i++)
 			{
-				Skree *sky = new Skree(this->textureManager, this->graphics, EnemyColors::Yellow);
+				Skree *sky = new Skree(this->textureManager, this->graphics, samus, EnemyColors::Yellow);
 
 				id = listSkreeYellow[i]["id"].GetInt();
 				x = listSkreeYellow[i]["x"].GetFloat();
@@ -1825,7 +1825,7 @@ bool ObjectManager::load_list(const char * filename)
 	
 			for (SizeType i = 0; i < listSkreeBrown.Size(); i++)
 			{
-				Skree *skb = new Skree(this->textureManager, this->graphics, EnemyColors::Brown);
+				Skree *skb = new Skree(this->textureManager, this->graphics, samus, EnemyColors::Brown);
 
 				id = listSkreeBrown[i]["id"].GetInt();
 				x = listSkreeBrown[i]["x"].GetFloat();
@@ -2038,7 +2038,7 @@ bool ObjectManager::load_list(const char * filename)
 		
 			for (SizeType i = 0; i < listRioYellow.Size(); i++)
 			{
-				Rio *roy = new Rio(this->textureManager, this->graphics, EnemyColors::Yellow);
+				Rio *roy = new Rio(this->textureManager, this->graphics, samus, EnemyColors::Yellow);
 
 				id = listRioYellow[i]["id"].GetInt();
 				x = listRioYellow[i]["x"].GetFloat();
@@ -2086,7 +2086,7 @@ bool ObjectManager::load_list(const char * filename)
 			for (SizeType i = 0; i < listRioBrown.Size(); i++)
 			{
 				
-					Rio *rob = new Rio(this->textureManager, this->graphics, EnemyColors::Brown);
+					Rio *rob = new Rio(this->textureManager, this->graphics, samus, EnemyColors::Brown);
 
 					id = listRioBrown[i]["id"].GetInt();
 					x = listRioBrown[i]["x"].GetFloat();
@@ -2137,7 +2137,7 @@ bool ObjectManager::load_list(const char * filename)
 	
 			for (SizeType i = 0; i < listRioRed.Size(); i++)
 			{
-				Rio *ror = new Rio(this->textureManager, this->graphics, EnemyColors::Red);
+				Rio *ror = new Rio(this->textureManager, this->graphics, samus, EnemyColors::Red);
 
 				id = listRioRed[i]["id"].GetInt();
 				x = listRioRed[i]["x"].GetFloat();

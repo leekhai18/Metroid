@@ -16,8 +16,8 @@
 //#define SAMUS_POS_Y 1251
 
 //start position
-//#define SAMUS_POS_X 640
-//#define SAMUS_POS_Y 1267
+#define SAMUS_POS_X 640
+#define SAMUS_POS_Y 1267
 
 //Boss
 //#define SAMUS_POS_X 960
@@ -36,8 +36,8 @@
 //#define SAMUS_POS_Y 3000
 
 //
-#define SAMUS_POS_X 278.264191  
-#define SAMUS_POS_Y 3651.00000   
+//#define SAMUS_POS_X 278.264191  
+//#define SAMUS_POS_Y 3651.00000   
 void Samus::setActiveBound()
 {
 	// Can 1 con so hop ly
@@ -155,6 +155,11 @@ Samus::~Samus()
 {
 	this->release();
 	SamusStateManager::getInstance()->release();
+}
+
+bool Samus::getRocket()
+{
+	return this->isRocket;
 }
 
 void Samus::setHitAlienSmall(bool hit)
@@ -580,6 +585,7 @@ int Samus::getNumRocket()
 void Samus::setNumRocket(int num)
 {
 	this->missitleRocket = num;
+	isRocket = true;
 }
 
 eSkin Samus::getCurrentSkin()

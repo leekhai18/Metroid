@@ -1,5 +1,4 @@
 #include "Zeb.h"
-
 #define VELOCITY_X 120
 #define VELOCITY_Y 120
 #define TIME_FRAME_DELAY 0.2f
@@ -10,7 +9,7 @@ Zeb::Zeb()
 {
 }
 
-Zeb::Zeb(TextureManager * textureM, Graphics * graphics, EnemyColors color,Samus* samus) : BaseObject(eID::ZEB), IFreezable(IndexManager::getInstance()->zebBlue)
+Zeb::Zeb(TextureManager * textureM, Graphics * graphics,EnemyColors color,Samus* samus) : BaseObject(eID::ZEB), IFreezable(IndexManager::getInstance()->zebBlue)
 {
 	this->samus = samus;
 	this->sprite = new Sprite();
@@ -21,7 +20,7 @@ Zeb::Zeb(TextureManager * textureM, Graphics * graphics, EnemyColors color,Samus
 	this->samusPosition = VECTOR2ZERO;
 
 	this->initExplosion(this->sprite, IndexManager::getInstance()->samusYellowExplosion, NUM_FRAMES_EXPLOSION, EXPLOSION_TIME_FRAME_DELAY);
-
+	this->initRocket(this->sprite, IndexManager::getInstance()->rocket, NUM_FRAMES_BONUS, TIME_FRAME_DELAY);
 	this->initItem(this->sprite, IndexManager::getInstance()->bonusHealth, NUM_FRAMES_BONUS, TIME_FRAME_DELAY);
 
 	switch (color)
@@ -180,7 +179,7 @@ void Zeb::update(float dt)
 		IExplosible::update(dt);
 		if (isExplose)
 		{
-			IBonusable::start();
+			IBonusable::start(samus->getRocket());
 		}
 	}
 

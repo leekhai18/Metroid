@@ -14,13 +14,14 @@ using namespace std;
 #define ZOMMER_COLLISION 14
 #define ZOMMER_WIDTH 14
 #define ZOMMER_HEIGHT 14
+class Samus;
 class Zommer : public BaseObject,public IFreezable ,public IExplosible,public IBonusable
 {
 private:
 	Animation *anim;
 	bool isCollide = false;
 	
-	
+	Samus* samus;
 	map<int,BaseObject*>* listWallCanCollide;
 	list<CollisionReturn> *listCollide;
 
@@ -42,7 +43,7 @@ private:
 	int reset;
 	EnemyColors color;
 public:
-	Zommer(TextureManager* textureM, Graphics* graphics, EnemyColors color);
+	Zommer(TextureManager* textureM, Graphics* graphics, Samus* samus, EnemyColors color);
 	Zommer();
 	~Zommer();
 	ZommerGravity getGravity();

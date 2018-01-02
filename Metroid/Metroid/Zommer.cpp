@@ -7,15 +7,17 @@
 #define TIME_DELAY_BE_HIT 0.2f
 #define TIME_RETURN_NOMAL 5.0f
 #include "Sound.h"
-Zommer::Zommer(TextureManager * textureM, Graphics * graphics, EnemyColors color) : BaseObject(eID::ZOMMER),IFreezable(IndexManager::getInstance()->zoomerBlue)
+Zommer::Zommer(TextureManager * textureM, Graphics * graphics, Samus* samus,EnemyColors color) : BaseObject(eID::ZOMMER),IFreezable(IndexManager::getInstance()->zoomerBlue)
 {
 	this->sprite = new Sprite();
 	if (!this->sprite->initialize(graphics, textureM, SpriteManager::getInstance()))
 	{
 		throw GameError(GameErrorNS::FATAL_ERROR, "Can not init sprite Zommer");
 	}
+	this->samus = samus;
 	this->initExplosion(this->sprite, IndexManager::getInstance()->samusYellowExplosion, NUM_FRAMES_EXPLOSION, EXPLOSION_TIME_FRAME_DELAY);
 
+	this->initRocket(this->sprite, IndexManager::getInstance()->rocket, NUM_FRAMES_BONUS, TIME_FRAME_DELAY);
 	this->initItem(this->sprite, IndexManager::getInstance()->bonusHealth, NUM_FRAMES_BONUS, TIME_FRAME_DELAY);
 
 	this->color = color;
@@ -580,7 +582,8 @@ void Zommer::update(float dt)
 		IExplosible::update(dt);
 		if (isExplose)
 		{
-			IBonusable::start();
+			
+			IBonusable::start(samus->getRocket());
 		}
 	}
 

@@ -92,7 +92,7 @@ private:
 	list<CollisionReturn> *listCollide;
 
 	map<int,BaseObject*>* listCanCollide;
-
+	
 
 	bool visible;
 	//when boom explose in samus, boomVelocity is set based on side of samus and boom
@@ -116,6 +116,8 @@ private:
 	Text* textNumRocket;
 
 	eSkin currentSkin;
+
+	bool isRocket;
 #pragma endregion
 
 
@@ -132,6 +134,7 @@ public:
 	Samus();
 	~Samus();
 
+	bool getRocket();
 	void setHitAlienSmall(bool hit);
 
 	void setHitAlienBig(bool hit);

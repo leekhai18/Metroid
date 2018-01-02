@@ -6,10 +6,12 @@
 #include "IFreezable.h"
 #include "IExplosible.h"
 #include "IBonusable.h"
+class Samus;
 class Waver : public BaseObject, public IFreezable, public IExplosible, public IBonusable
 {
 private:
 	Animation* anim;
+	Samus* samus;
 	int health;
 	map<int,BaseObject*>* listWallCanCollide;
 	list<CollisionReturn> *listCollide;
@@ -25,7 +27,7 @@ private:
 	int resetFrame;
 public:
 	Waver();
-	Waver(TextureManager* textureM, Graphics* graphics, EnemyColors color);
+	Waver(TextureManager * textureM, Graphics * graphics, Samus * samus, EnemyColors color);
 	~Waver();
 
 	map<int, BaseObject*>* getListWallCanCollide();
