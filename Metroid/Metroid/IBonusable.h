@@ -7,6 +7,7 @@ protected:
 	Animation *item;
 	Animation *rocket;
 	bool canDraw;
+	bool isRocket;
 public:
 	void initItem(Sprite* sprite, const int* frames, int totalFrames, float frameDelay);
 	void initRocket(Sprite* sprite, const int* frames, int totalFrames, float frameDelay);

@@ -4,9 +4,18 @@
 #include "GateBlue.h"
 #include "MaruMari.h"
 #include "GameLog.h"
+#include "GateRed.h"
 #include "Skree.h"
 #include "Zommer.h"
-#include "GateRed.h"
+#include "Waver.h"
+#include "Zeb.h"
+#include "Rio.h"
+#include "BossKraid.h"
+#include "MotherBrain.h"
+#include "AlienBig.h"
+#include "AlienSmall.h"
+#include "Ripper.h"
+#include "Sound.h"
 #define WIDTH_ROCKET_HALF 4
 #define HEIGHT_ROCKET_HALF 4
 
@@ -83,23 +92,191 @@ void Rocket::onCollision()
 					break;
 				}
 
+
+
 				case eID::SKREE:
 				{
-					Skree* skr = static_cast<Skree*>(i->object);
-					skr->setBeHit(true);
-					skr->decreaseHealth(this->dame);
+
+
+					Skree* skree = static_cast<Skree*>((*i).object);
+					if (!skree->getHandle())
+					{
+						break;
+					}
+					this->isCollided = true;
+
 					this->velocity = VECTOR2ZERO;
+
+					this->sprite->setData(IndexManager::getInstance()->samusPinkExplosion[0]);
+					if (!skree->getCold())
+					{
+						skree->setBeHit(true);
+						skree->decreaseHealth(this->dame);
+
+					}
+					if (BulletPool::getInstance()->getCurrentIceBullet())
+					{
+						if (skree->getCold())
+						{
+							skree->setCold(false);
+
+						}
+						else
+						{
+							skree->setCold(true);
+						}
+					}
 
 					break;
 				}
+				case eID::RIO:
+				{
 
+					Rio* rio = static_cast<Rio*>((*i).object);
+					if (!rio->getHandle())
+					{
+						break;
+					}
+					this->sprite->setData(IndexManager::getInstance()->samusPinkExplosion[0]);
+					this->isCollided = true;
+					this->velocity = VECTOR2ZERO;
+				
+					if (!rio->getCold())
+					{
+						rio->setBeHit(true);
+						rio->decreaseHealth(this->dame);
 
+					}
+					if (rio->getCold())
+					{
+						rio->setCold(false);
+
+					}
+
+					break;
+				}
+				case eID::RIPPER:
+				{
+
+					
+					Ripper* ripper = static_cast<Ripper*>((*i).object);
+
+					if (ripper->getCold())
+					{
+						ripper->setCold(false);
+
+					}
+					this->isCollided = true;
+					this->velocity = VECTOR2ZERO;
+					this->sprite->setData(IndexManager::getInstance()->samusPinkExplosion[0]);
+					break;
+				}
 				case eID::ZOMMER:
 				{
-					Zommer* zommer = static_cast<Zommer*>((*i).object);
-					zommer->setCold(true);
-					this->velocity = VECTOR2ZERO;
 
+			
+					Zommer* zommer = static_cast<Zommer*>((*i).object);
+					if (!zommer->getHandle())
+					{
+						break;
+					}
+					this->isCollided = true;
+					this->velocity = VECTOR2ZERO;
+					this->sprite->setData(IndexManager::getInstance()->samusPinkExplosion[0]);
+					if (!zommer->getCold())
+					{
+						zommer->setBeHit(true);
+						zommer->decreaseHealth(this->dame);
+						
+					}
+					if (zommer->getCold())
+					{
+						zommer->setCold(false);
+
+					}
+
+					break;
+				}
+				case eID::WAVER:
+				{
+
+				
+					Waver* waver = static_cast<Waver*>(i->object);
+					if (!waver->getHandle())
+					{
+						break;
+					}
+					this->isCollided = true;
+					this->velocity = VECTOR2ZERO;
+					this->sprite->setData(IndexManager::getInstance()->samusPinkExplosion[0]);
+					if (!waver->getCold())
+					{
+						waver->setBeHit(true);
+						waver->decreaseHealth(this->dame);
+						
+					}
+					if (waver->getCold())
+					{
+						waver->setCold(false);
+
+					}
+
+					break;
+				}
+				case eID::ZEB:
+				{
+					
+					
+					Zeb* zeb = static_cast<Zeb*>(i->object);
+					if (!zeb->getHandle())
+					{
+						break;
+					}
+					this->isCollided = true;
+					this->velocity = VECTOR2ZERO;
+					this->sprite->setData(IndexManager::getInstance()->samusPinkExplosion[0]);
+					if (!zeb->getCold())
+					{
+						zeb->setBeHit(true);
+						zeb->decreaseHealth(this->dame);
+
+					}
+					if (zeb->getCold())
+					{
+						zeb->setCold(false);
+
+					}
+
+					break;
+				}
+				case eID::BOSSKRAID:
+				{
+					BossKraid* bossKraid = static_cast<BossKraid*>(i->object);
+				
+					if (bossKraid->isActivitied())
+					{
+						this->isCollided = true;
+						this->velocity = VECTOR2ZERO;
+						
+						this->sprite->setData(IndexManager::getInstance()->samusPinkExplosion[0]);
+
+						bossKraid->setBeHit(true);
+						bossKraid->decreaseHealth(this->dame);
+					}
+					break;
+				}
+				case eID::MOTHERBRAIN:
+				{
+					MotherBrain* motherBrain = static_cast<MotherBrain*>(i->object);
+					
+					if (motherBrain->isActivitied())
+					{
+						this->isCollided = true;
+						this->sprite->setData(IndexManager::getInstance()->samusPinkExplosion[0]);
+						this->velocity = VECTOR2ZERO;
+						motherBrain->setBeHit(true);
+						motherBrain->decreaseHealth(this->dame);
+					}
 					break;
 				}
 

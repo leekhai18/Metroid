@@ -165,23 +165,11 @@ void SamusStateInjuring::onCollision(float dt)
 void SamusStateInjuring::update(float dt)
 {
 	time_to_stand += dt;
-	time_animation += dt;
 
 	this->samus->updateVertical(dt);
 	this->samus->updateHorizontal(dt);
 	setBoundCollision();
-	if(time_animation >= TIME_ANIMATION)
-	{
-		if(this->samus->getVisible())
-		{
-			this->samus->setVisible(false);
-		}
-		else
-		{
-			this->samus->setVisible(true);
-		}
-		time_animation = time_animation - TIME_ANIMATION;
-	}
+
 	if(time_to_stand >= TIME_TO_NORMAL)
 	{
 		this->samus->setStatus(SamusStateManager::getInstance()->getOldStatus());

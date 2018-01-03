@@ -31,7 +31,8 @@ void IBonusable::start()
 
 void IBonusable::start(bool isRocket)
 {
-	if(isRocket)
+	this->isRocket = isRocket;
+ 	if(isRocket)
 	{
 		srand(time(NULL));
 		int ran = rand() % 3 + 1;
@@ -42,6 +43,7 @@ void IBonusable::start(bool isRocket)
 		else
 		{
 			this->item->start();
+			this->isRocket = false;
 		}
 	}
 	else
@@ -52,7 +54,15 @@ void IBonusable::start(bool isRocket)
 
 void IBonusable::update(float dt)
 {
-	this->item->update(dt);
+	
+	if(isRocket)
+	{
+		this->rocket->update(dt);
+	}
+	else
+	{
+		this->item->update(dt);
+	}
 }
 
 IBonusable::IBonusable()

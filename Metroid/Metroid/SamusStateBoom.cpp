@@ -10,6 +10,11 @@
 #include "Rio.h"
 #include "Waver.h"
 #include "Sound.h"
+#include "GateBlue.h"
+#include "GateRed.h"
+#include "SamusStateManager.h"
+#include "Port.h"
+#include "ScenceManager.h"
 #define TIME_TO_NORMAL 0.5f
 
 SamusStateBoom::SamusStateBoom()
@@ -17,13 +22,7 @@ SamusStateBoom::SamusStateBoom()
 }
 void SamusStateBoom::setBoundCollision()
 {
-	MetroidRect rect;
-	VECTOR2 position(this->samus->getPosition().x, samus->getPosition().y - OFFSET_COLLISION_Y + 1);
-	rect.left = position.x - WIDTH_COLLISION*0.5f;
-	rect.right = position.x + WIDTH_COLLISION*0.5f;
-	rect.top = position.y + HEIGHT_COLLISION*0.5f;
-	rect.bottom = position.y - HEIGHT_COLLISION*0.5f;
-	samus->setBoundCollision(rect);
+	SamusStateManager::getInstance()->getOldState()->setBoundCollision();
 }
 SamusStateBoom::SamusStateBoom(Samus * samus, Input * input) : BaseState(samus, input)
 {
@@ -36,12 +35,6 @@ SamusStateBoom::~SamusStateBoom()
 
 void SamusStateBoom::init()
 {
-
-	/*if (this->samus->isFaling())
-		this->samus->setVelocityY(SAMUS_V0_FALL_Y);
-	else
-		this->samus->setVelocityY(-SAMUS_MIN_SPEED_Y);*/
-
 	setBoundCollision();
 	timerToRunning = 0;
 	if (input->isKeyDown(VK_UP))
@@ -70,7 +63,7 @@ void SamusStateBoom::init()
 void SamusStateBoom::handleInput(float dt)
 {
 
-	this->samus->setVelocity(VECTOR2(0,-SAMUS_MIN_SPEED_Y));
+	this->samus->setVelocity(VECTOR2(0,SAMUS_MIN_SPEED_Y));
 	if (!Camera::getInstance()->moveWhenSamusOnPort()) {
 		if (input->isKeyUp(VK_LEFT) && input->isKeyUp(VK_RIGHT))
 			timerToRunning = 0;
@@ -270,15 +263,47 @@ void SamusStateBoom::onCollision(float dt)
 		case eID::ALIENBIG:
 		case eID::ALIENSMALL:
 		{
+
 			switch (i->direction)
 			{
 			case CollideDirection::TOP:
 				this->samus->setVelocityY(0);
-				this->samus->setPositionY(i->positionCollision + OFFSET_STAND);
-
-				canRolling = true;
+				if (SamusStateManager::getInstance()->getOldStatus() == eStatus::RUNNING ||
+					SamusStateManager::getInstance()->getOldStatus() == eStatus::STANDING)
+				{
+					this->samus->setPositionY(i->positionCollision + OFFSET_STAND);
+				}
+				else if (SamusStateManager::getInstance()->getOldStatus() == eStatus::JUMPING)
+				{
+					this->samus->setPositionY(i->positionCollision + OFFSET_STAND);
+				}
+				if (SamusStateManager::getInstance()->getOldStatus() == eStatus::ROLLING ||
+					SamusStateManager::getInstance()->getOldStatus() == eStatus::FALLING_ROLLING)
+				{
+					this->samus->setPositionY(i->positionCollision + OFFSET_ROLLING);
+				}
 				break;
+			case CollideDirection::LEFT:
+				if (!(this->samus->getBoundCollision().bottom < i->object->getBoundCollision().top))
+				{
+					this->samus->setVelocityY(0);
+					return;
+				}
+			
+				this->samus->setVelocityX(0);
+				break;
+			case CollideDirection::RIGHT:
 
+				if (!(this->samus->getBoundCollision().bottom< i->object->getBoundCollision().top))
+				{
+					this->samus->setVelocityY(0);
+					return;
+				}
+				this->samus->setVelocityX(0);
+				break;
+			case CollideDirection::BOTTOM:
+				this->samus->setVelocityY(0);
+				break;
 			}
 			break;
 		}
@@ -289,143 +314,501 @@ void SamusStateBoom::onCollision(float dt)
 				
 			case CollideDirection::TOP:
 				this->samus->setVelocityY(0);
-				this->samus->setPositionY(i->positionCollision + OFFSET_STAND);
-
+				if (SamusStateManager::getInstance()->getOldStatus() == eStatus::RUNNING ||
+					SamusStateManager::getInstance()->getOldStatus() == eStatus::STANDING)
+				{
+					this->samus->setPositionY(i->positionCollision + OFFSET_STAND);
+				}
+				else if (SamusStateManager::getInstance()->getOldStatus() == eStatus::JUMPING)
+				{
+					this->samus->setPositionY(i->positionCollision + OFFSET_STAND);
+				}
+				if (SamusStateManager::getInstance()->getOldStatus() == eStatus::ROLLING ||
+					SamusStateManager::getInstance()->getOldStatus() == eStatus::FALLING_ROLLING)
+				{
+					this->samus->setPositionY(i->positionCollision + OFFSET_ROLLING);
+				}
 				this->samus->setHealth(this->samus->getHealth() - 8);
 				canRolling = true;
 				break;
 
 			}
 			break;
+		}		
+#pragma region GATE and PORT
+		case eID::GATEBLUE: case eID::GATERED:
+		{
+			if (i->object->isActivitied())
+			{
+				switch (i->direction)
+				{
+				case CollideDirection::LEFT:
+				{
+					if (Camera::getInstance()->moveWhenSamusOnPort())
+					{
+						GateBlue* gate = static_cast<GateBlue*>(i->object);
+						gate->setIsCollideSamusInPort(true);
+
+						this->samus->setIsCollidingPort(false);
+						this->samus->setVelocityX(0);
+						this->samus->setCanMoveToFrontGate(true);
+					}
+					else
+					{
+						this->samus->setVelocityX(0);
+						this->samus->setCanMoveRight(false);
+					}
+
+					break;
+				}
+				case CollideDirection::RIGHT:
+				{
+					if (Camera::getInstance()->moveWhenSamusOnPort())
+					{
+						GateBlue* gate = static_cast<GateBlue*>(i->object);
+						gate->setIsCollideSamusInPort(true);
+
+						this->samus->setIsCollidingPort(false);
+						this->samus->setVelocityX(0);
+						this->samus->setCanMoveToFrontGate(true);
+					}
+					else
+					{
+						this->samus->setVelocityX(0);
+						this->samus->setCanMoveLeft(false);
+					}
+
+					break;
+				}
+				}
+			}
+
+			break;
 		}
+
+		case eID::PORT:
+		{
+			Port* port = static_cast<Port*>(i->object);
+			if (port->Win() == true)
+			{
+				this->samus->setVelocity(VECTOR2ZERO);
+				ScenceManager::getInstance()->goToScence(ScenceType::END);
+				return;
+			}
+			switch (i->direction)
+			{
+
+			case LEFT:
+
+				Camera::getInstance()->setVelocity(VECTOR2(SAMUS_VERLOCITY_X, 0));
+				Camera::getInstance()->setOnPort(true);
+				this->samus->setIsCollidingPort(true);
+				break;
+			case RIGHT:
+				Camera::getInstance()->setVelocity(VECTOR2(-SAMUS_VERLOCITY_X, 0));
+				Camera::getInstance()->setOnPort(true);
+				this->samus->setIsCollidingPort(true);
+				break;
+			default:
+				break;
+			}
+
+			break;
+		}
+
+#pragma endregion
+
+#pragma region enemies
 		case eID::ZOMMER:
 		{
-			switch (i->direction)
-			{
-			case CollideDirection::TOP:
-				this->samus->setVelocityY(0);
-				break;
-			}
 			Zommer* zommer = static_cast<Zommer*>(i->object);
-			if (!zommer->getCold())
+			
+			if (zommer->getCold()&& zommer->getHandle())
 			{
-				
-				SamusStateManager::getInstance()->setOldStatus(eStatus::STANDING);
+				switch (i->direction)
+				{
+				case CollideDirection::LEFT:				
+					this->samus->setVelocityX(0);
+					break;
+				case CollideDirection::RIGHT:		
+					this->samus->setVelocityX(0);
+					break;
+				case CollideDirection::TOP:
+					this->samus->setVelocityY(0);
+					break;
+				case CollideDirection::BOTTOM:	
+					this->samus->setVelocityY(0);		
+					break;
+				}
+			}
+			else if (zommer->getExplose())
+			{
+				zommer->setCanDraw(false);
+				zommer->setActivity(false);
+			}
+			else
+			{
+				if (!zommer->getHandle())
+				{
+					return;
+				}
 				this->samus->setStatus(eStatus::INJURING);
-				SamusStateManager::getInstance()->setOldState(this);
-			}
-			break;
-		}
-		case eID::SKREE:
-		{
-			switch (i->direction)
-			{
-			case CollideDirection::TOP:
-				this->samus->setVelocityY(0);
-				break;
-			}
-			Skree* skree = static_cast<Skree*>(i->object);
-			if (!skree->getCold())
-			{
-				SamusStateManager::getInstance()->setOldStatus(eStatus::STANDING);
-				this->samus->setStatus(eStatus::INJURING);
-				SamusStateManager::getInstance()->setOldState(this);
-			}
-			//this->samus->setVelocity(VECTOR2(0, 0));
+				SamusStateManager::getInstance()->setOldStatus(SamusStateManager::getInstance()->getOldStatus());				
+				SamusStateManager::getInstance()->setOldState(SamusStateManager::getInstance()->getOldState());
 
-			break;
-		}
-		case eID::RIO:
-		{
-			switch (i->direction)
-			{
-			case CollideDirection::TOP:
-				this->samus->setVelocityY(0);
-				break;
-			}
-
-			//this->samus->setVelocity(VECTOR2(0, 0));
-			Rio* rio = static_cast<Rio*>(i->object);
-			if (!rio->getCold())
-			{
-				//this->samus->setVelocity(VECTOR2(0, 0));
-				SamusStateManager::getInstance()->setOldStatus(eStatus::STANDING);
-				this->samus->setStatus(eStatus::INJURING);
-				SamusStateManager::getInstance()->setOldState(this);
-			}
-			break;
-		}
-		case eID::RIPPER:
-		{
-			switch (i->direction)
-			{
-			case CollideDirection::TOP:
-				this->samus->setVelocityY(0);
-				break;
-			}
-			Ripper* ripper = static_cast<Ripper*>(i->object);
-			if (!ripper->getCold())
-			{
-				//this->samus->setVelocity(VECTOR2(0, 0));
-				SamusStateManager::getInstance()->setOldStatus(eStatus::STANDING);
-				this->samus->setStatus(eStatus::INJURING);
-				SamusStateManager::getInstance()->setOldState(this);
 			}
 			break;
 		}
 		case eID::WAVER:
 		{
-			switch (i->direction)
+			Waver* waver = static_cast<Waver*>(i->object);
+			if (waver->getCold()&& waver->getHandle())
 			{
-			case CollideDirection::TOP:
-				this->samus->setVelocityY(0);
+				switch (i->direction)
+				{
+				case CollideDirection::LEFT:
+
+					this->samus->setCanMoveRight(false);
+					this->samus->setVelocityX(0);
+					break;
+				case CollideDirection::RIGHT:
+					this->samus->setCanMoveLeft(false);
+					this->samus->setVelocityX(0);
+					break;
+				case CollideDirection::TOP:
+					this->samus->setVelocityY(0);
+					this->samus->setStatus(SamusStateManager::getInstance()->getOldStatus());
+					break;
+				case CollideDirection::BOTTOM:
+					this->samus->setVelocityY(0);
+					this->samus->setStatus(SamusStateManager::getInstance()->getOldStatus());
+					break;
+				}
 				break;
 			}
-			Waver* waver = static_cast<Waver*>(i->object);
-			if (!waver->getCold())
+			else if (waver->getExplose())
 			{
-				//this->samus->setVelocity(VECTOR2(0, 0));
-				SamusStateManager::getInstance()->setOldStatus(eStatus::STANDING);
+				waver->setCanDraw(false);
+				waver->setActivity(false);
+			}
+			else
+			{
+				if (!waver->getHandle())
+				{
+					return;
+				}
 				this->samus->setStatus(eStatus::INJURING);
-				SamusStateManager::getInstance()->setOldState(this);			
+				SamusStateManager::getInstance()->setOldStatus(SamusStateManager::getInstance()->getOldStatus());
+				SamusStateManager::getInstance()->setOldState(SamusStateManager::getInstance()->getOldState());
 			}
 			break;
 		}
+		case eID::SKREE:
+		{
+			Skree* skree = static_cast<Skree*>(i->object);
+			if (!skree->getHandle())
+			{
+				return;
+			}
+			if (skree->getCold() && skree->getHandle())
+			{
+				switch (i->direction)
+				{
+				case CollideDirection::LEFT:
 
+					this->samus->setCanMoveRight(false);
+					this->samus->setVelocityX(0);
+					break;
+				case CollideDirection::RIGHT:
+					this->samus->setCanMoveLeft(false);
+					this->samus->setVelocityX(0);
+					break;
+				case CollideDirection::TOP:
+					this->samus->setVelocityY(0);
+
+					this->samus->setStatus(SamusStateManager::getInstance()->getOldStatus());
+					break;
+				case CollideDirection::BOTTOM:
+					this->samus->setVelocityY(0);
+
+					this->samus->setStatus(SamusStateManager::getInstance()->getOldStatus());
+					break;
+				}
+				break;
+			}
+			else if (skree->getExplose())
+			{
+				skree->setCanDraw(false);
+				skree->setActivity(false);
+			}
+			else
+			{
+				if (!skree->getHandle())
+				{
+					return;
+				}
+				this->samus->setStatus(eStatus::INJURING);
+				SamusStateManager::getInstance()->setOldStatus(SamusStateManager::getInstance()->getOldStatus());
+				SamusStateManager::getInstance()->setOldState(SamusStateManager::getInstance()->getOldState());
+			}
+			break;
+		}
+		case eID::RIO:
+		{
+			Rio* rio = static_cast<Rio*>(i->object);
+
+			if (rio->getCold()&& rio->getHandle())
+			{
+				switch (i->direction)
+				{
+				case CollideDirection::LEFT:
+
+					this->samus->setCanMoveRight(false);
+					this->samus->setVelocityX(0);
+					break;
+				case CollideDirection::RIGHT:
+					this->samus->setCanMoveLeft(false);
+					this->samus->setVelocityX(0);
+					break;
+				case CollideDirection::TOP:
+
+					this->samus->setVelocityY(0);
+					break;
+				case CollideDirection::BOTTOM:
+					this->samus->setVelocityY(0);
+
+					break;
+				}
+				break;
+			}
+			else if (rio->getExplose())
+			{
+				rio->setCanDraw(false);
+				rio->setActivity(false);
+			}
+			else
+			{
+				if (!rio->getHandle())
+				{
+					return;
+				}
+				this->samus->setStatus(eStatus::INJURING);
+				SamusStateManager::getInstance()->setOldStatus(SamusStateManager::getInstance()->getOldStatus());
+				SamusStateManager::getInstance()->setOldState(SamusStateManager::getInstance()->getOldState());
+			}
+			break;
+		}
+		case eID::RIPPER:
+		{
+			Ripper* ripper = static_cast<Ripper*>(i->object);
+			if (ripper->getCold())
+			{
+				switch (i->direction)
+				{
+				case CollideDirection::LEFT:
+
+					this->samus->setCanMoveRight(false);
+					this->samus->setVelocityX(0);
+					break;
+				case CollideDirection::RIGHT:
+					this->samus->setCanMoveLeft(false);
+					this->samus->setVelocityX(0);
+					break;
+				case CollideDirection::TOP:
+					this->samus->setVelocityY(0);
+					break;
+				case CollideDirection::BOTTOM:
+					this->samus->setVelocityY(0);
+					break;
+				}
+				break;
+			}
+			else
+			{
+				this->samus->setStatus(eStatus::INJURING);
+				SamusStateManager::getInstance()->setOldStatus(SamusStateManager::getInstance()->getOldStatus());
+				SamusStateManager::getInstance()->setOldState(SamusStateManager::getInstance()->getOldState());
+			}
+			break;
+		}
 		case eID::ZEB:
 		{
-			switch (i->direction)
+			Zeb* zeb = static_cast<Zeb*>(i->object);
+
+			if (zeb->getCold()&& zeb->getHandle())
 			{
-			case CollideDirection::TOP:
-				this->samus->setVelocityY(0);
+				switch (i->direction)
+				{
+				case CollideDirection::LEFT:
+
+					this->samus->setCanMoveRight(false);
+					this->samus->setVelocityX(0);
+					break;
+				case CollideDirection::RIGHT:
+					this->samus->setCanMoveLeft(false);
+					this->samus->setVelocityX(0);
+					break;
+				case CollideDirection::TOP:
+					this->samus->setVelocityY(0);
+					break;
+				case CollideDirection::BOTTOM:
+					this->samus->setVelocityY(0);
+
+					break;
+				}
 				break;
 			}
-			Zeb* zeb = static_cast<Zeb*>(i->object);
-			if (!zeb->getCold())
+			else if (zeb->getExplose())
 			{
-				//this->samus->setVelocity(VECTOR2(0, 0));
-				SamusStateManager::getInstance()->setOldStatus(eStatus::STANDING);
+				zeb->setCanDraw(false);
+				zeb->setActivity(false);
+			}
+			else
+			{
+				if (!zeb->getHandle())
+				{
+					return;
+				}
 				this->samus->setStatus(eStatus::INJURING);
-				SamusStateManager::getInstance()->setOldState(this);
+				SamusStateManager::getInstance()->setOldStatus(SamusStateManager::getInstance()->getOldStatus());
+				SamusStateManager::getInstance()->setOldState(SamusStateManager::getInstance()->getOldState());
 			}
 			break;
 		}
-
 		case eID::BOSSKRAID:
 		{
 			switch (i->direction)
 			{
+			case CollideDirection::LEFT:
+				this->samus->setVelocityX(0);
+				//not allow move left
+				//this->samus->setCanMoveRight(false);
+				break;
+			case CollideDirection::RIGHT:
+				this->samus->setVelocityX(0);
+				//not allow move right
+				//this->samus->setCanMoveLeft(false);
+				break;
+			case CollideDirection::TOP:
+				this->samus->setVelocityY(0);
+				break;
+			case CollideDirection::BOTTOM:
+				this->samus->setVelocityY(0);
+				break;
+			}
+			this->samus->setStatus(eStatus::INJURING);
+			SamusStateManager::getInstance()->setOldStatus(SamusStateManager::getInstance()->getOldStatus());
+			SamusStateManager::getInstance()->setOldState(SamusStateManager::getInstance()->getOldState());
+			break;
+		}
+		case eID::MOTHERBRAIN:
+		{
+			switch (i->direction)
+			{
+			case CollideDirection::LEFT:
+				this->samus->setVelocityX(0);
+				//not allow move left
+				//this->samus->setCanMoveRight(false);
+				break;
+			case CollideDirection::RIGHT:
+				this->samus->setVelocityX(0);
+				//not allow move right
+				//this->samus->setCanMoveLeft(false);
+				break;
 			case CollideDirection::TOP:
 				this->samus->setVelocityY(0);
 				break;
 			}
 
-			//this->samus->setVelocity(VECTOR2(0, 0));
-			SamusStateManager::getInstance()->setOldStatus(eStatus::STANDING);
-			this->samus->setStatus(eStatus::INJURING);
-			SamusStateManager::getInstance()->setOldState(this);
+				this->samus->setStatus(eStatus::INJURING);
+				SamusStateManager::getInstance()->setOldStatus(SamusStateManager::getInstance()->getOldStatus());				
+				SamusStateManager::getInstance()->setOldState(SamusStateManager::getInstance()->getOldState());
+
 			break;
 		}
+
+#pragma endregion
+
+#pragma region items
+		case eID::MARUMARI:
+		{
+			this->samus->setMariMaru(true);
+			MaruMari* mm = static_cast<MaruMari*>(i->object);
+			mm->setActivity(false);
+
+			break;
+		}
+
+		case eID::ENERGYTANK:
+		{
+			this->samus->setNumLive(this->samus->getNumLive() + 1);
+			EnergyTank* energy = static_cast<EnergyTank*>(i->object);
+			energy->setActivity(false);
+
+			break;
+		}
+
+		case eID::BOMB:
+		{
+			this->samus->setMariMaru(true); // just test
+
+			this->samus->setBomb(true);
+			Bomb* bom = static_cast<Bomb*>(i->object);
+			bom->setActivity(false);
+
+			break;
+		}
+
+		case eID::LONGBEAM:
+		{
+			this->samus->setLongBeam(true);
+			LongBeam* lb = static_cast<LongBeam*>(i->object);
+			lb->setActivity(false);
+
+			BulletPool::getInstance()->setDistanceShoot(DISTANCE_SHOOT * 2);
+
+			break;
+		}
+
+		case eID::MISSILEROCKET:
+		{
+			this->samus->setNumRocket(this->samus->getNumRocket() + 5);
+			MissileRocket* mrocket = static_cast<MissileRocket*>(i->object);
+			mrocket->setActivity(false);
+
+			break;
+		}
+
+		case eID::ICEBEAM:
+		{
+			IceBeam* ib = static_cast<IceBeam*>(i->object);
+			ib->setActivity(false);
+
+			if (this->samus->getCurrentSkin() == eSkin::YELLOW)
+				this->samus->setNewSkin(eSkin::YELLOWICE);
+			if (this->samus->getCurrentSkin() == eSkin::PINK)
+				this->samus->setNewSkin(eSkin::PINKICE);
+
+			BulletPool::getInstance()->setIceBullet();
+
+			break;
+		}
+
+		case eID::VARIA:
+		{
+			Varia* va = static_cast<Varia*>(i->object);
+			va->setActivity(false);
+
+			if (this->samus->getCurrentSkin() == eSkin::YELLOW)
+				this->samus->setNewSkin(eSkin::PINK);
+			if (this->samus->getCurrentSkin() == eSkin::YELLOWICE)
+				this->samus->setNewSkin(eSkin::PINKICE);
+
+			break;
+		}
+
+#pragma endregion
+
 
 		default:
 			break;

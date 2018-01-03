@@ -343,7 +343,7 @@ void SamusStateAcrobat::onCollision(float dt)
 		case eID::ZOMMER:
 		{
 			Zommer* zommer = static_cast<Zommer*>(i->object);
-			if (zommer->getCold())
+			if (zommer->getCold()&& zommer->getHandle())
 			{
 				switch (i->direction)
 				{
@@ -398,7 +398,7 @@ void SamusStateAcrobat::onCollision(float dt)
 		case eID::WAVER:
 		{
 			Waver* waver = static_cast<Waver*>(i->object);
-			if (waver->getCold())
+			if (waver->getCold()&& waver->getHandle())
 			{
 				switch (i->direction)
 				{
@@ -501,7 +501,7 @@ void SamusStateAcrobat::onCollision(float dt)
 		{
 			Skree* skree = static_cast<Skree*>(i->object);
 
-			if (skree->getCold())
+			if (skree->getCold()&& skree->getHandle())
 			{
 				switch (i->direction)
 				{
@@ -558,7 +558,7 @@ void SamusStateAcrobat::onCollision(float dt)
 		{
 			Rio* rio = static_cast<Rio*>(i->object);
 
-			if (rio->getCold())
+			if (rio->getCold()&& rio->getHandle())
 			{
 				switch (i->direction)
 				{
@@ -615,7 +615,7 @@ void SamusStateAcrobat::onCollision(float dt)
 		{
 			Zeb* zeb = static_cast<Zeb*>(i->object);
 
-			if (zeb->getCold())
+			if (zeb->getCold()&& zeb->getHandle())
 			{
 				switch (i->direction)
 				{
