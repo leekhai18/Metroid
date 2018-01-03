@@ -420,42 +420,7 @@ bool ObjectManager::load_list(const char * filename)
 
 		//writer.StartObject();
 
-		const Value& listMachineGun = jSon["MaChineGun"];
-		for (SizeType i = 0; i < listMachineGun.Size(); i++)
-		{
-			
-			
-			id = listMachineGun[i]["id"].GetInt();
-			x = listMachineGun[i]["x"].GetFloat();
-			y = listMachineGun[i]["y"].GetFloat();
-			height = listMachineGun[i]["height"].GetFloat();
-			width = listMachineGun[i]["width"].GetFloat();
-			x =x + 16*0.5 ;
-			y =y - 16*0.5  ;
-			//int type = listMachineGun[i]["type"].GetInt();
-			CanonType type= static_cast<CanonType>(listMachineGun[i]["type"].GetInt());
-			MachineCanon *maChineGun = new MachineCanon(graphics, textureManager, samus,type);
-			maChineGun->setPosition(VECTOR2(x, y));
-			maChineGun->setStartPosition(VECTOR2(x, y));
-			/*			writer.StartObject();
-			writer.Key("x");
-			writer.Double(x);
-			writer.Key("y");
-			writer.Double(y);
-			writer.Key("height");
-			writer.Double(height);
-			writer.Key("width");
-			writer.Double(width);
-			writer.EndObject();*/
-
-			
-			maChineGun->setBoundCollision();
-			maChineGun->reInit();
-			maChineGun->setActiveBound(maChineGun->getBoundCollision());
-
-
-			map_object.insert(std::pair<int, BaseObject*>(id, maChineGun));
-		}
+		
 
 		const Value& listDefense = jSon["DefenseBoss"];
 		for (SizeType i = 0; i < listDefense.Size(); i++)
@@ -537,7 +502,48 @@ bool ObjectManager::load_list(const char * filename)
 
 		//writer.EndArray();	
 #pragma endregion
+			const Value& listMachineGun = jSon["MaChineGun"];
+			for (SizeType i = 0; i < listMachineGun.Size(); i++)
+			{
 
+
+				id = listMachineGun[i]["id"].GetInt();
+				x = listMachineGun[i]["x"].GetFloat();
+				y = listMachineGun[i]["y"].GetFloat();
+				height = listMachineGun[i]["height"].GetFloat();
+				width = listMachineGun[i]["width"].GetFloat();
+				x = x + 16 * 0.5;
+				y = y - 16 * 0.5;
+				
+				CanonType type = static_cast<CanonType>(listMachineGun[i]["type"].GetInt());
+				MachineCanon *maChineGun = new MachineCanon(graphics, textureManager, samus, type);
+				maChineGun->setPosition(VECTOR2(x, y));
+				maChineGun->setStartPosition(VECTOR2(x, y));
+
+				
+				/*			writer.StartObject();
+				writer.Key("x");
+				writer.Double(x);
+				writer.Key("y");
+				writer.Double(y);
+				writer.Key("height");
+				writer.Double(height);
+				writer.Key("width");
+				writer.Double(width);
+				writer.EndObject();*/
+
+
+				maChineGun->setBoundCollision();
+				maChineGun->reInit();
+				maChineGun->setActiveBound(maChineGun->getBoundCollision());
+
+				const Value& arrayWall = listMachineGun[i]["ListCollideID"];
+				for (SizeType t = 0; t < arrayWall.Size(); t++)
+				{
+					maChineGun->getListCanCollide()->insert(*map_object.find(arrayWall[t].GetInt()));
+				}
+				map_object.insert(std::pair<int, BaseObject*>(id, maChineGun));
+			}
 #pragma region other
 		// create Elevator
 		/*writer.Key("Elevator");

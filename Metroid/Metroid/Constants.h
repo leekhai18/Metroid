@@ -109,7 +109,8 @@ enum eID {
 	BRICK,
 	BOSSKRAID_ROCKET,
 	DEFENSEBOSS,
-	MACHINE_CANON
+	MACHINE_CANON,
+	CANON_BULLET
 };
 
 // collision direction

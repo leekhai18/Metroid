@@ -204,6 +204,7 @@ public:
 	const int canonUNKNOW1 = 290;
 	const int canonUNKNOW2 = 291;
 
+
 	const int canonBulletUp = 292;
 	const int canonBulletRightUp = 293;
 	const int canonBulletRight = 294;
@@ -213,7 +214,7 @@ public:
 	const int canonBulletLeft = 298;
 	const int canonBulletLeftUp = 299;
 
-	const int canonBulletUNKNOW1 = 300;
+	const int canonBulletExplose[2] = { 300,301 };
 	const int canonBulletUNKNOW2 = 301;
 
 	const int wallFrontMotherBrain[4] = { 302,303,304,305 };

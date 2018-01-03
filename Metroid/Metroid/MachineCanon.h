@@ -12,10 +12,12 @@ private:
 	CanonBullet* bullet;
 	Animation* anim;
 	int sideToFire;
-	bool stop;
 	float timeDelayFire;
 	bool isFire;
+
+	CanonDirection directionBefore;
 	int index;
+	float timeToFire;
 	CanonType type;
 	const int* listFrame;
 	VECTOR2 startPosition;
@@ -29,6 +31,7 @@ public:
 	void onCollision(float dt);
 	void update(float dt);
 	void draw();
+	map<int, BaseObject*>* getListCanCollide();
 	MachineCanon(Graphics* graphics,TextureManager* textureM,Samus* samus, CanonType type);
 	~MachineCanon();
 };

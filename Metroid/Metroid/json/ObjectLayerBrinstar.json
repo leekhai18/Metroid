@@ -6,7 +6,11 @@
       "x": 224,
       "y": 3696.0,
       "id": 0,
-	  "type": 2
+	  "type": 2,
+	  "ListCollideID":
+	  [
+		710
+	  ]
     },
     {
       "height": 16,
@@ -14,7 +18,11 @@
       "x": 192,
       "y": 3696.0,
       "id": 1,
-	  "type": 1
+	  "type": 1,
+	  "ListCollideID":
+	  [
+		703
+	  ]
     },
     {
       "height": 16,
@@ -22,7 +30,11 @@
       "x": 272,
       "y": 3728.0,
       "id": 2,
-	  "type": 0
+	  "type": 0,
+	  "ListCollideID":
+	  [
+		710
+	  ]
     },
     {
       "height": 16,
@@ -30,7 +42,11 @@
       "x": 320,
       "y": 3696.0,
       "id": 3,
-	  "type": 1
+	  "type": 1,
+	  "ListCollideID":
+	  [
+		710
+	  ]
     },
     {
       "height": 16,
@@ -38,7 +54,11 @@
       "x": 352,
       "y": 3696.0,
       "id": 4,
-	  "type": 2
+	  "type": 2,
+	  "ListCollideID":
+	  [
+		709
+	  ]
     }
   ],
   "DefenseBoss": [

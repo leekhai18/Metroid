@@ -7,6 +7,7 @@
 #include "BossKraid.h"
 #include "Rocket.h"
 #include "BossKraidRocket.h"
+#include "CanonBullet.h"
 Collision* Collision::instance = nullptr;
 Collision* Collision::getInstance()
 {
@@ -231,6 +232,13 @@ bool Collision::checkCollision(BaseObject * myEntity, BaseObject * otherEntity, 
 		{
 			BossKraidRocket* bossKraid = static_cast<BossKraidRocket*>(myEntity);
 			bossKraid->getListCollide()->push_back(data);
+
+			break;
+		}
+		case eID::CANON_BULLET:
+		{
+			CanonBullet* canonBullet = static_cast<CanonBullet*>(myEntity);
+			canonBullet->getListCollide()->push_back(data);
 
 			break;
 		}
