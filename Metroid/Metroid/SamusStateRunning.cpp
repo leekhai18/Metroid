@@ -287,6 +287,10 @@ void SamusStateRunning::onCollision(float dt)
 
 					break;
 				}
+				case CollideDirection::TOP:
+					this->samus->setFall(false);
+					this->samus->setVelocityY(0);
+					break;
 				}
 			}
 

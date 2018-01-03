@@ -213,7 +213,7 @@ void SamusStateAcrobat::onCollision(float dt)
 
 			break;
 #pragma endregion
-#pragma region Wall
+#pragma region Elevator
 		case eID::ELEVATOR:
 			if (samus->getCanMoveElevator())
 			{
@@ -299,6 +299,13 @@ void SamusStateAcrobat::onCollision(float dt)
 
 					break;
 				}
+				case CollideDirection::TOP:
+					jumpDistance = 0;
+					this->samus->setFall(true);
+					this->samus->setVelocityY(0);
+					addY = i->positionCollision;
+					this->samus->setPositionY(addY - OFFSET_JUMP);
+					break;
 				}
 			}
 

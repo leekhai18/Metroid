@@ -269,6 +269,8 @@ void SamusStateStanding::onCollision(float dt)
 		case eID::ELEVATOR:
 		case eID::ALIENBIG:
 		case eID::ALIENSMALL:
+		case eID::GATEBLUE:
+		case eID::GATERED:
 		{
 			switch (i->direction)
 			{

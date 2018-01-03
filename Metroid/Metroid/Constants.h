@@ -134,7 +134,8 @@ enum eStatus {
 	FALLING,
 	FOLLOW,
 	FALLING_ROLLING,
-	INJURING
+	INJURING,
+	BOOM
 };
 
 // direction
