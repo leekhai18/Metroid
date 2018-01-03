@@ -15,6 +15,7 @@
 #include "AlienSmall.h"
 #include "Ripper.h"
 #include "Sound.h"
+#include "Brick.h"
 #define WIDTH_BULLET_HALF 1
 #define HEIGHT_BULLET_HALF 1
 
@@ -65,22 +66,28 @@ void Bullet::onCollision()
 		{
 			switch (i->object->getId())
 			{
-				case eID::WALL : case eID::GATERED: case eID::BRICK:
+				case eID::BRICK:
+				{
+					Brick* brick = static_cast<Brick*>(i->object);
+					if(brick->isActivitied()&&brick->getVisible())
+					{
+						this->isCollided = true;
+
+						this->velocity = VECTOR2ZERO;
+
+						this->sprite->setData(indexEffect);
+						this->setPositionX(i->positionCollision);
+						
+						brick->decreaseHealth(dame);
+					}
+					
+				}
+				case eID::WALL : case eID::GATERED: 
 					this->sprite->setData(indexEffect);
 					this->isCollided = true;
 					this->velocity = VECTOR2ZERO;
-
-					switch (i->direction)
-					{
-					case CollideDirection::LEFT: case CollideDirection::RIGHT:
-						this->setPositionX(i->positionCollision);
-						break;
-					case CollideDirection::TOP:
-						this->setPositionY(i->positionCollision);
-						break;
-					default:
-						break;
-					}
+					this->setPositionX(i->positionCollision);
+				
 
 					break;
 

@@ -37,6 +37,7 @@ Brick::Brick(TextureManager * textureM, Graphics * graphics, BrickStyle style) :
 	isActivity = true;
 	visible = true;
 	listCanCollide = new map<int,BaseObject*>();
+	heath = 8;
 }
 
 
@@ -49,6 +50,11 @@ Brick::~Brick()
 bool Brick::getVisible()
 {
 	return this->visible;
+}
+
+void Brick::decreaseHealth(float dame)
+{
+	this->heath -= dame;
 }
 
 
@@ -76,6 +82,7 @@ void Brick::onCollision(float dt)
 
 void Brick::update(float dt)
 {
+
 	if (!this->isActivity&&visible)
 	{
 		this->timeReset += dt;
@@ -83,9 +90,18 @@ void Brick::update(float dt)
 		{
 			timeReset = 0;
 			isActivity = true;
+			heath = 8;
+		}
+		
+	}
+	if(this->isActivity&&visible)
+	{
+		if (heath <= 0)
+		{
+			this->isActivity = false;
 		}
 	}
-
+	
 }
 
 void Brick::draw()

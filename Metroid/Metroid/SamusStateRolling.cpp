@@ -117,7 +117,7 @@ void SamusStateRolling::handleInput(float dt)
 
 void SamusStateRolling::onCollision(float dt)
 {
-	if(this->samus->isInStatus(eStatus::STANDING) && input->isKeyDown(VK_UP))
+	if(this->samus->isInStatus(eStatus::STANDING) )
 	{
 		MetroidRect bound;
 		bound.left = this->samus->getPosition().x - WIDTH_COLLISION*0.5f;

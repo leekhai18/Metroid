@@ -8,11 +8,13 @@ private:
 	float timeReset;
 	map<int,BaseObject*>* listCanCollide;
 	bool visible;
+	int heath;
 public:
 	Brick();
 	Brick(TextureManager* textureM, Graphics* graphics, BrickStyle style);
 	~Brick();
 	bool getVisible();
+	void decreaseHealth(float dame);
 	void setVisible(bool visible);
 	void onCollision(float dt);
 	void update(float dt);
