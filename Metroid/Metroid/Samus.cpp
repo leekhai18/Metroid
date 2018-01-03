@@ -356,6 +356,7 @@ void Samus::setListCanCollide(map<int, BaseObject*>* list)
 
 void Samus::setBoomVelocity(VECTOR2 boomVelocity)
 {
+	this->boomVelocity = boomVelocity;
 }
 
 VECTOR2 Samus::getBoomVelocity()

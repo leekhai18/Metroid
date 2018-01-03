@@ -4,11 +4,10 @@
 class SamusStateBoom:public BaseState
 {
 private:
-	bool isUp;
-	bool isShoot;
-	bool canRolling;
 
-	float timerToRunning;
+
+
+	float timerToNormal;
 public:
 	SamusStateBoom();
 	void setBoundCollision();
@@ -20,7 +19,6 @@ public:
 	void update(float dt);
 	void onStart();
 	void onExit();
-	void fire();
-	void fireRocket();
+
 };
 

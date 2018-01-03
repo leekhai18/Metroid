@@ -531,7 +531,12 @@ void SamusStateRolling::update(float dt)
 	{
 		this->samus->setStatus(eStatus::FALLING_ROLLING);
 	}
-
+	if(samus->getBoomExplose())
+	{
+		this->samus->setStatus(eStatus::BOOM);
+		SamusStateManager::getInstance()->setOldState(this);
+		SamusStateManager::getInstance()->setOldStatus(eStatus::ROLLING);
+	}
 	if (!this->samus->isInStatus(eStatus::ROLLING))
 	{
 		switch (this->samus->getStatus())
@@ -549,11 +554,14 @@ void SamusStateRolling::update(float dt)
 		case eStatus::INJURING:
 			SamusStateManager::getInstance()->changeStateTo(this->samus->getStatus());
 			break;
+		case eStatus::BOOM:
+			SamusStateManager::getInstance()->changeStateTo(this->samus->getStatus());
+			break;
 		default:
 
 			break;
 		}
-		//SamusStateManager::getInstance()->changeStateTo(this->samus->getStatus());
+	
 		return;
 	}
 	this->samus->setCanMoveLeft(true);

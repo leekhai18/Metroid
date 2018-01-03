@@ -7,6 +7,7 @@
 #include "SamusStateAcrobat.h"
 #include "SamusStateFallRolling.h"
 #include "SamusStateInjuring.h"
+#include "SamusStateBoom.h"
 class SamusStateManager
 {
 private:
@@ -20,6 +21,7 @@ private:
 	SamusStateAcrobat* stateAcrobat;
 	SamusStateFallRolling* stateFallRolling;
 	SamusStateInjuring* stateInjuring;
+	SamusStateBoom* stateBoom;
 	BaseState* currentState;
 
 	eStatus oldStatus;

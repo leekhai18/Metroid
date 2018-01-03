@@ -127,32 +127,33 @@ void BoomBomb::onCollision()
 		MetroidRect bound = samus->getBoundCollision();
 		if (Collision::getInstance()->isCollide(bound, this->boundCollision))
 		{
-			if (this->boundCollision.bottom >= bound.bottom)
+			if (!samus->getBoomExplose())
 			{
-
 				if (bound.right < this->boundCollision.left - 2)
 				{
 					samus->setBoomVelocity(VECTOR2(-100, 100));
-					samus->setVelocity(VECTOR2(-100, 100));
+					//samus->setVelocity(VECTOR2(-100, 100));
 					samus->setBoomExplose(true);
 				}
 				else if (bound.left > this->boundCollision.left + 2)
 				{
 					samus->setBoomVelocity(VECTOR2(100, 100));
-					samus->setVelocity(VECTOR2(100, 100));
+					//samus->setVelocity(VECTOR2(100, 100));
 					samus->setBoomExplose(true);
 				}
 			}
-			else
-			{
-				samus->setBoomVelocity(VECTOR2(this->samus->getVelocity().x, 100));
-				samus->setVelocity(VECTOR2(100, 100));
-				samus->setBoomExplose(true);
-			}
-		}
-		else
-		{
-			samus->setBoomExplose(false);
+
+			//if (this->boundCollision.bottom >= bound.bottom)
+			//{
+
+			//	
+			//}
+			//else
+			//{
+			//	samus->setBoomVelocity(VECTOR2(0, 100));
+			//	//samus->setVelocity(VECTOR2(100, 100));
+			//	samus->setBoomExplose(true);
+			//}
 		}
 		canHandledCollision = false;
 		
