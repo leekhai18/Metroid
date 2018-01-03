@@ -4,7 +4,7 @@ class CanonBullet:public BaseObject
 {
 public:
 	CanonBullet();
-	CanonBullet(Graphics* graphics, TextureManager* textureM);
+	CanonBullet(Graphics* graphics, TextureManager* textureM,CanonType type);
 	void init();
 	void end();
 	void setBoundCollision();
