@@ -44,7 +44,7 @@ BossKraid::BossKraid(TextureManager * textureM, Graphics * graphics, Samus* samu
 
 	direction = eDirection::right;
 
-	health = 40;
+	health = 20;
 
 	rocketBoss = new BossKraidRocket(graphics, textureM, samus, this);
 	

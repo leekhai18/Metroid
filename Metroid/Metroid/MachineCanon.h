@@ -12,11 +12,8 @@ private:
 	CanonBullet* bullet;
 	Animation* anim;
 	int sideToFire;
-	float timeDelayFire;
 	bool isFire;
 
-	CanonDirection directionBefore;
-	int index;
 	float timeToFire;
 	CanonType type;
 	const int* listFrame;

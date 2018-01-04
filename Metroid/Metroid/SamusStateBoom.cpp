@@ -685,32 +685,14 @@ void SamusStateBoom::update(float dt)
 	if(this->timerToNormal>=TIME_TO_NORMAL)
 	{
 		this->timerToNormal = 0;
-		this->samus->setStatus(SamusStateManager::getInstance()->getOldStatus());
+		if(this->samus->getStatus()!= eStatus::BOOM)
+		{
+			this->samus->setStatus(SamusStateManager::getInstance()->getOldStatus());
+		}		
 	}
 	if (this->samus->getStatus() != eStatus::BOOM)
 	{
-		//switch (this->samus->getStatus())
-		//{
-		//case eStatus::JUMPING:
-
-		//	//this->samus->setPositionX(this->samus->getPosition().x )
-		//	SamusStateManager::getInstance()->changeStateTo(this->samus->getStatus());
-		//	break;
-		//case eStatus::RUNNING:
-		//	SamusStateManager::getInstance()->changeStateTo(this->samus->getStatus());
-		//	break;
-		//case eStatus::ROLLING:
-		//	if (canRolling)
-		//	{
-		//		SamusStateManager::getInstance()->changeStateTo(this->samus->getStatus());
-		//	}
-		//	break;
-		//case eStatus::INJURING:
-		//	SamusStateManager::getInstance()->changeStateTo(this->samus->getStatus());
-		//	break;
-		//default:
-		//	break;
-		//}
+		
 		samus->setBoomExplose(false);
 		SamusStateManager::getInstance()->changeStateTo(this->samus->getStatus());
 		return;

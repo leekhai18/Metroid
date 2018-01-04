@@ -30,7 +30,7 @@ MachineCanon::MachineCanon(Graphics * graphics, TextureManager * textureM, Samus
 		this->setPositionY(this->getPosition().y + OFFSET);
 		sideToFire = IndexManager::getInstance()->canonRightDown;
 		listFrame = IndexManager::getInstance()->canonTypeLeft;
-		directionBefore = CanonDirection::DDOWN;
+		
 		this->sprite->setData(listFrame[0]);
 		break;
 	case CanonType::CANON_RIGHT:
@@ -39,7 +39,7 @@ MachineCanon::MachineCanon(Graphics * graphics, TextureManager * textureM, Samus
 		this->setPositionY(this->getPosition().y + OFFSET);
 		sideToFire = IndexManager::getInstance()->canonLeftDown;
 		listFrame = IndexManager::getInstance()->canonTypeRight;
-		directionBefore = CanonDirection::DDOWN;
+	
 		this->sprite->setData(listFrame[0]);
 		break;
 	case CanonType::CANON_TOP:
@@ -49,14 +49,14 @@ MachineCanon::MachineCanon(Graphics * graphics, TextureManager * textureM, Samus
 		listFrame = IndexManager::getInstance()->canonTypeTop;
 		this->setPosition(VECTOR2(this->getPosition().x+ 30, this->getPosition().y + 16 * 0.5 + 4));
 		this->sprite->setData(listFrame[0]);
-		directionBefore = CanonDirection::DRIGHT;
+	
 		break;
 	default:
 		break;
 	}
 	anim->start();
 	
-	timeDelayFire = 0;
+
 	this->sprite->setOrigin(VECTOR2(0.5, 0.5));
 }
 void MachineCanon::reInit()
@@ -77,6 +77,13 @@ void MachineCanon::reInit()
 		break;
 	}
 	this->bullet->setListWallCanCollide(this->listWallCanCollide);
+}
+MachineCanon::~MachineCanon()
+{
+	delete listWallCanCollide;
+	delete sprite;
+	delete bullet;
+	delete anim;
 }
 
 void MachineCanon::setStartPosition(VECTOR2 position)
@@ -100,118 +107,122 @@ void MachineCanon::setBoundCollision()
 void MachineCanon::handleVelocity(float dt)
 {
 
-	if(isFire)
+	if (isActivity)
 	{
-		bullet->handleVelocity(dt);
-		bullet->setListWallCanCollide(this->listWallCanCollide);
-		
-		if(bullet->getCollided())
+		if (isFire)
 		{
-			this->anim->setPause(false);
-			this->anim->nextFrame();
-			isFire = false;
+			bullet->handleVelocity(dt);
+			bullet->setListWallCanCollide(this->listWallCanCollide);
+
+			if (bullet->getCollided())
+			{
+				this->anim->setPause(false);
+				this->anim->nextFrame();
+				isFire = false;
+			}
 		}
 	}
-	
 }
 
 void MachineCanon::onCollisionSamus(Samus* samus,float dt)
 {
 	if(isActivity)
 	{
-		
+		bullet->onCollisionSamus(samus, dt);
 	}
-	bullet->onCollisionSamus(samus, dt);
+	
 }
 
 void MachineCanon::onCollision(float dt)
 {
-	bullet->onCollision(dt);
+	if (isActivity)
+	{
+		bullet->onCollision(dt);
+	}
 }
 
 void MachineCanon::update(float dt)
 {
-
-	anim->update(dt);
-	bullet->update(dt);
-	CanonDirection canonDirection = static_cast<CanonDirection>(listFrame[anim->getCurrentFrame()]);
-	switch (canonDirection)
+	if (isActivity)
 	{
-	case CanonDirection::DUP:
-		this->setPosition(VECTOR2(startPosition.x , startPosition.y + OFFSET +0.5f));
-		//directionBefore
-		//this->setPositionY(startPosition.y + OFFSET );
-		break;
-	case CanonDirection::DDOWN:	
-		this->setPosition(VECTOR2(startPosition.x , startPosition.y - OFFSET - 0.5f));
-		if (type == CanonType::CANON_TOP)
+		anim->update(dt);
+		bullet->update(dt);
+		CanonDirection canonDirection = static_cast<CanonDirection>(listFrame[anim->getCurrentFrame()]);
+		switch (canonDirection)
 		{
-			if (!isFire)
+		case CanonDirection::DUP:
+			this->setPosition(VECTOR2(startPosition.x, startPosition.y + OFFSET + 0.5f));
+			//directionBefore
+			//this->setPositionY(startPosition.y + OFFSET );
+			break;
+		case CanonDirection::DDOWN:
+			this->setPosition(VECTOR2(startPosition.x, startPosition.y - OFFSET - 0.5f));
+			if (type == CanonType::CANON_TOP)
 			{
-				bullet->init();
-				isFire = true;
-				this->anim->setPause(true);			
+				if (!isFire)
+				{
+					bullet->init();
+					isFire = true;
+					this->anim->setPause(true);
+				}
+
 			}
-			
-		}
-		//this->setPositionY(startPosition.y - OFFSET);
-		break;
-	case CanonDirection::DLEFT_DOWN:	
-		this->setPosition(VECTOR2(startPosition.x - OFFSET*0.5f , startPosition.y - OFFSET*0.5f ));
-		if(type == CanonType::CANON_RIGHT)
-		{
-			if (!isFire)
+			//this->setPositionY(startPosition.y - OFFSET);
+			break;
+		case CanonDirection::DLEFT_DOWN:
+			this->setPosition(VECTOR2(startPosition.x - OFFSET*0.5f, startPosition.y - OFFSET*0.5f));
+			if (type == CanonType::CANON_RIGHT)
 			{
-				bullet->init();
-				isFire = true;
-				this->anim->setPause(true);
+				if (!isFire)
+				{
+					bullet->init();
+					isFire = true;
+					this->anim->setPause(true);
+				}
+
 			}
-			
-		}
-		break;
-	case CanonDirection::DRIGHT_DOWN:
-	
-		this->setPosition(VECTOR2(startPosition.x + OFFSET*0.5f, startPosition.y - OFFSET*0.5f));
-		if (type == CanonType::CANON_LEFT)
-		{
-			if (!isFire)
+			break;
+		case CanonDirection::DRIGHT_DOWN:
+
+			this->setPosition(VECTOR2(startPosition.x + OFFSET*0.5f, startPosition.y - OFFSET*0.5f));
+			if (type == CanonType::CANON_LEFT)
 			{
-				bullet->init();
-				isFire = true;
-				this->anim->setPause(true);
+				if (!isFire)
+				{
+					bullet->init();
+					isFire = true;
+					this->anim->setPause(true);
+				}
+				//bullet->init();
 			}
-			//bullet->init();
+			break;
+		case CanonDirection::DLEFT_UP:
+			this->setPosition(VECTOR2(startPosition.x - OFFSET*0.5f, startPosition.y + OFFSET*0.5f));
+			break;
+		case CanonDirection::DRIGHT_UP:
+			this->setPosition(VECTOR2(startPosition.x + OFFSET*0.5f, startPosition.y + OFFSET*0.5f));
+			break;
+		case CanonDirection::DRIGHT:
+			this->setPosition(VECTOR2(startPosition.x + OFFSET, startPosition.y));
+			break;
+		case CanonDirection::DLEFT:
+			this->setPosition(VECTOR2(startPosition.x - OFFSET, startPosition.y));
+			break;
+		default:
+			break;
 		}
-		break;
-	case CanonDirection::DLEFT_UP:
-		this->setPosition(VECTOR2(startPosition.x - OFFSET*0.5f, startPosition.y + OFFSET*0.5f));
-		break;
-	case CanonDirection::DRIGHT_UP:
-		this->setPosition(VECTOR2(startPosition.x + OFFSET*0.5f, startPosition.y + OFFSET*0.5f));
-		break;
-	case CanonDirection::DRIGHT:
-		this->setPosition(VECTOR2(startPosition.x + OFFSET, startPosition.y));
-		break;
-	case CanonDirection::DLEFT:
-		this->setPosition(VECTOR2(startPosition.x - OFFSET, startPosition.y));
-		break;
-	default:
-		break;
 	}
-	
 }
 
 void MachineCanon::draw()
 {
-	sprite->draw();
-	bullet->draw();
+	if (isActivity)
+	{
+		sprite->draw();
+		bullet->draw();
+	}
 }
 map<int, BaseObject*>* MachineCanon::getListCanCollide()
 {
 	return this->listWallCanCollide;
-}
-MachineCanon::~MachineCanon()
-{
-	delete listWallCanCollide;
-	delete sprite;
 }

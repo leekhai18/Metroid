@@ -97,9 +97,13 @@ void SamusStateRolling::handleInput(float dt)
 			this->samus->setVelocityX(0);
 		}
 
-		if (input->isKeyDown(VK_UP) || input->isKeyDown(VK_X))
+		if (input->isKeyDown(VK_UP))
 		{
 			this->samus->setStatus(eStatus::STANDING);
+		}
+		if (input->isKeyDown(VK_X))
+		{
+			this->samus->setStatus(eStatus::JUMPING);
 		}
 	}
 
@@ -440,6 +444,7 @@ void SamusStateRolling::onCollision(float dt)
 			break;
 		}
 		case eID::RIO:
+
 		case eID::RIPPER:
 
 		case eID::ZEB:
@@ -471,6 +476,7 @@ void SamusStateRolling::onCollision(float dt)
 		}
 
 	}
+
 	if (this->samus->isInStatus(eStatus::JUMPING))
 	{
 		VECTOR2 position = VECTOR2(this->samus->getPosition().x, this->samus->getBoundCollision().bottom + this->samus->getVelocity().y*dt);
@@ -484,6 +490,10 @@ void SamusStateRolling::onCollision(float dt)
 		{
 			if ((*i).second->isActivitied())
 			{
+				if((*i).first == 244)
+				{
+					int test = 0;
+				}
 				if (Collision::getInstance()->isCollide((*i).second->getBoundCollision(), bound))
 				{
 					this->samus->setStatus(eStatus::ROLLING);
@@ -579,7 +589,9 @@ void SamusStateRolling::onCollision(float dt)
 			}
 		}
 	}
+
 }
+
 void SamusStateRolling::update(float dt)
 {
 	this->animation->update(dt);
@@ -609,7 +621,7 @@ void SamusStateRolling::update(float dt)
 	}
 
 	if (move_to_fall && !this->samus->isInStatus(eStatus::STANDING) && !this->samus->isInStatus(eStatus::INJURING)
-		&& !samus->getBoomExplose())
+		&& !samus->getBoomExplose()&& !this->samus->isInStatus(eStatus::JUMPING))
 	{
 		this->samus->setStatus(eStatus::FALLING_ROLLING);
 	}
@@ -631,8 +643,13 @@ void SamusStateRolling::update(float dt)
 			}
 			else
 			{
+				
 				this->samus->setStatus(eStatus::ROLLING);
 			}
+			break;
+		case eStatus::JUMPING:
+			this->samus->setPositionY(this->samus->getBoundCollision().bottom);
+			SamusStateManager::getInstance()->changeStateTo(this->samus->getStatus());
 			break;
 		case eStatus::FALLING_ROLLING:
 			SamusStateManager::getInstance()->changeStateTo(this->samus->getStatus());

@@ -5,9 +5,8 @@
 #include <math.h>
 #include "BossRocketPool.h"
 #include "SamusStateManager.h"
-#define ROCKET_VELOCITY_X 100
-#define ROCKET_VELOCITY_Y 100
-#define ROCKET_VELOCITY VECTOR2(ROCKET_VELOCITY_X,ROCKET_VELOCITY_Y)
+#define ROCKET_VELOCITY_X 80
+#define ROCKET_VELOCITY_Y 80
 BossKraidRocket::BossKraidRocket()
 {
 }

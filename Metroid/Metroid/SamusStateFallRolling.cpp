@@ -91,11 +91,14 @@ void SamusStateFallRolling::handleInput(float dt)
 			this->samus->setVelocityX(0);
 		}
 
-		if (input->isKeyDown(VK_UP) || input->isKeyDown(VK_X))
+		if (input->isKeyDown(VK_UP) )
 		{
 			this->samus->setStatus(eStatus::STANDING);
 		}
-
+		if( input->isKeyDown(VK_X))
+		{
+			this->samus->setStatus(eStatus::JUMPING);
+		}
 		if (this->samus->getVelocity().y > -SAMUS_MAX_SPEED_Y)
 		{
 			this->samus->setVelocityY(this->samus->getVelocity().y + ACCELERATE_Y*dt);
@@ -370,7 +373,118 @@ void SamusStateFallRolling::onCollision(float dt)
 		}
 
 	}
+	if (this->samus->isInStatus(eStatus::JUMPING))
+	{
+		VECTOR2 position = VECTOR2(this->samus->getPosition().x, this->samus->getBoundCollision().bottom + this->samus->getVelocity().y*dt);
+		MetroidRect bound;
+		bound.left = this->samus->getPosition().x - WIDTH_COLLISION*0.5f;
+		bound.right = this->samus->getPosition().x + WIDTH_COLLISION*0.5f;
+		bound.bottom = position.y;
+		bound.top = bound.bottom + 24;
 
+		for (auto i = this->samus->getListWallCanCollide()->begin(); i != this->samus->getListWallCanCollide()->end(); ++i)
+		{
+			if ((*i).second->isActivitied())
+			{
+				if ((*i).first == 244)
+				{
+					int test = 0;
+				}
+				if (Collision::getInstance()->isCollide((*i).second->getBoundCollision(), bound))
+				{
+					this->samus->setStatus(eStatus::ROLLING);
+					break;
+				}
+			}
+		}
+		bound.bottom = position.y - this->samus->getVelocity().y*dt;
+		bound.top = bound.bottom + 24;
+
+		for (auto i = this->samus->getListCanCollide()->begin(); i != this->samus->getListCanCollide()->end(); ++i)
+		{
+			if ((*i).second->isActivitied())
+			{
+				if ((*i).second->getId() == eID::ZOMMER)
+				{
+					Zommer* zommer = static_cast<Zommer*>((*i).second);
+					if (zommer->getHandle())
+					{
+						if (Collision::getInstance()->isCollide((*i).second->getBoundCollision(), bound))
+						{
+							this->samus->setStatus(eStatus::ROLLING);
+							break;
+						}
+					}
+
+				}
+				else
+				{
+					if (Collision::getInstance()->isCollide((*i).second->getBoundCollision(), bound))
+					{
+						this->samus->setStatus(eStatus::ROLLING);
+						break;
+					}
+
+				}
+
+
+			}
+		}
+	}
+	if (this->samus->isInStatus(eStatus::STANDING))
+	{
+
+		MetroidRect bound;
+		bound.left = this->samus->getPosition().x - WIDTH_COLLISION*0.5f;
+		bound.right = this->samus->getPosition().x + WIDTH_COLLISION*0.5f;
+		bound.bottom = this->samus->getBoundCollision().bottom + this->samus->getVelocity().y*dt;
+		bound.top = bound.bottom + 30;
+
+
+		for (auto i = this->samus->getListWallCanCollide()->begin(); i != this->samus->getListWallCanCollide()->end(); ++i)
+		{
+			if ((*i).second->isActivitied())
+			{
+				if (Collision::getInstance()->isCollide((*i).second->getBoundCollision(), bound))
+				{
+					this->samus->setStatus(eStatus::ROLLING);
+					break;
+				}
+			}
+		}
+		bound.bottom = this->samus->getBoundCollision().bottom;
+		bound.top = bound.bottom + 30;
+		for (auto i = this->samus->getListCanCollide()->begin(); i != this->samus->getListCanCollide()->end(); ++i)
+		{
+			if ((*i).second->isActivitied())
+			{
+				if ((*i).second->getId() == eID::ZOMMER)
+				{
+					Zommer* zommer = static_cast<Zommer*>((*i).second);
+					if (zommer->getHandle())
+					{
+						if (Collision::getInstance()->isCollide((*i).second->getBoundCollision(), bound))
+						{
+							this->samus->setStatus(eStatus::ROLLING);
+							break;
+						}
+					}
+
+				}
+				else
+				{
+					if (Collision::getInstance()->isCollide((*i).second->getBoundCollision(), bound))
+					{
+						this->samus->setStatus(eStatus::ROLLING);
+						break;
+					}
+
+				}
+
+
+			}
+		}
+	}
 }
 void SamusStateFallRolling::update(float dt)
 {
@@ -391,6 +505,9 @@ void SamusStateFallRolling::update(float dt)
 			this->samus->setPositionY(this->samus->getPosition().y + OFFSET_STAND);
 			this->samus->setFall(true);
 			
+			break;
+		case eStatus::JUMPING:
+			this->samus->setPositionY(this->samus->getBoundCollision().bottom);
 			break;
 		default:
 			break;

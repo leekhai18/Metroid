@@ -399,6 +399,39 @@ void SamusStateJumping::onCollision(float dt)
 #pragma endregion
 
 #pragma region enemies
+		case eID::MACHINE_CANON:
+		{
+			switch (i->direction)
+			{
+			case CollideDirection::LEFT:
+
+				this->samus->setCanMoveRight(false);
+				this->samus->setVelocityX(0);
+				break;
+			case CollideDirection::RIGHT:
+				this->samus->setCanMoveLeft(false);
+				this->samus->setVelocityX(0);
+				break;
+			case CollideDirection::TOP:
+				jumpDistance = 0;
+				//set jump = false, when user release jump button set to true
+				this->samus->setCanJump(false);
+				//set fall to false
+				this->samus->setFall(false);
+				//reset velocity
+				this->samus->setVelocityY(0);
+				positionCollide = i->positionCollision;
+				this->samus->setStatus(eStatus::STANDING);
+				break;
+			case CollideDirection::BOTTOM:
+				jumpDistance = 0;
+				this->samus->setFall(true);
+				addY = i->positionCollision;
+				this->samus->setVelocityY(0);
+				this->samus->setPositionY(addY - OFFSET_JUMP);
+				break;
+			}
+		}
 		case eID::ZOMMER:
 		{
 			Zommer* zommer = static_cast<Zommer*>(i->object);
