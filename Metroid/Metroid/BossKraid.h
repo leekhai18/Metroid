@@ -47,11 +47,13 @@ public:
 	void setBoundCollision();
 	void reInit();
 
+	
 	void calculateBezier();
 	void runToSamus();
 	void lauchRocket();
 	void update(float dt);
 	void handleVelocity(float dt);
+	void onCollisionSamus(float dt);
 	void onCollision(float dt);
 
 	

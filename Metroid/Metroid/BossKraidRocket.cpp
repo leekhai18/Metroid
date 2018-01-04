@@ -4,7 +4,7 @@
 #include "Samus.h"
 #include <math.h>
 #include "BossRocketPool.h"
-
+#include "SamusStateManager.h"
 #define ROCKET_VELOCITY_X 100
 #define ROCKET_VELOCITY_Y 100
 #define ROCKET_VELOCITY VECTOR2(ROCKET_VELOCITY_X,ROCKET_VELOCITY_Y)
@@ -141,7 +141,22 @@ void BossKraidRocket::handleVelocity(float dt)
 		}
 	}
 }
+void BossKraidRocket::onCollisionSamus(float dt)
+{
 
+	if (Collision::getInstance()->checkCollision(this, samus, dt))
+	{
+		this->status = eStatus::ENDING;
+		this->velocity = VECTOR2ZERO;
+		if(!samus->isInStatus(eStatus::INJURING))
+		{
+			SamusStateManager::getInstance()->setOldStatus(samus->getStatus());
+			samus->setStatus(eStatus::INJURING);
+			SamusStateManager::getInstance()->setOldState(SamusStateManager::getInstance()->getCurrentState());
+		}
+	
+	}
+}
 void BossKraidRocket::onCollision(float dt)
 {
 	if (isActivity)

@@ -26,6 +26,7 @@
 #include "Collision.h"
 #include "BossKraid.h"
 #include "MachineCanon.h"
+#include "BossKraidRocket.h"
 #include "rapidjson-master\include\rapidjson\writer.h"
 #include "rapidjson-master\include\rapidjson\ostreamwrapper.h"
 
@@ -167,11 +168,7 @@ void ObjectManager::onCheckCollision(float dt)
 	if (listObjectNotWallOnViewPort)
 	{
 		for (map<int,BaseObject*>::iterator i = listObjectNotWallOnViewPort->begin(); i != listObjectNotWallOnViewPort->end(); ++i)
-		{
-			/*for (map<int, BaseObject*>::iterator x = listWallEmnermy->begin(); x != listWallEmnermy->end(); ++x)
-			{
-				Collision::getInstance()->checkCollision((*i).second, (*x).second, dt);
-			}	*/	
+		{	
 			((*i).second)->onCollision(dt);
 		}
 	}
@@ -239,10 +236,6 @@ void ObjectManager::onCheckCollision(float dt)
 	for (auto x = listNotWallCanCollideSamus->begin(); x != listNotWallCanCollideSamus->end(); x++)
 	{
 		BaseObject* object = (*x).second;
-		//if (object->getId() == BOSSKRAID)
-		//{
-		//	int test = 0;
-		//}	
 		Collision::getInstance()->checkCollision(samus, object, dt);
 
 		if (object->getId() == eID::SKREE)
@@ -254,7 +247,11 @@ void ObjectManager::onCheckCollision(float dt)
 				skr->onCollision(samus);
 			}
 		}
-
+		if(object->getId() ==eID::BOSSKRAID)
+		{
+			BossKraid* rocket = static_cast<BossKraid*>(object);
+			rocket->onCollisionSamus(dt);
+		}
 		if (object->getId() == eID::MOTHERBRAIN)
 		{
 			MotherBrain* motherBrain = static_cast<MotherBrain*>(object);

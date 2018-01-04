@@ -77,11 +77,7 @@ void SamusStateInjuring::onCollision(float dt)
 				}
 				break;
 			case CollideDirection::LEFT:
-				//if (SamusStateManager::getInstance()->getOldStatus() == eStatus::RUNNING ||
-				//	SamusStateManager::getInstance()->getOldStatus() == eStatus::ROLLING|| 
-				//	SamusStateManager::getInstance()->getOldStatus() == eStatus::STANDING)
-				//{
-				//	
+
 					if (!(this->samus->getBoundCollision().bottom < i->object->getBoundCollision().top))
 					{
 						this->samus->setVelocityY(0);
@@ -91,11 +87,7 @@ void SamusStateInjuring::onCollision(float dt)
 				this->samus->setVelocityX(0);
 				break;
 			case CollideDirection::RIGHT:
-			/*	if (SamusStateManager::getInstance()->getOldStatus() == eStatus::RUNNING ||
-					SamusStateManager::getInstance()->getOldStatus() == eStatus::ROLLING ||
-					SamusStateManager::getInstance()->getOldStatus() == eStatus::STANDING)
-				{
-					*/
+
 					if (!(this->samus->getBoundCollision().bottom< i->object->getBoundCollision().top))
 					{
 						this->samus->setVelocityY(0);
@@ -165,10 +157,23 @@ void SamusStateInjuring::onCollision(float dt)
 void SamusStateInjuring::update(float dt)
 {
 	time_to_stand += dt;
-
+	time_animation += dt;
 	this->samus->updateVertical(dt);
 	this->samus->updateHorizontal(dt);
 	setBoundCollision();
+
+	if (time_animation >= TIME_ANIMATION)
+	{
+		if (this->samus->getVisible())
+		{
+			this->samus->setVisible(false);
+		}
+		else
+		{
+			this->samus->setVisible(true);
+		}
+		time_animation = time_animation - TIME_ANIMATION;
+	}
 
 	if(time_to_stand >= TIME_TO_NORMAL)
 	{

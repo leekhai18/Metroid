@@ -34,6 +34,7 @@ public:
 	void init();
 	void returnPool();
 	void handleVelocity(float dt);
+	void onCollisionSamus(float dt);
 	void setBoundCollision();
 	void setListWallCanCollide(map<int, BaseObject*>* list);
 	map<int, BaseObject*>* getListWallCanCollide();

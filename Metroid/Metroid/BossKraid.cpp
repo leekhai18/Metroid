@@ -170,6 +170,14 @@ void BossKraid::handleVelocity(float dt)
 	}
 }
 
+void BossKraid::onCollisionSamus(float dt)
+{
+	for (int i = 0; i < BossRocketPool::getInstance()->getListRocketUsing().size(); i++)
+	{
+		BossRocketPool::getInstance()->getListRocketUsing()[i]->onCollisionSamus(dt);
+	}
+}
+
 void BossKraid::onCollision(float dt)
 {
 	if (isActivity)

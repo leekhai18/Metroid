@@ -91,7 +91,7 @@ void Skree::onCollision(Samus* sam) // handle collide with skree's bullet
 		sam->setStatus(eStatus::INJURING);
 		SamusStateManager::getInstance()->setOldState(SamusStateManager::getInstance()->getCurrentState());
 
-		GAMELOG("Skree's bullets hit");
+		//GAMELOG("Skree's bullets hit");
 	}
 }
 
