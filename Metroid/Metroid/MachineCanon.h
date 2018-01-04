@@ -28,6 +28,7 @@ public:
 
 	void setBoundCollision();
 	void handleVelocity(float dt);
+	void onCollisionSamus(Samus* samus,float dt);
 	void onCollision(float dt);
 	void update(float dt);
 	void draw();

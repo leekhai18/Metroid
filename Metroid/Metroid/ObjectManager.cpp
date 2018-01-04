@@ -153,6 +153,7 @@ void ObjectManager::handleVelocity(float dt)
 			MachineCanon* canon = static_cast<MachineCanon*>((*i).second);
 			
 			canon->handleVelocity(dt);
+
 			break;
 		}
 		default:
@@ -247,7 +248,7 @@ void ObjectManager::onCheckCollision(float dt)
 				skr->onCollision(samus);
 			}
 		}
-		if(object->getId() ==eID::BOSSKRAID)
+		if(object->getId() == eID::BOSSKRAID)
 		{
 			BossKraid* rocket = static_cast<BossKraid*>(object);
 			rocket->onCollisionSamus(dt);
@@ -258,6 +259,13 @@ void ObjectManager::onCheckCollision(float dt)
 
 			motherBrain->onCollision(samus, dt);
 		}
+		if (object->getId() == eID::MACHINE_CANON)
+		{
+			MachineCanon* canon = static_cast<MachineCanon*>(object);
+
+			canon->onCollisionSamus(samus, dt);
+		}
+			
 	}
 
 	// handle on listCollide

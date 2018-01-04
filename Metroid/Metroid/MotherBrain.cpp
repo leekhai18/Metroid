@@ -127,6 +127,13 @@ void MotherBrain::update(float dt)
 					this->anim->start();
 					position = Camera::getInstance()->getPosition();
 				}
+
+				if (this->health <= 30&& this->health > 0)
+				{
+					this->anim = this->openingBoss;
+					this->anim->start();
+					//position = Camera::getInstance()->getPosition();
+				}
 			}
 		}
 

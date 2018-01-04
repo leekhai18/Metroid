@@ -1,6 +1,7 @@
 #include "CanonBullet.h"
 #include "MachineCanon.h"
 #include "Collision.h"
+#include "SamusStateManager.h"
 #define CANON_BULLET_VELOCITY_X 150
 #define CANON_BULLET_VELOCITY_Y 150
 #define TIME_HIT 0.3f
@@ -89,6 +90,8 @@ void CanonBullet::init()
 	this->sprite->setData(this->resetFrame);
 	this->explose->setPause(false);
 	setBoundCollision();
+
+	dame = 3;
 }
 
 void CanonBullet::end()
@@ -105,6 +108,8 @@ void CanonBullet::setCollided(bool collide)
 {
 	isCollided = collide;
 }
+
+
 
 list<CollisionReturn>* CanonBullet::getListCollide()
 {
@@ -128,7 +133,24 @@ void CanonBullet::handleVelocity(float dt)
 {
 	
 }
-
+void CanonBullet::onCollisionSamus(Samus* samus, float dt)
+{
+	if (Collision::getInstance()->checkCollision(this, samus, dt))
+	{
+		if(!isCollided&&this->isActivity)
+		{
+			isCollided = true;
+			this->velocity = VECTOR2ZERO;
+			if (!samus->isInStatus(eStatus::INJURING))
+			{
+				SamusStateManager::getInstance()->setOldStatus(samus->getStatus());
+				samus->setStatus(eStatus::INJURING);
+				samus->setHealth(samus->getHealth() - dame);
+				SamusStateManager::getInstance()->setOldState(SamusStateManager::getInstance()->getCurrentState());
+			}
+		}
+	}
+}
 void CanonBullet::onCollision(float dt)
 {
 	if(isActivity&&!isCollided)

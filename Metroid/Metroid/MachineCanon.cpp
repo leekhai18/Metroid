@@ -115,6 +115,15 @@ void MachineCanon::handleVelocity(float dt)
 	
 }
 
+void MachineCanon::onCollisionSamus(Samus* samus,float dt)
+{
+	if(isActivity)
+	{
+		
+	}
+	bullet->onCollisionSamus(samus, dt);
+}
+
 void MachineCanon::onCollision(float dt)
 {
 	bullet->onCollision(dt);

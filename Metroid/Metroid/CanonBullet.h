@@ -3,6 +3,7 @@
 #include <map>
 #include <list>
 #include "Animation.h"
+#include "Samus.h"
 class MachineCanon;
 class CanonBullet:public BaseObject
 {
@@ -18,6 +19,7 @@ private:
 	bool isCollided;
 	float timeHit;
 	int resetFrame;
+	int dame;
 public:
 	CanonBullet();
 	CanonBullet(Graphics* graphics, TextureManager* textureM,CanonType type, MachineCanon* canon);
@@ -26,6 +28,7 @@ public:
 	void end();
 	bool getCollided();
 	void setCollided(bool collide);
+	void onCollisionSamus(Samus* samus,float dt);
 	list<CollisionReturn>* getListCollide( );
 	void setBoundCollision();
 	void handleVelocity(float dt);
