@@ -94,7 +94,7 @@ void Zeb::handleVelocity(float dt)
 			samusPosition = samus->getPosition();
 		}
 
-		if (this->getPosition().y + 50 <= this->samusPosition.y)
+		if (this->getPosition().y + 80 <= this->samusPosition.y)
 		{
 			this->velocity.y = VELOCITY_Y;
 
@@ -183,7 +183,8 @@ void Zeb::update(float dt)
 		}
 	}
 
-	if (this->getPosition().x < Camera::getInstance()->getBound().left - 20 || this->getPosition().x > Camera::getInstance()->getBound().right + 20)
+	if (!Collision::getInstance()->isCollide(Camera::getInstance()->getBound(), this->startBound)
+		&& !Collision::getInstance()->isCollide(Camera::getInstance()->getBound(), this->boundCollision))
 	{
 		reInit();
 	}
@@ -202,6 +203,10 @@ void Zeb::draw()
 void Zeb::setBeHit(bool hit)
 {
 	this->beHit = hit;
+}
+void Zeb::setStartBound(MetroidRect rect)
+{
+	this->startBound = rect;
 }
 void Zeb::decreaseHealth(float dame)
 {

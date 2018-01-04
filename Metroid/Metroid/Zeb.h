@@ -28,7 +28,7 @@ private:
 	bool isHandle;
 	bool canMoveHorizontal;
 	int reset;
-
+	MetroidRect startBound;
 public:
 	Zeb();
 	Zeb(TextureManager* textureM, Graphics* graphics, EnemyColors color, Samus* samus);
@@ -37,6 +37,7 @@ public:
 	void update(float dt);
 	void draw();
 	void setBeHit(bool hit);
+	void setStartBound(MetroidRect rect);
 	void decreaseHealth(float dame);
 	void setBoundCollision();
 	void handleVelocity(float dt);

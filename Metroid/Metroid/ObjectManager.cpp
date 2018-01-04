@@ -1528,6 +1528,7 @@ bool ObjectManager::load_list(const char * filename)
 					zby->setPosition(VECTOR2(x, y));
 
 					zby->setBoundCollision();
+					zby->setStartBound(zby->getBoundCollision());
 					string temp = std::to_string(id);
 					const char *pchar = temp.c_str();
 					GAMELOG(pchar);
@@ -1581,7 +1582,7 @@ bool ObjectManager::load_list(const char * filename)
 					zbb->setPosition(VECTOR2(x, y));
 
 					zbb->setBoundCollision();
-
+					zbb->setStartBound(zbb->getBoundCollision());
 					/*bound.bottom = listZebBrown[i]["ba"].GetFloat();
 					bound.top = listZebBrown[i]["ta"].GetFloat();
 					bound.left = listZebBrown[i]["la"].GetFloat();
@@ -1632,7 +1633,7 @@ bool ObjectManager::load_list(const char * filename)
 					zbr->setPosition(VECTOR2(x, y));
 
 					zbr->setBoundCollision();
-
+					zbr->setStartBound(zbr->getBoundCollision());
 					/*bound.bottom = listZebRed[i]["ba"].GetFloat();
 					bound.top = listZebRed[i]["ta"].GetFloat();
 					bound.left = listZebRed[i]["la"].GetFloat();

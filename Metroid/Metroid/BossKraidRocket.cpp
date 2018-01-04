@@ -32,7 +32,7 @@ BossKraidRocket::BossKraidRocket(Graphics * graphics, TextureManager * textureM,
 
 	this->setOrigin(VECTOR2(0.5, 0.5));
 	this->status = eStatus::ENDING;
-
+	dame = 5;
 	isReInit = true;
 }
 
@@ -152,6 +152,7 @@ void BossKraidRocket::onCollisionSamus(float dt)
 		{
 			SamusStateManager::getInstance()->setOldStatus(samus->getStatus());
 			samus->setStatus(eStatus::INJURING);
+			samus->setHealth(samus->getHealth() - dame);
 			SamusStateManager::getInstance()->setOldState(SamusStateManager::getInstance()->getCurrentState());
 		}
 	

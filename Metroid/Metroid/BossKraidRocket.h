@@ -29,7 +29,7 @@ private:
 	bool isCollided;
 	float timer;
 
-	float dame;
+	int dame;
 public:
 	void init();
 	void returnPool();
