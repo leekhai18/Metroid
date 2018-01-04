@@ -375,7 +375,7 @@ void SamusStateFallRolling::onCollision(float dt)
 	}
 	if (this->samus->isInStatus(eStatus::JUMPING))
 	{
-		VECTOR2 position = VECTOR2(this->samus->getPosition().x, this->samus->getBoundCollision().bottom + this->samus->getVelocity().y*dt);
+		VECTOR2 position = VECTOR2(this->samus->getPosition().x, this->samus->getBoundCollision().bottom + this->samus->getVelocity().y*dt + 1);
 		MetroidRect bound;
 		bound.left = this->samus->getPosition().x - WIDTH_COLLISION*0.5f;
 		bound.right = this->samus->getPosition().x + WIDTH_COLLISION*0.5f;

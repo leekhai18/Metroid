@@ -91,7 +91,7 @@ void SamusStateRolling::handleInput(float dt)
 				this->samus->setVelocityX(SAMUS_VERLOCITY_X);
 			}
 		}
-
+		 
 		if ((input->isKeyUp(VK_RIGHT) && input->isKeyUp(VK_LEFT)) || (input->isKeyDown(VK_LEFT) && input->isKeyDown(VK_RIGHT)))
 		{
 			this->samus->setVelocityX(0);
@@ -479,7 +479,7 @@ void SamusStateRolling::onCollision(float dt)
 
 	if (this->samus->isInStatus(eStatus::JUMPING))
 	{
-		VECTOR2 position = VECTOR2(this->samus->getPosition().x, this->samus->getBoundCollision().bottom + this->samus->getVelocity().y*dt);
+		VECTOR2 position = VECTOR2(this->samus->getPosition().x, this->samus->getBoundCollision().bottom + this->samus->getVelocity().y*dt + 1);
 		MetroidRect bound;
 		bound.left = this->samus->getPosition().x - WIDTH_COLLISION*0.5f;
 		bound.right = this->samus->getPosition().x + WIDTH_COLLISION*0.5f;
@@ -648,7 +648,7 @@ void SamusStateRolling::update(float dt)
 			}
 			break;
 		case eStatus::JUMPING:
-			this->samus->setPositionY(this->samus->getBoundCollision().bottom);
+			this->samus->setPositionY(this->samus->getBoundCollision().bottom + 13);
 			SamusStateManager::getInstance()->changeStateTo(this->samus->getStatus());
 			break;
 		case eStatus::FALLING_ROLLING:
