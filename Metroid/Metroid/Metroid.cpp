@@ -135,6 +135,8 @@ void Metroid::initialize(Graphics * graphics, Input * input)
 		throw GameError(GameErrorNS::FATAL_ERROR, "Can not initalize map brinstar");
 	}
 
+	Sound::getInstance()->loadAllSound();
+
 	camera = new Camera(VIEWPORT_WIDTH, VIEWPORT_HEIGHT);
 	camera->setPosition(VECTOR2(CAM_POS_X, CAM_POS_Y));
 

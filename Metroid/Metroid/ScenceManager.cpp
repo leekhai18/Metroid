@@ -94,6 +94,11 @@ void ScenceManager::deleteAll()
 	delete instance;
 }
 
+HWND ScenceManager::getHWnd()
+{
+	return this->handle;
+}
+
 ScenceManager::ScenceManager()
 {
 }

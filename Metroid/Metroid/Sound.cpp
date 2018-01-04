@@ -1,13 +1,14 @@
 #include "Sound.h"
 #include "Metroid.h"
 #include "GameLog.h"
+#include "ScenceManager.h"
 
 Sound* Sound::instance = nullptr;
 
 Sound* Sound:: getInstance()
 {
 	if (instance == nullptr)
-		instance = new Sound(Metroid::getInstance()->getCurrentHWND());
+		instance = new Sound(ScenceManager::getInstance()->getHWnd());
 
 	return instance;
 }

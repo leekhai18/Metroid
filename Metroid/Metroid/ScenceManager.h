@@ -44,6 +44,8 @@ public:
 
 	void deleteAll();
 
+	HWND getHWnd();
+
 	ScenceManager();
 	~ScenceManager();
 };
