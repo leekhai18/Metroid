@@ -47,46 +47,46 @@ bool SpriteManager::initialize(const char* filename)
 			this->spritesData[i] = spriteData;
 		}
 
-#pragma region Write Json File
-		Document d;
-		d.Parse("json");
-
-		ofstream ofs("json\\MetroidTexture1.json");
-		OStreamWrapper osw(ofs);
-		Writer<OStreamWrapper> writer(osw);
-
-		writer.StartObject();
-		writer.Key("frames");
-
-		writer.StartArray();
-
-		for (SizeType i = 0; i < size; i++)
-		{
-			writer.StartObject();
-			writer.Key("frame");
-
-				writer.StartObject();
-
-				writer.Key("x");
-				writer.Int(this->spritesData[i].rect.left);
-
-				writer.Key("y");
-				writer.Int(this->spritesData[i].rect.top);
-
-				writer.Key("w");
-				writer.Int(this->spritesData[i].width);
-
-				writer.Key("h");
-				writer.Int(this->spritesData[i].height);
-
-				writer.EndObject();
-
-			writer.EndObject();
-		}
-
-		writer.EndArray();
-		writer.EndObject();
-#pragma endregion
+//#pragma region Write Json File
+//		Document d;
+//		d.Parse("json");
+//
+//		ofstream ofs("json\\MetroidTexture1.json");
+//		OStreamWrapper osw(ofs);
+//		Writer<OStreamWrapper> writer(osw);
+//
+//		writer.StartObject();
+//		writer.Key("frames");
+//
+//		writer.StartArray();
+//
+//		for (SizeType i = 0; i < size; i++)
+//		{
+//			writer.StartObject();
+//			writer.Key("frame");
+//
+//				writer.StartObject();
+//
+//				writer.Key("x");
+//				writer.Int(this->spritesData[i].rect.left);
+//
+//				writer.Key("y");
+//				writer.Int(this->spritesData[i].rect.top);
+//
+//				writer.Key("w");
+//				writer.Int(this->spritesData[i].width);
+//
+//				writer.Key("h");
+//				writer.Int(this->spritesData[i].height);
+//
+//				writer.EndObject();
+//
+//			writer.EndObject();
+//		}
+//
+//		writer.EndArray();
+//		writer.EndObject();
+//#pragma endregion
 
 	}
 	catch (const std::exception&)
