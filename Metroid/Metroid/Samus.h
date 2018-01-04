@@ -93,7 +93,7 @@ private:
 
 	map<int,BaseObject*>* listCanCollide;
 	
-
+	map<int, BaseObject*>* listWallCanCollide;
 	bool visible;
 	//when boom explose in samus, boomVelocity is set based on side of samus and boom
 	VECTOR2 boomVelocity;
@@ -176,7 +176,7 @@ public:
 	void setCanMoveElevator(bool flag);
 	bool getCanMoveElevator();
 	void setListCanCollide(map<int,BaseObject*>* list);
-
+	void setListWallCanCollide(map<int, BaseObject*>* list);
 	void setBoomVelocity(VECTOR2 boomVelocity);
 	VECTOR2 getBoomVelocity();
 	void setBoomExplose(bool boomExplose);
@@ -190,6 +190,7 @@ public:
 	
 	list<CollisionReturn> *getListCollide();
 	map<int, BaseObject*>* getListCanCollide();
+	map<int, BaseObject*>* getListWallCanCollide();
 #pragma region items
 	bool isHaveMariMaru();
 	void setMariMaru(bool flag);

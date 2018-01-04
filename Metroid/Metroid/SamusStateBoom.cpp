@@ -23,6 +23,7 @@
 #include "MissileRocket.h"
 #include "IceBeam.h"
 #include "Varia.h"
+#include "Brick.h"
 #define TIME_TO_NORMAL 0.4f
 
 SamusStateBoom::SamusStateBoom()
@@ -115,7 +116,7 @@ void SamusStateBoom::handleInput(float dt)
 			this->samus->setFall(false);
 			this->samus->setAcrobat(false);
 			this->samus->setVelocityX(0);
-			this->samus->setStatus(eStatus::JUMPING);
+			this->samus->setStatus(eStatus::ROLLING);
 			return;
 		}
 
@@ -153,8 +154,6 @@ void SamusStateBoom::onCollision(float dt)
 				this->samus->setVelocityY(0);
 				break;
 			case CollideDirection::LEFT:
-
-
 				this->samus->setVelocityX(0);
 				break;
 			case CollideDirection::RIGHT:
@@ -659,7 +658,18 @@ void SamusStateBoom::onCollision(float dt)
 
 #pragma endregion
 
-
+		//for (auto i = this->samus->getListCanCollide()->begin(); i != this->samus->getListCanCollide()->end(); ++i)
+		//{
+		//	if ((*i).second->isActivitied())
+		//	{
+		//		if (Collision::getInstance()->isCollide((*i).second->getBoundCollision(),this->samus->getBoundCollision()))
+		//		{
+		//			this->samus->setStatus(eStatus::BOOM);
+		//			//timerToNormal = 0;
+		//			break;
+		//		}
+		//	}
+		//}
 		default:
 			break;
 		}

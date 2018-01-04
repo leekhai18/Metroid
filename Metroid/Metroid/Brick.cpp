@@ -1,12 +1,13 @@
 #include "Brick.h"
 #include "Collision.h"
-#define TIME_TO_RESET 5.0f
+#include "Samus.h"
+#define TIME_TO_RESET 8.0f
 
 Brick::Brick()
 {
 }
 
-Brick::Brick(TextureManager * textureM, Graphics * graphics, BrickStyle style) : BaseObject(eID::BRICK)
+Brick::Brick(TextureManager * textureM, Graphics * graphics, Samus* samus,BrickStyle style) : BaseObject(eID::BRICK)
 {
 	this->sprite = new Sprite();
 	if (!this->sprite->initialize(graphics, textureM, SpriteManager::getInstance()))
@@ -34,6 +35,7 @@ Brick::Brick(TextureManager * textureM, Graphics * graphics, BrickStyle style) :
 	default:
 		break;
 	}
+	this->samus = samus;
 	isActivity = true;
 	visible = true;
 	listCanCollide = new map<int,BaseObject*>();
@@ -75,7 +77,13 @@ void Brick::onCollision(float dt)
 			if(Collision::getInstance()->isCollide(this->boundCollision, object->getBoundCollision()))
 			{
 				this->timeReset = 0;
+				isActivity = false;
 			}
+		}
+		if (Collision::getInstance()->isCollide(this->boundCollision, samus->getBoundCollision()))
+		{
+			this->timeReset = 0;
+			isActivity = false;
 		}
 	}
 }
@@ -83,7 +91,7 @@ void Brick::onCollision(float dt)
 void Brick::update(float dt)
 {
 
-	if (!this->isActivity&&visible)
+	if (!this->isActivity)
 	{
 		this->timeReset += dt;
 		if (timeReset >= TIME_TO_RESET)
@@ -94,19 +102,19 @@ void Brick::update(float dt)
 		}
 		
 	}
-	if(this->isActivity&&visible)
+	else
 	{
 		if (heath <= 0)
 		{
 			this->isActivity = false;
+			
 		}
 	}
-	
 }
 
 void Brick::draw()
 {
-	if (this->isActivity&&visible)
+	if (this->isActivity)
 		this->sprite->draw();
 }
 

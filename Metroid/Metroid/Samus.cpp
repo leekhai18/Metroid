@@ -354,6 +354,11 @@ void Samus::setListCanCollide(map<int, BaseObject*>* list)
 	this->listCanCollide = list;
 }
 
+void Samus::setListWallCanCollide(map<int, BaseObject*>* list)
+{
+	this->listWallCanCollide = list;
+}
+
 void Samus::setBoomVelocity(VECTOR2 boomVelocity)
 {
 	this->boomVelocity = boomVelocity;
@@ -484,6 +489,10 @@ map<int, BaseObject*>* Samus::getListCanCollide()
 {
 	return this->listCanCollide;
 
+}
+map<int, BaseObject*>* Samus::getListWallCanCollide()
+{
+	return this->listWallCanCollide;
 }
 list<CollisionReturn>* Samus::getListCollide()
 {

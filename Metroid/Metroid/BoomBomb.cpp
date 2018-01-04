@@ -131,13 +131,13 @@ void BoomBomb::onCollision()
 			{
 				if (bound.right < this->boundCollision.left - 2)
 				{
-					samus->setBoomVelocity(VECTOR2(-100, 100));
+					samus->setBoomVelocity(VECTOR2(0, 100));
 					//samus->setVelocity(VECTOR2(-100, 100));
 					samus->setBoomExplose(true);
 				}
 				else if (bound.left > this->boundCollision.left + 2)
 				{
-					samus->setBoomVelocity(VECTOR2(100, 100));
+					samus->setBoomVelocity(VECTOR2(0, 100));
 					//samus->setVelocity(VECTOR2(100, 100));
 					samus->setBoomExplose(true);
 				}

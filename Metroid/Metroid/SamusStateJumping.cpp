@@ -20,6 +20,7 @@
 #include "Port.h"
 #include "ScenceManager.h"
 #include "Sound.h"
+#include "Brick.h"
 SamusStateJumping::SamusStateJumping()
 {
 }
@@ -179,7 +180,13 @@ void SamusStateJumping::handleInput(float dt)
 					this->samus->timerShoot = 0;
 				}
 			}
-
+			if (input->isKeyDown(VK_DOWN) && this->samus->isHaveMariMaru())
+			{
+				this->samus->setVelocityX(0);
+				this->samus->setStatus(eStatus::ROLLING);
+				jumpDistance = 0;
+				return;
+			}
 			if (input->isKeyDown(VK_UP) && input->isKeyUp(VK_Z))
 			{
 				// Set Data for sprite
@@ -241,6 +248,7 @@ void SamusStateJumping::onCollision(float dt)
 				//reset velocity
 				this->samus->setVelocityY(0);
 				positionCollide = i->positionCollision;
+				//if(this->samus->getStatus()!)
 				this->samus->setStatus(eStatus::STANDING);
 				break;
 			case CollideDirection::BOTTOM:
@@ -866,6 +874,32 @@ void SamusStateJumping::onCollision(float dt)
 		}
 
 	}
+	if (this->samus->isInStatus(eStatus::STANDING))
+	{
+		VECTOR2 position = VECTOR2(this->samus->getPosition().x, positionCollide + OFFSET_STAND - OFFSET_COLLISION_Y + 1);
+		MetroidRect bound;
+		bound.left = position.x - WIDTH_COLLISION*0.5f;
+		bound.right = position.x + WIDTH_COLLISION*0.5f;
+		bound.top = position.y + HEIGHT_COLLISION*0.5f;
+		bound.bottom = position.y - HEIGHT_COLLISION*0.5f;
+
+
+		for (auto i = this->samus->getListWallCanCollide()->begin(); i != this->samus->getListWallCanCollide()->end(); ++i)
+		{
+			if((*i).second->isActivitied())
+			{
+				if (Collision::getInstance()->isCollide((*i).second->getBoundCollision(), bound))
+				{
+					
+						this->samus->setStatus(eStatus::JUMPING);
+						break;
+					
+
+				}
+			}
+			
+		}
+	}
 }
 
 void SamusStateJumping::update(float dt)
@@ -906,6 +940,9 @@ void SamusStateJumping::update(float dt)
 			}*/
 			
 			break;
+			case  eStatus::ROLLING:
+				this->samus->setCanJump(true);
+				break;
 		default:
 			break;
 		}

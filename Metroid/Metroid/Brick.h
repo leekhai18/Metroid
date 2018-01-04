@@ -2,6 +2,7 @@
 #include "BaseObject.h"
 #include <list>
 #include <map>
+class Samus;
 class Brick : public BaseObject
 {
 private:
@@ -9,9 +10,10 @@ private:
 	map<int,BaseObject*>* listCanCollide;
 	bool visible;
 	int heath;
+	Samus* samus;
 public:
 	Brick();
-	Brick(TextureManager* textureM, Graphics* graphics, BrickStyle style);
+	Brick(TextureManager* textureM, Graphics* graphics, Samus* samus,BrickStyle style);
 	~Brick();
 	bool getVisible();
 	void decreaseHealth(float dame);

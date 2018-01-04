@@ -76,9 +76,22 @@ void Bullet::onCollision()
 						this->velocity = VECTOR2ZERO;
 
 						this->sprite->setData(indexEffect);
-						this->setPositionX(i->positionCollision);
+						
 						
 						brick->decreaseHealth(dame);
+						switch (i->direction)
+						{
+						case CollideDirection::BOTTOM: case CollideDirection::TOP:
+							this->setPositionY(i->positionCollision);
+							break;
+
+						case CollideDirection::LEFT: case CollideDirection::RIGHT:
+							this->setPositionX(i->positionCollision);
+							break;
+						default:
+							break;
+						}
+
 					}
 					
 				}
@@ -86,7 +99,19 @@ void Bullet::onCollision()
 					this->sprite->setData(indexEffect);
 					this->isCollided = true;
 					this->velocity = VECTOR2ZERO;
-					this->setPositionX(i->positionCollision);
+					switch (i->direction)
+					{
+					case CollideDirection::BOTTOM: case CollideDirection::TOP:
+						this->setPositionY(i->positionCollision);
+						break;
+
+					case CollideDirection::LEFT: case CollideDirection::RIGHT:
+						this->setPositionX(i->positionCollision);
+						break;
+					default:
+						break;
+					}
+				
 				
 
 					break;
@@ -103,12 +128,17 @@ void Bullet::onCollision()
 
 					switch (i->direction)
 					{
+					case CollideDirection::BOTTOM: case CollideDirection::TOP:
+						this->setPositionY(i->positionCollision);
+						break;
+
 					case CollideDirection::LEFT: case CollideDirection::RIGHT:
 						this->setPositionX(i->positionCollision);
 						break;
 					default:
 						break;
 					}
+
 					break;
 				}
 				
@@ -121,6 +151,19 @@ void Bullet::onCollision()
 					{
 						break;
 					}
+					switch (i->direction)
+					{
+					case CollideDirection::BOTTOM: case CollideDirection::TOP:
+						this->setPositionY(i->positionCollision);
+						break;
+
+					case CollideDirection::LEFT: case CollideDirection::RIGHT:
+						this->setPositionX(i->positionCollision);
+						break;
+					default:
+						break;
+					}
+
 					this->isCollided = true;
 
 					this->velocity = VECTOR2ZERO;
@@ -155,6 +198,19 @@ void Bullet::onCollision()
 					{
 						break;
 					}
+					switch (i->direction)
+					{
+					case CollideDirection::BOTTOM: case CollideDirection::TOP:
+						this->setPositionY(i->positionCollision);
+						break;
+
+					case CollideDirection::LEFT: case CollideDirection::RIGHT:
+						this->setPositionX(i->positionCollision);
+						break;
+					default:
+						break;
+					}
+
 					this->isCollided = true;
 					this->velocity = VECTOR2ZERO;
 					this->sprite->setData(indexEffect);
@@ -187,6 +243,19 @@ void Bullet::onCollision()
 					this->sprite->setData(indexEffect);
 					Ripper* ripper = static_cast<Ripper*>((*i).object);
 
+					switch (i->direction)
+					{
+					case CollideDirection::BOTTOM: case CollideDirection::TOP:
+						this->setPositionY(i->positionCollision);
+						break;
+
+					case CollideDirection::LEFT: case CollideDirection::RIGHT:
+						this->setPositionX(i->positionCollision);
+						break;
+					default:
+						break;
+					}
+
 					if (BulletPool::getInstance()->getCurrentIceBullet())
 					{
 						if (ripper->getCold())
@@ -212,6 +281,19 @@ void Bullet::onCollision()
 					{
 						break;
 					}
+					switch (i->direction)
+					{
+					case CollideDirection::BOTTOM: case CollideDirection::TOP:
+						this->setPositionY(i->positionCollision);
+						break;
+
+					case CollideDirection::LEFT: case CollideDirection::RIGHT:
+						this->setPositionX(i->positionCollision);
+						break;
+					default:
+						break;
+					}
+
 					if (!zommer->getCold())
 					{
 						zommer->setBeHit(true);
@@ -243,6 +325,19 @@ void Bullet::onCollision()
 					{
 						break;
 					}
+					switch (i->direction)
+					{
+					case CollideDirection::BOTTOM: case CollideDirection::TOP:
+						this->setPositionY(i->positionCollision);
+						break;
+
+					case CollideDirection::LEFT: case CollideDirection::RIGHT:
+						this->setPositionX(i->positionCollision);
+						break;
+					default:
+						break;
+					}
+
 					if (!waver->getCold())
 					{
 						waver->setBeHit(true);
@@ -274,6 +369,19 @@ void Bullet::onCollision()
 					{
 						break;
 					}
+					switch (i->direction)
+					{
+					case CollideDirection::BOTTOM: case CollideDirection::TOP:
+						this->setPositionY(i->positionCollision);
+						break;
+
+					case CollideDirection::LEFT: case CollideDirection::RIGHT:
+						this->setPositionX(i->positionCollision);
+						break;
+					default:
+						break;
+					}
+
 					if (BulletPool::getInstance()->getCurrentIceBullet())
 					{
 						if (zeb->getCold())
@@ -296,6 +404,19 @@ void Bullet::onCollision()
 					BossKraid* bossKraid = static_cast<BossKraid*>(i->object);
 					if (bossKraid->isActivitied()) 
 					{
+						switch (i->direction)
+						{
+						case CollideDirection::BOTTOM: case CollideDirection::TOP:
+							this->setPositionY(i->positionCollision);
+							break;
+
+						case CollideDirection::LEFT: case CollideDirection::RIGHT:
+							this->setPositionX(i->positionCollision);
+							break;
+						default:
+							break;
+						}
+
 						this->isCollided = true;
 						this->velocity = VECTOR2ZERO;
 						this->sprite->setData(indexEffect);
@@ -311,6 +432,19 @@ void Bullet::onCollision()
 					MotherBrain* motherBrain = static_cast<MotherBrain*>(i->object);
 					if (motherBrain->isActivitied())
 					{
+						switch (i->direction)
+						{
+						case CollideDirection::BOTTOM: case CollideDirection::TOP:
+							this->setPositionY(i->positionCollision);
+							break;
+
+						case CollideDirection::LEFT: case CollideDirection::RIGHT:
+							this->setPositionX(i->positionCollision);
+							break;
+						default:
+							break;
+						}
+
 						this->isCollided = true;
 						this->sprite->setData(indexEffect);
 						this->velocity = VECTOR2ZERO;

@@ -65,6 +65,7 @@ void SamusStateStanding::init()
 		IndexManager::getInstance()->samusPinkIceTurnRight);
 
 	canRolling = false;
+	setBoundCollision();
 }
 
 void SamusStateStanding::handleInput(float dt)

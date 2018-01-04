@@ -210,10 +210,12 @@ void ObjectManager::onCheckCollision(float dt)
 
 
 #pragma region handle Wall
+	//samus->setListCanCollide(listWallCanCollideSamus);
+	samus->setListWallCanCollide(listWallCanCollideSamus);
 	for (auto x = listWallCanCollideSamus->begin(); x != listWallCanCollideSamus->end(); x++)
 	{
 		BaseObject* object = (*x).second;
-		samus->setListCanCollide(listWallCanCollideSamus);
+		
 		Collision::getInstance()->checkCollision(samus, object, dt);
 
 		for (unsigned i = 0; i < BulletPool::getInstance()->getListUsing().size(); i++)
@@ -233,14 +235,14 @@ void ObjectManager::onCheckCollision(float dt)
 
 #pragma region handle Other wall
 	// Get listCollide
+	samus->setListCanCollide(listNotWallCanCollideSamus);
 	for (auto x = listNotWallCanCollideSamus->begin(); x != listNotWallCanCollideSamus->end(); x++)
 	{
 		BaseObject* object = (*x).second;
 		//if (object->getId() == BOSSKRAID)
 		//{
 		//	int test = 0;
-		//}
-		samus->setListCanCollide(listNotWallCanCollideSamus);
+		//}	
 		Collision::getInstance()->checkCollision(samus, object, dt);
 
 		if (object->getId() == eID::SKREE)
@@ -636,7 +638,7 @@ bool ObjectManager::load_list(const char * filename)
 		
 			for (SizeType i = 0; i < listBrickSecretBlue.Size(); i++)
 			{
-				Brick *bsb = new Brick(this->textureManager, this->graphics, BrickStyle::BrickSecretBlue);
+				Brick *bsb = new Brick(this->textureManager, this->graphics, samus, BrickStyle::BrickSecretBlue);
 
 				id = listBrickSecretBlue[i]["id"].GetInt();
 				x = listBrickSecretBlue[i]["x"].GetFloat();
@@ -673,7 +675,7 @@ bool ObjectManager::load_list(const char * filename)
 		
 			for (SizeType i = 0; i < listBrickSerectGreen.Size(); i++)
 			{
-				Brick *bsg = new Brick(this->textureManager, this->graphics, BrickStyle::BrickSerectGreen);
+				Brick *bsg = new Brick(this->textureManager, this->graphics, samus, BrickStyle::BrickSerectGreen);
 
 				id = listBrickSerectGreen[i]["id"].GetInt();
 				x = listBrickSerectGreen[i]["x"].GetFloat();
@@ -709,7 +711,7 @@ bool ObjectManager::load_list(const char * filename)
 		
 			for (SizeType i = 0; i < listBrickGreen.Size(); i++)
 			{
-				Brick *bg = new Brick(this->textureManager, this->graphics, BrickStyle::BrickGreen);
+				Brick *bg = new Brick(this->textureManager, this->graphics, samus, BrickStyle::BrickGreen);
 				id = listBrickGreen[i]["id"].GetInt();
 
 				x = listBrickGreen[i]["x"].GetFloat();
@@ -747,7 +749,7 @@ bool ObjectManager::load_list(const char * filename)
 		
 			for (SizeType i = 0; i < listBrickBlue.Size(); i++)
 			{
-				Brick *bb = new Brick(this->textureManager, this->graphics, BrickStyle::BrickBlue);
+				Brick *bb = new Brick(this->textureManager, this->graphics, samus,BrickStyle::BrickBlue);
 
 				id = listBrickBlue[i]["id"].GetInt();
 				x = listBrickBlue[i]["x"].GetFloat();
@@ -755,7 +757,7 @@ bool ObjectManager::load_list(const char * filename)
 				bb->setPosition(VECTOR2(x, y));
 
 				isVisible = listBrickBlue[i]["visible"].GetBool();
-				bb->setVisible(isVisible);
+				bb->setActivity(isVisible);
 
 				//writer.StartObject();
 				//writer.Key("x");
@@ -787,7 +789,7 @@ bool ObjectManager::load_list(const char * filename)
 	
 			for (SizeType i = 0; i < listBrickRed.Size(); i++)
 			{
-				Brick *br = new Brick(this->textureManager, this->graphics, BrickStyle::BrickRed);
+				Brick *br = new Brick(this->textureManager, this->graphics, samus, BrickStyle::BrickRed);
 
 				id = listBrickRed[i]["id"].GetInt();
 				x = listBrickRed[i]["x"].GetFloat();

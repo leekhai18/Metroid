@@ -113,7 +113,7 @@ void SamusStateFallRolling::onCollision(float dt)
 		bound.bottom = this->samus->getBoundCollision().bottom;
 		bound.top = bound.bottom + 30;
 
-		for (map<int,BaseObject*>::iterator i = this->samus->getListCanCollide()->begin(); i != this->samus->getListCanCollide()->end(); ++i)
+		for (map<int,BaseObject*>::iterator i = this->samus->getListWallCanCollide()->begin(); i != this->samus->getListWallCanCollide()->end(); ++i)
 		{
 			if (Collision::getInstance()->isCollide((*i).second->getBoundCollision(), bound))
 			{
@@ -130,6 +130,36 @@ void SamusStateFallRolling::onCollision(float dt)
 				{
 					this->samus->setStatus(eStatus::FALLING_ROLLING);
 				}
+			}
+		}
+		for (auto i = this->samus->getListCanCollide()->begin(); i != this->samus->getListCanCollide()->end(); ++i)
+		{
+			if ((*i).second->isActivitied())
+			{
+				if ((*i).second->getId() == eID::ZOMMER)
+				{
+					Zommer* zommer = static_cast<Zommer*>((*i).second);
+					if (zommer->getHandle())
+					{
+						if (Collision::getInstance()->isCollide((*i).second->getBoundCollision(), bound))
+						{
+							this->samus->setStatus(eStatus::ROLLING);
+							break;
+						}
+					}
+
+				}
+				else
+				{
+					if (Collision::getInstance()->isCollide((*i).second->getBoundCollision(), bound))
+					{
+						this->samus->setStatus(eStatus::ROLLING);
+						break;
+					}
+
+				}
+
+
 			}
 		}
 	}
@@ -358,8 +388,9 @@ void SamusStateFallRolling::update(float dt)
 		switch (this->samus->getStatus())
 		{
 		case eStatus::STANDING:
-			//this->samus->setPositionY(this->samus->getPosition().y + OFFSET_STAND);
+			this->samus->setPositionY(this->samus->getPosition().y + OFFSET_STAND);
 			this->samus->setFall(true);
+			
 			break;
 		default:
 			break;

@@ -110,6 +110,9 @@ void Zommer::reInit()
 
 	this->sprite->setRotate(0);
 	sprite->setData(reset);
+
+	isCold = false;
+	timeReturnNormal = 0;
 	
 }
 bool Zommer::getHandle()
