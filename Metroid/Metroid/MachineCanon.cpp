@@ -9,7 +9,8 @@ MachineCanon::MachineCanon()
 
 
 
-MachineCanon::MachineCanon(Graphics * graphics, TextureManager * textureM, Samus * samus, CanonType type):BaseObject(eID::MACHINE_CANON)
+MachineCanon::MachineCanon(Graphics * graphics, TextureManager * textureM, Samus * samus, CanonType type)
+	:BaseObject(eID::MACHINE_CANON)
 {
 	this->sprite = new Sprite();
 	if (!this->sprite->initialize(graphics, textureM, SpriteManager::getInstance()))
@@ -55,7 +56,7 @@ MachineCanon::MachineCanon(Graphics * graphics, TextureManager * textureM, Samus
 		break;
 	}
 	anim->start();
-	
+	this->isActivity = true;
 
 	this->sprite->setOrigin(VECTOR2(0.5, 0.5));
 }

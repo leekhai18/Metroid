@@ -9,7 +9,8 @@ CanonBullet::CanonBullet()
 {
 }
 
-CanonBullet::CanonBullet(Graphics * graphics, TextureManager * textureM, CanonType type, MachineCanon* canon):BaseObject(eID::CANON_BULLET)
+CanonBullet::CanonBullet(Graphics * graphics, TextureManager * textureM, CanonType type, MachineCanon* canon)
+	:BaseObject(eID::CANON_BULLET)
 {
 	this->sprite = new Sprite();
 	this->canon = canon;

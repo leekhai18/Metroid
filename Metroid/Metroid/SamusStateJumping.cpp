@@ -431,6 +431,7 @@ void SamusStateJumping::onCollision(float dt)
 				this->samus->setPositionY(addY - OFFSET_JUMP);
 				break;
 			}
+			break;
 		}
 		case eID::ZOMMER:
 		{
@@ -926,8 +927,6 @@ void SamusStateJumping::onCollision(float dt)
 					
 						this->samus->setStatus(eStatus::JUMPING);
 						break;
-					
-
 				}
 			}
 			

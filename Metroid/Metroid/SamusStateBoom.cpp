@@ -300,10 +300,12 @@ void SamusStateBoom::onCollision(float dt)
 				if (!zommer->getHandle())
 				{
 					return;
-				}
+				}	
 				this->samus->setStatus(eStatus::INJURING);
-				SamusStateManager::getInstance()->setOldStatus(SamusStateManager::getInstance()->getOldStatus());
-				SamusStateManager::getInstance()->setOldState(SamusStateManager::getInstance()->getOldState());
+				BaseState* state = SamusStateManager::getInstance()->getOldState();
+				eStatus status = SamusStateManager::getInstance()->getOldStatus();
+				SamusStateManager::getInstance()->setOldStatus(status);
+				SamusStateManager::getInstance()->setOldState(state);
 
 			}
 			break;
@@ -347,8 +349,10 @@ void SamusStateBoom::onCollision(float dt)
 					return;
 				}
 				this->samus->setStatus(eStatus::INJURING);
-				SamusStateManager::getInstance()->setOldStatus(SamusStateManager::getInstance()->getOldStatus());
-				SamusStateManager::getInstance()->setOldState(SamusStateManager::getInstance()->getOldState());
+				BaseState* state = SamusStateManager::getInstance()->getOldState();
+				eStatus status = SamusStateManager::getInstance()->getOldStatus();
+				SamusStateManager::getInstance()->setOldStatus(status);
+				SamusStateManager::getInstance()->setOldState(state);
 			}
 			break;
 		}
@@ -397,8 +401,10 @@ void SamusStateBoom::onCollision(float dt)
 					return;
 				}
 				this->samus->setStatus(eStatus::INJURING);
-				SamusStateManager::getInstance()->setOldStatus(SamusStateManager::getInstance()->getOldStatus());
-				SamusStateManager::getInstance()->setOldState(SamusStateManager::getInstance()->getOldState());
+				BaseState* state = SamusStateManager::getInstance()->getOldState();
+				eStatus status = SamusStateManager::getInstance()->getOldStatus();
+				SamusStateManager::getInstance()->setOldStatus(status);
+				SamusStateManager::getInstance()->setOldState(state);
 			}
 			break;
 		}
@@ -442,8 +448,10 @@ void SamusStateBoom::onCollision(float dt)
 					return;
 				}
 				this->samus->setStatus(eStatus::INJURING);
-				SamusStateManager::getInstance()->setOldStatus(SamusStateManager::getInstance()->getOldStatus());
-				SamusStateManager::getInstance()->setOldState(SamusStateManager::getInstance()->getOldState());
+				BaseState* state = SamusStateManager::getInstance()->getOldState();
+				eStatus status = SamusStateManager::getInstance()->getOldStatus();
+				SamusStateManager::getInstance()->setOldStatus(status);
+				SamusStateManager::getInstance()->setOldState(state);
 			}
 			break;
 		}
@@ -475,8 +483,10 @@ void SamusStateBoom::onCollision(float dt)
 			else
 			{
 				this->samus->setStatus(eStatus::INJURING);
-				SamusStateManager::getInstance()->setOldStatus(SamusStateManager::getInstance()->getOldStatus());
-				SamusStateManager::getInstance()->setOldState(SamusStateManager::getInstance()->getOldState());
+				BaseState* state = SamusStateManager::getInstance()->getOldState();
+				eStatus status = SamusStateManager::getInstance()->getOldStatus();
+				SamusStateManager::getInstance()->setOldStatus(status);
+				SamusStateManager::getInstance()->setOldState(state);
 			}
 			break;
 		}
@@ -519,8 +529,10 @@ void SamusStateBoom::onCollision(float dt)
 					return;
 				}
 				this->samus->setStatus(eStatus::INJURING);
-				SamusStateManager::getInstance()->setOldStatus(SamusStateManager::getInstance()->getOldStatus());
-				SamusStateManager::getInstance()->setOldState(SamusStateManager::getInstance()->getOldState());
+				BaseState* state = SamusStateManager::getInstance()->getOldState();
+				eStatus status = SamusStateManager::getInstance()->getOldStatus();
+				SamusStateManager::getInstance()->setOldStatus(status);
+				SamusStateManager::getInstance()->setOldState(state);
 			}
 			break;
 		}
@@ -546,8 +558,10 @@ void SamusStateBoom::onCollision(float dt)
 				break;
 			}
 			this->samus->setStatus(eStatus::INJURING);
-			SamusStateManager::getInstance()->setOldStatus(SamusStateManager::getInstance()->getOldStatus());
-			SamusStateManager::getInstance()->setOldState(SamusStateManager::getInstance()->getOldState());
+			BaseState* state = SamusStateManager::getInstance()->getOldState();
+			eStatus status = SamusStateManager::getInstance()->getOldStatus();
+			SamusStateManager::getInstance()->setOldStatus(status);
+			SamusStateManager::getInstance()->setOldState(state);
 			break;
 		}
 		case eID::MOTHERBRAIN:
@@ -570,8 +584,10 @@ void SamusStateBoom::onCollision(float dt)
 			}
 
 			this->samus->setStatus(eStatus::INJURING);
-			SamusStateManager::getInstance()->setOldStatus(SamusStateManager::getInstance()->getOldStatus());
-			SamusStateManager::getInstance()->setOldState(SamusStateManager::getInstance()->getOldState());
+			BaseState* state = SamusStateManager::getInstance()->getOldState();
+			eStatus status = SamusStateManager::getInstance()->getOldStatus();
+			SamusStateManager::getInstance()->setOldStatus(status);
+			SamusStateManager::getInstance()->setOldState(state);
 
 			break;
 		}
@@ -685,14 +701,23 @@ void SamusStateBoom::update(float dt)
 	if(this->timerToNormal>=TIME_TO_NORMAL)
 	{
 		this->timerToNormal = 0;
-		if(this->samus->getStatus()!= eStatus::BOOM)
+		if (this->samus->getStatus() != eStatus::INJURING)
 		{
 			this->samus->setStatus(SamusStateManager::getInstance()->getOldStatus());
-		}		
+		}
 	}
 	if (this->samus->getStatus() != eStatus::BOOM)
 	{
-		
+		switch (this->samus->getStatus())
+		{
+		case eStatus::INJURING:
+			/*SamusStateManager::getInstance()->setOldStatus(eStatus::ROLLING);
+			BaseState* state = SamusStateManager::getInstance()->getOldState();
+			SamusStateManager::getInstance()->setOldState(state);*/
+			break;
+		default:
+			break;
+		}
 		samus->setBoomExplose(false);
 		SamusStateManager::getInstance()->changeStateTo(this->samus->getStatus());
 		return;
