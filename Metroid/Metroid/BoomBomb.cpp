@@ -142,18 +142,6 @@ void BoomBomb::onCollision()
 					samus->setBoomExplose(true);
 				}
 			}
-
-			//if (this->boundCollision.bottom >= bound.bottom)
-			//{
-
-			//	
-			//}
-			//else
-			//{
-			//	samus->setBoomVelocity(VECTOR2(0, 100));
-			//	//samus->setVelocity(VECTOR2(100, 100));
-			//	samus->setBoomExplose(true);
-			//}
 		}
 		canHandledCollision = false;
 		
