@@ -184,6 +184,7 @@ public:
 	const int bossKraidR[2] = { 189,190 };
 	const int motherBrain[8] = { 264,265,266,267,268,269,270,271 };
 	const int motherBrainOpening[8] = { 272,273,274,275,276,277,278,279 };
+	
 	const int motherBrainOpened[2] = { 280,281 };
 	const int bulletMotherBrain[4] = { 256,257,258,259 };
 

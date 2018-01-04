@@ -4,8 +4,8 @@
 #include "Constants.h"
 
 //start position
-//#define CAM_POS_X 640
-//#define CAM_POS_Y 1320
+#define CAM_POS_X 640
+#define CAM_POS_Y 1320
 
 //boss position
 //#define CAM_POS_X 896
@@ -33,8 +33,8 @@
 //#define CAM_POS_Y 3000
 
 //
-#define CAM_POS_X  263.111481
-#define CAM_POS_Y 3647.88770
+//#define CAM_POS_X  263.111481
+//#define CAM_POS_Y 3647.88770
 class Camera
 {
 private:

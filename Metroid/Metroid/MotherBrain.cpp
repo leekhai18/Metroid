@@ -1,11 +1,13 @@
 #include "MotherBrain.h"
-
+#include "Camera.h"
 #define NUMBER_BULLET 10
 #define WIDTH_BULLET 50
 #define RATE_BEZIER 1.0f
 
 #define DISTANCE_TO_FIRE 150
 #define TIME_DELAY_BE_HIT 0.2f
+#define TIME_BEFORE_DEATH 6.0f
+#define CYCLE 0.1
 MotherBrain::MotherBrain()
 {
 }
@@ -20,7 +22,11 @@ MotherBrain::MotherBrain(TextureManager * textureM, Graphics * graphics,Samus* s
 
 	this->initExplosion(this->sprite, IndexManager::getInstance()->samusYellowExplosion, NUM_FRAMES_EXPLOSION, EXPLOSION_TIME_FRAME_DELAY);
 
-	this->anim = new Animation(this->sprite, IndexManager::getInstance()->motherBrain, NUM_FRAMES_MOTHER, 0.1f);
+	//this->anim = new Animation(this->sprite, IndexManager::getInstance()->motherBrain, NUM_FRAMES_MOTHER, 0.1f);
+	fullHeath= new Animation(this->sprite, IndexManager::getInstance()->motherBrain, NUM_FRAMES_MOTHER, 0.1f);
+	openingBoss = new Animation(this->sprite, IndexManager::getInstance()->motherBrainOpening, NUM_FRAMES_MOTHER, 0.1f);
+	openedBoss= new Animation(this->sprite, IndexManager::getInstance()->motherBrainOpened, 2, 0.1f);
+	this->anim = fullHeath;
 	this->anim->start();
 	this->getSprite()->setOrigin(VECTOR2(0.5, 0.5));
 
@@ -29,14 +35,16 @@ MotherBrain::MotherBrain(TextureManager * textureM, Graphics * graphics,Samus* s
 	this->samus = samus;
 	health = 50;
 	bulletPool = new MBulletPool(textureM, graphics, samus, NUMBER_BULLET);
-
+	this->isHandle = true;
 }
 
 
 MotherBrain::~MotherBrain()
 {
 	delete this->sprite;
-	delete anim;
+	delete fullHeath;
+	delete openingBoss;
+	delete openedBoss;
 	delete bulletPool;
 }
 
@@ -70,7 +78,7 @@ void MotherBrain::reInit()
 void MotherBrain::handleVelocity(float dt)
 {
 	
-	if(isHandle)
+	/*if(isHandle)
 	{
 		bulletPool->handleVelocity(dt);
 	}
@@ -81,15 +89,15 @@ void MotherBrain::handleVelocity(float dt)
 			isHandle = true;
 			initStartBulletPool(this->getPosition());
 		}
-	}
+	}*/
 }
 
 void MotherBrain::onCollision(Samus * samus, float dt)
 {
-	if (isHandle&&isActivity)
+	/*if (isHandle&&isActivity)
 	{
 		bulletPool->onCollision(dt);
-	}
+	}*/
 }
 
 
@@ -110,24 +118,48 @@ void MotherBrain::update(float dt)
 				timerHit = 0;
 				beHit = false;
 				this->anim->setPause(false);
+				
 				if (this->health <= 0)
 				{
 
-					IExplosible::start();
-					this->setVelocity(VECTOR2(0, 0));
-					this->isActivity = false;
-					this->port->setWin(true);
+					this->isHandle = false;
+					this->anim = this->openedBoss;
+					this->anim->start();
+					position = Camera::getInstance()->getPosition();
 				}
 			}
 		}
 
-		if (isHandle)
+	
+		this->anim->update(dt);
+		if (isHandle == false)
 		{
-			bulletPool->update(dt);
+			timeBeforDeath += dt;
+
+			if (timeBeforDeath >= CYCLE)
+			{
+				if (cycle%2 == 0)
+				{
+					Camera::getInstance()->setPosition(VECTOR2(position.x, position.y + 8));
+				}
+				else
+				{
+					Camera::getInstance()->setPosition(VECTOR2(position.x, position.y - 8));
+				}
+				++cycle;
+			}
+
+			if (timeBeforDeath >= TIME_BEFORE_DEATH)
+			{
+				isActivity = false;
+				this->port->setWin(true);
+				Camera::getInstance()->setPosition(position);
+			}
+
 		}
-		this->anim->update(dt);		
 	}
-	IExplosible::update(dt);
+	
+	
 }
 
 void MotherBrain::draw()
@@ -135,7 +167,6 @@ void MotherBrain::draw()
 	if (isActivity)
 	{
 		this->sprite->draw();
-		bulletPool->draw();
 	}
 }
 void MotherBrain::setBeHit(bool hit)

@@ -9,7 +9,10 @@ class MotherBrain : public BaseObject,public IExplosible
 {
 private:
 	Animation *anim;
-
+	Animation* fullHeath;
+	Animation* openingBoss;
+	Animation* openedBoss;
+	
 	MBulletPool* bulletPool;
 
 	Samus* samus;
@@ -20,8 +23,10 @@ private:
 	bool beHit;
 	float timerHit;
 	int health;
-
+	float timeBeforDeath;
 	bool isHandle;
+	VECTOR3 position;
+	int cycle;
 public:
 	MotherBrain();
 	MotherBrain(TextureManager* textureM, Graphics* graphics,Samus* samus);

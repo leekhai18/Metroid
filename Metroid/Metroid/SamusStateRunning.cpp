@@ -13,6 +13,7 @@
 #include "Ripper.h"
 #include "MotherBrain.h"
 #include "Sound.h"
+#include "ScenceManager.h"
 SamusStateRunning::SamusStateRunning()
 {
 }
@@ -299,6 +300,13 @@ void SamusStateRunning::onCollision(float dt)
 
 		case eID::PORT:
 		{
+			Port* port = static_cast<Port*>(i->object);
+			if (port->Win() == true)
+			{
+				this->samus->setVelocity(VECTOR2ZERO);
+				ScenceManager::getInstance()->goToScence(ScenceType::END);
+				return;
+			}
 			switch (i->direction)
 			{
 			case LEFT:
