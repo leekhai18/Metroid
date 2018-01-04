@@ -101,6 +101,15 @@ void Zeb::handleVelocity(float dt)
 			this->velocity.x = 0;
 
 			direction = this->getPosition().x > this->samusPosition.x ? eDirection::left: eDirection::right ;
+			if (direction == eDirection::left)
+			{
+				this->sprite->setFlipX(false);
+			}
+			else
+			{
+				this->sprite->setFlipX(true);
+			}
+
 
 			allowFly = true; 
 			canMoveHorizontal = true;
