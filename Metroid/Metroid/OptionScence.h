@@ -12,6 +12,7 @@ public:
 	void update();
 	void draw();
 	void run();
+	void release();
 	OptionScence();
 	OptionScence(Graphics* graphics, Input* input);
 	~OptionScence();

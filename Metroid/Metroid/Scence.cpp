@@ -28,6 +28,9 @@ void Scence::run()
 {
 	
 }
+void Scence::release()
+{
+}
 void Scence::handleLostGraphicsDevice()
 {
 	// test for and handle lost device

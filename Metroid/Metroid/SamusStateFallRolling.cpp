@@ -310,7 +310,7 @@ void SamusStateFallRolling::onCollision(float dt)
 			}
 			else if (zommer->getExplose())
 			{
-				zommer->setCanDraw(false);
+				zommer->setCanDraw(false, samus->getHealth(), samus->getNumRocket());
 			}
 			else
 			{
@@ -344,7 +344,7 @@ void SamusStateFallRolling::onCollision(float dt)
 			}
 			else if (waver->getExplose())
 			{
-				waver->setCanDraw(false);
+				waver->setCanDraw(false, samus->getHealth(), samus->getNumRocket());
 			}
 			else
 			{

@@ -79,7 +79,11 @@
     <ClCompile Include="CanonBullet.cpp" />
     <ClCompile Include="MachineCanon.cpp" />
     <ClCompile Include="Buble.cpp" />
+<<<<<<< HEAD
+    <ClCompile Include="dsutil.cpp" />
+=======
     <ClCompile Include="DefendBoss.cpp" />
+>>>>>>> 6f57295600ea0666345544da52d26046f5f79e2a
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AlienBig.h" />
@@ -162,7 +166,12 @@
     <ClInclude Include="CanonBullet.h" />
     <ClInclude Include="MachineCanon.h" />
     <ClInclude Include="Buble.h" />
+<<<<<<< HEAD
+    <ClInclude Include="dsutil.h" />
+    <ClInclude Include="dxutil.h" />
+=======
     <ClInclude Include="DefendBoss.h" />
+>>>>>>> 6f57295600ea0666345544da52d26046f5f79e2a
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Metroid.rc" />

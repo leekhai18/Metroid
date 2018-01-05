@@ -143,7 +143,7 @@ void CanonBullet::onCollisionSamus(Samus* samus, float dt)
 			{
 				SamusStateManager::getInstance()->setOldStatus(samus->getStatus());
 				samus->setStatus(eStatus::INJURING);
-				samus->setHealth(samus->getHealth() - dame);
+				samus->setHealth(*samus->getHealth() - dame);
 				SamusStateManager::getInstance()->setOldState(SamusStateManager::getInstance()->getCurrentState());
 			}
 		}

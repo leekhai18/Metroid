@@ -542,8 +542,6 @@ void Zommer::update(float dt)
 
 				if (this->health <= 0)
 				{
-
-					Sound::getInstance()->play(SOUND_EXPLOSION, false);
 					IExplosible::start();
 					this->setVelocity(VECTOR2(0, 0));
 					//this->isActivity = false;

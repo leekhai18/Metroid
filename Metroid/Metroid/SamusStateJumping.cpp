@@ -21,6 +21,9 @@
 #include "ScenceManager.h"
 #include "Sound.h"
 #include "Brick.h"
+#include "Rocket.h"
+#include "RocketPool.h"
+
 SamusStateJumping::SamusStateJumping()
 {
 }
@@ -45,7 +48,7 @@ void SamusStateJumping::setBoundCollision()
 }
 void SamusStateJumping::init()
 {
-	Sound::getInstance()->play(SOUND_JUMP, false);
+	isShoot = false;
 	time = 0;
 	if (this->samus->isFaling() == false)
 	{
@@ -65,7 +68,7 @@ void SamusStateJumping::init()
 void SamusStateJumping::handleInput(float dt)
 {
 	this->samus->setVelocityX(0);
-	if (!Camera::getInstance()->moveWhenSamusOnPort()) 
+	if (!Camera::getInstance()->moveWhenSamusOnPort())
 	{
 #pragma region Horizontal
 		if (input->isKeyDown(VK_RIGHT) && input->isKeyUp(VK_LEFT))
@@ -142,110 +145,7 @@ void SamusStateJumping::handleInput(float dt)
 
 
 #pragma region Shooting
-
-
-			if (input->isKeyDown(VK_Z) && input->isKeyUp(VK_UP))
-			{
-				// Set Data for sprite
-				this->samus->setDataSuiteSkin(
-					IndexManager::getInstance()->samusYellowHittingAndJumpRight,
-					IndexManager::getInstance()->samusYellowIceHittingAndJumpRight,
-					IndexManager::getInstance()->samusPinkHittingAndJumpRight,
-					IndexManager::getInstance()->samusPinkIceHittingAndJumpRight);
-
-
-				this->isUp = false;
-				if (this->samus->timerShoot > TIME_SHOOTING)
-				{
-					this->fire();
-					this->samus->timerShoot = 0;
-				}
-			}
-
-			if (input->isKeyDown(VK_Z) && input->isKeyDown(VK_UP))
-			{
-				// Set Data for sprite
-				this->samus->setDataSuiteSkin(
-					IndexManager::getInstance()->samusYellowHittingJumpUp,
-					IndexManager::getInstance()->samusYellowIceHittingJumpUp,
-					IndexManager::getInstance()->samusPinkHittingJumpUp,
-					IndexManager::getInstance()->samusPinkIceHittingJumpUp);
-
-
-				this->isUp = true;
-				if (this->samus->timerShoot > TIME_SHOOTING)
-				{
-					this->fire();
-					this->samus->timerShoot = 0;
-				}
-			}
-			if (input->isKeyDown(VK_DOWN) && this->samus->isHaveMariMaru())
-			{
-				this->samus->setVelocityX(0);
-				this->samus->setStatus(eStatus::ROLLING);
-				jumpDistance = 0;
-				return;
-			}
-			if (input->isKeyDown(VK_UP) && input->isKeyUp(VK_Z))
-			{
-				// Set Data for sprite
-				this->samus->setDataSuiteSkin(
-					IndexManager::getInstance()->samusYellowJumpUp,
-					IndexManager::getInstance()->samusYellowIceJumpUp,
-					IndexManager::getInstance()->samusPinkJumpUp,
-					IndexManager::getInstance()->samusPinkIceJumpUp);
-
-			}
-
-			if (input->isKeyUp(VK_Z) && input->isKeyUp(VK_UP) && this->samus->isInStatus(eStatus::JUMPING))
-			{
-				// Set Data for sprite
-				this->samus->setDataSuiteSkin(
-					IndexManager::getInstance()->samusYellowJumpRight,
-					IndexManager::getInstance()->samusYellowIceJumpRight,
-					IndexManager::getInstance()->samusPinkJumpRight,
-					IndexManager::getInstance()->samusPinkIceJumpRight);
-			}
-		}
-
-	
-#pragma endregion
-
-
-		//if (input->isKeyDown(VK_SPACE))
-		//{
-		//	if (this->samus->getNumRocket() > 0)
-		//	{
-		//		// Set up sprite Shooting rocket
-		//		if (isUp)
-		//		{
-		//			// Set Data for sprite
-		//			this->samus->setDataSuiteSkin(
-		//				IndexManager::getInstance()->samusYellowHittingJumpUp,
-		//				IndexManager::getInstance()->samusYellowIceHittingJumpUp,
-		//				IndexManager::getInstance()->samusPinkHittingJumpUp,
-		//				IndexManager::getInstance()->samusPinkIceHittingJumpUp);
-		//		}
-		//		else
-		//		{
-		//			// Set Data for sprite
-		//			this->samus->setDataSuiteSkin(
-		//				IndexManager::getInstance()->samusYellowHittingAndJumpRight,
-		//				IndexManager::getInstance()->samusYellowIceHittingAndJumpRight,
-		//				IndexManager::getInstance()->samusPinkHittingAndJumpRight,
-		//				IndexManager::getInstance()->samusPinkIceHittingAndJumpRight);
-		//		}
-
-		//		if (this->samus->timerShoot > TIME_SHOOTING_ROCKET)
-		//		{
-		//			this->fireRocket();
-		//			this->samus->timerShoot = 0;
-		//			this->isShoot = true;
-		//		}
-		//	}
-		//}
-#pragma region Rocket
-		if (input->isKeyDown(VK_SPACE) && input->isKeyUp(VK_UP))
+		if (input->isKeyDown(VK_Z) && input->isKeyUp(VK_UP) && input->isKeyUp(VK_SPACE))
 		{
 			// Set Data for sprite
 			this->samus->setDataSuiteSkin(
@@ -256,15 +156,16 @@ void SamusStateJumping::handleInput(float dt)
 
 
 			this->isUp = false;
-			if (this->samus->timerShoot > TIME_SHOOTING_ROCKET)
+			if (this->samus->timerShoot > TIME_SHOOTING)
 			{
-				this->fireRocket();
+				this->fire();
 				this->samus->timerShoot = 0;
-				
+				this->isShoot = true;
 			}
 		}
+			
 
-		if (input->isKeyDown(VK_SPACE) && input->isKeyDown(VK_UP))
+		if (input->isKeyDown(VK_Z) && input->isKeyDown(VK_UP) && input->isKeyUp(VK_SPACE))
 		{
 			// Set Data for sprite
 			this->samus->setDataSuiteSkin(
@@ -275,35 +176,87 @@ void SamusStateJumping::handleInput(float dt)
 
 
 			this->isUp = true;
-			if (this->samus->timerShoot > TIME_SHOOTING_ROCKET)
+			if (this->samus->timerShoot > TIME_SHOOTING)
 			{
-				this->fireRocket();
+				this->fire();
 				this->samus->timerShoot = 0;
+				this->isShoot = true;
 			}
 		}
 
-		//if (input->isKeyDown(VK_UP) && input->isKeyUp(VK_SPACE))
-		//{
-		//	// Set Data for sprite
-		//	this->samus->setDataSuiteSkin(
-		//		IndexManager::getInstance()->samusYellowJumpUp,
-		//		IndexManager::getInstance()->samusYellowIceJumpUp,
-		//		IndexManager::getInstance()->samusPinkJumpUp,
-		//		IndexManager::getInstance()->samusPinkIceJumpUp);
+		if (input->isKeyDown(VK_SPACE) && input->isKeyUp(VK_UP) && input->isKeyUp(VK_Z))
+		{
+			// Set Data for sprite
+			this->samus->setDataSuiteSkin(
+				IndexManager::getInstance()->samusYellowHittingAndJumpRight,
+				IndexManager::getInstance()->samusYellowIceHittingAndJumpRight,
+				IndexManager::getInstance()->samusPinkHittingAndJumpRight,
+				IndexManager::getInstance()->samusPinkIceHittingAndJumpRight);
 
-		//}
 
-		//if (input->isKeyUp(VK_SPACE) && input->isKeyUp(VK_UP) && this->samus->isInStatus(eStatus::JUMPING))
-		//{
-		//	// Set Data for sprite
-		//	this->samus->setDataSuiteSkin(
-		//		IndexManager::getInstance()->samusYellowJumpRight,
-		//		IndexManager::getInstance()->samusYellowIceJumpRight,
-		//		IndexManager::getInstance()->samusPinkJumpRight,
-		//		IndexManager::getInstance()->samusPinkIceJumpRight);
-		//}
-		
+			this->isUp = false;
+			if (this->samus->timerShoot > TIME_SHOOTING)
+			{
+				this->fireRocket();
+				this->samus->timerShoot = 0;
+				this->isShoot = true;
+			}
+		}
+
+		if (input->isKeyDown(VK_SPACE) && input->isKeyDown(VK_UP) && input->isKeyUp(VK_Z))
+		{
+			// Set Data for sprite
+			this->samus->setDataSuiteSkin(
+				IndexManager::getInstance()->samusYellowHittingJumpUp,
+				IndexManager::getInstance()->samusYellowIceHittingJumpUp,
+				IndexManager::getInstance()->samusPinkHittingJumpUp,
+				IndexManager::getInstance()->samusPinkIceHittingJumpUp);
+
+
+			this->isUp = true;
+			if (this->samus->timerShoot > TIME_SHOOTING)
+			{
+				this->fireRocket();
+				this->samus->timerShoot = 0;
+				this->isShoot = true;
+			}
+		}
+
+
+		if (input->isKeyDown(VK_DOWN) && this->samus->isHaveMariMaru())
+		{
+			this->samus->setVelocityX(0);
+			this->samus->setStatus(eStatus::ROLLING);
+			jumpDistance = 0;
+			return;
+		}
+
+		if (input->isKeyDown(VK_UP) && input->isKeyUp(VK_Z))
+		{
+			// Set Data for sprite
+			this->samus->setDataSuiteSkin(
+				IndexManager::getInstance()->samusYellowJumpUp,
+				IndexManager::getInstance()->samusYellowIceJumpUp,
+				IndexManager::getInstance()->samusPinkJumpUp,
+				IndexManager::getInstance()->samusPinkIceJumpUp);
+
+		}
+
+		if (input->isKeyUp(VK_Z) && input->isKeyUp(VK_UP) && input->isKeyUp(VK_SPACE) && this->samus->isInStatus(eStatus::JUMPING) && isShoot)
+		{
+			// Set Data for sprite
+			this->samus->setDataSuiteSkin(
+				IndexManager::getInstance()->samusYellowJumpRight,
+				IndexManager::getInstance()->samusYellowIceJumpRight,
+				IndexManager::getInstance()->samusPinkJumpRight,
+				IndexManager::getInstance()->samusPinkIceJumpRight);
+
+			isShoot = false;
+		}
+
 #pragma endregion
+		
+	}
 }
 
 void SamusStateJumping::onCollision(float dt)
@@ -579,7 +532,7 @@ void SamusStateJumping::onCollision(float dt)
 			}
 			else if (zommer->getExplose())
 			{
-				zommer->setCanDraw(false);
+				zommer->setCanDraw(false, samus->getHealth(), samus->getNumRocket());
 				zommer->setActivity(false);
 			}
 			else
@@ -638,7 +591,7 @@ void SamusStateJumping::onCollision(float dt)
 			}
 			else if (waver->getExplose())
 			{
-				waver->setCanDraw(false);
+				waver->setCanDraw(false, samus->getHealth(), samus->getNumRocket());
 				waver->setActivity(false);
 			}
 			else
@@ -695,7 +648,7 @@ void SamusStateJumping::onCollision(float dt)
 			}
 			else if (skree->getExplose())
 			{
-				skree->setCanDraw(false);
+				skree->setCanDraw(false, samus->getHealth(), samus->getNumRocket());
 				skree->setActivity(false);
 			}
 			else
@@ -755,7 +708,7 @@ void SamusStateJumping::onCollision(float dt)
 			}
 			else if (rio->getExplose())
 			{
-				rio->setCanDraw(false);
+				rio->setCanDraw(false, samus->getHealth(), samus->getNumRocket());
 				rio->setActivity(false);
 			}
 			else
@@ -862,7 +815,7 @@ void SamusStateJumping::onCollision(float dt)
 			}
 			else if (zeb->getExplose())
 			{
-				zeb->setCanDraw(false);
+				zeb->setCanDraw(false, samus->getHealth(), samus->getNumRocket());
 				zeb->setActivity(false);
 			}
 			else
@@ -975,7 +928,7 @@ void SamusStateJumping::onCollision(float dt)
 
 		case eID::MISSILEROCKET:
 		{
-			this->samus->setNumRocket(this->samus->getNumRocket() + 5);
+			this->samus->setNumRocket(*this->samus->getNumRocket() + 5);
 			MissileRocket* mrocket = static_cast<MissileRocket*>(i->object);
 			mrocket->setActivity(false);
 
@@ -1044,10 +997,6 @@ void SamusStateJumping::onCollision(float dt)
 
 void SamusStateJumping::update(float dt)
 {
-	if (this->animation != nullptr)
-	{
-		this->animation->update(dt);
-	}
 	//update position.x
 	if (this->samus->canMoveLeft() || this->samus->canMoveRight())
 	{
@@ -1092,24 +1041,18 @@ void SamusStateJumping::update(float dt)
 
 void SamusStateJumping::onStart()
 {
-	if (this->animation != nullptr)
-		this->animation->start();
+	
 }
 
 void SamusStateJumping::onExit()
 {
-	if (this->animation != nullptr)
-	{
-		this->animation->stop();
-		this->animation = nullptr;
-	}
+
 }
 
 void SamusStateJumping::fire()
 {
 	VECTOR2 stP;
 	Bullet* bullet = BulletPool::getInstance()->getBullet();
-	Sound::getInstance()->play(SOUND_BULLET, false);
 
 	if (isUp)
 	{
@@ -1124,23 +1067,22 @@ void SamusStateJumping::fire()
 
 	bullet->init(stP);
 }
+
 void SamusStateJumping::fireRocket()
 {
 	VECTOR2 stP;
 	Rocket* rocket = RocketPool::getInstance()->getRocket();
-	Sound::getInstance()->play(SOUND_ROCKET, false);
 	if (isUp)
 	{
-		stP = VECTOR2(this->samus->getPosition().x + this->samus->getDirection(), this->samus->getPosition().y + this->samus->getSprite()->getHeight()*0.4f);
+		stP = VECTOR2(this->samus->getPosition().x + this->samus->getDirection(), this->samus->getPosition().y + this->samus->getSprite()->getHeight()*0.5f);
 		rocket->setVelocity(VECTOR2(0, VELOCITY_ROCKET));
-
 		rocket->getSprite()->setData(IndexManager::getInstance()->rocketPinkUp);
 	}
 	else
 	{
-		stP = VECTOR2(this->samus->getPosition().x, this->samus->getPosition().y + 3);
-		rocket->setVelocity(VECTOR2((float)VELOCITY_ROCKET*this->samus->getDirection(), 0));
 
+		stP = VECTOR2(this->samus->getPosition().x + this->samus->getDirection()*this->samus->getSprite()->getWidth()*0.2f, this->samus->getPosition().y + 2);
+		rocket->setVelocity(VECTOR2((float)VELOCITY_ROCKET*this->samus->getDirection(), 0));
 		rocket->getSprite()->setData(IndexManager::getInstance()->rocketPinkR);
 
 		if (this->samus->isInDirection(eDirection::left))
@@ -1151,6 +1093,6 @@ void SamusStateJumping::fireRocket()
 
 	rocket->init(stP);
 
-	this->samus->setNumRocket(this->samus->getNumRocket() - 1);
+	this->samus->setNumRocket(*this->samus->getNumRocket() - 1);
 }
 

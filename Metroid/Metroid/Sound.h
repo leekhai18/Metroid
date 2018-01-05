@@ -5,6 +5,7 @@
 #include <string>
 #include <iostream>
 #include <mmsystem.h>
+#include "dsutil.h"
 
 /////////////////
 // LINKING lib //
@@ -13,63 +14,54 @@
 #pragma comment(lib, "dxguid.lib")
 #pragma comment(lib, "winmm.lib")
 
-#define SOUND_BULLET "bullet.wav"
-#define SOUND_EXPLOSION "explosion.wav"
-#define SOUND_JUMP "jump.wav"
-#define SOUND_ROCKET "missile.wav"
-#define SOUND_BOSSMOTHER_HIT "bossMotherHit.wav"
-#define SOUND_COLLECTION_BONUS "collectionBonus.wav"
-#define SOUND_COLLECTION_ITEMS "collectionItem.wav"
-#define SOUND_COLLIDE_ENEMIES "collideEnemies.wav"
-#define SOUND_DEATH "die.wav"
-#define SOUND_NEAR_DEATH "nearDie.wav"
-#define SOUND_PUT_BOMB "putBomb.wav"
+#define SOUND_TITLE "TitleScene.wav"
+#define SOUND_BACKGROUND "Background.wav"
+#define SOUND_BOMB_PUT "BoomPut.wav"
+#define SOUND_BOMB_BURST "BoomBurst.wav"
+#define SOUND_SAMUS_DEATH "Die.wav"
+#define SOUND_SAMUS_NEAR_DEATH "Dying.wav"
+#define SOUND_ENEMIES_COLLISION "EnemyCollision.wav"
+#define SOUND_BULLET_NORMAL "Fire.wav"
+#define SOUND_BULLET_ICE "IceFire.wav"
+#define SOUND_ROCKET "RocketFire.wav"
+#define SOUND_BONUS_EN "BonusEN.wav"
+#define SOUND_BONUS_ROCKET "BonusRocket.wav"
+#define SOUND_SAMUS_JUMP "Jump.wav"
+#define SOUND_SAMUS_RUN "Run.wav"
+#define SOUND_PORT "PortCollison.wav"
+#define SOUND_RIPPER "RipperCollision.wav"
+#define SOUND_COLLECTION_ITEMS "CollectionItem.wav"
 
-
-// Sử dụng DirectSound để đọc file .wav (only wav support). Current failure: Không thể sử dụng lại file mp3 convert sang wav
 
 class Sound
 {
-public:
+private:
+	GSoundManager *dsound;
+	HWND hwnd;
 
-	//When loading in .wav files I first read in the header to determine the required information for loading in the .wav audio data
-	struct WaveHeaderStruct
-	{
-		char chunkId[4];
-		unsigned long chunkSize;
-		char format[4];
-		char subChunkId[4];
-		unsigned long subChunkSize;
-		unsigned short audioFormat;
-		unsigned short numChannels;
-		unsigned long sampleRate;
-		unsigned long bytesPerSecond;
-		unsigned short blockAlign;
-		unsigned short bitsPerSample;
-		char dataChunkId[4];
-		unsigned long dataSize;
-	};
-	void static create(HWND hWnd); // create sound instance in current hWnd game
-	void setVolume(float percentage, std::string name = ""); // setup volume
-	bool loadSound(char* fileName, std::string name); // 
-	void play(std:: string name , bool infiniteLoop); // play sound by name, or 1 or loop
-	void stop(std::string name = ""); // stop by name sound
-	float getVolume(); // get volume
+	static Sound* instance;
+
+public:
+	Sound(HWND);
 	~Sound();
-	static Sound* getInstance();  // using singleton
-	void mute(); // mute
-	void unMute(); // un mute
-	void cleanUp();  // delete this instance
+
+	static Sound* getInstance();
+
+	bool Init_DirectSound();
+	GSound *LoadSound(LPTSTR);
+	void loadSound(LPTSTR fileName, std::string name);
+
+	void PlaySound(GSound *);
+	void LoopSound(GSound *);
+	void play(std::string name, bool isLoop);
+
+	void StopSound(GSound *);
+	void stop(std::string name);
 
 	void loadAllSound();
 
-private:
-	Sound(HWND hWnd); // constructor to init driectSound on hWnd
-	static Sound * instance;
-	IDirectSound8* pDevice;
-	IDirectSoundBuffer* primaryBuffer;
-	std::map<std::string, IDirectSoundBuffer8*> soundBufferMap; // using map to save by name sound
-	bool isMute;
-	float volume;
+	std::map<std::string, GSound*> soundBufferMap; // using map to save by name sound
+
+	void cleanUp();  // delete this instance
 };
 

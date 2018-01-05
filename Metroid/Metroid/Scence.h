@@ -13,6 +13,7 @@ public:
 	virtual void update();
 	virtual void draw();
 	virtual void run();
+	virtual void release();
 	void handleLostGraphicsDevice();
 	~Scence();
 };

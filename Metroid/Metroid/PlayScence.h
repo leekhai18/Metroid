@@ -10,6 +10,7 @@ public:
 	void update();
 	void draw();
 	void run();
+	void release();
 	PlayScence(Graphics* graphics, Input* input);
 	PlayScence();
 	~PlayScence();

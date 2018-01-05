@@ -1,6 +1,6 @@
 #include "Zeb.h"
-#define VELOCITY_X 120
-#define VELOCITY_Y 120
+#define VELOCITY_X 100
+#define VELOCITY_Y 100
 #define TIME_FRAME_DELAY 0.2f
 #define TIME_DELAY_BE_HIT 0.2f
 #define TIME_RETURN_NOMAL 1.0f
@@ -94,7 +94,7 @@ void Zeb::handleVelocity(float dt)
 			samusPosition = samus->getPosition();
 		}
 
-		if (this->getPosition().y + 80 <= this->samusPosition.y)
+		if (this->getPosition().y + 20 <= this->samusPosition.y)
 		{
 			this->velocity.y = VELOCITY_Y;
 

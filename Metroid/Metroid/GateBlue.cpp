@@ -1,5 +1,6 @@
 #include "GateBlue.h"
 #include "Camera.h"
+#include "Sound.h"
 
 #define TIME_RE_OPEN 3
 
@@ -79,6 +80,9 @@ void GateBlue::effectOpen()
 		openAnim->start();
 		closeAnim->reInit();
 		this->isActivity = false;
+
+		Sound::getInstance()->stop(SOUND_PORT);
+		Sound::getInstance()->play(SOUND_PORT, false);
 	}
 }
 

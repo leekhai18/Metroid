@@ -5,6 +5,8 @@ class SamusStateJumping : public BaseState
 {
 private:
 	bool isUp;
+	bool isShoot;
+
 	float jumpDistance;
 	float positionCollide;
 	float time;

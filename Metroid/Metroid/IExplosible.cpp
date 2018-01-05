@@ -1,5 +1,5 @@
 #include "IExplosible.h"
-
+#include "Sound.h"
 
 
 IExplosible::IExplosible()
@@ -27,6 +27,8 @@ void IExplosible::reInit()
 
 void IExplosible::start()
 {
+	Sound::getInstance()->stop(SOUND_BOMB_BURST);
+	Sound::getInstance()->play(SOUND_BOMB_BURST, false);
 	this->explosion->start();
 }
 void IExplosible::update(float dt)

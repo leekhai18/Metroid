@@ -70,6 +70,7 @@ void Bullet::onCollision()
 			{
 				case eID::BRICK:
 				{
+					Sound::getInstance()->play(SOUND_ENEMIES_COLLISION, false);
 					Brick* brick = static_cast<Brick*>(i->object);
 					if(brick->isActivitied()&&brick->getVisible())
 					{
@@ -97,9 +98,14 @@ void Bullet::onCollision()
 					}
 					
 				}
+
 				case eID::WALL :
 				case eID::GATERED: 
 				case eID::DEFENSEBOSS:
+				{
+					Sound::getInstance()->stop(SOUND_ENEMIES_COLLISION);
+					Sound::getInstance()->play(SOUND_ENEMIES_COLLISION, false);
+
 					this->sprite->setData(indexEffect);
 					this->isCollided = true;
 					this->velocity = VECTOR2ZERO;
@@ -115,10 +121,15 @@ void Bullet::onCollision()
 					default:
 						break;
 					}
-					break;
 
+					break;
+				}
+					
+				
 				case eID::GATEBLUE:
 				{
+					Sound::getInstance()->play(SOUND_ENEMIES_COLLISION, false);
+
 					this->sprite->setData(indexEffect);
 					this->isCollided = true;
 					this->velocity = VECTOR2ZERO;
@@ -141,7 +152,7 @@ void Bullet::onCollision()
 					}
 
 					break;
-				}
+			}
 				
 				case eID::FIRE_BUBLE:
 				{
@@ -177,7 +188,7 @@ void Bullet::onCollision()
 				}
 				case eID::SKREE:
 				{
-
+					Sound::getInstance()->play(SOUND_ENEMIES_COLLISION, false);
 				
 					Skree* skree = static_cast<Skree*>((*i).object);
 					if (!skree->getHandle())
@@ -225,7 +236,8 @@ void Bullet::onCollision()
 				}
 				case eID::RIO:
 				{
-					
+					Sound::getInstance()->play(SOUND_ENEMIES_COLLISION, false);
+
 					Rio* rio = static_cast<Rio*>((*i).object);
 					if (!rio->getHandle())
 					{
@@ -270,7 +282,8 @@ void Bullet::onCollision()
 				}
 				case eID::RIPPER:
 				{
-					
+					Sound::getInstance()->play(SOUND_RIPPER, false);
+
 					this->isCollided = true;
 					this->velocity = VECTOR2ZERO;
 					this->sprite->setData(indexEffect);
@@ -306,7 +319,8 @@ void Bullet::onCollision()
 				}
 				case eID::ZOMMER:
 				{
-					
+					Sound::getInstance()->play(SOUND_ENEMIES_COLLISION, false);
+
 					this->isCollided = true;
 					this->velocity = VECTOR2ZERO;
 					Zommer* zommer = static_cast<Zommer*>((*i).object);
@@ -350,7 +364,8 @@ void Bullet::onCollision()
 				}
 				case eID::WAVER:
 				{
-					
+					Sound::getInstance()->play(SOUND_ENEMIES_COLLISION, false);
+
 					this->isCollided = true;
 					this->velocity = VECTOR2ZERO;
 					Waver* waver = static_cast<Waver*>(i->object);
@@ -394,7 +409,9 @@ void Bullet::onCollision()
 					break;
 				}
 				case eID::ZEB:
-				{
+				{	
+					Sound::getInstance()->play(SOUND_ENEMIES_COLLISION, false);
+
 					this->velocity = VECTOR2ZERO;
 					this->isCollided = true;
 					Zeb* zeb = static_cast<Zeb*>(i->object);
@@ -434,6 +451,9 @@ void Bullet::onCollision()
 				}
 				case eID::BOSSKRAID:
 				{
+					Sound::getInstance()->stop(SOUND_ENEMIES_COLLISION);
+					Sound::getInstance()->play(SOUND_ENEMIES_COLLISION, false);
+
 					BossKraid* bossKraid = static_cast<BossKraid*>(i->object);
 					if (bossKraid->isActivitied()) 
 					{
@@ -461,7 +481,10 @@ void Bullet::onCollision()
 					break;
 				}
 				case eID::MOTHERBRAIN:
-				{				
+				{		
+					Sound::getInstance()->stop(SOUND_ENEMIES_COLLISION);
+					Sound::getInstance()->play(SOUND_ENEMIES_COLLISION, false);
+
 					MotherBrain* motherBrain = static_cast<MotherBrain*>(i->object);
 					if (motherBrain->isActivitied())
 					{
@@ -488,6 +511,8 @@ void Bullet::onCollision()
 				}
 				case eID::ALIENBIG:
 				{
+					Sound::getInstance()->play(SOUND_ENEMIES_COLLISION, false);
+
 					this->sprite->setData(indexEffect);
 					this->isCollided = true;
 					this->velocity = VECTOR2ZERO;
@@ -497,6 +522,8 @@ void Bullet::onCollision()
 				}
 				case eID::ALIENSMALL:
 				{
+					Sound::getInstance()->play(SOUND_ENEMIES_COLLISION, false);
+
 					this->sprite->setData(indexEffect);
 					this->isCollided = true;
 					this->velocity = VECTOR2ZERO;
@@ -558,6 +585,18 @@ void Bullet::setBoundCollision()
 
 void Bullet::init(VECTOR2 stPosition)
 {
+	if (BulletPool::getInstance()->getCurrentIceBullet())
+	{
+		Sound::getInstance()->stop(SOUND_BULLET_ICE);
+		Sound::getInstance()->play(SOUND_BULLET_ICE, false);
+	}
+	else
+	{
+		Sound::getInstance()->stop(SOUND_BULLET_NORMAL);
+		Sound::getInstance()->play(SOUND_BULLET_NORMAL, false);
+	}
+
+
 	this->setPosition(stPosition);
 	setBoundCollision();
 

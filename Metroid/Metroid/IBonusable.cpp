@@ -1,6 +1,7 @@
 #include "IBonusable.h"
 #include <stdlib.h>     
 #include <time.h>      
+#include "Sound.h"
 
 
 void IBonusable::initItem(Sprite * sprite, const int * frames, int totalFrames, float frameDelay)
@@ -20,9 +21,22 @@ void IBonusable::reInit()
 	this->rocket->setPause(false);
 	canDraw = true;
 }
-void IBonusable::setCanDraw(bool draw)
+void IBonusable::setCanDraw(bool draw, int *health, int *rocket)
 {
 	this->canDraw = draw;
+	
+	if (this->isRocket)
+	{
+		(*rocket)++;
+		Sound::getInstance()->stop(SOUND_BONUS_ROCKET);
+		Sound::getInstance()->play(SOUND_BONUS_ROCKET, false);
+	}
+	else
+	{
+		(*health) = (*health) + 5;
+		Sound::getInstance()->stop(SOUND_BONUS_ROCKET);
+		Sound::getInstance()->play(SOUND_BONUS_EN, false);
+	}
 }
 void IBonusable::start()
 {
@@ -54,7 +68,6 @@ void IBonusable::start(bool isRocket)
 
 void IBonusable::update(float dt)
 {
-	
 	if(isRocket)
 	{
 		this->rocket->update(dt);
@@ -73,4 +86,5 @@ IBonusable::IBonusable()
 IBonusable::~IBonusable()
 {
 	delete item;
+	delete rocket;
 }

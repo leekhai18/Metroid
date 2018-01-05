@@ -41,7 +41,7 @@ Rocket::Rocket(TextureManager * textureM, Graphics * graphics) : BaseObject(eID:
 	this->timer = 0;
 	this->listCollide = new list<CollisionReturn>();
 
-	this->dame = 5; // se setup lai sau
+	this->dame = 4;
 }
 
 Rocket::Rocket()
@@ -65,6 +65,9 @@ void Rocket::onCollision()
 			switch (i->object->getId())
 			{
 				case eID::WALL:
+					Sound::getInstance()->stop(SOUND_BOMB_BURST);
+					Sound::getInstance()->play(SOUND_BOMB_BURST, false);
+
 					this->sprite->setData(IndexManager::getInstance()->samusPinkExplosion[0]);
 					this->isCollided = true;
 					this->velocity = VECTOR2ZERO;
@@ -72,6 +75,9 @@ void Rocket::onCollision()
 
 				case eID::GATEBLUE:
 				{
+					Sound::getInstance()->stop(SOUND_BOMB_BURST);
+					Sound::getInstance()->play(SOUND_BOMB_BURST, false);
+
 					this->sprite->setData(IndexManager::getInstance()->samusPinkExplosion[0]);
 					this->isCollided = true;
 
@@ -84,6 +90,8 @@ void Rocket::onCollision()
 
 				case eID::GATERED:
 				{
+					Sound::getInstance()->play(SOUND_BOMB_BURST, false);
+
 					this->sprite->setData(IndexManager::getInstance()->samusPinkExplosion[0]);
 					this->isCollided = true;
 
@@ -117,6 +125,8 @@ void Rocket::onCollision()
 				}
 				case eID::SKREE:
 				{
+					Sound::getInstance()->stop(SOUND_BOMB_BURST);
+					Sound::getInstance()->play(SOUND_BOMB_BURST, false);
 
 
 					Skree* skree = static_cast<Skree*>((*i).object);
@@ -152,6 +162,8 @@ void Rocket::onCollision()
 				}
 				case eID::RIO:
 				{
+					Sound::getInstance()->stop(SOUND_BOMB_BURST);
+					Sound::getInstance()->play(SOUND_BOMB_BURST, false);
 
 					Rio* rio = static_cast<Rio*>((*i).object);
 					if (!rio->getHandle())
@@ -178,7 +190,8 @@ void Rocket::onCollision()
 				}
 				case eID::RIPPER:
 				{
-
+					Sound::getInstance()->stop(SOUND_BOMB_BURST);
+					Sound::getInstance()->play(SOUND_BOMB_BURST, false);
 					
 					Ripper* ripper = static_cast<Ripper*>((*i).object);
 
@@ -194,6 +207,8 @@ void Rocket::onCollision()
 				}
 				case eID::ZOMMER:
 				{
+					Sound::getInstance()->stop(SOUND_BOMB_BURST);
+					Sound::getInstance()->play(SOUND_BOMB_BURST, false);
 
 			
 					Zommer* zommer = static_cast<Zommer*>((*i).object);
@@ -220,6 +235,8 @@ void Rocket::onCollision()
 				}
 				case eID::WAVER:
 				{
+					Sound::getInstance()->stop(SOUND_BOMB_BURST);
+					Sound::getInstance()->play(SOUND_BOMB_BURST, false);
 
 				
 					Waver* waver = static_cast<Waver*>(i->object);
@@ -246,7 +263,9 @@ void Rocket::onCollision()
 				}
 				case eID::ZEB:
 				{
-					
+					Sound::getInstance()->stop(SOUND_BOMB_BURST);
+					Sound::getInstance()->play(SOUND_BOMB_BURST, false);
+
 					
 					Zeb* zeb = static_cast<Zeb*>(i->object);
 					if (!zeb->getHandle())
@@ -272,6 +291,9 @@ void Rocket::onCollision()
 				}
 				case eID::BOSSKRAID:
 				{
+					Sound::getInstance()->stop(SOUND_BOMB_BURST);
+					Sound::getInstance()->play(SOUND_BOMB_BURST, false);
+
 					BossKraid* bossKraid = static_cast<BossKraid*>(i->object);
 				
 					if (bossKraid->isActivitied())
@@ -288,6 +310,9 @@ void Rocket::onCollision()
 				}
 				case eID::MOTHERBRAIN:
 				{
+					Sound::getInstance()->stop(SOUND_BOMB_BURST);
+					Sound::getInstance()->play(SOUND_BOMB_BURST, false);
+
 					MotherBrain* motherBrain = static_cast<MotherBrain*>(i->object);
 					
 					if (motherBrain->isActivitied())
@@ -364,9 +389,10 @@ void Rocket::setBoundCollision()
 
 void Rocket::init(VECTOR2 stPosition)
 {
+	Sound::getInstance()->play(SOUND_ROCKET, false);
+
 	this->setPosition(stPosition);
 	setBoundCollision();
-
 	this->distance = 0;
 	this->setStatus(eStatus::RUNNING);
 	this->isActivity = true;

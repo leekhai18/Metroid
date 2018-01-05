@@ -227,7 +227,7 @@ void SamusStateStanding::handleInput(float dt)
 
 		if (input->isKeyDown(VK_SPACE))
 		{
-			if (this->samus->getNumRocket() > 0)
+			if (*this->samus->getNumRocket() > 0)
 			{
 				// Set up sprite Shooting rocket
 				if (isUp)
@@ -299,7 +299,7 @@ void SamusStateStanding::onCollision(float dt)
 				this->samus->setTimerInFire(this->samus->getTimerInFire() + dt);
 				if (this->samus->getTimerInFire() > TIME_DEC_HEALTH_FIRE)
 				{
-					this->samus->setHealth(this->samus->getHealth() - 8);
+					this->samus->setHealth(*this->samus->getHealth() - 8);
 					this->samus->setTimerInFire(0);
 				}
 
@@ -508,7 +508,6 @@ void SamusStateStanding::fire()
 {
 	VECTOR2 stP;
 	Bullet* bullet = BulletPool::getInstance()->getBullet();
-	Sound::getInstance()->play(SOUND_BULLET, false);
 	if (isUp)
 	{
 		stP = VECTOR2(this->samus->getPosition().x + this->samus->getDirection(), this->samus->getPosition().y + this->samus->getSprite()->getHeight()*0.4f);
@@ -527,19 +526,16 @@ void SamusStateStanding::fireRocket()
 {
 	VECTOR2 stP;
 	Rocket* rocket = RocketPool::getInstance()->getRocket();
-	Sound::getInstance()->play(SOUND_ROCKET, false);
 	if (isUp)
 	{
 		stP = VECTOR2(this->samus->getPosition().x + this->samus->getDirection(), this->samus->getPosition().y + this->samus->getSprite()->getHeight()*0.4f);
 		rocket->setVelocity(VECTOR2(0, VELOCITY_ROCKET));
-
 		rocket->getSprite()->setData(IndexManager::getInstance()->rocketPinkUp);
 	}
 	else
 	{
 		stP = VECTOR2(this->samus->getPosition().x, this->samus->getPosition().y + 3);
 		rocket->setVelocity(VECTOR2((float)VELOCITY_ROCKET*this->samus->getDirection(), 0));
-
 		rocket->getSprite()->setData(IndexManager::getInstance()->rocketPinkR);
 
 		if (this->samus->isInDirection(eDirection::left))
@@ -550,5 +546,5 @@ void SamusStateStanding::fireRocket()
 
 	rocket->init(stP);
 
-	this->samus->setNumRocket(this->samus->getNumRocket() - 1);
+	this->samus->setNumRocket(*this->samus->getNumRocket() - 1);
 }

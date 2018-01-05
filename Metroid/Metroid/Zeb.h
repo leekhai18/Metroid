@@ -29,6 +29,7 @@ private:
 	bool canMoveHorizontal;
 	int reset;
 	MetroidRect startBound;
+
 public:
 	Zeb();
 	Zeb(TextureManager* textureM, Graphics* graphics, EnemyColors color, Samus* samus);

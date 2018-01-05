@@ -112,7 +112,6 @@ void SamusStateRolling::handleInput(float dt)
 		timerToStartBoom += dt;
 		if (timerToStartBoom > TIME_START_BOMB)
 		{
-			Sound::getInstance()->play(SOUND_PUT_BOMB, false);
 			BoomBombPool::getInstance()->getBoom()->start(this->samus->getPosition());
 			timerToStartBoom = 0;
 		}
@@ -369,7 +368,7 @@ void SamusStateRolling::onCollision(float dt)
 			}
 			else if (zommer->getExplose())
 			{
-				zommer->setCanDraw(false);
+				zommer->setCanDraw(false, samus->getHealth(), samus->getNumRocket());
 			}
 			else
 			{
@@ -407,7 +406,7 @@ void SamusStateRolling::onCollision(float dt)
 			}
 			else if (waver->getExplose())
 			{
-				waver->setCanDraw(false);
+				waver->setCanDraw(false, samus->getHealth(), samus->getNumRocket());
 			}
 			else
 			{
@@ -446,7 +445,7 @@ void SamusStateRolling::onCollision(float dt)
 			}
 			else if (skree->getExplose())
 			{
-				skree->setCanDraw(false);
+				skree->setCanDraw(false, samus->getHealth(), samus->getNumRocket());
 				skree->setActivity(false);
 			}
 			else

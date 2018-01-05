@@ -1,6 +1,8 @@
 #include "BossKraid.h"
 #include "Collision.h"
 #include "Camera.h"
+#include "Sound.h"
+
 #define BOSSKRAID_VELOCITY_Y 100
 #define RATE_BEZIER 1.0f
 #define BOSSKRAID_JUMP_HEIGHT 100

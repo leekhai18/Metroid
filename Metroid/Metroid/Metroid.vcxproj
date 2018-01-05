@@ -94,7 +94,7 @@
       <SDLCheck>true</SDLCheck>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>d3d9.lib;d3dx9.lib;winmm.lib;xinput.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>d3d9.lib;d3dx9.lib;winmm.lib;xinput.lib;DxErr.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -143,6 +143,8 @@
     <ClInclude Include="CanonBullet.h" />
     <ClInclude Include="Collision.h" />
     <ClInclude Include="Constants.h" />
+    <ClInclude Include="dsutil.h" />
+    <ClInclude Include="dxutil.h" />
     <ClInclude Include="DefendBoss.h" />
     <ClInclude Include="EndScence.h" />
     <ClInclude Include="EnergyTank.h" />
@@ -225,6 +227,7 @@
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="CanonBullet.cpp" />
     <ClCompile Include="Collision.cpp" />
+    <ClCompile Include="dsutil.cpp" />
     <ClCompile Include="DefendBoss.cpp" />
     <ClCompile Include="EndScence.cpp" />
     <ClCompile Include="EnergyTank.cpp" />
