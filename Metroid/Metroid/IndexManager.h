@@ -1,7 +1,7 @@
 #pragma once
 // Class used to manage Index Sprites in Texture
 
-#define MAX_INDEX 310
+#define MAX_INDEX 311
 
 // Define NUM_FRAMES
 #define NUM_FRAMES_ZOOMER 2
@@ -223,6 +223,8 @@ public:
 
 	const int explosionRocketBoss[4] = { 307,308,309,306 };
 	const int rocketBoss = 310;
+
+	const int rinka = 311;
 	
 
 	const int enIcon = 201;

@@ -137,6 +137,7 @@
     <ClInclude Include="BossKraidRocket.h" />
     <ClInclude Include="BossRocketPool.h" />
     <ClInclude Include="Brick.h" />
+    <ClInclude Include="Buble.h" />
     <ClInclude Include="Bullet.h" />
     <ClInclude Include="Camera.h" />
     <ClInclude Include="CanonBullet.h" />
@@ -218,6 +219,7 @@
     <ClCompile Include="BossKraidRocket.cpp" />
     <ClCompile Include="BossRocketPool.cpp" />
     <ClCompile Include="Brick.cpp" />
+    <ClCompile Include="Buble.cpp" />
     <ClCompile Include="Bullet.cpp" />
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="CanonBullet.cpp" />

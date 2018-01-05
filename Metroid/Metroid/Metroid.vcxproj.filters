@@ -78,6 +78,7 @@
     <ClCompile Include="BossRocketPool.cpp" />
     <ClCompile Include="CanonBullet.cpp" />
     <ClCompile Include="MachineCanon.cpp" />
+    <ClCompile Include="Buble.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AlienBig.h" />
@@ -159,6 +160,7 @@
     <ClInclude Include="BossRocketPool.h" />
     <ClInclude Include="CanonBullet.h" />
     <ClInclude Include="MachineCanon.h" />
+    <ClInclude Include="Buble.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Metroid.rc" />
