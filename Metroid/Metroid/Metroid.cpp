@@ -197,7 +197,7 @@ void Metroid::update(float dt)
 		//add rocket
 		if (input->isKeyDown(VK_F))
 		{
-			samus->setNumRocket(10);
+			samus->setNumRocket(20);
 			this->samus->setMariMaru(true);
 		}
 		//add boom

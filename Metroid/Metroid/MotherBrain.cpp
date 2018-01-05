@@ -1,5 +1,7 @@
 #include "MotherBrain.h"
 #include "Camera.h"
+#include "Sound.h"
+
 #define NUMBER_BULLET 10
 #define WIDTH_BULLET 50
 #define RATE_BEZIER 1.0f
@@ -33,7 +35,7 @@ MotherBrain::MotherBrain(TextureManager * textureM, Graphics * graphics,Samus* s
 
 	isActivity = true;
 	this->samus = samus;
-	health = 50;
+	health = 5;
 	bulletPool = new MBulletPool(textureM, graphics, samus, NUMBER_BULLET);
 	this->isHandle = true;
 }
@@ -127,6 +129,9 @@ void MotherBrain::update(float dt)
 		this->anim->update(dt);
 		if (isHandle == false)
 		{
+			Sound::getInstance()->stop(SOUND_BACKGROUND);
+			Sound::getInstance()->play(SOUND_BOMB_BURST, true);
+
 			timeBeforDeath += dt;
 
 			if (timeBeforDeath >= CYCLE)
@@ -144,6 +149,9 @@ void MotherBrain::update(float dt)
 
 			if (timeBeforDeath >= TIME_BEFORE_DEATH)
 			{
+				Sound::getInstance()->stop(SOUND_BOMB_BURST);
+				Sound::getInstance()->play(SOUND_BACKGROUND, true);
+
 				isActivity = false;
 				this->port->setWin(true);
 				Camera::getInstance()->setPosition(position);

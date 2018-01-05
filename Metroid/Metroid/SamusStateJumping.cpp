@@ -186,39 +186,45 @@ void SamusStateJumping::handleInput(float dt)
 
 		if (input->isKeyDown(VK_SPACE) && input->isKeyUp(VK_UP) && input->isKeyUp(VK_Z))
 		{
-			// Set Data for sprite
-			this->samus->setDataSuiteSkin(
-				IndexManager::getInstance()->samusYellowHittingAndJumpRight,
-				IndexManager::getInstance()->samusYellowIceHittingAndJumpRight,
-				IndexManager::getInstance()->samusPinkHittingAndJumpRight,
-				IndexManager::getInstance()->samusPinkIceHittingAndJumpRight);
-
-
-			this->isUp = false;
-			if (this->samus->timerShoot > TIME_SHOOTING)
+			if (*this->samus->getNumRocket() > 0)
 			{
-				this->fireRocket();
-				this->samus->timerShoot = 0;
-				this->isShoot = true;
+				// Set Data for sprite
+				this->samus->setDataSuiteSkin(
+					IndexManager::getInstance()->samusYellowHittingAndJumpRight,
+					IndexManager::getInstance()->samusYellowIceHittingAndJumpRight,
+					IndexManager::getInstance()->samusPinkHittingAndJumpRight,
+					IndexManager::getInstance()->samusPinkIceHittingAndJumpRight);
+
+
+				this->isUp = false;
+				if (this->samus->timerShoot > TIME_SHOOTING)
+				{
+					this->fireRocket();
+					this->samus->timerShoot = 0;
+					this->isShoot = true;
+				}
 			}
 		}
 
 		if (input->isKeyDown(VK_SPACE) && input->isKeyDown(VK_UP) && input->isKeyUp(VK_Z))
 		{
-			// Set Data for sprite
-			this->samus->setDataSuiteSkin(
-				IndexManager::getInstance()->samusYellowHittingJumpUp,
-				IndexManager::getInstance()->samusYellowIceHittingJumpUp,
-				IndexManager::getInstance()->samusPinkHittingJumpUp,
-				IndexManager::getInstance()->samusPinkIceHittingJumpUp);
-
-
-			this->isUp = true;
-			if (this->samus->timerShoot > TIME_SHOOTING)
+			if (*this->samus->getNumRocket() > 0)
 			{
-				this->fireRocket();
-				this->samus->timerShoot = 0;
-				this->isShoot = true;
+				// Set Data for sprite
+				this->samus->setDataSuiteSkin(
+					IndexManager::getInstance()->samusYellowHittingJumpUp,
+					IndexManager::getInstance()->samusYellowIceHittingJumpUp,
+					IndexManager::getInstance()->samusPinkHittingJumpUp,
+					IndexManager::getInstance()->samusPinkIceHittingJumpUp);
+
+
+				this->isUp = true;
+				if (this->samus->timerShoot > TIME_SHOOTING)
+				{
+					this->fireRocket();
+					this->samus->timerShoot = 0;
+					this->isShoot = true;
+				}
 			}
 		}
 

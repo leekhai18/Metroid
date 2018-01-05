@@ -5,6 +5,7 @@
 #include <math.h>
 #include "BossRocketPool.h"
 #include "SamusStateManager.h"
+
 #define ROCKET_VELOCITY_X 80
 #define ROCKET_VELOCITY_Y 80
 BossKraidRocket::BossKraidRocket()
@@ -37,6 +38,7 @@ BossKraidRocket::BossKraidRocket(Graphics * graphics, TextureManager * textureM,
 
 void BossKraidRocket::init()
 {
+
 	if (boss->getDirection() == eDirection::right)
 	{
 		P1 = VECTOR2(boss->getPosition().x + 1, boss->getPosition().y) - boss->getPosition();

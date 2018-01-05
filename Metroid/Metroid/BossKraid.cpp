@@ -127,6 +127,9 @@ void BossKraid::runToSamus()
 }
 void BossKraid::lauchRocket()
 {
+	Sound::getInstance()->stop(SOUND_ROCKET);
+	Sound::getInstance()->play(SOUND_ROCKET, false);
+
 	BossKraidRocket* rocket = BossRocketPool::getInstance()->getRocket();
 	setBoundCollision();
 	rocket->setListWallCanCollide(this->listWallCanCollide);
