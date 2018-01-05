@@ -1519,7 +1519,10 @@ bool ObjectManager::load_list(const char * filename)
 
 					x += zmr->getSprite()->getWidth()*0.5f;
 					y = y - 16 + zmr->getSprite()->getHeight()*0.5f;
-					
+					if(id==939)
+					{
+						y += 1;
+					}
 					zmr->setPosition(VECTOR2(x, y));
 					zmr->setStartPosition(VECTOR2(x, y));
 					const Value& arrayWall = listZommerRed[i]["ListCollideID"];

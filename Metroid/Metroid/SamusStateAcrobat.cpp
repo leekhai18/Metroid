@@ -411,9 +411,10 @@ void SamusStateAcrobat::onCollision(float dt)
 		case eID::ZOMMER:
 		{
 			Zommer* zommer = static_cast<Zommer*>(i->object);
-			if(this->samus->isCreamAttack()&& zommer->getCold() && zommer->getHandle())
+			if(this->samus->isCreamAttack()&& !zommer->getCold() && zommer->getHandle())
 			{
 				zommer->decreaseHealth(5);
+				zommer->setBeHit(true);
 				if (zommer->getExplose())
 				{
 					zommer->setCanDraw(false);
@@ -478,8 +479,9 @@ void SamusStateAcrobat::onCollision(float dt)
 		case eID::WAVER:
 		{
 			Waver* waver = static_cast<Waver*>(i->object);
-			if (this->samus->isCreamAttack())
+			if (this->samus->isCreamAttack() && !waver->getCold() && waver->getHandle())
 			{
+				waver->setBeHit(true);
 				waver->decreaseHealth(5);
 				if (waver->getExplose())
 				{
@@ -591,8 +593,9 @@ void SamusStateAcrobat::onCollision(float dt)
 		case eID::SKREE:
 		{
 			Skree* skree = static_cast<Skree*>(i->object);
-			if (this->samus->isCreamAttack())
+			if (this->samus->isCreamAttack() && !skree->getCold() && skree->getHandle())
 			{
+				skree->setBeHit(true);
 				skree->decreaseHealth(5);
 				if (skree->getExplose())
 				{
@@ -658,8 +661,9 @@ void SamusStateAcrobat::onCollision(float dt)
 		case eID::RIO:
 		{
 			Rio* rio = static_cast<Rio*>(i->object);
-			if (this->samus->isCreamAttack())
+			if (this->samus->isCreamAttack() && !rio->getCold() && rio->getHandle())
 			{
+				rio->setBeHit(true);
 				rio->decreaseHealth(5);
 				if (rio->getExplose())
 				{
@@ -725,8 +729,9 @@ void SamusStateAcrobat::onCollision(float dt)
 		case eID::ZEB:
 		{
 			Zeb* zeb = static_cast<Zeb*>(i->object);
-			if (this->samus->isCreamAttack())
+			if (this->samus->isCreamAttack() && !zeb->getCold() && zeb->getHandle())
 			{
+				zeb->setBeHit(true);
 				zeb->decreaseHealth(5);
 				if (zeb->getExplose())
 				{
