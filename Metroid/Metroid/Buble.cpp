@@ -23,7 +23,7 @@ Buble::Buble(TextureManager * textureM, Graphics * graphics, Samus * samus, Enem
 	this->samus = samus;
 	initExplosion(this->sprite, IndexManager::getInstance()->samusYellowExplosion, NUM_FRAMES_EXPLOSION, EXPLOSION_TIME_FRAME_DELAY);
 
-	
+	this->sprite->setData(IndexManager::getInstance()->rinka);
 	health = 4;
 
 	this->sprite->setOrigin(VECTOR2(0.5, 0.5));
@@ -45,9 +45,11 @@ void Buble::setStartPosition(VECTOR2 position)
 void Buble::reInit()
 {
 	P1 = this->getPosition() - this->samus->getPosition();
-
 	
 	D3DXVec2Normalize(&normalize, &P1);
+	this->sprite->setData(IndexManager::getInstance()->rinka);
+
+	isActivity = true;
 }
 
 void Buble::setBeHit(bool hit)
@@ -145,7 +147,7 @@ void Buble::draw()
 {
 	if (isActivity)
 	{
-
+		this->sprite->draw();
 	}
 }
 
