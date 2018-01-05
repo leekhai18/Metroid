@@ -196,7 +196,7 @@ void Metroid::update(float dt)
 		if(input->isKeyDown(VK_S))
 		{
 			samus->setPosition(VECTOR2(960, 4250));
-			Camera::getInstance()->setPosition(VECTOR2(912, 4208));
+			Camera::getInstance()->setPosition(VECTOR2(896, 4208));
 
 			//BulletPool::getInstance()->setIceBullet();
 			//this->samus->setMariMaru(true);
