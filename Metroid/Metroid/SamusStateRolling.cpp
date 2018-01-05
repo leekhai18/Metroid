@@ -112,7 +112,6 @@ void SamusStateRolling::handleInput(float dt)
 		timerToStartBoom += dt;
 		if (timerToStartBoom > TIME_START_BOMB)
 		{
-			Sound::getInstance()->play(SOUND_PUT_BOMB, false);
 			BoomBombPool::getInstance()->getBoom()->start(this->samus->getPosition());
 			timerToStartBoom = 0;
 		}

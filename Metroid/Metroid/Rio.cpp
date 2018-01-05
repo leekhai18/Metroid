@@ -4,8 +4,8 @@
 #include "Samus.h"
 #define RATE_BEZIER 0.45f
 #define TIME_FRAME_DELAY 0.15f
-#define WIDTH_AREA_ACTIVE 100
-#define HEIGHT_AREA_ACTIVE 130
+#define WIDTH_AREA_ACTIVE 70
+#define HEIGHT_AREA_ACTIVE 90
 #define VELOCITY_X 60
 #define TIME_DELAY_BE_HIT 0.2f
 #define TIME_RETURN_NOMAL 5.0f
@@ -66,11 +66,11 @@ Rio::~Rio()
 void Rio::reInit(VECTOR2 stP)
 {
 	this->startPosition = stP;
-	this->P1 = this->startPosition;
-	this->P3 = VECTOR2(P1.x + WIDTH_AREA_ACTIVE, startPosition.y + 17);
-	this->P5 = VECTOR2(P3.x + WIDTH_AREA_ACTIVE, startPosition.y + 16);
+	this->P1 = this->startPosition + VECTOR2(0, -10);
+	this->P3 = VECTOR2(P1.x + WIDTH_AREA_ACTIVE, startPosition.y - 10);
+	this->P5 = VECTOR2(P3.x + WIDTH_AREA_ACTIVE, startPosition.y - 10);
 
-	this->setPosition(stP);
+	this->setPosition(P1);
 	this->target = VECTOR2ZERO;
 	this->sprite->setData(resetFrame);
 
@@ -90,9 +90,9 @@ void Rio::reInit(VECTOR2 stP)
 }
 void Rio::reInit()
 {
-	this->P1 = this->startPosition;
-	this->P3 = VECTOR2(P1.x + WIDTH_AREA_ACTIVE, startPosition.y + 17);
-	this->P5 = VECTOR2(P3.x + WIDTH_AREA_ACTIVE, startPosition.y + 16);
+	this->P1 = this->startPosition + VECTOR2(0, -10);
+	this->P3 = VECTOR2(P1.x + WIDTH_AREA_ACTIVE, startPosition.y - 10);
+	this->P5 = VECTOR2(P3.x + WIDTH_AREA_ACTIVE, startPosition.y - 10);
 
 	this->target = VECTOR2ZERO;
 	this->sprite->setData(resetFrame);
@@ -100,7 +100,7 @@ void Rio::reInit()
 	this->isActivity = true;
 	isHandle = true;
 	isCold = false;
-	this->setPosition(startPosition);
+	this->setPosition(P1);
 	this->anim->setPause(false);
 
 	canDraw = true;

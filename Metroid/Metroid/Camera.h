@@ -16,8 +16,8 @@
 //#define CAM_POS_Y 4200
 
 //Rio
-//#define CAM_POS_X 2432.00000
-//#define CAM_POS_Y 1320.00000
+#define CAM_POS_X 2432.00000
+#define CAM_POS_Y 1320.00000
 
 //MotherBrain
 //boss
@@ -33,8 +33,8 @@
 //#define CAM_POS_Y 3000
 
 //
-#define CAM_POS_X  263.111481
-#define CAM_POS_Y 3647.88770
+//#define CAM_POS_X  263.111481
+//#define CAM_POS_Y 3647.88770
 class Camera
 {
 private:

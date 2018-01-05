@@ -1,5 +1,5 @@
 #include "OptionScence.h"
-
+#include "Sound.h"
 
 
 void OptionScence::init()

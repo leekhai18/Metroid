@@ -652,6 +652,7 @@ void SamusStateRunning::update(float dt)
 
 			//stop current animation
 			this->animation->stop();
+			Sound::getInstance()->play(SOUND_SAMUS_JUMP, false);
 
 			break;
 		case eStatus::STANDING:
@@ -664,6 +665,7 @@ void SamusStateRunning::update(float dt)
 			break;
 		}
 		SamusStateManager::getInstance()->changeStateTo(this->samus->getStatus());
+
 		return;
 	}
 
@@ -678,6 +680,8 @@ void SamusStateRunning::update(float dt)
 
 void SamusStateRunning::onStart()
 {
+	Sound::getInstance()->play(SOUND_SAMUS_RUN, true);
+
 	runningNormal->setPause(false);
 	runningUp->setPause(false);
 	runningHittingRight->setPause(false);
@@ -687,6 +691,7 @@ void SamusStateRunning::onStart()
 
 void SamusStateRunning::onExit()
 {
+	Sound::getInstance()->stop(SOUND_SAMUS_RUN);
 	this->animation->stop();
 }
 
@@ -694,7 +699,6 @@ void SamusStateRunning::fire()
 {
 	VECTOR2 stP;
 	Bullet* bullet = BulletPool::getInstance()->getBullet();
-	Sound::getInstance()->play(SOUND_BULLET, false);
 	if (isUp)
 	{
 		stP = VECTOR2(this->samus->getPosition().x + this->samus->getDirection(), this->samus->getPosition().y + this->samus->getSprite()->getHeight()*0.4f);

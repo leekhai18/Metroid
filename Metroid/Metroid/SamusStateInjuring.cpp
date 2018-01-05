@@ -23,10 +23,10 @@ SamusStateInjuring::~SamusStateInjuring()
 
 void SamusStateInjuring::init()
 {
-
+	Sound::getInstance()->stop(SOUND_ENEMIES_COLLISION);
+	Sound::getInstance()->play(SOUND_ENEMIES_COLLISION, false);
+	
 	//this->samus->setVelocityY(-SAMUS_MIN_SPEED_Y);
-
-	Sound::getInstance()->play(SOUND_COLLIDE_ENEMIES, false);
 	setBoundCollision();
 
 	time_to_stand = 0;

@@ -20,6 +20,8 @@
 #include "Ripper.h"
 #include "Port.h"
 #include "ScenceManager.h"
+#include "Sound.h"
+
 SamusStateAcrobat::SamusStateAcrobat()
 {
 }

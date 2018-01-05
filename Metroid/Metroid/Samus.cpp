@@ -2,6 +2,7 @@
 #include "SamusStateManager.h"
 #include "Camera.h"
 #include "GameDebug.h"
+#include "Sound.h"
 
 
 #define DISTANCE_MOVE_FRONT_GATE 24
@@ -12,8 +13,8 @@
 //#define SAMUS_POS_Y 4211
 
 //Rio position
-//#define SAMUS_POS_X 2522
-//#define SAMUS_POS_Y 1251
+#define SAMUS_POS_X 2522
+#define SAMUS_POS_Y 1251
 
 //start position
 //#define SAMUS_POS_X 640
@@ -36,8 +37,9 @@
 //#define SAMUS_POS_Y 3000
 
 //
-#define SAMUS_POS_X 278.264191  
-#define SAMUS_POS_Y 3651.00000   
+/*#define SAMUS_POS_X 278.264191  
+#define SAMUS_POS_Y 3651.00000  */ 
+
 void Samus::setActiveBound()
 {
 	// Can 1 con so hop ly
@@ -462,6 +464,11 @@ void Samus::setHealth(int heal)
 {
 	this->health = heal;
 
+	if (this->health < 10 && this->health > 0)
+	{
+		Sound::getInstance()->play(SOUND_SAMUS_NEAR_DEATH, true);
+	}
+
 	if (this->health <= 0)
 	{
 		if (this->numLives > 0)
@@ -472,7 +479,8 @@ void Samus::setHealth(int heal)
 		else
 		{
 			// GAME OVER
-			health = 30;
+			health = 99;
+			Sound::getInstance()->stop(SOUND_SAMUS_NEAR_DEATH);
 		}
 	}
 }

@@ -493,7 +493,6 @@ void SamusStateStanding::fire()
 {
 	VECTOR2 stP;
 	Bullet* bullet = BulletPool::getInstance()->getBullet();
-	Sound::getInstance()->play(SOUND_BULLET, false);
 	if (isUp)
 	{
 		stP = VECTOR2(this->samus->getPosition().x + this->samus->getDirection(), this->samus->getPosition().y + this->samus->getSprite()->getHeight()*0.4f);
@@ -512,7 +511,6 @@ void SamusStateStanding::fireRocket()
 {
 	VECTOR2 stP;
 	Rocket* rocket = RocketPool::getInstance()->getRocket();
-	Sound::getInstance()->play(SOUND_ROCKET, false);
 	if (isUp)
 	{
 		stP = VECTOR2(this->samus->getPosition().x + this->samus->getDirection(), this->samus->getPosition().y + this->samus->getSprite()->getHeight()*0.4f);

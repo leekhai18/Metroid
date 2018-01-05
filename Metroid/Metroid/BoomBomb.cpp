@@ -10,6 +10,8 @@
 #include "Brick.h"
 #include "BossKraid.h"
 #include "MotherBrain.h"
+#include "Sound.h"
+
 #define TIME_BOM 2
 #define W_H_BOOM_HALF 12
 
@@ -160,6 +162,8 @@ void BoomBomb::update(float dt)
 		{
 			this->anim->stop();
 			this->explosion->start();
+			Sound::getInstance()->stop(SOUND_BOMB_BURST);
+			Sound::getInstance()->play(SOUND_BOMB_BURST, false);
 			this->setBoundCollision();
 			this->canHandledCollision = true;
 		}
@@ -191,6 +195,7 @@ void BoomBomb::setBoundCollision()
 
 void BoomBomb::start(VECTOR2 pos)
 {
+	Sound::getInstance()->play(SOUND_BOMB_PUT, false);
 	this->setPosition(pos);
 	this->anim->start();
 	this->explosion->reInit();

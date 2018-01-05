@@ -5,7 +5,7 @@
 #include "GameDebug.h"
 #include "BulletPool.h"
 #include "Sound.h"
-#define TIME_DELAY_WHEN_COLLECT_ITEM 1
+#define TIME_DELAY_WHEN_COLLECT_ITEM 3
 
 Metroid::Metroid()
 {
@@ -80,7 +80,7 @@ void Metroid::initialize(HWND hwnd)
 		throw GameError(GameErrorNS::FATAL_ERROR, "Can not initalize map brinstar");
 	}
 
-	Sound::getInstance()->loadAllSound();
+	//Sound::getInstance()->loadAllSound();
 
 	camera = new Camera(VIEWPORT_WIDTH, VIEWPORT_HEIGHT);
 	camera->setPosition(VECTOR2(CAM_POS_X, CAM_POS_Y));
@@ -135,7 +135,7 @@ void Metroid::initialize(Graphics * graphics, Input * input)
 		throw GameError(GameErrorNS::FATAL_ERROR, "Can not initalize map brinstar");
 	}
 
-	Sound::getInstance()->loadAllSound();
+	//Sound::getInstance()->loadAllSound();
 
 	camera = new Camera(VIEWPORT_WIDTH, VIEWPORT_HEIGHT);
 	camera->setPosition(VECTOR2(CAM_POS_X, CAM_POS_Y));
@@ -184,6 +184,9 @@ void Metroid::update(float dt)
 		{
 			timerEffectCollectItem = 0;
 			this->justCollect = false;
+
+			Sound::getInstance()->stop(SOUND_COLLECTION_ITEMS);
+			Sound::getInstance()->play(SOUND_BACKGROUND, true);
 		}
 	}
 
@@ -274,4 +277,10 @@ HWND Metroid::getCurrentHWND()
 void Metroid::setJustCollectItem(bool flag)
 {
 	this->justCollect = flag;
+
+	if (flag == true)
+	{
+		Sound::getInstance()->stop(SOUND_BACKGROUND);
+		Sound::getInstance()->play(SOUND_COLLECTION_ITEMS, false);
+	}
 }

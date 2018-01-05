@@ -3,6 +3,8 @@
 #include "PlayScence.h"
 #include "Constants.h"
 #include "EndScence.h"
+#include "Sound.h"
+
 ScenceManager* ScenceManager::instance;
 
 ScenceManager * ScenceManager::getInstance()
@@ -54,6 +56,9 @@ void ScenceManager::run()
 	if(input->isKeyDown(VK_RETURN))
 	{
 		this->goToScence(ScenceType::PLAY);
+
+		Sound::getInstance()->stop(SOUND_TITLE);
+		Sound::getInstance()->play(SOUND_BACKGROUND, true);
 	}
 }
 
@@ -79,6 +84,9 @@ void ScenceManager::init(HWND hwnd)
 	this->scenceContainer->insert(pair<ScenceType, Scence*>(ScenceType::OPTION,optionS));
 	this->scenceContainer->insert(pair<ScenceType, Scence*>(ScenceType::PLAY, playS) );
 	this->scenceContainer->insert(pair<ScenceType, Scence*>(ScenceType::END, endS));
+
+	Sound::getInstance()->loadAllSound();
+	Sound::getInstance()->play(SOUND_TITLE, true);
 }
 
 void ScenceManager::deleteAll()
