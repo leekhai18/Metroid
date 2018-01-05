@@ -1,5 +1,5 @@
 #include "MBulletPool.h"
-
+#include "Sound.h"
 
 #define WIDTH_BULLET 50
 #define TIME_DELAY_CREATE 0.1f
@@ -42,7 +42,6 @@ void MBulletPool::setOwnPosition(VECTOR2 position)
 }
 void MBulletPool::reInit()
 {
-	
 	middlePosition = VECTOR2(samus->getPosition().x,3552);
 
 	targetPosition = VECTOR2(middlePosition.x + WIDTH_BULLET, ownPosition.y);

@@ -107,6 +107,7 @@ void Sound::play(std::string name, bool isLoop)
 //Dừng nhạc
 void Sound::StopSound(GSound *sound)
 {
+	sound->Reset();
 	sound->Stop();
 }
 

@@ -5,7 +5,7 @@
 #include "GameDebug.h"
 #include "BulletPool.h"
 #include "Sound.h"
-#define TIME_DELAY_WHEN_COLLECT_ITEM 3
+#define TIME_DELAY_WHEN_COLLECT_ITEM 3.5f
 
 Metroid::Metroid()
 {
@@ -283,6 +283,7 @@ void Metroid::setJustCollectItem(bool flag)
 	if (flag == true)
 	{
 		Sound::getInstance()->stop(SOUND_BACKGROUND);
+		Sound::getInstance()->stop(SOUND_COLLECTION_ITEMS);
 		Sound::getInstance()->play(SOUND_COLLECTION_ITEMS, false);
 	}
 }
