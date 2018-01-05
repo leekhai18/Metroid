@@ -19,6 +19,7 @@ private:
 
 	bool isDead;
 
+
 	Port* port;
 	bool beHit;
 	float timerHit;

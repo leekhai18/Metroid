@@ -359,6 +359,7 @@ void SamusStateAcrobat::onCollision(float dt)
 			{
 				Buble* buble = static_cast<Buble*>(i->object);
 				buble->decreaseHealth(5);
+				buble->setBeHit(true);
 				break;
 			}
 			switch (i->direction)

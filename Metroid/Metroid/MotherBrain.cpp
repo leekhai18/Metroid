@@ -117,7 +117,8 @@ void MotherBrain::update(float dt)
 				{
 					this->anim = this->openingBoss;
 					this->anim->start();
-					boundCollision.right = boundCollision.right - 10;
+
+					boundCollision.right=position.x + this->getSprite()->getWidth() *0.5f - ;
 				}
 			}
 		}
