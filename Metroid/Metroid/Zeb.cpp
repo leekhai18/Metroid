@@ -192,8 +192,7 @@ void Zeb::update(float dt)
 		}
 	}
 
-	if (!Collision::getInstance()->isCollide(Camera::getInstance()->getBound(), this->startBound)
-		&& !Collision::getInstance()->isCollide(Camera::getInstance()->getBound(), this->boundCollision))
+	if (!Collision::getInstance()->isCollide(Camera::getInstance()->getBound(), this->boundCollision))
 	{
 		reInit();
 	}
