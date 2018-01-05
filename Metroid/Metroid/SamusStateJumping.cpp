@@ -399,6 +399,20 @@ void SamusStateJumping::onCollision(float dt)
 #pragma endregion
 
 #pragma region enemies
+		case eID::FIRE_BUBLE:
+		{
+			switch (i->direction)
+			{
+			case CollideDirection::TOP:
+				this->samus->setVelocityY(0);
+				break;
+			}
+			//Buble* zommer = static_cast<Buble*>(i->object);
+			SamusStateManager::getInstance()->setOldStatus(eStatus::JUMPING);
+			this->samus->setStatus(eStatus::INJURING);
+			SamusStateManager::getInstance()->setOldState(this);
+			break;
+		}
 		case eID::MACHINE_CANON:
 		{
 			switch (i->direction)

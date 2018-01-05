@@ -2,8 +2,9 @@
 #include "Collision.h"
 #include "Camera.h"
 #define TIME_DELAY_BE_HIT 0.2f
-#define BUBLE_VELOCITY_X 50
-#define BUBLE_VELOCITY_Y 50
+#define BUBLE_VELOCITY_X 40
+#define BUBLE_VELOCITY_Y 40
+
 Buble::Buble()
 {
 }
@@ -11,6 +12,7 @@ Buble::Buble()
 
 Buble::~Buble()
 {
+
 }
 
 Buble::Buble(TextureManager * textureM, Graphics * graphics, Samus * samus) : BaseObject(eID::FIRE_BUBLE)

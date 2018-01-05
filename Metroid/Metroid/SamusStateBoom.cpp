@@ -268,6 +268,22 @@ void SamusStateBoom::onCollision(float dt)
 #pragma endregion
 
 #pragma region enemies
+		case eID::FIRE_BUBLE:
+		{
+			switch (i->direction)
+			{
+			case CollideDirection::TOP:
+				this->samus->setVelocityY(0);
+				break;
+			}
+			//Buble* zommer = static_cast<Buble*>(i->object);
+			this->samus->setStatus(eStatus::INJURING);
+			BaseState* state = SamusStateManager::getInstance()->getOldState();
+			eStatus status = SamusStateManager::getInstance()->getOldStatus();
+			SamusStateManager::getInstance()->setOldStatus(status);
+			SamusStateManager::getInstance()->setOldState(state);
+			break;
+		}
 		case eID::ZOMMER:
 		{
 			Zommer* zommer = static_cast<Zommer*>(i->object);

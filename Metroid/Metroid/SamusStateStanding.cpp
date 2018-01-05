@@ -10,6 +10,7 @@
 #include "Rio.h"
 #include "Waver.h"
 #include "Sound.h"
+#include "Buble.h"
 #define TIME_TO_NORMAL 0.1f
 
 SamusStateStanding::SamusStateStanding()
@@ -301,6 +302,20 @@ void SamusStateStanding::onCollision(float dt)
 			}
 			break;
 		}
+		case eID::FIRE_BUBLE:
+		{
+			switch (i->direction)
+			{
+			case CollideDirection::TOP:
+				this->samus->setVelocityY(0);
+				break;
+			}
+			//Buble* zommer = static_cast<Buble*>(i->object);
+			SamusStateManager::getInstance()->setOldStatus(eStatus::STANDING);
+			this->samus->setStatus(eStatus::INJURING);
+			SamusStateManager::getInstance()->setOldState(this);
+			break;
+		}
 		case eID::ZOMMER:
 		{
 			switch (i->direction)
@@ -438,7 +453,6 @@ void SamusStateStanding::onCollision(float dt)
 
 void SamusStateStanding::update(float dt)
 {
-
 	this->samus->updateVertical(dt);
 	setBoundCollision();
 
