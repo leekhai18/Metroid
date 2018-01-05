@@ -195,10 +195,11 @@ void Metroid::update(float dt)
 		//go to boss draik
 		if(input->isKeyDown(VK_S))
 		{
-			/*samus->setPosition(VECTOR2(960, 4250));
+			samus->setPosition(VECTOR2(960, 4250));
 			Camera::getInstance()->setPosition(VECTOR2(912, 4208));
-			BulletPool::getInstance()->setIceBullet();
-			this->samus->setMariMaru(true);*/
+
+			//BulletPool::getInstance()->setIceBullet();
+			//this->samus->setMariMaru(true);
 		}
 		//go to mother brain
 

@@ -25,7 +25,8 @@ private:
 	float t1;
 	int flag = 1;
 	bool start = false;
-	
+	map<int, BaseObject*>* listWallCanCollide;
+	list<CollisionReturn> *listCollide;
 
 	VECTOR2 positionBefore;
 	VECTOR2 positionAfter;
@@ -42,6 +43,7 @@ public:
 	Rio();
 	~Rio();
 	void handleVelocity(float dt);
+	void onCollision(float dt);
 	void update(float dt);
 	void draw();
 	void setBoundCollision();
@@ -55,5 +57,8 @@ public:
 
 	void reInit(VECTOR2 stP);
 	void reInit();
+
+	map<int, BaseObject*>* getListWallCanCollide();
+	list<CollisionReturn> *getListCollide();
 };
 

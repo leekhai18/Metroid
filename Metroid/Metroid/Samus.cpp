@@ -16,8 +16,8 @@
 //#define SAMUS_POS_Y 1251
 
 //start position
-//#define SAMUS_POS_X 640
-//#define SAMUS_POS_Y 1267
+#define SAMUS_POS_X 640
+#define SAMUS_POS_Y 1267
 
 //Boss
 //#define SAMUS_POS_X 960

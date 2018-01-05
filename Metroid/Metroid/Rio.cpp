@@ -112,6 +112,14 @@ void Rio::reInit()
 	start = false;
 	health = 4;
 }
+map<int, BaseObject*>* Rio::getListWallCanCollide()
+{
+	return this->listWallCanCollide;
+}
+list<CollisionReturn>* Rio::getListCollide()
+{
+	return this->listCollide;
+}
 void Rio::handleVelocity(float dt)
 {
 	if (isHandle && !this->isCold&&isActivity)
@@ -194,6 +202,42 @@ void Rio::handleVelocity(float dt)
 		this->velocity = (positionAfter - positionBefore) / dt;
 	}
 	
+
+}
+
+void Rio::onCollision(float dt)
+{
+	for (auto i = this->listWallCanCollide->begin(); i != this->listWallCanCollide->end(); i++)
+	{
+		BaseObject* x = (*i).second;
+		Collision::getInstance()->checkCollision(this, x, dt);
+
+	}
+	for (auto x = this->listCollide->begin(); x != this->listCollide->end(); x++)
+	{
+
+		switch (x->direction)
+		{
+		case CollideDirection::LEFT:
+			direction = eDirection::left;
+		
+			break;
+		case CollideDirection::RIGHT:
+			direction = eDirection::right;
+		
+			break;
+		case CollideDirection::TOP:
+			velocity.y = 0;
+	
+			break;
+		case CollideDirection::BOTTOM:
+			velocity.y = 0;
+		
+			break;
+		}
+	}
+
+	this->listCollide->clear();
 
 }
 
