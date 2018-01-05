@@ -223,7 +223,14 @@ void ObjectManager::onCheckCollision(float dt)
 	{
 		BaseObject* object = (*x).second;
 		
-		Collision::getInstance()->checkCollision(samus, object, dt);
+		if(Collision::getInstance()->checkCollision(samus, object, dt))
+		{
+			if ((*x).first == 685)
+			{
+				int test = 0;
+			}
+		}
+		//Collision::getInstance()->checkCollision(samus, object, dt);
 
 		for (unsigned i = 0; i < BulletPool::getInstance()->getListUsing().size(); i++)
 			Collision::getInstance()->checkCollision(BulletPool::getInstance()->getListUsing().at(i), object, dt);

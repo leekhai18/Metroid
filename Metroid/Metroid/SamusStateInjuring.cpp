@@ -81,7 +81,7 @@ void SamusStateInjuring::onCollision(float dt)
 					if (!(this->samus->getBoundCollision().bottom < i->object->getBoundCollision().top))
 					{
 						this->samus->setVelocityY(0);
-						return;
+						break;
 					}
 				//}
 				this->samus->setVelocityX(0);
@@ -91,7 +91,7 @@ void SamusStateInjuring::onCollision(float dt)
 					if (!(this->samus->getBoundCollision().bottom< i->object->getBoundCollision().top))
 					{
 						this->samus->setVelocityY(0);
-						return;
+						break;
 					}
 				//}
 				this->samus->setVelocityX(0);

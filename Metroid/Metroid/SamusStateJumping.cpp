@@ -256,8 +256,7 @@ void SamusStateJumping::onCollision(float dt)
 				this->samus->setFall(true);
 				this->samus->setVelocityY(0);
 				addY = i->positionCollision;
-				this->samus->setVelocityY(0);
-
+				
 				this->samus->setPositionY(addY - OFFSET_JUMP);
 				break;
 			}
@@ -408,6 +407,7 @@ void SamusStateJumping::onCollision(float dt)
 				break;
 			}
 			//Buble* zommer = static_cast<Buble*>(i->object);
+
 			SamusStateManager::getInstance()->setOldStatus(eStatus::JUMPING);
 			this->samus->setStatus(eStatus::INJURING);
 			SamusStateManager::getInstance()->setOldState(this);
