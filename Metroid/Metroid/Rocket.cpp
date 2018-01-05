@@ -17,6 +17,7 @@
 #include "Ripper.h"
 #include "Sound.h"
 #include "DefendBoss.h"
+#include "Buble.h"
 #define WIDTH_ROCKET_HALF 4
 #define HEIGHT_ROCKET_HALF 4
 
@@ -94,7 +95,26 @@ void Rocket::onCollision()
 				}
 
 
+				case eID::FIRE_BUBLE:
+				{
 
+
+					Buble* skree = static_cast<Buble*>((*i).object);
+
+
+					this->isCollided = true;
+
+					this->velocity = VECTOR2ZERO;
+
+					this->sprite->setData(IndexManager::getInstance()->samusPinkExplosion[0]);
+
+					skree->setBeHit(true);
+					skree->decreaseHealth(this->dame);
+
+
+
+					break;
+				}
 				case eID::SKREE:
 				{
 

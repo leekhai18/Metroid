@@ -52,7 +52,7 @@ void DefendBoss::update(float dt)
 			switch (heath)
 			{
 			case 15:
-				this->sprite->setData(this->frame[3]);
+				this->sprite->setData(this->frame[1]);
 				setBoundCollision();
 				break;
 			case 10:
@@ -60,7 +60,7 @@ void DefendBoss::update(float dt)
 				setBoundCollision();
 				break;
 			case 5:
-				this->sprite->setData(this->frame[1]);
+				this->sprite->setData(this->frame[3]);
 				setBoundCollision();
 				break;
 			case 0:

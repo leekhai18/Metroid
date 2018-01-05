@@ -16,6 +16,8 @@
 #include "Ripper.h"
 #include "Sound.h"
 #include "Brick.h"
+#include "DefendBoss.h"
+#include "Buble.h"
 #define WIDTH_BULLET_HALF 1
 #define HEIGHT_BULLET_HALF 1
 
@@ -95,7 +97,9 @@ void Bullet::onCollision()
 					}
 					
 				}
-				case eID::WALL : case eID::GATERED: 
+				case eID::WALL :
+				case eID::GATERED: 
+				case eID::DEFENSEBOSS:
 					this->sprite->setData(indexEffect);
 					this->isCollided = true;
 					this->velocity = VECTOR2ZERO;
@@ -111,9 +115,6 @@ void Bullet::onCollision()
 					default:
 						break;
 					}
-				
-				
-
 					break;
 
 				case eID::GATEBLUE:
@@ -142,6 +143,38 @@ void Bullet::onCollision()
 					break;
 				}
 				
+				case eID::FIRE_BUBLE:
+				{
+
+
+					Buble* skree = static_cast<Buble*>((*i).object);
+
+					switch (i->direction)
+					{
+					case CollideDirection::BOTTOM: case CollideDirection::TOP:
+						this->setPositionY(i->positionCollision);
+						break;
+
+					case CollideDirection::LEFT: case CollideDirection::RIGHT:
+						this->setPositionX(i->positionCollision);
+						break;
+					default:
+						break;
+					}
+
+					this->isCollided = true;
+
+					this->velocity = VECTOR2ZERO;
+
+					this->sprite->setData(indexEffect);
+
+					skree->setBeHit(true);
+					skree->decreaseHealth(this->dame);
+
+					
+
+					break;
+				}
 				case eID::SKREE:
 				{
 

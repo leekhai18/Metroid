@@ -37,6 +37,7 @@ Buble::Buble(TextureManager * textureM, Graphics * graphics, Samus * samus) : Ba
 	isHandle = true;
 
 	timerHit = 0;
+	isExplose = false;
 }
 
 
@@ -55,8 +56,9 @@ void Buble::reInit()
 	D3DXVec2Normalize(&normalize, &P1);
 
 	this->sprite->setData(IndexManager::getInstance()->rinka);
-
+	IExplosible::reInit();
 	isActivity = true;
+	health = 4;
 }
 
 void Buble::setBeHit(bool hit)
@@ -129,22 +131,22 @@ void Buble::update(float dt)
 	if (!isExplose)
 	{
 		IExplosible::update(dt);
-
+		
 	}
 	else
 	{
-		this->sprite->setData(IndexManager::getInstance()->rinka);
+		reInit();
 	}
 		
 	if (!Collision::getInstance()->isCollide(Camera::getInstance()->getBound(), this->boundCollision))
 	{
-		timeReset += dt;
-		this->setVelocity(VECTOR2(0, 0));
-		if(this->timeReset>=TIME_TO_RESET)
-		{
+		//timeReset += dt;
+		//this->setVelocity(VECTOR2(0, 0));
+		//if(this->timeReset>=TIME_TO_RESET)
+		//{
 			reInit();
-			timeReset = 0;
-		}
+			//timeReset = 0;
+		//}
 		
 	}
 }

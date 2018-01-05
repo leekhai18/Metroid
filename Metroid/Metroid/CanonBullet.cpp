@@ -54,8 +54,7 @@ void CanonBullet::init()
 
 		P1 = VECTOR2(canon->getBoundCollision().right + 1, canon->getBoundCollision().bottom - 1) 
 			-VECTOR2(canon->getBoundCollision().right, canon->getBoundCollision().bottom) ;
-		P2 = VECTOR2(canon->getBoundCollision().right, canon->getBoundCollision().bottom - 1)
-			- VECTOR2(canon->getBoundCollision().right, canon->getBoundCollision().bottom);
+
 
 		//angle = acos(D3DXVec2Dot(&P1, &P2) / (D3DXVec2Length(&P1)*D3DXVec2Length(&P2)));
 		D3DXVec2Normalize(&normalize, &P1);
@@ -64,21 +63,19 @@ void CanonBullet::init()
 	case CanonType::CANON_RIGHT:
 		P1 = VECTOR2(canon->getBoundCollision().left - 1, canon->getBoundCollision().bottom -1)
 			- VECTOR2(canon->getBoundCollision().left , canon->getBoundCollision().bottom);
-		P2 = VECTOR2(canon->getBoundCollision().left , canon->getBoundCollision().bottom - 1)
-			- VECTOR2(canon->getBoundCollision().left , canon->getBoundCollision().bottom);
+
 
 		D3DXVec2Normalize(&normalize, &P1);
 		//angle = acos(D3DXVec2Dot(&P1, &P2) / (D3DXVec2Length(&P1)*D3DXVec2Length(&P2)));
 		this->setPosition(VECTOR2(canon->getBoundCollision().left , canon->getBoundCollision().bottom ));
 		break;
 	case CanonType::CANON_TOP:
-		P1 = VECTOR2(canon->getBoundCollision().left - 1, canon->getBoundCollision().bottom - 1)
-			- VECTOR2(canon->getBoundCollision().left, canon->getBoundCollision().bottom);
-		P2 = VECTOR2(canon->getBoundCollision().left, canon->getBoundCollision().bottom - 1)
-			- VECTOR2(canon->getBoundCollision().left, canon->getBoundCollision().bottom);
+		P1 = VECTOR2(canon->getBoundCollision().right - canon->getSprite()->getWidth() *0.5f, canon->getBoundCollision().bottom - 1)
+			- VECTOR2(canon->getBoundCollision().right - canon->getSprite()->getWidth() *0.5f, canon->getBoundCollision().bottom);
+	
 
 		D3DXVec2Normalize(&normalize, &P1);
-		this->setPosition(VECTOR2((canon->getBoundCollision().right - canon->getBoundCollision().left)*0.5f, canon->getBoundCollision().bottom));
+		this->setPosition(VECTOR2(canon->getBoundCollision().right - canon->getSprite()->getWidth() *0.5f, canon->getBoundCollision().bottom));
 		//angle = acos(D3DXVec2Dot(&P1, &P2) / (D3DXVec2Length(&P1)*D3DXVec2Length(&P2)));
 		break;
 	default:
