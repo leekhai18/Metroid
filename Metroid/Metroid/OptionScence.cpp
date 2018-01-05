@@ -60,6 +60,12 @@ void OptionScence::run()
 	draw();
 }
 
+void OptionScence::release()
+{
+	textureM->onLostDevice();
+	delete textureM;
+}
+
 OptionScence::OptionScence()
 {
 
@@ -74,7 +80,5 @@ OptionScence::OptionScence(Graphics * graphics, Input * input)
 
 OptionScence::~OptionScence()
 {
-	textureM->onLostDevice();
-	delete textureM;
 	//delete data;
 }

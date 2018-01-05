@@ -19,6 +19,11 @@ void PlayScence::run()
 	metroidGame->run();
 }
 
+void PlayScence::release()
+{
+	metroidGame->releaseAll();
+}
+
 PlayScence::PlayScence(Graphics * graphics, Input * input)
 {
 	this->metroidGame = new  Metroid();
@@ -27,11 +32,9 @@ PlayScence::PlayScence(Graphics * graphics, Input * input)
 
 PlayScence::PlayScence()
 {
-	
 }
 
 
 PlayScence::~PlayScence()
 {
-	delete metroidGame;
 }

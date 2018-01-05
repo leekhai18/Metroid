@@ -105,7 +105,7 @@ private:
 
 	int numLives;
 	list<Sprite*> *listNumLives;
-	int health;
+	int* health;
 	Sprite* labelIconHealth;
 	Text* textHealth;
 
@@ -113,7 +113,7 @@ private:
 
 	bool isLongBeam;
 
-	int missitleRocket;
+	int* missitleRocket;
 	Sprite* labelIconRoket;
 	Text* textNumRocket;
 
@@ -174,7 +174,7 @@ public:
 	bool getVisible();
 
 	void setHealth(int heal);
-	int getHealth();
+	int* getHealth();
 
 	void setIsCollidingPort(bool flag);
 	bool isColliedPort();
@@ -211,7 +211,7 @@ public:
 	bool isHaveLongBeam();
 	void setLongBeam(bool flag);
 
-	int getNumRocket();
+	int* getNumRocket();
 	void setNumRocket(int num);
 	
 	eSkin getCurrentSkin();

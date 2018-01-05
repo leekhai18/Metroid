@@ -17,12 +17,12 @@
 //#define SAMUS_POS_Y 1251
 
 //start position
-#define SAMUS_POS_X 640
-#define SAMUS_POS_Y 1267
+//#define SAMUS_POS_X 640
+//#define SAMUS_POS_Y 1267
 
 //Boss
-//#define SAMUS_POS_X 960
-//#define SAMUS_POS_Y 4250
+#define SAMUS_POS_X 960
+#define SAMUS_POS_Y 4250
 
 //MotherBrain
 //#define SAMUS_POS_X 640
@@ -91,7 +91,7 @@ Samus::Samus(TextureManager* textureM,Graphics* graphics, Input* input) : BaseOb
 	this->numLives = 0;
 	this->listNumLives = new list<Sprite*>();
 
-	this->health = 30;
+	this->health = new int(30);
 	this->labelIconHealth = new Sprite();
 	if (!this->labelIconHealth->initialize(graphics, textureM, SpriteManager::getInstance()))
 	{
@@ -104,7 +104,7 @@ Samus::Samus(TextureManager* textureM,Graphics* graphics, Input* input) : BaseOb
 	this->textHealth = new Text("30", eFont::body, 8, VECTOR2(45, 20), GraphicsNS::WHITE, false, true);
 	this->textHealth->initialize(graphics);
 
-	this->missitleRocket = 0;
+	this->missitleRocket = new int(0);
 	this->labelIconRoket = new Sprite();
 	if (!this->labelIconRoket->initialize(graphics, textureM, SpriteManager::getInstance()))
 	{
@@ -124,8 +124,11 @@ Samus::Samus(TextureManager* textureM,Graphics* graphics, Input* input) : BaseOb
 Samus::Samus()
 {
 }
+
 void Samus::release()
 {
+	delete this->health;
+	delete this->missitleRocket;
 	delete this->sprite;
 	delete runningNormalAnimation;
 	delete runningUpAnimation;
@@ -315,13 +318,13 @@ void Samus::drawInFrontMap()
 
 	this->labelIconHealth->draw(false);
 	
-	this->textHealth->setText(std::to_string(this->health));
+	this->textHealth->setText(std::to_string(*this->health));
 	this->textHealth->draw();
 
 	if (this->missitleRocket > 0)
 	{
 		this->labelIconRoket->draw(false);
-		this->textNumRocket->setText(std::to_string(this->missitleRocket));
+		this->textNumRocket->setText(std::to_string(*this->missitleRocket));
 		this->textNumRocket->draw();
 	}
 }
@@ -460,30 +463,30 @@ bool Samus::getVisible()
 
 void Samus::setHealth(int heal)
 {
-	this->health = heal;
+	*this->health = heal;
 
-	if (this->health < 10 && this->health > 0)
+	if (*this->health < 10 && *this->health > 0)
 	{
 		Sound::getInstance()->play(SOUND_SAMUS_NEAR_DEATH, true);
 	}
 
-	if (this->health <= 0)
+	if (*this->health <= 0)
 	{
 		if (this->numLives > 0)
 		{
 			this->numLives--;
-			this->health = 99;
+			*this->health = 99;
 		}
 		else
 		{
 			// GAME OVER
-			health = 99;
+			*health = 99;
 			Sound::getInstance()->stop(SOUND_SAMUS_NEAR_DEATH);
 		}
 	}
 }
 
-int Samus::getHealth()
+int* Samus::getHealth()
 {
 	return this->health;
 }
@@ -600,14 +603,14 @@ void Samus::setLongBeam(bool flag)
 	this->isLongBeam = flag;
 }
 
-int Samus::getNumRocket()
+int* Samus::getNumRocket()
 {
 	return this->missitleRocket;
 }
 
 void Samus::setNumRocket(int num)
 {
-	this->missitleRocket = num;
+	*this->missitleRocket = num;
 	isRocket = true;
 }
 

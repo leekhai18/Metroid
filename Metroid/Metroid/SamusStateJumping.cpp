@@ -541,7 +541,7 @@ void SamusStateJumping::onCollision(float dt)
 			}
 			else if (zommer->getExplose())
 			{
-				zommer->setCanDraw(false);
+				zommer->setCanDraw(false, samus->getHealth(), samus->getNumRocket());
 				zommer->setActivity(false);
 			}
 			else
@@ -600,7 +600,7 @@ void SamusStateJumping::onCollision(float dt)
 			}
 			else if (waver->getExplose())
 			{
-				waver->setCanDraw(false);
+				waver->setCanDraw(false, samus->getHealth(), samus->getNumRocket());
 				waver->setActivity(false);
 			}
 			else
@@ -657,7 +657,7 @@ void SamusStateJumping::onCollision(float dt)
 			}
 			else if (skree->getExplose())
 			{
-				skree->setCanDraw(false);
+				skree->setCanDraw(false, samus->getHealth(), samus->getNumRocket());
 				skree->setActivity(false);
 			}
 			else
@@ -717,7 +717,7 @@ void SamusStateJumping::onCollision(float dt)
 			}
 			else if (rio->getExplose())
 			{
-				rio->setCanDraw(false);
+				rio->setCanDraw(false, samus->getHealth(), samus->getNumRocket());
 				rio->setActivity(false);
 			}
 			else
@@ -824,7 +824,7 @@ void SamusStateJumping::onCollision(float dt)
 			}
 			else if (zeb->getExplose())
 			{
-				zeb->setCanDraw(false);
+				zeb->setCanDraw(false, samus->getHealth(), samus->getNumRocket());
 				zeb->setActivity(false);
 			}
 			else
@@ -937,7 +937,7 @@ void SamusStateJumping::onCollision(float dt)
 
 		case eID::MISSILEROCKET:
 		{
-			this->samus->setNumRocket(this->samus->getNumRocket() + 5);
+			this->samus->setNumRocket(*this->samus->getNumRocket() + 5);
 			MissileRocket* mrocket = static_cast<MissileRocket*>(i->object);
 			mrocket->setActivity(false);
 
@@ -1102,6 +1102,6 @@ void SamusStateJumping::fireRocket()
 
 	rocket->init(stP);
 
-	this->samus->setNumRocket(this->samus->getNumRocket() - 1);
+	this->samus->setNumRocket(*this->samus->getNumRocket() - 1);
 }
 

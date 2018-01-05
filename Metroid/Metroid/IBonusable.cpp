@@ -21,17 +21,19 @@ void IBonusable::reInit()
 	this->rocket->setPause(false);
 	canDraw = true;
 }
-void IBonusable::setCanDraw(bool draw)
+void IBonusable::setCanDraw(bool draw, int *health, int *rocket)
 {
 	this->canDraw = draw;
 	
 	if (this->isRocket)
 	{
+		(*rocket)++;
 		Sound::getInstance()->stop(SOUND_BONUS_ROCKET);
 		Sound::getInstance()->play(SOUND_BONUS_ROCKET, false);
 	}
 	else
 	{
+		(*health) = (*health) + 5;
 		Sound::getInstance()->stop(SOUND_BONUS_ROCKET);
 		Sound::getInstance()->play(SOUND_BONUS_EN, false);
 	}

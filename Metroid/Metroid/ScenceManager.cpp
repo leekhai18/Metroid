@@ -93,7 +93,8 @@ void ScenceManager::deleteAll()
 {
 	for (auto i = scenceContainer->begin(); i != scenceContainer->end(); ++i)
 	{
-		delete (*i).second;
+		(*i).second->release();
+		delete ((*i).second);
 	}
 	delete scenceContainer;
 	graphics->releaseAll();
@@ -114,4 +115,5 @@ ScenceManager::ScenceManager()
 
 ScenceManager::~ScenceManager()
 {
+
 }

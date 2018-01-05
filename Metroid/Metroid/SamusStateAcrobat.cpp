@@ -419,8 +419,7 @@ void SamusStateAcrobat::onCollision(float dt)
 				zommer->setBeHit(true);
 				if (zommer->getExplose())
 				{
-					zommer->setCanDraw(false);
-
+					zommer->setCanDraw(false, samus->getHealth(), samus->getNumRocket());
 				}
 				
 				break;
@@ -464,7 +463,7 @@ void SamusStateAcrobat::onCollision(float dt)
 			}
 			else if (zommer->getExplose())
 			{
-				zommer->setCanDraw(false);
+				zommer->setCanDraw(false, samus->getHealth(), samus->getNumRocket());
 			}
 			else
 			{
@@ -487,7 +486,7 @@ void SamusStateAcrobat::onCollision(float dt)
 				waver->decreaseHealth(5);
 				if (waver->getExplose())
 				{
-					waver->setCanDraw(false);
+					waver->setCanDraw(false, samus->getHealth(), samus->getNumRocket());
 
 				}
 
@@ -531,7 +530,7 @@ void SamusStateAcrobat::onCollision(float dt)
 			}
 			else if (waver->getExplose())
 			{
-				waver->setCanDraw(false);
+				waver->setCanDraw(false, samus->getHealth(), samus->getNumRocket());
 			}
 			else
 			{
@@ -601,7 +600,7 @@ void SamusStateAcrobat::onCollision(float dt)
 				skree->decreaseHealth(5);
 				if (skree->getExplose())
 				{
-					skree->setCanDraw(false);
+					skree->setCanDraw(false, samus->getHealth(), samus->getNumRocket());
 
 				}
 
@@ -645,7 +644,7 @@ void SamusStateAcrobat::onCollision(float dt)
 			}
 			else if (skree->getExplose())
 			{
-				skree->setCanDraw(false);
+				skree->setCanDraw(false, samus->getHealth(), samus->getNumRocket());
 				skree->setActivity(false);
 			}
 			else
@@ -669,7 +668,7 @@ void SamusStateAcrobat::onCollision(float dt)
 				rio->decreaseHealth(5);
 				if (rio->getExplose())
 				{
-					rio->setCanDraw(false);
+					rio->setCanDraw(false, samus->getHealth(), samus->getNumRocket());
 
 				}
 
@@ -713,7 +712,7 @@ void SamusStateAcrobat::onCollision(float dt)
 			}
 			else if (rio->getExplose())
 			{
-				rio->setCanDraw(false);
+				rio->setCanDraw(false, samus->getHealth(), samus->getNumRocket());
 				rio->setActivity(false);
 			}
 			else
@@ -737,7 +736,7 @@ void SamusStateAcrobat::onCollision(float dt)
 				zeb->decreaseHealth(5);
 				if (zeb->getExplose())
 				{
-					zeb->setCanDraw(false);
+					zeb->setCanDraw(false, samus->getHealth(), samus->getNumRocket());
 
 				}
 
@@ -781,7 +780,7 @@ void SamusStateAcrobat::onCollision(float dt)
 			}
 			else if (zeb->getExplose())
 			{
-				zeb->setCanDraw(false);
+				zeb->setCanDraw(false, samus->getHealth(), samus->getNumRocket());
 				zeb->setActivity(false);
 			}
 			else
@@ -894,7 +893,7 @@ void SamusStateAcrobat::onCollision(float dt)
 
 		case eID::MISSILEROCKET:
 		{
-			this->samus->setNumRocket(this->samus->getNumRocket() + 5);
+			this->samus->setNumRocket(*this->samus->getNumRocket() + 5);
 			MissileRocket* mrocket = static_cast<MissileRocket*>(i->object);
 			mrocket->setActivity(false);
 

@@ -23,23 +23,6 @@ Metroid::Metroid()
 
 Metroid::~Metroid()
 {
-
-	textureManager->onLostDevice();
-	spriteManger->releaseAll();
-
-	tileset->onLostDevice();
-	delete mapInfo;
-	delete mapBrinstar;
-
-	delete samus;
-	delete fpsText;
-	delete opsText;
-
-
-	ObjectManager::getInstance()->release();
-	Collision::getInstance()->release();
-	Sound::getInstance()->cleanUp();
-	//GameDebug::getInstance()->release();
 }
 
 Metroid* Metroid::instance = nullptr;
@@ -261,7 +244,25 @@ void Metroid::render()
 
 void Metroid::releaseAll()
 {
+	textureManager->onLostDevice();
+	spriteManger->releaseAll();
+
+	tileset->onLostDevice();
+	delete mapInfo;
+	delete mapBrinstar;
+
+	delete samus;
+	delete fpsText;
+	delete opsText;
+
+
+	ObjectManager::getInstance()->release();
+	Collision::getInstance()->release();
+	Sound::getInstance()->cleanUp();
+
 	GameManager::releaseAll();
+
+	delete instance;
 }
 
 void Metroid::resetAll()

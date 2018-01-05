@@ -154,6 +154,12 @@ void Sound::loadAllSound()
 
 void Sound::cleanUp()
 {
+	for (auto i = soundBufferMap.begin(); i != soundBufferMap.end(); i++)
+	{
+		delete (*i).second;
+	}
+
+	soundBufferMap.erase(soundBufferMap.begin(), soundBufferMap.end());
 	soundBufferMap.clear();
 	delete instance;
 }

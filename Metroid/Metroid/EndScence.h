@@ -13,6 +13,8 @@ public:
 
 	void draw();
 
+	void release();
+
 	EndScence(Graphics* graphics, Input* input);
 	void run();
 	EndScence();

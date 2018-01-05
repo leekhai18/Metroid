@@ -207,7 +207,7 @@ void SamusStateRunning::onCollision(float dt)
 				this->samus->setTimerInFire(this->samus->getTimerInFire() + dt);
 				if (this->samus->getTimerInFire() > TIME_DEC_HEALTH_FIRE)
 				{
-					this->samus->setHealth(this->samus->getHealth() - 8);
+					this->samus->setHealth(*this->samus->getHealth() - 8);
 					this->samus->setTimerInFire(0);
 				}
 				break;
@@ -377,7 +377,7 @@ void SamusStateRunning::onCollision(float dt)
 			}
 			else if (zommer->getExplose())
 			{
-				zommer->setCanDraw(false);
+				zommer->setCanDraw(false, samus->getHealth(), samus->getNumRocket());
 				zommer->setActivity(false);
 			}
 			else
@@ -417,7 +417,7 @@ void SamusStateRunning::onCollision(float dt)
 			}
 			else if (waver->getExplose())
 			{
-				waver->setCanDraw(false);
+				waver->setCanDraw(false, samus->getHealth(), samus->getNumRocket());
 				waver->setActivity(false);
 			}
 			else
@@ -458,7 +458,7 @@ void SamusStateRunning::onCollision(float dt)
 			}
 			else if (skree->getExplose())
 			{
-				skree->setCanDraw(false);
+				skree->setCanDraw(false, samus->getHealth(), samus->getNumRocket());
 				skree->setActivity(false);
 			}
 			else
@@ -498,7 +498,7 @@ void SamusStateRunning::onCollision(float dt)
 			}
 			else if (rio->getExplose())
 			{
-				rio->setCanDraw(false);
+				rio->setCanDraw(false, samus->getHealth(), samus->getNumRocket());
 				rio->setActivity(false);
 			}
 			else
@@ -570,7 +570,7 @@ void SamusStateRunning::onCollision(float dt)
 			}
 			else if (zeb->getExplose())
 			{
-				zeb->setCanDraw(false);
+				zeb->setCanDraw(false, samus->getHealth(), samus->getNumRocket());
 				zeb->setActivity(false);
 			}
 			else

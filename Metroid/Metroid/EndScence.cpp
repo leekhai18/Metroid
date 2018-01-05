@@ -53,6 +53,12 @@ void EndScence::draw()
 	graphics->showBackbuffer();
 }
 
+void EndScence::release()
+{
+	textureM->onLostDevice();
+	delete textureM;
+}
+
 EndScence::EndScence(Graphics * graphics, Input * input)
 {
 	this->graphics = graphics;
@@ -69,11 +75,11 @@ void EndScence::run()
 
 EndScence::EndScence()
 {
+
 }
 
 
 EndScence::~EndScence()
 {
-	textureM->onLostDevice();
-	delete textureM;
+
 }

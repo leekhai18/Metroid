@@ -227,7 +227,7 @@ void SamusStateStanding::handleInput(float dt)
 
 		if (input->isKeyDown(VK_SPACE))
 		{
-			if (this->samus->getNumRocket() > 0)
+			if (*this->samus->getNumRocket() > 0)
 			{
 				// Set up sprite Shooting rocket
 				if (isUp)
@@ -299,7 +299,7 @@ void SamusStateStanding::onCollision(float dt)
 				this->samus->setTimerInFire(this->samus->getTimerInFire() + dt);
 				if (this->samus->getTimerInFire() > TIME_DEC_HEALTH_FIRE)
 				{
-					this->samus->setHealth(this->samus->getHealth() - 8);
+					this->samus->setHealth(*this->samus->getHealth() - 8);
 					this->samus->setTimerInFire(0);
 				}
 
@@ -546,5 +546,5 @@ void SamusStateStanding::fireRocket()
 
 	rocket->init(stP);
 
-	this->samus->setNumRocket(this->samus->getNumRocket() - 1);
+	this->samus->setNumRocket(*this->samus->getNumRocket() - 1);
 }
