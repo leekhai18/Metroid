@@ -13,14 +13,16 @@ Buble::~Buble()
 {
 }
 
-Buble::Buble(TextureManager * textureM, Graphics * graphics, Samus * samus, EnemyColors color)
+Buble::Buble(TextureManager * textureM, Graphics * graphics, Samus * samus) : BaseObject(eID::FIRE_BUBLE)
 {
 	this->sprite = new Sprite();
 	if (!this->sprite->initialize(graphics, textureM, SpriteManager::getInstance()))
 	{
 		throw GameError(GameErrorNS::FATAL_ERROR, "Can not init sprite Waver");
 	}
+
 	this->samus = samus;
+
 	initExplosion(this->sprite, IndexManager::getInstance()->samusYellowExplosion, NUM_FRAMES_EXPLOSION, EXPLOSION_TIME_FRAME_DELAY);
 
 	this->sprite->setData(IndexManager::getInstance()->rinka);
@@ -44,9 +46,12 @@ void Buble::setStartPosition(VECTOR2 position)
 
 void Buble::reInit()
 {
-	P1 = this->getPosition() - this->samus->getPosition();
+	this->setPosition(startPosition);
+	P1 = this->samus->getPosition() -this->getPosition() ;
 	
+	setBoundCollision();
 	D3DXVec2Normalize(&normalize, &P1);
+
 	this->sprite->setData(IndexManager::getInstance()->rinka);
 
 	isActivity = true;
@@ -125,11 +130,10 @@ void Buble::update(float dt)
 	}
 	else
 	{
-
+		this->sprite->setData(IndexManager::getInstance()->rinka);
 	}
 		
-	if (!Collision::getInstance()->isCollide(Camera::getInstance()->getBound(), this->startBound)
-		&& !Collision::getInstance()->isCollide(Camera::getInstance()->getBound(), this->boundCollision))
+	if (!Collision::getInstance()->isCollide(Camera::getInstance()->getBound(), this->boundCollision))
 	{
 		reInit();
 	}

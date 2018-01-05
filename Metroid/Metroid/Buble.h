@@ -17,7 +17,7 @@ private:
 	bool isHandle;
 
 public:
-	Buble(TextureManager * textureM, Graphics * graphics, Samus * samus, EnemyColors color);
+	Buble(TextureManager * textureM, Graphics * graphics, Samus * samus);
 
 	void setStartPosition(VECTOR2 position);
 	void reInit();

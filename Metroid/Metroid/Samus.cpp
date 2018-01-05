@@ -24,8 +24,8 @@
 //#define SAMUS_POS_Y 4250
 
 //MotherBrain
-//#define SAMUS_POS_X 640
-//#define SAMUS_POS_Y 3656
+#define SAMUS_POS_X 640
+#define SAMUS_POS_Y 3656
 
 //Zeb position
 //#define SAMUS_POS_X 810
@@ -36,8 +36,8 @@
 //#define SAMUS_POS_Y 3000
 
 //
-#define SAMUS_POS_X 278.264191  
-#define SAMUS_POS_Y 3651.00000   
+/*#define SAMUS_POS_X 278.264191 
+#define SAMUS_POS_Y 3680.00000  */ 
 void Samus::setActiveBound()
 {
 	// Can 1 con so hop ly

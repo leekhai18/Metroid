@@ -27,6 +27,7 @@
 #include "BossKraid.h"
 #include "MachineCanon.h"
 #include "BossKraidRocket.h"
+#include "Buble.h"
 #include "rapidjson-master\include\rapidjson\writer.h"
 #include "rapidjson-master\include\rapidjson\ostreamwrapper.h"
 
@@ -156,6 +157,14 @@ void ObjectManager::handleVelocity(float dt)
 
 			break;
 		}
+		case eID::FIRE_BUBLE:
+		{
+			Buble* buble = static_cast<Buble*>((*i).second);
+
+			buble->handleVelocity(dt);
+
+			break;
+		}
 		default:
 			break;
 		}
@@ -267,7 +276,6 @@ void ObjectManager::onCheckCollision(float dt)
 		}
 			
 	}
-
 	// handle on listCollide
 	samus->onCollision(dt);
 
@@ -431,11 +439,13 @@ bool ObjectManager::load_list(const char * filename)
 		const Value& listBuble = jSon["Buble"];
 		for (SizeType i = 0; i < listBuble.Size(); i++)
 		{
-			BaseObject *buble = new BaseObject(eID::FIRE_BUBLE);
+			Buble* buble = new Buble(textureManager,graphics,samus);
 
 			id = listBuble[i]["id"].GetInt();
 			x = listBuble[i]["x"].GetFloat();
 			y = listBuble[i]["y"].GetFloat();
+			x = x + buble->getSprite()->getWidth()*0.5f;
+			y= y- buble->getSprite()->getHeight()*0.5f;
 			height = listBuble[i]["height"].GetFloat();
 			width = listBuble[i]["width"].GetFloat();
 
@@ -450,11 +460,12 @@ bool ObjectManager::load_list(const char * filename)
 			writer.Double(width);
 			writer.EndObject();*/
 
-			bound.left = x;
-			bound.top = y;
-			bound.right = bound.left + width;
-			bound.bottom = bound.top - height;
-			buble->setBoundCollision(bound);
+			
+			
+			buble->setPosition(VECTOR2(x, y));
+			buble->setStartPosition(VECTOR2(x, y));
+			buble->setBoundCollision();
+			buble->setStartBound(buble->getBoundCollision());
 			bound.bottom = listBuble[i]["ba"].GetFloat();
 			bound.top = listBuble[i]["ta"].GetFloat();
 			bound.left = listBuble[i]["la"].GetFloat();

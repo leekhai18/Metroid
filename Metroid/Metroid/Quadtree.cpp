@@ -107,6 +107,10 @@ void Quadtree::retrieve(map<int, BaseObject*>* listNotWallCanCollideSamus, map<i
 			{
 				/*if (listNotWallCanCollideSamus->find((*i).first) == listNotWallCanCollideSamus->end())
 				{*/
+				if((*i).first == 19)
+				{
+					int tesst = 0;
+				}
 					if (Collision::getInstance()->isCollide(samus->getActiveBound(), ((*i).second)->getBoundCollision()))
 					{
 						listNotWallCanCollideSamus->insert((*i));
