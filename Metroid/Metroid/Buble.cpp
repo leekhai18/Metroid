@@ -127,6 +127,7 @@ void Buble::update(float dt)
 	if (!isExplose)
 	{
 		IExplosible::update(dt);
+
 	}
 	else
 	{
