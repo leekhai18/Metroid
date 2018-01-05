@@ -16,6 +16,7 @@
 #include "AlienSmall.h"
 #include "Ripper.h"
 #include "Sound.h"
+#include "DefendBoss.h"
 #define WIDTH_ROCKET_HALF 4
 #define HEIGHT_ROCKET_HALF 4
 
@@ -39,7 +40,7 @@ Rocket::Rocket(TextureManager * textureM, Graphics * graphics) : BaseObject(eID:
 	this->timer = 0;
 	this->listCollide = new list<CollisionReturn>();
 
-	this->dame = 1; // se setup lai sau
+	this->dame = 5; // se setup lai sau
 }
 
 Rocket::Rocket()
@@ -279,7 +280,20 @@ void Rocket::onCollision()
 					}
 					break;
 				}
+				case eID::DEFENSEBOSS:
+				{
+					DefendBoss* defendBoss = static_cast<DefendBoss*>(i->object);
 
+					if (defendBoss->isActivitied())
+					{
+						this->isCollided = true;
+						this->sprite->setData(IndexManager::getInstance()->samusPinkExplosion[0]);
+						this->velocity = VECTOR2ZERO;
+						defendBoss->setBeHit(true);
+						defendBoss->decreaseHealth(this->dame);
+					}
+					break;
+				}
 				default:
 					break;
 			}

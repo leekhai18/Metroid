@@ -166,6 +166,7 @@ void SamusStateRunning::onCollision(float dt)
 		case eID::BRICK:
 		case eID::ALIENBIG:
 		case eID::ALIENSMALL:
+		case eID::DEFENSEBOSS:
 			switch (i->direction)
 			{
 			case CollideDirection::LEFT:

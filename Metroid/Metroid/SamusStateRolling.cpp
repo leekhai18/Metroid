@@ -130,7 +130,7 @@ void SamusStateRolling::onCollision(float dt)
 
 #pragma region Wall			
 		case eID::WALL:
-
+		case eID::DEFENSEBOSS:
 		case eID::ALIENBIG:
 		case eID::ALIENSMALL:
 			switch (i->direction)
@@ -644,10 +644,6 @@ void SamusStateRolling::update(float dt)
 		this->samus->setStatus(eStatus::BOOM);
 		SamusStateManager::getInstance()->setOldState(this);
 		SamusStateManager::getInstance()->setOldStatus(eStatus::ROLLING);
-	}
-	if (this->samus->getBoundCollision().bottom < 3552)
-	{
-		int test = 0;
 	}
 	if (!this->samus->isInStatus(eStatus::ROLLING))
 	{

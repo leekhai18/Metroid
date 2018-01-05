@@ -173,6 +173,7 @@ void SamusStateFallRolling::onCollision(float dt)
 		case eID::WALL:
 		case eID::BRICK:
 		case eID::FIRE:
+		case eID::DEFENSEBOSS:
 		case eID::ELEVATOR:
 		case eID::ALIENBIG:
 		case eID::ALIENSMALL:

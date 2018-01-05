@@ -28,6 +28,7 @@
 #include "MachineCanon.h"
 #include "BossKraidRocket.h"
 #include "Buble.h"
+#include "DefendBoss.h"
 #include "rapidjson-master\include\rapidjson\writer.h"
 #include "rapidjson-master\include\rapidjson\ostreamwrapper.h"
 
@@ -223,14 +224,8 @@ void ObjectManager::onCheckCollision(float dt)
 	{
 		BaseObject* object = (*x).second;
 		
-		if(Collision::getInstance()->checkCollision(samus, object, dt))
-		{
-			if ((*x).first == 685)
-			{
-				int test = 0;
-			}
-		}
-		//Collision::getInstance()->checkCollision(samus, object, dt);
+		Collision::getInstance()->checkCollision(samus, object, dt);
+		
 
 		for (unsigned i = 0; i < BulletPool::getInstance()->getListUsing().size(); i++)
 			Collision::getInstance()->checkCollision(BulletPool::getInstance()->getListUsing().at(i), object, dt);
@@ -486,11 +481,13 @@ bool ObjectManager::load_list(const char * filename)
 		const Value& listDefense = jSon["DefenseBoss"];
 		for (SizeType i = 0; i < listDefense.Size(); i++)
 		{
-			BaseObject *defense = new BaseObject(eID::DEFENSEBOSS);
+			DefendBoss *defense = new DefendBoss(textureManager,graphics);
 
 			id = listDefense[i]["id"].GetInt();
 			x = listDefense[i]["x"].GetFloat();
 			y = listDefense[i]["y"].GetFloat();
+			x = x + defense->getSprite()->getWidth()*0.5f;
+			y= y- defense->getSprite()->getHeight()*0.5f - 16;
 			height = listDefense[i]["height"].GetFloat();
 			width = listDefense[i]["width"].GetFloat();
 
@@ -505,13 +502,14 @@ bool ObjectManager::load_list(const char * filename)
 			writer.Double(width);
 			writer.EndObject();*/
 
-			bound.left = x;
-			bound.top = y;
-			bound.right = bound.left + width;
-			bound.bottom = bound.top - height;
-			defense->setBoundCollision(bound);
-
-			defense->setActiveBound(bound);
+			//bound.left = x;
+			//bound.top = y;
+			//bound.right = bound.left + width;
+			//bound.bottom = bound.top - height;
+			defense->setPosition(VECTOR2(x, y));
+			defense->setBoundCollision();
+			
+			defense->setActiveBound(defense->getBoundCollision());
 
 
 			map_object.insert(std::pair<int, BaseObject*>(id, defense));

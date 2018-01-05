@@ -19,6 +19,7 @@
 #include "Rio.h"
 #include "Ripper.h"
 #include "Port.h"
+#include "Buble.h"
 #include "ScenceManager.h"
 SamusStateAcrobat::SamusStateAcrobat()
 {
@@ -26,6 +27,7 @@ SamusStateAcrobat::SamusStateAcrobat()
 
 SamusStateAcrobat::SamusStateAcrobat(Samus * samus, Input * input) : BaseState(samus, input)
 {
+	
 }
 
 
@@ -45,8 +47,15 @@ void SamusStateAcrobat::setBoundCollision()
 }
 void SamusStateAcrobat::init()
 {
-	
-	this->animation = samus->getJumpingAnim();
+	if(this->samus->isCreamAttack())
+	{
+		this->animation = samus->getAcroBatDame();
+	}
+	else
+	{
+		
+		this->animation = samus->getJumpingAnim();
+	}
 	time = 0;
 	this->position_to_jump = this->samus->getPosition().y;
 	setBoundCollision();
@@ -79,11 +88,6 @@ void SamusStateAcrobat::handleInput(float dt)
 
 			this->samus->setVelocityX(-SAMUS_VELOCITY_JUMP_X);
 		}
-
-		/*if ((input->isKeyUp(VK_RIGHT) && input->isKeyUp(VK_LEFT)) || (input->isKeyDown(VK_LEFT) && input->isKeyDown(VK_RIGHT)))
-		{
-			this->samus->setVelocityX(0);
-		}*/
 #pragma endregion
 
 #pragma region Vertical
@@ -141,6 +145,7 @@ void SamusStateAcrobat::onCollision(float dt)
 		case eID::BRICK:
 		case eID::ALIENBIG:
 		case eID::ALIENSMALL:
+		case eID::DEFENSEBOSS:
 			switch (i->direction)
 			{
 			case CollideDirection::LEFT:
@@ -349,6 +354,13 @@ void SamusStateAcrobat::onCollision(float dt)
 			//another object
 		case eID::FIRE_BUBLE:
 		{
+			
+			if (this->samus->isCreamAttack())
+			{
+				Buble* buble = static_cast<Buble*>(i->object);
+				buble->decreaseHealth(5);
+				break;
+			}
 			switch (i->direction)
 			{
 			case CollideDirection::TOP:
@@ -398,6 +410,18 @@ void SamusStateAcrobat::onCollision(float dt)
 		case eID::ZOMMER:
 		{
 			Zommer* zommer = static_cast<Zommer*>(i->object);
+			if(this->samus->isCreamAttack())
+			{
+				zommer->decreaseHealth(5);
+				if (zommer->getExplose())
+				{
+					zommer->setCanDraw(false);
+
+				}
+				
+				break;
+			}
+			
 			if (zommer->getCold()&& zommer->getHandle())
 			{
 				switch (i->direction)
@@ -442,7 +466,7 @@ void SamusStateAcrobat::onCollision(float dt)
 			{
 				if (!zommer->getHandle())
 				{
-					return;
+					break;
 				}
 				SamusStateManager::getInstance()->setOldStatus(eStatus::ACROBAT);
 				this->samus->setStatus(eStatus::INJURING);
@@ -453,6 +477,17 @@ void SamusStateAcrobat::onCollision(float dt)
 		case eID::WAVER:
 		{
 			Waver* waver = static_cast<Waver*>(i->object);
+			if (this->samus->isCreamAttack())
+			{
+				waver->decreaseHealth(5);
+				if (waver->getExplose())
+				{
+					waver->setCanDraw(false);
+
+				}
+
+				break;
+			}
 			if (waver->getCold()&& waver->getHandle())
 			{
 				switch (i->direction)
@@ -497,7 +532,7 @@ void SamusStateAcrobat::onCollision(float dt)
 			{
 				if (!waver->getHandle())
 				{
-					return;
+					break;
 				}
 				SamusStateManager::getInstance()->setOldStatus(eStatus::ACROBAT);
 				this->samus->setStatus(eStatus::INJURING);
@@ -555,7 +590,17 @@ void SamusStateAcrobat::onCollision(float dt)
 		case eID::SKREE:
 		{
 			Skree* skree = static_cast<Skree*>(i->object);
+			if (this->samus->isCreamAttack())
+			{
+				skree->decreaseHealth(5);
+				if (skree->getExplose())
+				{
+					skree->setCanDraw(false);
 
+				}
+
+				break;
+			}
 			if (skree->getCold()&& skree->getHandle())
 			{
 				switch (i->direction)
@@ -601,7 +646,7 @@ void SamusStateAcrobat::onCollision(float dt)
 			{
 				if (!skree->getHandle())
 				{
-					return;
+					break;
 				}
 				SamusStateManager::getInstance()->setOldStatus(eStatus::ACROBAT);
 				this->samus->setStatus(eStatus::INJURING);
@@ -612,7 +657,17 @@ void SamusStateAcrobat::onCollision(float dt)
 		case eID::RIO:
 		{
 			Rio* rio = static_cast<Rio*>(i->object);
+			if (this->samus->isCreamAttack())
+			{
+				rio->decreaseHealth(5);
+				if (rio->getExplose())
+				{
+					rio->setCanDraw(false);
 
+				}
+
+				break;
+			}
 			if (rio->getCold()&& rio->getHandle())
 			{
 				switch (i->direction)
@@ -658,7 +713,7 @@ void SamusStateAcrobat::onCollision(float dt)
 			{
 				if (!rio->getHandle())
 				{
-					return;
+					break;
 				}
 				SamusStateManager::getInstance()->setOldStatus(eStatus::ACROBAT);
 				this->samus->setStatus(eStatus::INJURING);
@@ -669,7 +724,17 @@ void SamusStateAcrobat::onCollision(float dt)
 		case eID::ZEB:
 		{
 			Zeb* zeb = static_cast<Zeb*>(i->object);
+			if (this->samus->isCreamAttack())
+			{
+				zeb->decreaseHealth(5);
+				if (zeb->getExplose())
+				{
+					zeb->setCanDraw(false);
 
+				}
+
+				break;
+			}
 			if (zeb->getCold()&& zeb->getHandle())
 			{
 				switch (i->direction)
@@ -715,7 +780,7 @@ void SamusStateAcrobat::onCollision(float dt)
 			{
 				if (!zeb->getHandle())
 				{
-					return;
+					break;
 				}
 				SamusStateManager::getInstance()->setOldStatus(eStatus::ACROBAT);
 				this->samus->setStatus(eStatus::INJURING);

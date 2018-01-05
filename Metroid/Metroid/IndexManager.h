@@ -167,6 +167,8 @@ public:
 	const int samusPinkIceHittingJumpUp = 231;
 
 
+	const int samusAcrobat[4] = { 115, 145, 222, 246 };
+
 	const int alienSmallR = 181;
 	const int alienBigR = 182;
 	const int brickBlue = 183;

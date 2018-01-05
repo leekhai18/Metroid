@@ -67,7 +67,7 @@ Samus::Samus(TextureManager* textureM,Graphics* graphics, Input* input) : BaseOb
 	rollingAnimation = new Animation(this->sprite, IndexManager::getInstance()->samusYellowRollingRight, NUM_FRAMES_SAMUS_ROLLING, 0.05f);
 	jumpingAnimation = new Animation(this->sprite, IndexManager::getInstance()->samusYellowJumpingRight, NUM_FRAMES_SAMUS_JUMPING, 0.04f);
 	startingAnimation = new Animation(this->sprite, IndexManager::getInstance()->samusYellowStart, NUM_FRAMES_SAMUS_START, 1, false);
-
+	acrobatDame = new Animation(this->sprite, IndexManager::getInstance()->samusAcrobat, NUM_FRAMES_SAMUS_START, 0.05f);
 	SamusStateManager::getInstance()->init(this, input);
 
 	this->isFalling = false;
@@ -133,7 +133,7 @@ void Samus::release()
 	delete rollingAnimation;
 	delete startingAnimation;
 	delete jumpingAnimation;
-
+	delete acrobatDame;
 	bulletPool->release();
 	boomPool->release();
 	rocketPool->release();
@@ -530,6 +530,11 @@ Animation * Samus::getJumpingAnim()
 	return this->jumpingAnimation;
 }
 
+Animation * Samus::getAcroBatDame()
+{
+	return this->acrobatDame;
+}
+
 
 
 bool Samus::isHaveMariMaru()
@@ -659,6 +664,16 @@ void Samus::setDataSuiteSkin(int yellow, int yellowIce, int pink, int pinkIce)
 	default:
 		break;
 	}
+}
+
+void Samus::setCreamAttack(bool creamAttack)
+{
+	this->creamAttack = creamAttack;
+}
+
+bool Samus::isCreamAttack()
+{
+	return this->creamAttack;
 }
 
 void Samus::setTimerInFire(float time)

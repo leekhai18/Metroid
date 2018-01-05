@@ -55,7 +55,7 @@ void SamusStateInjuring::onCollision(float dt)
 		case eID::PORT:
 		case eID::GATEBLUE:
 		case eID::GATERED:
-
+		case eID::DEFENSEBOSS:
 			switch (i->direction)
 			{
 			case CollideDirection::TOP:
@@ -180,10 +180,7 @@ void SamusStateInjuring::update(float dt)
 	{
 		this->samus->setStatus(SamusStateManager::getInstance()->getOldStatus());
 	}
-	if(this->samus->getBoundCollision().bottom < 3552)
-	{
-		int test = 0;
-	}
+
 	if (this->samus->getStatus() != eStatus::INJURING)
 	{
 		switch (this->samus->getStatus())
