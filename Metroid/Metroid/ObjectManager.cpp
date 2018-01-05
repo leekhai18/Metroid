@@ -2110,9 +2110,11 @@ bool ObjectManager::load_list(const char * filename)
 				Rio *roy = new Rio(this->textureManager, this->graphics, samus, EnemyColors::Yellow);
 
 				id = listRioYellow[i]["id"].GetInt();
-				x = listRioYellow[i]["x"].GetFloat();
-				y = listRioYellow[i]["y"].GetFloat();
+				x = listRioYellow[i]["x"].GetFloat() ;
+				y = listRioYellow[i]["y"].GetFloat() ;
 
+				y = y - 16 + roy->getSprite()->getHeight()*0.5f;
+				x = x + roy->getSprite()->getWidth()*0.5f;
 				roy->reInit(VECTOR2(x, y));
 
 				roy->setStartPosition(VECTOR2(x, y));
@@ -2166,6 +2168,8 @@ bool ObjectManager::load_list(const char * filename)
 					x = listRioBrown[i]["x"].GetFloat();
 					y = listRioBrown[i]["y"].GetFloat();
 
+					y = y - 16 + rob->getSprite()->getHeight()*0.5f;
+					x = x + rob->getSprite()->getWidth()*0.5f;
 					rob->reInit(VECTOR2(x, y));
 
 					rob->setBoundCollision();
