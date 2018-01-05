@@ -7,7 +7,7 @@
 #define DISTANCE_TO_FIRE 150
 #define TIME_DELAY_BE_HIT 0.2f
 #define TIME_BEFORE_DEATH 6.0f
-#define CYCLE 0.1
+#define CYCLE 0.5f
 MotherBrain::MotherBrain()
 {
 }
@@ -78,26 +78,11 @@ void MotherBrain::reInit()
 void MotherBrain::handleVelocity(float dt)
 {
 	
-	/*if(isHandle)
-	{
-		bulletPool->handleVelocity(dt);
-	}
-	else
-	{
-		if (samus->getPosition().x - this->getPosition().x <= DISTANCE_TO_FIRE)
-		{
-			isHandle = true;
-			initStartBulletPool(this->getPosition());
-		}
-	}*/
 }
 
 void MotherBrain::onCollision(Samus * samus, float dt)
 {
-	/*if (isHandle&&isActivity)
-	{
-		bulletPool->onCollision(dt);
-	}*/
+
 }
 
 
@@ -132,7 +117,8 @@ void MotherBrain::update(float dt)
 				{
 					this->anim = this->openingBoss;
 					this->anim->start();
-					//position = Camera::getInstance()->getPosition();
+
+					boundCollision.right=position.x + this->getSprite()->getWidth() *0.5f ;
 				}
 			}
 		}
@@ -147,11 +133,11 @@ void MotherBrain::update(float dt)
 			{
 				if (cycle%2 == 0)
 				{
-					Camera::getInstance()->setPosition(VECTOR2(position.x, position.y + 8));
+					Camera::getInstance()->setPosition(VECTOR2(position.x, position.y + 4));
 				}
 				else
 				{
-					Camera::getInstance()->setPosition(VECTOR2(position.x, position.y - 8));
+					Camera::getInstance()->setPosition(VECTOR2(position.x, position.y - 4));
 				}
 				++cycle;
 			}

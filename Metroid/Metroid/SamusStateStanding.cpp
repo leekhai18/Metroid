@@ -10,6 +10,7 @@
 #include "Rio.h"
 #include "Waver.h"
 #include "Sound.h"
+#include "Buble.h"
 #define TIME_TO_NORMAL 0.1f
 
 SamusStateStanding::SamusStateStanding()
@@ -272,6 +273,7 @@ void SamusStateStanding::onCollision(float dt)
 		case eID::ALIENSMALL:
 		case eID::GATEBLUE:
 		case eID::GATERED:
+		case eID::DEFENSEBOSS:
 		{
 			switch (i->direction)
 			{
@@ -306,6 +308,20 @@ void SamusStateStanding::onCollision(float dt)
 				break;
 
 			}
+			break;
+		}
+		case eID::FIRE_BUBLE:
+		{
+			switch (i->direction)
+			{
+			case CollideDirection::TOP:
+				this->samus->setVelocityY(0);
+				break;
+			}
+			//Buble* zommer = static_cast<Buble*>(i->object);
+			SamusStateManager::getInstance()->setOldStatus(eStatus::STANDING);
+			this->samus->setStatus(eStatus::INJURING);
+			SamusStateManager::getInstance()->setOldState(this);
 			break;
 		}
 		case eID::ZOMMER:
@@ -445,7 +461,6 @@ void SamusStateStanding::onCollision(float dt)
 
 void SamusStateStanding::update(float dt)
 {
-
 	this->samus->updateVertical(dt);
 	setBoundCollision();
 
@@ -515,14 +530,12 @@ void SamusStateStanding::fireRocket()
 	{
 		stP = VECTOR2(this->samus->getPosition().x + this->samus->getDirection(), this->samus->getPosition().y + this->samus->getSprite()->getHeight()*0.4f);
 		rocket->setVelocity(VECTOR2(0, VELOCITY_ROCKET));
-
 		rocket->getSprite()->setData(IndexManager::getInstance()->rocketPinkUp);
 	}
 	else
 	{
 		stP = VECTOR2(this->samus->getPosition().x, this->samus->getPosition().y + 3);
 		rocket->setVelocity(VECTOR2((float)VELOCITY_ROCKET*this->samus->getDirection(), 0));
-
 		rocket->getSprite()->setData(IndexManager::getInstance()->rocketPinkR);
 
 		if (this->samus->isInDirection(eDirection::left))

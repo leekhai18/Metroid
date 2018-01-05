@@ -111,7 +111,7 @@ enum eID {
 	DEFENSEBOSS,
 	MACHINE_CANON,
 	CANON_BULLET,
-	FIRE_BUBLE
+	FIRE_BUBLE,
 };
 
 // collision direction

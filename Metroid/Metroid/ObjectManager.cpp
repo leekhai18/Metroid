@@ -27,6 +27,8 @@
 #include "BossKraid.h"
 #include "MachineCanon.h"
 #include "BossKraidRocket.h"
+#include "Buble.h"
+#include "DefendBoss.h"
 #include "rapidjson-master\include\rapidjson\writer.h"
 #include "rapidjson-master\include\rapidjson\ostreamwrapper.h"
 
@@ -156,6 +158,14 @@ void ObjectManager::handleVelocity(float dt)
 
 			break;
 		}
+		case eID::FIRE_BUBLE:
+		{
+			Buble* buble = static_cast<Buble*>((*i).second);
+
+			buble->handleVelocity(dt);
+
+			break;
+		}
 		default:
 			break;
 		}
@@ -215,6 +225,7 @@ void ObjectManager::onCheckCollision(float dt)
 		BaseObject* object = (*x).second;
 		
 		Collision::getInstance()->checkCollision(samus, object, dt);
+		
 
 		for (unsigned i = 0; i < BulletPool::getInstance()->getListUsing().size(); i++)
 			Collision::getInstance()->checkCollision(BulletPool::getInstance()->getListUsing().at(i), object, dt);
@@ -267,7 +278,6 @@ void ObjectManager::onCheckCollision(float dt)
 		}
 			
 	}
-
 	// handle on listCollide
 	samus->onCollision(dt);
 
@@ -431,11 +441,13 @@ bool ObjectManager::load_list(const char * filename)
 		const Value& listBuble = jSon["Buble"];
 		for (SizeType i = 0; i < listBuble.Size(); i++)
 		{
-			BaseObject *buble = new BaseObject(eID::FIRE_BUBLE);
+			Buble* buble = new Buble(textureManager,graphics,samus);
 
 			id = listBuble[i]["id"].GetInt();
 			x = listBuble[i]["x"].GetFloat();
 			y = listBuble[i]["y"].GetFloat();
+			x = x + buble->getSprite()->getWidth()*0.5f;
+			y= y- buble->getSprite()->getHeight()*0.5f;
 			height = listBuble[i]["height"].GetFloat();
 			width = listBuble[i]["width"].GetFloat();
 
@@ -450,11 +462,12 @@ bool ObjectManager::load_list(const char * filename)
 			writer.Double(width);
 			writer.EndObject();*/
 
-			bound.left = x;
-			bound.top = y;
-			bound.right = bound.left + width;
-			bound.bottom = bound.top - height;
-			buble->setBoundCollision(bound);
+			
+			
+			buble->setPosition(VECTOR2(x, y));
+			buble->setStartPosition(VECTOR2(x, y));
+			buble->setBoundCollision();
+			buble->setStartBound(buble->getBoundCollision());
 			bound.bottom = listBuble[i]["ba"].GetFloat();
 			bound.top = listBuble[i]["ta"].GetFloat();
 			bound.left = listBuble[i]["la"].GetFloat();
@@ -468,11 +481,13 @@ bool ObjectManager::load_list(const char * filename)
 		const Value& listDefense = jSon["DefenseBoss"];
 		for (SizeType i = 0; i < listDefense.Size(); i++)
 		{
-			BaseObject *defense = new BaseObject(eID::DEFENSEBOSS);
+			DefendBoss *defense = new DefendBoss(textureManager,graphics);
 
 			id = listDefense[i]["id"].GetInt();
 			x = listDefense[i]["x"].GetFloat();
 			y = listDefense[i]["y"].GetFloat();
+			x = x + defense->getSprite()->getWidth()*0.5f;
+			y= y- defense->getSprite()->getHeight()*0.5f ;
 			height = listDefense[i]["height"].GetFloat();
 			width = listDefense[i]["width"].GetFloat();
 
@@ -487,13 +502,14 @@ bool ObjectManager::load_list(const char * filename)
 			writer.Double(width);
 			writer.EndObject();*/
 
-			bound.left = x;
-			bound.top = y;
-			bound.right = bound.left + width;
-			bound.bottom = bound.top - height;
-			defense->setBoundCollision(bound);
-
-			defense->setActiveBound(bound);
+			//bound.left = x;
+			//bound.top = y;
+			//bound.right = bound.left + width;
+			//bound.bottom = bound.top - height;
+			defense->setPosition(VECTOR2(x, y));
+			defense->setBoundCollision();
+			
+			defense->setActiveBound(defense->getBoundCollision());
 
 
 			map_object.insert(std::pair<int, BaseObject*>(id, defense));
@@ -1503,7 +1519,10 @@ bool ObjectManager::load_list(const char * filename)
 
 					x += zmr->getSprite()->getWidth()*0.5f;
 					y = y - 16 + zmr->getSprite()->getHeight()*0.5f;
-					
+					if(id==939)
+					{
+						y += 1;
+					}
 					zmr->setPosition(VECTOR2(x, y));
 					zmr->setStartPosition(VECTOR2(x, y));
 					const Value& arrayWall = listZommerRed[i]["ListCollideID"];
@@ -1928,8 +1947,8 @@ bool ObjectManager::load_list(const char * filename)
 				Ripper *rpy = new Ripper(this->textureManager, this->graphics, EnemyColors::Yellow);
 
 				id = listRipperYellow[i]["id"].GetInt();
-				x = listRipperYellow[i]["x"].GetFloat();
-				y = listRipperYellow[i]["y"].GetFloat();
+				x = listRipperYellow[i]["x"].GetFloat() ;
+				y = listRipperYellow[i]["y"].GetFloat() - 8;
 
 				rpy->setPosition(VECTOR2(x, y));
 
@@ -1984,7 +2003,7 @@ bool ObjectManager::load_list(const char * filename)
 
 					id = listRipperBrown[i]["id"].GetInt();
 					x = listRipperBrown[i]["x"].GetFloat();
-					y = listRipperBrown[i]["y"].GetFloat();
+					y = listRipperBrown[i]["y"].GetFloat() - 8;
 
 					rpb->setPosition(VECTOR2(x, y));
 
@@ -2039,7 +2058,7 @@ bool ObjectManager::load_list(const char * filename)
 
 				id = listRipperRed[i]["id"].GetInt();
 				x = listRipperRed[i]["x"].GetFloat();
-				y = listRipperRed[i]["y"].GetFloat();
+				y = listRipperRed[i]["y"].GetFloat() - 8;
 
 				rpr->setPosition(VECTOR2(x, y));
 
@@ -2091,13 +2110,20 @@ bool ObjectManager::load_list(const char * filename)
 				Rio *roy = new Rio(this->textureManager, this->graphics, samus, EnemyColors::Yellow);
 
 				id = listRioYellow[i]["id"].GetInt();
-				x = listRioYellow[i]["x"].GetFloat();
-				y = listRioYellow[i]["y"].GetFloat();
+				x = listRioYellow[i]["x"].GetFloat() ;
+				y = listRioYellow[i]["y"].GetFloat() ;
 
+				y = y - 16 + roy->getSprite()->getHeight()*0.5f;
+				x = x + roy->getSprite()->getWidth()*0.5f;
 				roy->reInit(VECTOR2(x, y));
 
 				roy->setStartPosition(VECTOR2(x, y));
 
+				/*const Value& arrayWall = listRioYellow[i]["ListCollideID"];
+				for (SizeType t = 0; t < arrayWall.Size(); t++)
+				{
+					roy->getListWallCanCollide()->insert(*map_object.find(arrayWall[t].GetInt()));
+				}*/
 				roy->setBoundCollision();
 				roy->setStartBound(roy->getBoundCollision());
 				bound.bottom = listRioYellow[i]["ba"].GetFloat();
@@ -2142,15 +2168,22 @@ bool ObjectManager::load_list(const char * filename)
 					x = listRioBrown[i]["x"].GetFloat();
 					y = listRioBrown[i]["y"].GetFloat();
 
+					y = y - 16 + rob->getSprite()->getHeight()*0.5f;
+					x = x + rob->getSprite()->getWidth()*0.5f;
 					rob->reInit(VECTOR2(x, y));
 
 					rob->setBoundCollision();
 					rob->setStartBound(rob->getBoundCollision());
 					rob->setStartPosition(VECTOR2(x, y));
 
-					string temp = std::to_string(id);
-					const char *pchar = temp.c_str();
-					GAMELOG(pchar);
+					/*const Value& arrayWall = listRioBrown[i]["ListCollideID"];
+					for (SizeType t = 0; t < arrayWall.Size(); t++)
+					{
+						rob->getListWallCanCollide()->insert(*map_object.find(arrayWall[t].GetInt()));
+					}*/
+
+
+				
 					/*bound.bottom = listRioBrown[i]["ba"].GetFloat();
 					bound.top = listRioBrown[i]["ta"].GetFloat();
 					bound.left = listRioBrown[i]["la"].GetFloat();
@@ -2204,6 +2237,11 @@ bool ObjectManager::load_list(const char * filename)
 				bound.left = listRioRed[i]["la"].GetFloat();
 				bound.right = listRioRed[i]["ra"].GetFloat();*/
 				ror->setActiveBound(ror->getBoundCollision());
+				/*const Value& arrayWall = listRioRed[i]["ListCollideID"];
+				for (SizeType t = 0; t < arrayWall.Size(); t++)
+				{
+					ror->getListWallCanCollide()->insert(*map_object.find(arrayWall[t].GetInt()));
+				}*/
 
 				/*			writer.StartObject();
 				writer.Key("x");

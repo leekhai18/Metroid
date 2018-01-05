@@ -6,6 +6,8 @@ private:
 	float jumpDistance;
 	float positionCollide;
 	float time;
+
+	
 	//position that from jump state to acrobat
 	//when we fall down to this position we will change to jump state
 	float position_to_jump;

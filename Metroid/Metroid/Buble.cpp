@@ -2,8 +2,9 @@
 #include "Collision.h"
 #include "Camera.h"
 #define TIME_DELAY_BE_HIT 0.2f
-#define BUBLE_VELOCITY_X 50
-#define BUBLE_VELOCITY_Y 50
+#define BUBLE_VELOCITY_X 40
+#define BUBLE_VELOCITY_Y 40
+#define TIME_TO_RESET 2.0f
 Buble::Buble()
 {
 }
@@ -11,16 +12,19 @@ Buble::Buble()
 
 Buble::~Buble()
 {
+
 }
 
-Buble::Buble(TextureManager * textureM, Graphics * graphics, Samus * samus, EnemyColors color)
+Buble::Buble(TextureManager * textureM, Graphics * graphics, Samus * samus) : BaseObject(eID::FIRE_BUBLE)
 {
 	this->sprite = new Sprite();
 	if (!this->sprite->initialize(graphics, textureM, SpriteManager::getInstance()))
 	{
 		throw GameError(GameErrorNS::FATAL_ERROR, "Can not init sprite Waver");
 	}
+
 	this->samus = samus;
+
 	initExplosion(this->sprite, IndexManager::getInstance()->samusYellowExplosion, NUM_FRAMES_EXPLOSION, EXPLOSION_TIME_FRAME_DELAY);
 
 	this->sprite->setData(IndexManager::getInstance()->rinka);
@@ -33,6 +37,7 @@ Buble::Buble(TextureManager * textureM, Graphics * graphics, Samus * samus, Enem
 	isHandle = true;
 
 	timerHit = 0;
+	isExplose = false;
 }
 
 
@@ -44,12 +49,16 @@ void Buble::setStartPosition(VECTOR2 position)
 
 void Buble::reInit()
 {
-	P1 = this->getPosition() - this->samus->getPosition();
+	this->setPosition(startPosition);
+	P1 = this->samus->getPosition() -this->getPosition() ;
 	
+	setBoundCollision();
 	D3DXVec2Normalize(&normalize, &P1);
-	this->sprite->setData(IndexManager::getInstance()->rinka);
 
+	this->sprite->setData(IndexManager::getInstance()->rinka);
+	IExplosible::reInit();
 	isActivity = true;
+	health = 4;
 }
 
 void Buble::setBeHit(bool hit)
@@ -122,16 +131,23 @@ void Buble::update(float dt)
 	if (!isExplose)
 	{
 		IExplosible::update(dt);
+		
 	}
 	else
 	{
-
+		reInit();
 	}
 		
-	if (!Collision::getInstance()->isCollide(Camera::getInstance()->getBound(), this->startBound)
-		&& !Collision::getInstance()->isCollide(Camera::getInstance()->getBound(), this->boundCollision))
+	if (!Collision::getInstance()->isCollide(Camera::getInstance()->getBound(), this->boundCollision))
 	{
-		reInit();
+		//timeReset += dt;
+		//this->setVelocity(VECTOR2(0, 0));
+		//if(this->timeReset>=TIME_TO_RESET)
+		//{
+			reInit();
+			//timeReset = 0;
+		//}
+		
 	}
 }
 

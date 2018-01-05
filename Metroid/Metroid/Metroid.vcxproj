@@ -145,6 +145,7 @@
     <ClInclude Include="Constants.h" />
     <ClInclude Include="dsutil.h" />
     <ClInclude Include="dxutil.h" />
+    <ClInclude Include="DefendBoss.h" />
     <ClInclude Include="EndScence.h" />
     <ClInclude Include="EnergyTank.h" />
     <ClInclude Include="GameDebug.h" />
@@ -227,6 +228,7 @@
     <ClCompile Include="CanonBullet.cpp" />
     <ClCompile Include="Collision.cpp" />
     <ClCompile Include="dsutil.cpp" />
+    <ClCompile Include="DefendBoss.cpp" />
     <ClCompile Include="EndScence.cpp" />
     <ClCompile Include="EnergyTank.cpp" />
     <ClCompile Include="GameDebug.cpp" />

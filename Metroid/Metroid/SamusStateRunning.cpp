@@ -166,6 +166,7 @@ void SamusStateRunning::onCollision(float dt)
 		case eID::BRICK:
 		case eID::ALIENBIG:
 		case eID::ALIENSMALL:
+		case eID::DEFENSEBOSS:
 			switch (i->direction)
 			{
 			case CollideDirection::LEFT:
@@ -337,7 +338,20 @@ void SamusStateRunning::onCollision(float dt)
 
 #pragma region Enemies
 
-
+		case eID::FIRE_BUBLE:
+		{
+			switch (i->direction)
+			{
+			case CollideDirection::TOP:
+				this->samus->setVelocityY(0);
+				break;
+			}
+			//Buble* zommer = static_cast<Buble*>(i->object);
+			SamusStateManager::getInstance()->setOldStatus(eStatus::RUNNING);
+			this->samus->setStatus(eStatus::INJURING);
+			SamusStateManager::getInstance()->setOldState(this);
+			break;
+		}
 		case eID::ZOMMER:
 		{
 			Zommer* zommer = static_cast<Zommer*>(i->object);

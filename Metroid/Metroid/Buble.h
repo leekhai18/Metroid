@@ -16,8 +16,9 @@ private:
 	MetroidRect startBound;
 	bool isHandle;
 
+	float timeReset;
 public:
-	Buble(TextureManager * textureM, Graphics * graphics, Samus * samus, EnemyColors color);
+	Buble(TextureManager * textureM, Graphics * graphics, Samus * samus);
 
 	void setStartPosition(VECTOR2 position);
 	void reInit();

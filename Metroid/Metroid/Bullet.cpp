@@ -16,6 +16,8 @@
 #include "Ripper.h"
 #include "Sound.h"
 #include "Brick.h"
+#include "DefendBoss.h"
+#include "Buble.h"
 #define WIDTH_BULLET_HALF 1
 #define HEIGHT_BULLET_HALF 1
 
@@ -96,7 +98,10 @@ void Bullet::onCollision()
 					}
 					
 				}
-				case eID::WALL : case eID::GATERED: 
+
+				case eID::WALL :
+				case eID::GATERED: 
+				case eID::DEFENSEBOSS:
 				{
 					Sound::getInstance()->stop(SOUND_ENEMIES_COLLISION);
 					Sound::getInstance()->play(SOUND_ENEMIES_COLLISION, false);
@@ -119,6 +124,8 @@ void Bullet::onCollision()
 
 					break;
 				}
+					
+				
 				case eID::GATEBLUE:
 				{
 					Sound::getInstance()->play(SOUND_ENEMIES_COLLISION, false);
@@ -145,7 +152,40 @@ void Bullet::onCollision()
 					}
 
 					break;
-				}	
+			}
+				
+				case eID::FIRE_BUBLE:
+				{
+
+
+					Buble* skree = static_cast<Buble*>((*i).object);
+
+					switch (i->direction)
+					{
+					case CollideDirection::BOTTOM: case CollideDirection::TOP:
+						this->setPositionY(i->positionCollision);
+						break;
+
+					case CollideDirection::LEFT: case CollideDirection::RIGHT:
+						this->setPositionX(i->positionCollision);
+						break;
+					default:
+						break;
+					}
+
+					this->isCollided = true;
+
+					this->velocity = VECTOR2ZERO;
+
+					this->sprite->setData(indexEffect);
+
+					skree->setBeHit(true);
+					skree->decreaseHealth(this->dame);
+
+					
+
+					break;
+				}
 				case eID::SKREE:
 				{
 					Sound::getInstance()->play(SOUND_ENEMIES_COLLISION, false);

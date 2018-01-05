@@ -173,6 +173,7 @@ void SamusStateFallRolling::onCollision(float dt)
 		case eID::WALL:
 		case eID::BRICK:
 		case eID::FIRE:
+		case eID::DEFENSEBOSS:
 		case eID::ELEVATOR:
 		case eID::ALIENBIG:
 		case eID::ALIENSMALL:
@@ -271,6 +272,20 @@ void SamusStateFallRolling::onCollision(float dt)
 		}
 
 #pragma endregion
+		case eID::FIRE_BUBLE:
+		{
+			switch (i->direction)
+			{
+			case CollideDirection::TOP:
+				this->samus->setVelocityY(0);
+				break;
+			}
+			//Buble* zommer = static_cast<Buble*>(i->object);
+			SamusStateManager::getInstance()->setOldStatus(eStatus::FALLING_ROLLING);
+			this->samus->setStatus(eStatus::INJURING);
+			SamusStateManager::getInstance()->setOldState(this);
+			break;
+		}
 		case eID::ZOMMER:
 		{
 			Zommer* zommer = static_cast<Zommer*>(i->object);
@@ -507,7 +522,8 @@ void SamusStateFallRolling::update(float dt)
 			
 			break;
 		case eStatus::JUMPING:
-			this->samus->setPositionY(this->samus->getBoundCollision().bottom);
+			this->samus->setPositionY(this->samus->getBoundCollision().bottom + 13);
+			//this->samus->setPositionY(this->samus->getBoundCollision().bottom);
 			break;
 		default:
 			break;

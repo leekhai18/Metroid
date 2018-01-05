@@ -73,8 +73,8 @@ private:
 				*runningHittingRightAnimation,
 				*rollingAnimation,
 				*jumpingAnimation,
-				*startingAnimation;
-
+				*startingAnimation,
+				*acrobatDame;
 	bool isFalling;
 	bool acrobat;
 	bool moveRight;
@@ -132,6 +132,7 @@ private:
 
 	float timerInFire;
 
+	bool creamAttack;
 public:
 	float timerShoot;
 
@@ -192,10 +193,11 @@ public:
 	Animation* getRunningHittingRightAnim();
 	Animation* getRollingAnim();
 	Animation* getJumpingAnim();
-	
+	Animation* getAcroBatDame();
 	list<CollisionReturn> *getListCollide();
 	map<int, BaseObject*>* getListCanCollide();
 	map<int, BaseObject*>* getListWallCanCollide();
+
 #pragma region items
 	bool isHaveMariMaru();
 	void setMariMaru(bool flag);
@@ -215,6 +217,9 @@ public:
 	eSkin getCurrentSkin();
 	void setNewSkin(eSkin skin);
 	void setDataSuiteSkin(int yellow, int yellowIce, int pink, int pinkIce);
+
+	void setCreamAttack(bool creamAttack);
+	bool isCreamAttack();
 #pragma endregion
 
 	void setTimerInFire(float time);
