@@ -1944,8 +1944,8 @@ bool ObjectManager::load_list(const char * filename)
 				Ripper *rpy = new Ripper(this->textureManager, this->graphics, EnemyColors::Yellow);
 
 				id = listRipperYellow[i]["id"].GetInt();
-				x = listRipperYellow[i]["x"].GetFloat();
-				y = listRipperYellow[i]["y"].GetFloat();
+				x = listRipperYellow[i]["x"].GetFloat() ;
+				y = listRipperYellow[i]["y"].GetFloat() - 8;
 
 				rpy->setPosition(VECTOR2(x, y));
 
@@ -2000,7 +2000,7 @@ bool ObjectManager::load_list(const char * filename)
 
 					id = listRipperBrown[i]["id"].GetInt();
 					x = listRipperBrown[i]["x"].GetFloat();
-					y = listRipperBrown[i]["y"].GetFloat();
+					y = listRipperBrown[i]["y"].GetFloat() - 8;
 
 					rpb->setPosition(VECTOR2(x, y));
 
@@ -2055,7 +2055,7 @@ bool ObjectManager::load_list(const char * filename)
 
 				id = listRipperRed[i]["id"].GetInt();
 				x = listRipperRed[i]["x"].GetFloat();
-				y = listRipperRed[i]["y"].GetFloat();
+				y = listRipperRed[i]["y"].GetFloat() - 8;
 
 				rpr->setPosition(VECTOR2(x, y));
 
