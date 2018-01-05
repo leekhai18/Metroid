@@ -321,7 +321,7 @@ void Samus::drawInFrontMap()
 	this->textHealth->setText(std::to_string(*this->health));
 	this->textHealth->draw();
 
-	if (this->missitleRocket > 0)
+	if (*this->missitleRocket > 0)
 	{
 		this->labelIconRoket->draw(false);
 		this->textNumRocket->setText(std::to_string(*this->missitleRocket));

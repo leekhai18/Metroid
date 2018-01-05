@@ -155,116 +155,107 @@ void SamusStateJumping::handleInput(float dt)
 				IndexManager::getInstance()->samusPinkIceHittingAndJumpRight);
 
 
-			if (input->isKeyDown(VK_Z) && input->isKeyUp(VK_UP))
+			this->isUp = false;
+			if (this->samus->timerShoot > TIME_SHOOTING)
 			{
-				// Set Data for sprite
-				this->samus->setDataSuiteSkin(
-					IndexManager::getInstance()->samusYellowHittingAndJumpRight,
-					IndexManager::getInstance()->samusYellowIceHittingAndJumpRight,
-					IndexManager::getInstance()->samusPinkHittingAndJumpRight,
-					IndexManager::getInstance()->samusPinkIceHittingAndJumpRight);
-
-
-				this->isUp = false;
-				if (this->samus->timerShoot > TIME_SHOOTING)
-				{
-					this->fire();
-					this->samus->timerShoot = 0;
-					this->isShoot = true;
-				}
+				this->fire();
+				this->samus->timerShoot = 0;
+				this->isShoot = true;
 			}
+		}
+			
 
-			if (input->isKeyDown(VK_Z) && input->isKeyDown(VK_UP) && input->isKeyUp(VK_SPACE))
+		if (input->isKeyDown(VK_Z) && input->isKeyDown(VK_UP) && input->isKeyUp(VK_SPACE))
+		{
+			// Set Data for sprite
+			this->samus->setDataSuiteSkin(
+				IndexManager::getInstance()->samusYellowHittingJumpUp,
+				IndexManager::getInstance()->samusYellowIceHittingJumpUp,
+				IndexManager::getInstance()->samusPinkHittingJumpUp,
+				IndexManager::getInstance()->samusPinkIceHittingJumpUp);
+
+
+			this->isUp = true;
+			if (this->samus->timerShoot > TIME_SHOOTING)
 			{
-				// Set Data for sprite
-				this->samus->setDataSuiteSkin(
-					IndexManager::getInstance()->samusYellowHittingJumpUp,
-					IndexManager::getInstance()->samusYellowIceHittingJumpUp,
-					IndexManager::getInstance()->samusPinkHittingJumpUp,
-					IndexManager::getInstance()->samusPinkIceHittingJumpUp);
-
-
-				this->isUp = true;
-				if (this->samus->timerShoot > TIME_SHOOTING)
-				{
-					this->fire();
-					this->samus->timerShoot = 0;
-					this->isShoot = true;
-				}
+				this->fire();
+				this->samus->timerShoot = 0;
+				this->isShoot = true;
 			}
+		}
 
-			if (input->isKeyDown(VK_SPACE) && input->isKeyUp(VK_UP) && input->isKeyUp(VK_Z))
+		if (input->isKeyDown(VK_SPACE) && input->isKeyUp(VK_UP) && input->isKeyUp(VK_Z))
+		{
+			// Set Data for sprite
+			this->samus->setDataSuiteSkin(
+				IndexManager::getInstance()->samusYellowHittingAndJumpRight,
+				IndexManager::getInstance()->samusYellowIceHittingAndJumpRight,
+				IndexManager::getInstance()->samusPinkHittingAndJumpRight,
+				IndexManager::getInstance()->samusPinkIceHittingAndJumpRight);
+
+
+			this->isUp = false;
+			if (this->samus->timerShoot > TIME_SHOOTING)
 			{
-				// Set Data for sprite
-				this->samus->setDataSuiteSkin(
-					IndexManager::getInstance()->samusYellowHittingAndJumpRight,
-					IndexManager::getInstance()->samusYellowIceHittingAndJumpRight,
-					IndexManager::getInstance()->samusPinkHittingAndJumpRight,
-					IndexManager::getInstance()->samusPinkIceHittingAndJumpRight);
-
-
-				this->isUp = false;
-				if (this->samus->timerShoot > TIME_SHOOTING)
-				{
-					this->fireRocket();
-					this->samus->timerShoot = 0;
-					this->isShoot = true;
-				}
+				this->fireRocket();
+				this->samus->timerShoot = 0;
+				this->isShoot = true;
 			}
+		}
 
-			if (input->isKeyDown(VK_SPACE) && input->isKeyDown(VK_UP) && input->isKeyUp(VK_Z))
+		if (input->isKeyDown(VK_SPACE) && input->isKeyDown(VK_UP) && input->isKeyUp(VK_Z))
+		{
+			// Set Data for sprite
+			this->samus->setDataSuiteSkin(
+				IndexManager::getInstance()->samusYellowHittingJumpUp,
+				IndexManager::getInstance()->samusYellowIceHittingJumpUp,
+				IndexManager::getInstance()->samusPinkHittingJumpUp,
+				IndexManager::getInstance()->samusPinkIceHittingJumpUp);
+
+
+			this->isUp = true;
+			if (this->samus->timerShoot > TIME_SHOOTING)
 			{
-				// Set Data for sprite
-				this->samus->setDataSuiteSkin(
-					IndexManager::getInstance()->samusYellowHittingJumpUp,
-					IndexManager::getInstance()->samusYellowIceHittingJumpUp,
-					IndexManager::getInstance()->samusPinkHittingJumpUp,
-					IndexManager::getInstance()->samusPinkIceHittingJumpUp);
-
-
-				this->isUp = true;
-				if (this->samus->timerShoot > TIME_SHOOTING)
-				{
-					this->fireRocket();
-					this->samus->timerShoot = 0;
-					this->isShoot = true;
-				}
+				this->fireRocket();
+				this->samus->timerShoot = 0;
+				this->isShoot = true;
 			}
+		}
 
 
-			if (input->isKeyDown(VK_DOWN) && this->samus->isHaveMariMaru())
-			{
-				this->samus->setVelocityX(0);
-				this->samus->setStatus(eStatus::ROLLING);
-				jumpDistance = 0;
-				return;
-			}
+		if (input->isKeyDown(VK_DOWN) && this->samus->isHaveMariMaru())
+		{
+			this->samus->setVelocityX(0);
+			this->samus->setStatus(eStatus::ROLLING);
+			jumpDistance = 0;
+			return;
+		}
 
-			if (input->isKeyDown(VK_UP) && input->isKeyUp(VK_Z))
-			{
-				// Set Data for sprite
-				this->samus->setDataSuiteSkin(
-					IndexManager::getInstance()->samusYellowJumpUp,
-					IndexManager::getInstance()->samusYellowIceJumpUp,
-					IndexManager::getInstance()->samusPinkJumpUp,
-					IndexManager::getInstance()->samusPinkIceJumpUp);
+		if (input->isKeyDown(VK_UP) && input->isKeyUp(VK_Z))
+		{
+			// Set Data for sprite
+			this->samus->setDataSuiteSkin(
+				IndexManager::getInstance()->samusYellowJumpUp,
+				IndexManager::getInstance()->samusYellowIceJumpUp,
+				IndexManager::getInstance()->samusPinkJumpUp,
+				IndexManager::getInstance()->samusPinkIceJumpUp);
 
-			}
+		}
 
-			if (input->isKeyUp(VK_Z) && input->isKeyUp(VK_UP) && input->isKeyUp(VK_SPACE) && this->samus->isInStatus(eStatus::JUMPING) && isShoot)
-			{
-				// Set Data for sprite
-				this->samus->setDataSuiteSkin(
-					IndexManager::getInstance()->samusYellowJumpRight,
-					IndexManager::getInstance()->samusYellowIceJumpRight,
-					IndexManager::getInstance()->samusPinkJumpRight,
-					IndexManager::getInstance()->samusPinkIceJumpRight);
+		if (input->isKeyUp(VK_Z) && input->isKeyUp(VK_UP) && input->isKeyUp(VK_SPACE) && this->samus->isInStatus(eStatus::JUMPING) && isShoot)
+		{
+			// Set Data for sprite
+			this->samus->setDataSuiteSkin(
+				IndexManager::getInstance()->samusYellowJumpRight,
+				IndexManager::getInstance()->samusYellowIceJumpRight,
+				IndexManager::getInstance()->samusPinkJumpRight,
+				IndexManager::getInstance()->samusPinkIceJumpRight);
 
-				isShoot = false;
-			}
+			isShoot = false;
+		}
 
 #pragma endregion
-		}
+		
 	}
 }
 
