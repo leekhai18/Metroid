@@ -8,8 +8,8 @@
 //#define CAM_POS_Y 1320
 
 //boss position
-#define CAM_POS_X 896
-#define CAM_POS_Y 4200
+//#define CAM_POS_X 896
+//#define CAM_POS_Y 4200
 
 //zeb
 //#define CAM_POS_X 2432
@@ -33,8 +33,8 @@
 //#define CAM_POS_Y 3000
 
 //
-//#define CAM_POS_X  263.111481
-//#define CAM_POS_Y 3647.88770
+#define CAM_POS_X  263.111481
+#define CAM_POS_Y 3647.88770
 class Camera
 {
 private:

@@ -427,7 +427,43 @@ bool ObjectManager::load_list(const char * filename)
 
 		//writer.StartObject();
 
-		
+
+		const Value& listBuble = jSon["Buble"];
+		for (SizeType i = 0; i < listBuble.Size(); i++)
+		{
+			BaseObject *buble = new BaseObject(eID::FIRE_BUBLE);
+
+			id = listBuble[i]["id"].GetInt();
+			x = listBuble[i]["x"].GetFloat();
+			y = listBuble[i]["y"].GetFloat();
+			height = listBuble[i]["height"].GetFloat();
+			width = listBuble[i]["width"].GetFloat();
+
+			/*			writer.StartObject();
+			writer.Key("x");
+			writer.Double(x);
+			writer.Key("y");
+			writer.Double(y);
+			writer.Key("height");
+			writer.Double(height);
+			writer.Key("width");
+			writer.Double(width);
+			writer.EndObject();*/
+
+			bound.left = x;
+			bound.top = y;
+			bound.right = bound.left + width;
+			bound.bottom = bound.top - height;
+			buble->setBoundCollision(bound);
+			bound.bottom = listBuble[i]["ba"].GetFloat();
+			bound.top = listBuble[i]["ta"].GetFloat();
+			bound.left = listBuble[i]["la"].GetFloat();
+			bound.right = listBuble[i]["ra"].GetFloat();
+			buble->setActiveBound(bound);
+
+
+			map_object.insert(std::pair<int, BaseObject*>(id, buble));
+		}
 
 		const Value& listDefense = jSon["DefenseBoss"];
 		for (SizeType i = 0; i < listDefense.Size(); i++)

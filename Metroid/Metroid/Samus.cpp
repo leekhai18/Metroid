@@ -20,8 +20,8 @@
 //#define SAMUS_POS_Y 1267
 
 //Boss
-#define SAMUS_POS_X 960
-#define SAMUS_POS_Y 4250
+//#define SAMUS_POS_X 960
+//#define SAMUS_POS_Y 4250
 
 //MotherBrain
 //#define SAMUS_POS_X 640
@@ -36,8 +36,8 @@
 //#define SAMUS_POS_Y 3000
 
 //
-/*#define SAMUS_POS_X 278.264191  
-#define SAMUS_POS_Y 3651.00000  */ 
+#define SAMUS_POS_X 278.264191  
+#define SAMUS_POS_Y 3651.00000   
 void Samus::setActiveBound()
 {
 	// Can 1 con so hop ly
