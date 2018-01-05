@@ -57,6 +57,8 @@
 #define OFFSET_COLLISION_Y 4
 #define OFFSET_ROLLING 6.0f
 
+#define TIME_DEC_HEALTH_FIRE 1
+
 
 
 class Samus: public BaseObject
@@ -127,6 +129,9 @@ private:
 	bool isHitAlienSmall;
 
 	bool isHitAlienBig;
+
+	float timerInFire;
+
 public:
 	float timerShoot;
 
@@ -211,6 +216,9 @@ public:
 	void setNewSkin(eSkin skin);
 	void setDataSuiteSkin(int yellow, int yellowIce, int pink, int pinkIce);
 #pragma endregion
+
+	void setTimerInFire(float time);
+	float getTimerInFire();
 
 };
 
