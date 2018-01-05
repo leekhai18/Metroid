@@ -2114,12 +2114,11 @@ bool ObjectManager::load_list(const char * filename)
 
 				roy->setStartPosition(VECTOR2(x, y));
 
-				const Value& arrayWall = listRioYellow[i]["ListCollideID"];
+				/*const Value& arrayWall = listRioYellow[i]["ListCollideID"];
 				for (SizeType t = 0; t < arrayWall.Size(); t++)
 				{
 					roy->getListWallCanCollide()->insert(*map_object.find(arrayWall[t].GetInt()));
-				}
-
+				}*/
 				roy->setBoundCollision();
 				roy->setStartBound(roy->getBoundCollision());
 				bound.bottom = listRioYellow[i]["ba"].GetFloat();
@@ -2170,11 +2169,11 @@ bool ObjectManager::load_list(const char * filename)
 					rob->setStartBound(rob->getBoundCollision());
 					rob->setStartPosition(VECTOR2(x, y));
 
-					const Value& arrayWall = listRioBrown[i]["ListCollideID"];
+					/*const Value& arrayWall = listRioBrown[i]["ListCollideID"];
 					for (SizeType t = 0; t < arrayWall.Size(); t++)
 					{
 						rob->getListWallCanCollide()->insert(*map_object.find(arrayWall[t].GetInt()));
-					}
+					}*/
 
 
 				
@@ -2231,11 +2230,11 @@ bool ObjectManager::load_list(const char * filename)
 				bound.left = listRioRed[i]["la"].GetFloat();
 				bound.right = listRioRed[i]["ra"].GetFloat();*/
 				ror->setActiveBound(ror->getBoundCollision());
-				const Value& arrayWall = listRioRed[i]["ListCollideID"];
+				/*const Value& arrayWall = listRioRed[i]["ListCollideID"];
 				for (SizeType t = 0; t < arrayWall.Size(); t++)
 				{
 					ror->getListWallCanCollide()->insert(*map_object.find(arrayWall[t].GetInt()));
-				}
+				}*/
 
 				/*			writer.StartObject();
 				writer.Key("x");

@@ -411,7 +411,7 @@ void SamusStateAcrobat::onCollision(float dt)
 		case eID::ZOMMER:
 		{
 			Zommer* zommer = static_cast<Zommer*>(i->object);
-			if(this->samus->isCreamAttack())
+			if(this->samus->isCreamAttack()&& zommer->getCold() && zommer->getHandle())
 			{
 				zommer->decreaseHealth(5);
 				if (zommer->getExplose())

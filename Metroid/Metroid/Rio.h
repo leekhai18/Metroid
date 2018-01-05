@@ -34,6 +34,8 @@ private:
 	int health;
 	MetroidRect startBound;
 	
+	bool isCollided;
+	CollideDirection directCollision;
 	int resetFrame;
 	bool isHandle;
 	bool beHit;

@@ -4,8 +4,8 @@
 #include "Constants.h"
 
 //start position
-//#define CAM_POS_X 640
-//#define CAM_POS_Y 1320
+#define CAM_POS_X 640
+#define CAM_POS_Y 1320
 
 //boss position
 //#define CAM_POS_X 896
@@ -21,8 +21,8 @@
 
 //MotherBrain
 
-#define CAM_POS_X 640
-#define CAM_POS_Y 3656
+//#define CAM_POS_X 640
+//#define CAM_POS_Y 3656
 //boss KRAID
 //#define CAM_POS_X 912
 //#define CAM_POS_Y 4208

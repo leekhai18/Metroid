@@ -24,8 +24,8 @@
 //#define SAMUS_POS_Y 4250
 
 //MotherBrain
-#define SAMUS_POS_X 640
-#define SAMUS_POS_Y 3656
+//#define SAMUS_POS_X 640
+//#define SAMUS_POS_Y 3656
 
 //Zeb position
 //#define SAMUS_POS_X 810

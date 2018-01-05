@@ -207,7 +207,7 @@ void Rio::handleVelocity(float dt)
 
 void Rio::onCollision(float dt)
 {
-	for (auto i = this->listWallCanCollide->begin(); i != this->listWallCanCollide->end(); i++)
+	/*for (auto i = this->listWallCanCollide->begin(); i != this->listWallCanCollide->end(); i++)
 	{
 		BaseObject* x = (*i).second;
 		Collision::getInstance()->checkCollision(this, x, dt);
@@ -237,7 +237,7 @@ void Rio::onCollision(float dt)
 		}
 	}
 
-	this->listCollide->clear();
+	this->listCollide->clear();*/
 
 }
 
