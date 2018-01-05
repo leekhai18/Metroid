@@ -203,7 +203,12 @@ void SamusStateRunning::onCollision(float dt)
 			{
 				this->samus->setFall(false);
 				this->samus->setVelocityY(0);
-				this->samus->setHealth(this->samus->getHealth() - 8);
+				this->samus->setTimerInFire(this->samus->getTimerInFire() + dt);
+				if (this->samus->getTimerInFire() > TIME_DEC_HEALTH_FIRE)
+				{
+					this->samus->setHealth(this->samus->getHealth() - 8);
+					this->samus->setTimerInFire(0);
+				}
 				break;
 			}
 			break;

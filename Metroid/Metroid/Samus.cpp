@@ -117,6 +117,8 @@ Samus::Samus(TextureManager* textureM,Graphics* graphics, Input* input) : BaseOb
 	this->textNumRocket->initialize(graphics);
 	//listCanCollide = new map<int, BaseObject*>();
 	listCollide = new list<CollisionReturn>();
+
+	timerInFire = 0;
 }
 
 Samus::Samus()
@@ -657,6 +659,16 @@ void Samus::setDataSuiteSkin(int yellow, int yellowIce, int pink, int pinkIce)
 	default:
 		break;
 	}
+}
+
+void Samus::setTimerInFire(float time)
+{
+	this->timerInFire = time;
+}
+
+float Samus::getTimerInFire()
+{
+	return this->timerInFire;
 }
 
 
