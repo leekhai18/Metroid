@@ -976,19 +976,12 @@ void SamusStateJumping::update(float dt)
 		case eStatus::ACROBAT:
 			break;
 		case eStatus::INJURING:
-			/*if(this->samus->isFaling())
-			{
-				this->samus->setPositionY(positionCollide - OFFSET_STAND);
-			}
-			else
-			{
-				this->samus->setPositionY(positionCollide + OFFSET_STAND);
-			}*/
+
 			
 			break;
-			case  eStatus::ROLLING:
-				this->samus->setCanJump(true);
-				break;
+		case  eStatus::ROLLING:
+			this->samus->setCanJump(true);
+			break;
 		default:
 			break;
 		}

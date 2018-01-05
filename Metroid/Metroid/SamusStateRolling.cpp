@@ -645,6 +645,10 @@ void SamusStateRolling::update(float dt)
 		SamusStateManager::getInstance()->setOldState(this);
 		SamusStateManager::getInstance()->setOldStatus(eStatus::ROLLING);
 	}
+	if (this->samus->getBoundCollision().bottom < 3552)
+	{
+		int test = 0;
+	}
 	if (!this->samus->isInStatus(eStatus::ROLLING))
 	{
 		switch (this->samus->getStatus())
@@ -663,6 +667,10 @@ void SamusStateRolling::update(float dt)
 			break;
 		case eStatus::JUMPING:
 			this->samus->setPositionY(this->samus->getBoundCollision().bottom + 13);
+			if (this->samus->getBoundCollision().bottom < 3552)
+			{
+				int test = 0;
+			}
 			SamusStateManager::getInstance()->changeStateTo(this->samus->getStatus());
 			break;
 		case eStatus::FALLING_ROLLING:

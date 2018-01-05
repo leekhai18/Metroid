@@ -73,7 +73,12 @@ void SamusStateInjuring::onCollision(float dt)
 				if(SamusStateManager::getInstance()->getOldStatus() == eStatus::ROLLING || 
 					SamusStateManager::getInstance()->getOldStatus() == eStatus::FALLING_ROLLING)
 				{
-					this->samus->setPositionY(i->positionCollision + OFFSET_ROLLING);
+					/*this->samus->setPositionY(i->positionCollision + OFFSET_ROLLING);
+					float pos = i->positionCollision + OFFSET_ROLLING;
+					if(pos - ROLL_HEIGHT*0.5f <= 3552)
+					{
+						int test = 0;
+					}*/
 				}
 				break;
 			case CollideDirection::LEFT:
@@ -118,30 +123,24 @@ void SamusStateInjuring::onCollision(float dt)
 
 				break;
 			case CollideDirection::LEFT:
-				if (SamusStateManager::getInstance()->getOldStatus() == eStatus::RUNNING 
-					|| SamusStateManager::getInstance()->getOldStatus() == eStatus::ROLLING
-					|| SamusStateManager::getInstance()->getOldStatus() == eStatus::STANDING)
-				{
+				
 					if (!(this->samus->getBoundCollision().bottom < i->object->getBoundCollision().top))
 					{
 						this->samus->setVelocityY(0);
-						return;
+						break;
 					}
-				}
+				
 				this->samus->setVelocityX(0);
 				break;
 			case CollideDirection::RIGHT:
-				if (SamusStateManager::getInstance()->getOldStatus() == eStatus::RUNNING
-					|| SamusStateManager::getInstance()->getOldStatus() == eStatus::ROLLING
-					|| SamusStateManager::getInstance()->getOldStatus() == eStatus::STANDING)
-				{
+
 					if (!(this->samus->getBoundCollision().bottom < i->object->getBoundCollision().top))
 					
 					{
 						this->samus->setVelocityY(0);
-						return;
+						break;
 					}
-				}
+				
 				this->samus->setVelocityX(0);
 				break;
 			case CollideDirection::BOTTOM:
@@ -181,7 +180,10 @@ void SamusStateInjuring::update(float dt)
 	{
 		this->samus->setStatus(SamusStateManager::getInstance()->getOldStatus());
 	}
-
+	if(this->samus->getBoundCollision().bottom < 3552)
+	{
+		int test = 0;
+	}
 	if (this->samus->getStatus() != eStatus::INJURING)
 	{
 		switch (this->samus->getStatus())

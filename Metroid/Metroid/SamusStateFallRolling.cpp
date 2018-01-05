@@ -521,7 +521,8 @@ void SamusStateFallRolling::update(float dt)
 			
 			break;
 		case eStatus::JUMPING:
-			this->samus->setPositionY(this->samus->getBoundCollision().bottom);
+			this->samus->setPositionY(this->samus->getBoundCollision().bottom + 13);
+			//this->samus->setPositionY(this->samus->getBoundCollision().bottom);
 			break;
 		default:
 			break;
