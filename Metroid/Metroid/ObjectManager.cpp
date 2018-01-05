@@ -487,7 +487,7 @@ bool ObjectManager::load_list(const char * filename)
 			x = listDefense[i]["x"].GetFloat();
 			y = listDefense[i]["y"].GetFloat();
 			x = x + defense->getSprite()->getWidth()*0.5f;
-			y= y- defense->getSprite()->getHeight()*0.5f - 16;
+			y= y- defense->getSprite()->getHeight()*0.5f ;
 			height = listDefense[i]["height"].GetFloat();
 			width = listDefense[i]["width"].GetFloat();
 

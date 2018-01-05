@@ -4,7 +4,7 @@
 #define TIME_DELAY_BE_HIT 0.2f
 #define BUBLE_VELOCITY_X 40
 #define BUBLE_VELOCITY_Y 40
-
+#define TIME_TO_RESET 2.0f
 Buble::Buble()
 {
 }
@@ -138,7 +138,14 @@ void Buble::update(float dt)
 		
 	if (!Collision::getInstance()->isCollide(Camera::getInstance()->getBound(), this->boundCollision))
 	{
-		reInit();
+		timeReset += dt;
+		this->setVelocity(VECTOR2(0, 0));
+		if(this->timeReset>=TIME_TO_RESET)
+		{
+			reInit();
+			timeReset = 0;
+		}
+		
 	}
 }
 

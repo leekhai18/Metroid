@@ -16,6 +16,7 @@ private:
 	MetroidRect startBound;
 	bool isHandle;
 
+	float timeReset;
 public:
 	Buble(TextureManager * textureM, Graphics * graphics, Samus * samus);
 
