@@ -133,8 +133,13 @@ private:
 	float timerInFire;
 
 	bool creamAttack;
+
+	CollideDirection directCollide;
 public:
 	float timerShoot;
+
+	void setDirectCollide(CollideDirection direct);
+	CollideDirection getDirectCollide();
 
 	Samus(TextureManager* textureM, Graphics* graphics, Input* input);
 	Samus();

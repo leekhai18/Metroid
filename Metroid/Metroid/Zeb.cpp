@@ -94,7 +94,7 @@ void Zeb::handleVelocity(float dt)
 			samusPosition = samus->getPosition();
 		}
 
-		if (this->getPosition().y + 20 <= this->samusPosition.y)
+		if (this->getPosition().y + 80 <= this->samusPosition.y)
 		{
 			this->velocity.y = VELOCITY_Y;
 

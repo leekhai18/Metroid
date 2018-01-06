@@ -279,6 +279,7 @@ void SamusStateBoom::onCollision(float dt)
 			}
 			//Buble* zommer = static_cast<Buble*>(i->object);
 			this->samus->setStatus(eStatus::INJURING);
+			this->samus->setDirectCollide(i->direction);
 			BaseState* state = SamusStateManager::getInstance()->getOldState();
 			eStatus status = SamusStateManager::getInstance()->getOldStatus();
 			SamusStateManager::getInstance()->setOldStatus(status);
@@ -318,6 +319,7 @@ void SamusStateBoom::onCollision(float dt)
 				{
 					return;
 				}	
+				this->samus->setDirectCollide(i->direction);
 				this->samus->setStatus(eStatus::INJURING);
 				BaseState* state = SamusStateManager::getInstance()->getOldState();
 				eStatus status = SamusStateManager::getInstance()->getOldStatus();
@@ -365,6 +367,7 @@ void SamusStateBoom::onCollision(float dt)
 				{
 					return;
 				}
+				this->samus->setDirectCollide(i->direction);
 				this->samus->setStatus(eStatus::INJURING);
 				BaseState* state = SamusStateManager::getInstance()->getOldState();
 				eStatus status = SamusStateManager::getInstance()->getOldStatus();
@@ -417,6 +420,7 @@ void SamusStateBoom::onCollision(float dt)
 				{
 					return;
 				}
+				this->samus->setDirectCollide(i->direction);
 				this->samus->setStatus(eStatus::INJURING);
 				BaseState* state = SamusStateManager::getInstance()->getOldState();
 				eStatus status = SamusStateManager::getInstance()->getOldStatus();
@@ -464,6 +468,7 @@ void SamusStateBoom::onCollision(float dt)
 				{
 					return;
 				}
+				this->samus->setDirectCollide(i->direction);
 				this->samus->setStatus(eStatus::INJURING);
 				BaseState* state = SamusStateManager::getInstance()->getOldState();
 				eStatus status = SamusStateManager::getInstance()->getOldStatus();
@@ -499,6 +504,7 @@ void SamusStateBoom::onCollision(float dt)
 			}
 			else
 			{
+				this->samus->setDirectCollide(i->direction);
 				this->samus->setStatus(eStatus::INJURING);
 				BaseState* state = SamusStateManager::getInstance()->getOldState();
 				eStatus status = SamusStateManager::getInstance()->getOldStatus();
@@ -545,6 +551,7 @@ void SamusStateBoom::onCollision(float dt)
 				{
 					return;
 				}
+				this->samus->setDirectCollide(i->direction);
 				this->samus->setStatus(eStatus::INJURING);
 				BaseState* state = SamusStateManager::getInstance()->getOldState();
 				eStatus status = SamusStateManager::getInstance()->getOldStatus();
@@ -574,6 +581,7 @@ void SamusStateBoom::onCollision(float dt)
 				this->samus->setVelocityY(0);
 				break;
 			}
+			this->samus->setDirectCollide(i->direction);
 			this->samus->setStatus(eStatus::INJURING);
 			BaseState* state = SamusStateManager::getInstance()->getOldState();
 			eStatus status = SamusStateManager::getInstance()->getOldStatus();
@@ -600,6 +608,7 @@ void SamusStateBoom::onCollision(float dt)
 				break;
 			}
 
+			this->samus->setDirectCollide(i->direction);
 			this->samus->setStatus(eStatus::INJURING);
 			BaseState* state = SamusStateManager::getInstance()->getOldState();
 			eStatus status = SamusStateManager::getInstance()->getOldStatus();

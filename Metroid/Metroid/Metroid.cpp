@@ -5,6 +5,7 @@
 #include "GameDebug.h"
 #include "BulletPool.h"
 #include "Sound.h"
+#include "SamusStateManager.h"
 #define TIME_DELAY_WHEN_COLLECT_ITEM 3.5f
 
 Metroid::Metroid()
@@ -178,38 +179,54 @@ void Metroid::update(float dt)
 		ObjectManager::getInstance()->update(dt);
 		samus->update(dt);
 		this->camera->update(dt);
-		//go to boss draik
-		if(input->isKeyDown(VK_S))
-		{
-			samus->setPosition(VECTOR2(960, 4250));
-			Camera::getInstance()->setPosition(VECTOR2(896, 4208));
-
-			//BulletPool::getInstance()->setIceBullet();
-			//this->samus->setMariMaru(true);
-		}
-		//go to mother brain
-
-		if (input->isKeyDown(VK_D))
-		{
-			samus->setCreamAttack(true);
 		
-		}
-		//add rocket
-		if (input->isKeyDown(VK_F))
-		{
-			samus->setNumRocket(20);
-			this->samus->setMariMaru(true);
-		}
-		//add boom
-		if (input->isKeyDown(VK_G))
-		{
-			samus->setBomb(true);
-		}
-		//add ice bullet
-		if (input->isKeyDown(VK_A))
-		{
-			BulletPool::getInstance()->setIceBullet();
-		}
+	}
+	//go to boss draik
+	if (input->isKeyDown(VK_S))
+	{
+		samus->setPosition(VECTOR2(2529, 4215));
+		Camera::getInstance()->setPosition(VECTOR2(2432, 4200));
+		SamusStateManager::getInstance()->getCurrentState()->setBoundCollision();
+		//BulletPool::getInstance()->setIceBullet();
+		//this->samus->setMariMaru(true);
+	}
+	//take long beeam
+	if (input->isKeyDown(0x48))//VK_H
+	{
+		samus->setPosition(VECTOR2(2594, 3491));
+		Camera::getInstance()->setPosition(VECTOR2(2688, 3480));
+		SamusStateManager::getInstance()->getCurrentState()->setBoundCollision();
+		//BulletPool::getInstance()->setIceBullet();
+		//this->samus->setMariMaru(true);
+	}
+
+	//go to mother brain
+	if(input->isKeyDown(0x4B))
+	{
+		samus->setPosition(VECTOR2(560, 3651));
+		Camera::getInstance()->setPosition(VECTOR2(640, 3647.27515));
+		SamusStateManager::getInstance()->getCurrentState()->setBoundCollision();
+	}
+	if (input->isKeyDown(VK_D))
+	{
+		samus->setCreamAttack(true);
+
+	}
+	//add rocket
+	if (input->isKeyDown(VK_F))
+	{
+		samus->setNumRocket(20);
+		this->samus->setMariMaru(true);
+	}
+	//add boom
+	if (input->isKeyDown(VK_G))
+	{
+		samus->setBomb(true);
+	}
+	//add ice bullet
+	if (input->isKeyDown(VK_A))
+	{
+		BulletPool::getInstance()->setIceBullet();
 	}
 }
 

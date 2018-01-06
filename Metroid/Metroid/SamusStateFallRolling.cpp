@@ -281,6 +281,7 @@ void SamusStateFallRolling::onCollision(float dt)
 				break;
 			}
 			//Buble* zommer = static_cast<Buble*>(i->object);
+			this->samus->setDirectCollide(i->direction);
 			SamusStateManager::getInstance()->setOldStatus(eStatus::FALLING_ROLLING);
 			this->samus->setStatus(eStatus::INJURING);
 			SamusStateManager::getInstance()->setOldState(this);
@@ -314,6 +315,7 @@ void SamusStateFallRolling::onCollision(float dt)
 			}
 			else
 			{
+				this->samus->setDirectCollide(i->direction);
 				SamusStateManager::getInstance()->setOldStatus(eStatus::FALLING_ROLLING);
 				this->samus->setStatus(eStatus::INJURING);
 				SamusStateManager::getInstance()->setOldState(this);
@@ -348,6 +350,7 @@ void SamusStateFallRolling::onCollision(float dt)
 			}
 			else
 			{
+				this->samus->setDirectCollide(i->direction);
 				SamusStateManager::getInstance()->setOldStatus(eStatus::FALLING_ROLLING);
 				this->samus->setStatus(eStatus::INJURING);
 				SamusStateManager::getInstance()->setOldState(this);
@@ -379,6 +382,7 @@ void SamusStateFallRolling::onCollision(float dt)
 				break;
 			}
 			//this->samus->setVelocity(VECTOR2(0, 0));
+			this->samus->setDirectCollide(i->direction);
 			SamusStateManager::getInstance()->setOldStatus(eStatus::FALLING_ROLLING);
 			SamusStateManager::getInstance()->setOldState(this);
 			this->samus->setStatus(eStatus::INJURING);

@@ -49,7 +49,27 @@ void DefendBoss::update(float dt)
 	{
 		if(beHit)
 		{
-			switch (heath)
+			if (heath <= 15 && heath > 10)
+			{
+				this->sprite->setData(this->frame[1]);
+				setBoundCollision();
+			}
+			else if (heath <= 10 && heath > 5)
+			{
+				this->sprite->setData(this->frame[2]);
+				setBoundCollision();
+			}
+			else if (heath <= 5 && heath > 0)
+			{
+				this->sprite->setData(this->frame[3]);
+				setBoundCollision();
+			}
+			else if (heath <= 0)
+			{
+				isActivity = false;		
+			}
+
+			/*switch (heath)
 			{
 			case 15:
 				this->sprite->setData(this->frame[1]);
@@ -67,7 +87,7 @@ void DefendBoss::update(float dt)
 				isActivity = false;
 			default:
 				break;
-			}
+			}*/
 			beHit = false;
 		}
 		

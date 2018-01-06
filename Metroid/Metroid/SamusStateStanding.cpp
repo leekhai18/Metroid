@@ -319,6 +319,7 @@ void SamusStateStanding::onCollision(float dt)
 				break;
 			}
 			//Buble* zommer = static_cast<Buble*>(i->object);
+			this->samus->setDirectCollide(i->direction);
 			SamusStateManager::getInstance()->setOldStatus(eStatus::STANDING);
 			this->samus->setStatus(eStatus::INJURING);
 			SamusStateManager::getInstance()->setOldState(this);
@@ -335,7 +336,7 @@ void SamusStateStanding::onCollision(float dt)
 			Zommer* zommer = static_cast<Zommer*>(i->object);
 			if (!zommer->getCold())
 			{
-				
+				this->samus->setDirectCollide(i->direction);
 				SamusStateManager::getInstance()->setOldStatus(eStatus::STANDING);
 				this->samus->setStatus(eStatus::INJURING);
 				SamusStateManager::getInstance()->setOldState(this);
@@ -353,6 +354,7 @@ void SamusStateStanding::onCollision(float dt)
 			Skree* skree = static_cast<Skree*>(i->object);
 			if (!skree->getCold())
 			{
+				this->samus->setDirectCollide(i->direction);
 				SamusStateManager::getInstance()->setOldStatus(eStatus::STANDING);
 				this->samus->setStatus(eStatus::INJURING);
 				SamusStateManager::getInstance()->setOldState(this);
@@ -375,6 +377,7 @@ void SamusStateStanding::onCollision(float dt)
 			if (!rio->getCold())
 			{
 				//this->samus->setVelocity(VECTOR2(0, 0));
+				this->samus->setDirectCollide(i->direction);
 				SamusStateManager::getInstance()->setOldStatus(eStatus::STANDING);
 				this->samus->setStatus(eStatus::INJURING);
 				SamusStateManager::getInstance()->setOldState(this);
@@ -393,6 +396,7 @@ void SamusStateStanding::onCollision(float dt)
 			if (!ripper->getCold())
 			{
 				//this->samus->setVelocity(VECTOR2(0, 0));
+				this->samus->setDirectCollide(i->direction);
 				SamusStateManager::getInstance()->setOldStatus(eStatus::STANDING);
 				this->samus->setStatus(eStatus::INJURING);
 				SamusStateManager::getInstance()->setOldState(this);
@@ -411,6 +415,7 @@ void SamusStateStanding::onCollision(float dt)
 			if (!waver->getCold())
 			{
 				//this->samus->setVelocity(VECTOR2(0, 0));
+				this->samus->setDirectCollide(i->direction);
 				SamusStateManager::getInstance()->setOldStatus(eStatus::STANDING);
 				this->samus->setStatus(eStatus::INJURING);
 				SamusStateManager::getInstance()->setOldState(this);			
@@ -430,6 +435,7 @@ void SamusStateStanding::onCollision(float dt)
 			if (!zeb->getCold())
 			{
 				//this->samus->setVelocity(VECTOR2(0, 0));
+				this->samus->setDirectCollide(i->direction);
 				SamusStateManager::getInstance()->setOldStatus(eStatus::STANDING);
 				this->samus->setStatus(eStatus::INJURING);
 				SamusStateManager::getInstance()->setOldState(this);
@@ -447,6 +453,7 @@ void SamusStateStanding::onCollision(float dt)
 			}
 
 			//this->samus->setVelocity(VECTOR2(0, 0));
+			this->samus->setDirectCollide(i->direction);
 			SamusStateManager::getInstance()->setOldStatus(eStatus::STANDING);
 			this->samus->setStatus(eStatus::INJURING);
 			SamusStateManager::getInstance()->setOldState(this);

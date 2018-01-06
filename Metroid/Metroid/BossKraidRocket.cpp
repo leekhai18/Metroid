@@ -5,7 +5,7 @@
 #include <math.h>
 #include "BossRocketPool.h"
 #include "SamusStateManager.h"
-
+#include "RocketPool.h"
 #define ROCKET_VELOCITY_X 80
 #define ROCKET_VELOCITY_Y 80
 BossKraidRocket::BossKraidRocket()
@@ -151,13 +151,29 @@ void BossKraidRocket::onCollisionSamus(float dt)
 		this->velocity = VECTOR2ZERO;
 		if(!samus->isInStatus(eStatus::INJURING))
 		{
-			SamusStateManager::getInstance()->setOldStatus(samus->getStatus());
-			samus->setStatus(eStatus::INJURING);
-			samus->setHealth(*samus->getHealth() - dame);
-			SamusStateManager::getInstance()->setOldState(SamusStateManager::getInstance()->getCurrentState());
+			if(!(samus->isInStatus(eStatus::ACROBAT)&&this->samus->isCreamAttack()))
+			{
+				SamusStateManager::getInstance()->setOldStatus(samus->getStatus());
+				samus->setStatus(eStatus::INJURING);
+				samus->setHealth(*samus->getHealth() - dame);
+				SamusStateManager::getInstance()->setOldState(SamusStateManager::getInstance()->getCurrentState());
+			}
+			
 		}
 	
 	}
+	
+	for (unsigned i = 0; i < RocketPool::getInstance()->getListUsing().size(); i++)
+	{
+		if (Collision::getInstance()->checkCollision(this, RocketPool::getInstance()->getListUsing()[i], dt))
+		{
+			this->status = eStatus::ENDING;
+			this->velocity = VECTOR2ZERO;
+			break;
+
+		}
+	}
+			
 }
 void BossKraidRocket::onCollision(float dt)
 {

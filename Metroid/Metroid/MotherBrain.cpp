@@ -1,7 +1,7 @@
 #include "MotherBrain.h"
 #include "Camera.h"
 #include "Sound.h"
-
+#include "ObjectManager.h"
 #define NUMBER_BULLET 10
 #define WIDTH_BULLET 50
 #define RATE_BEZIER 1.0f
@@ -14,7 +14,7 @@ MotherBrain::MotherBrain()
 {
 }
 
-MotherBrain::MotherBrain(TextureManager * textureM, Graphics * graphics,Samus* samus) : BaseObject(eID::MOTHERBRAIN)
+MotherBrain::MotherBrain(TextureManager * textureM, Graphics * graphics, Samus* samus) : BaseObject(eID::MOTHERBRAIN)
 {
 	this->sprite = new Sprite();
 	if (!this->sprite->initialize(graphics, textureM, SpriteManager::getInstance()))
@@ -25,9 +25,9 @@ MotherBrain::MotherBrain(TextureManager * textureM, Graphics * graphics,Samus* s
 	this->initExplosion(this->sprite, IndexManager::getInstance()->samusYellowExplosion, NUM_FRAMES_EXPLOSION, EXPLOSION_TIME_FRAME_DELAY);
 
 	//this->anim = new Animation(this->sprite, IndexManager::getInstance()->motherBrain, NUM_FRAMES_MOTHER, 0.1f);
-	fullHeath= new Animation(this->sprite, IndexManager::getInstance()->motherBrain, NUM_FRAMES_MOTHER, 0.1f);
+	fullHeath = new Animation(this->sprite, IndexManager::getInstance()->motherBrain, NUM_FRAMES_MOTHER, 0.1f);
 	openingBoss = new Animation(this->sprite, IndexManager::getInstance()->motherBrainOpening, NUM_FRAMES_MOTHER, 0.1f);
-	openedBoss= new Animation(this->sprite, IndexManager::getInstance()->motherBrainOpened, 2, 0.1f);
+	openedBoss = new Animation(this->sprite, IndexManager::getInstance()->motherBrainOpened, 2, 0.1f);
 	this->anim = fullHeath;
 	this->anim->start();
 	this->getSprite()->setOrigin(VECTOR2(0.5, 0.5));
@@ -35,7 +35,7 @@ MotherBrain::MotherBrain(TextureManager * textureM, Graphics * graphics,Samus* s
 
 	isActivity = true;
 	this->samus = samus;
-	health = 5;
+	health = 10;
 	bulletPool = new MBulletPool(textureM, graphics, samus, NUMBER_BULLET);
 	this->isHandle = true;
 }
@@ -51,7 +51,7 @@ MotherBrain::~MotherBrain()
 }
 
 void MotherBrain::initStartBulletPool(VECTOR2 position)
-{	
+{
 	bulletPool->setOwnPosition(position);
 }
 
@@ -64,22 +64,22 @@ void MotherBrain::setBoundCollision()
 {
 	MetroidRect rect;
 	VECTOR2 position(this->getPosition().x, this->getPosition().y);
-	rect.left = position.x - this->getSprite()->getWidth() *0.5f ;
-	rect.right = position.x + this->getSprite()->getWidth() *0.5f ;
-	rect.top = position.y + this->getSprite()->getHeight() *0.5f ;
-	rect.bottom = position.y - this->getSprite()->getHeight() *0.5f ;
+	rect.left = position.x - this->getSprite()->getWidth() *0.5f;
+	rect.right = position.x + this->getSprite()->getWidth() *0.5f;
+	rect.top = position.y + this->getSprite()->getHeight() *0.5f;
+	rect.bottom = position.y - this->getSprite()->getHeight() *0.5f;
 
 	this->boundCollision = rect;
 }
 
 void MotherBrain::reInit()
 {
-	
+
 }
 
 void MotherBrain::handleVelocity(float dt)
 {
-	
+
 }
 
 void MotherBrain::onCollision(Samus * samus, float dt)
@@ -94,38 +94,30 @@ void MotherBrain::update(float dt)
 	{
 		if (beHit)
 		{
-			timerHit += dt;
-			if (timerHit < TIME_DELAY_BE_HIT)
+			beHit = false;
+
+			if (this->health <= 0)
 			{
-				this->anim->setPause(true);
-				this->setVelocity(VECTOR2(0, 0));
-			}
-			else
-			{
-				timerHit = 0;
-				beHit = false;
-				this->anim->setPause(false);
+				this->isHandle = false;
+				this->anim = this->openedBoss;
+				this->anim->start();
+				position = Camera::getInstance()->getPosition();
+				ObjectManager::getInstance()->setEnd(true);
+				this->port->setWin(true);
 				
-				if (this->health <= 0)
-				{
+			}
+			if (this->health <= 30 && this->health > 0)
+			{
+				this->anim = this->openingBoss;
+				this->anim->start();
 
-					this->isHandle = false;
-					this->anim = this->openedBoss;
-					this->anim->start();
-					position = Camera::getInstance()->getPosition();
-				}
+				boundCollision.right = this->getPosition().x + this->getSprite()->getWidth() *0.5f - 10;
 
-				if (this->health <= 30&& this->health > 0)
-				{
-					this->anim = this->openingBoss;
-					this->anim->start();
-
-					boundCollision.right=position.x + this->getSprite()->getWidth() *0.5f ;
-				}
+				//boundCollision.left = position.x - this->getSprite()->getWidth() *0.5f;
 			}
 		}
 
-	
+
 		this->anim->update(dt);
 		if (isHandle == false)
 		{
@@ -136,7 +128,7 @@ void MotherBrain::update(float dt)
 
 			if (timeBeforDeath >= CYCLE)
 			{
-				if (cycle%2 == 0)
+				if (cycle % 2 == 0)
 				{
 					Camera::getInstance()->setPosition(VECTOR2(position.x, position.y + 4));
 				}
@@ -153,14 +145,14 @@ void MotherBrain::update(float dt)
 				Sound::getInstance()->play(SOUND_BACKGROUND, true);
 
 				isActivity = false;
-				this->port->setWin(true);
+				
 				Camera::getInstance()->setPosition(position);
 			}
 
 		}
 	}
-	
-	
+
+
 }
 
 void MotherBrain::draw()

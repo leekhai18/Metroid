@@ -321,13 +321,14 @@ void Bullet::onCollision()
 				{
 					Sound::getInstance()->play(SOUND_ENEMIES_COLLISION, false);
 
-					this->isCollided = true;
-					this->velocity = VECTOR2ZERO;
+					
 					Zommer* zommer = static_cast<Zommer*>((*i).object);
 					if(!zommer->getHandle())
 					{
 						break;
 					}
+					this->isCollided = true;
+					this->velocity = VECTOR2ZERO;
 					switch (i->direction)
 					{
 					case CollideDirection::BOTTOM: case CollideDirection::TOP:
@@ -366,13 +367,14 @@ void Bullet::onCollision()
 				{
 					Sound::getInstance()->play(SOUND_ENEMIES_COLLISION, false);
 
-					this->isCollided = true;
-					this->velocity = VECTOR2ZERO;
+					
 					Waver* waver = static_cast<Waver*>(i->object);
 					if (!waver->getHandle())
 					{
 						break;
 					}
+					this->isCollided = true;
+					this->velocity = VECTOR2ZERO;
 					switch (i->direction)
 					{
 					case CollideDirection::BOTTOM: case CollideDirection::TOP:
@@ -412,13 +414,14 @@ void Bullet::onCollision()
 				{	
 					Sound::getInstance()->play(SOUND_ENEMIES_COLLISION, false);
 
-					this->velocity = VECTOR2ZERO;
-					this->isCollided = true;
+					
 					Zeb* zeb = static_cast<Zeb*>(i->object);
 					if (!zeb->getHandle())
 					{
 						break;
 					}
+					this->velocity = VECTOR2ZERO;
+					this->isCollided = true;
 					switch (i->direction)
 					{
 					case CollideDirection::BOTTOM: case CollideDirection::TOP:

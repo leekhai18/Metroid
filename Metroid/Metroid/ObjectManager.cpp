@@ -37,17 +37,29 @@
 
 ObjectManager* ObjectManager::instance = nullptr;
 
+void ObjectManager::setEnd(bool active)
+{
+	this->isEnd = active;
+}
+
+bool ObjectManager::getEnd()
+{
+	return this->isEnd;
+}
+
 ObjectManager * ObjectManager::getInstance()
 {
 	if (instance == NULL)
 	{
 		instance = new ObjectManager();
+		
 	}
 
 	return instance;
 }
 ObjectManager::ObjectManager()
 {
+	this->isEnd = false;
 	this->listNotWallCanCollideSamus = new map<int, BaseObject*>();
 	this->listObjectNotWallOnViewPort = new map<int, BaseObject*>();
 	this->listWallCanCollideSamus = new map<int, BaseObject*>();
@@ -1519,10 +1531,7 @@ bool ObjectManager::load_list(const char * filename)
 
 					x += zmr->getSprite()->getWidth()*0.5f;
 					y = y - 16 + zmr->getSprite()->getHeight()*0.5f;
-					if(id==939)
-					{
-						y += 1;
-					}
+				
 					zmr->setPosition(VECTOR2(x, y));
 					zmr->setStartPosition(VECTOR2(x, y));
 					const Value& arrayWall = listZommerRed[i]["ListCollideID"];
@@ -1531,9 +1540,7 @@ bool ObjectManager::load_list(const char * filename)
 					{
 						zmr->getListWallCanCollide()->insert(*map_object.find(arrayWall[t].GetInt()));
 					}
-					string temp = std::to_string(id);
-					const char *pchar = temp.c_str();
-					GAMELOG(pchar);
+			
 					zmr->setBoundCollision();
 
 					zmr->setStartBound(zmr->getBoundCollision());

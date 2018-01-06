@@ -17,12 +17,12 @@
 //#define SAMUS_POS_Y 1251
 
 //start position
-//#define SAMUS_POS_X 640
-//#define SAMUS_POS_Y 1267
+#define SAMUS_POS_X 640
+#define SAMUS_POS_Y 1267
 
 //Boss
-#define SAMUS_POS_X 960
-#define SAMUS_POS_Y 4250
+//#define SAMUS_POS_X 960
+//#define SAMUS_POS_Y 4250
 
 //MotherBrain
 //#define SAMUS_POS_X 640
@@ -44,6 +44,14 @@ void Samus::setActiveBound()
 	this->activeBound.left = this->boundCollision.left - ACTIVE;
 	this->activeBound.right = this->boundCollision.right + ACTIVE;
 	this->activeBound.bottom = this->boundCollision.bottom - ACTIVE;
+}
+void Samus::setDirectCollide(CollideDirection direct)
+{
+	this->directCollide = direct;
+}
+CollideDirection Samus::getDirectCollide()
+{
+	return this->directCollide;
 }
 Samus::Samus(TextureManager* textureM,Graphics* graphics, Input* input) : BaseObject(eID::SAMUS)
 {

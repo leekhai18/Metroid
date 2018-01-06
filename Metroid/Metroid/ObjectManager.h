@@ -41,7 +41,12 @@ private:
 	float timer;
 
 	void insertQuadTreeNode(const Value& value,Quadtree* quadtree);
+
+	bool isEnd;
 public:
+	void setEnd(bool active);
+	bool getEnd();
+
 	static ObjectManager* getInstance();
 
 	map<int, BaseObject*>* getListWallOnViewPort() { return listWallCanCollideSamus; };

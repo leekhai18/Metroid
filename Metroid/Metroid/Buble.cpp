@@ -1,9 +1,10 @@
 #include "Buble.h"
 #include "Collision.h"
 #include "Camera.h"
+#include "ObjectManager.h"
 #define TIME_DELAY_BE_HIT 0.2f
-#define BUBLE_VELOCITY_X 40
-#define BUBLE_VELOCITY_Y 40
+#define BUBLE_VELOCITY_X 25
+#define BUBLE_VELOCITY_Y 25
 #define TIME_TO_RESET 2.0f
 Buble::Buble()
 {
@@ -102,6 +103,10 @@ void Buble::setBoundCollision()
 
 void Buble::update(float dt)
 {
+	if (ObjectManager::getInstance()->getEnd())
+	{
+		this->isActivity = false;
+	}
 	if (isActivity)
 	{
 		if (beHit)

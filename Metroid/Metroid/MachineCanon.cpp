@@ -1,5 +1,5 @@
 #include "MachineCanon.h"
-
+#include "ObjectManager.h"
 #define TIME_TO_FIRE 0.1f
 #define OFFSET 3
 #define FRAME_DELAY_ANIMATON 0.6f
@@ -144,6 +144,7 @@ void MachineCanon::onCollision(float dt)
 
 void MachineCanon::update(float dt)
 {
+	
 	if (isActivity)
 	{
 		anim->update(dt);
@@ -212,6 +213,11 @@ void MachineCanon::update(float dt)
 		default:
 			break;
 		}
+	}
+	if (ObjectManager::getInstance()->getEnd())
+	{
+		this->isFire = false;
+		this->anim->setPause(true);
 	}
 }
 
