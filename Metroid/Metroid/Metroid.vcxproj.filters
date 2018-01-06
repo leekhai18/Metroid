@@ -1,182 +1,529 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <ClCompile Include="AlienBig.cpp" />
-    <ClCompile Include="AlienSmall.cpp" />
-    <ClCompile Include="Animation.cpp" />
-    <ClCompile Include="BaseObject.cpp" />
-    <ClCompile Include="BaseState.cpp" />
-    <ClCompile Include="Bomb.cpp" />
-    <ClCompile Include="BossDragon.cpp" />
-    <ClCompile Include="BossKraid.cpp" />
-    <ClCompile Include="Brick.cpp" />
-    <ClCompile Include="Bullet.cpp" />
-    <ClCompile Include="Camera.cpp" />
-    <ClCompile Include="Collision.cpp" />
-    <ClCompile Include="EnergyTank.cpp" />
-    <ClCompile Include="GameDebug.cpp" />
-    <ClCompile Include="GameLog.cpp" />
-    <ClCompile Include="GameManager.cpp" />
-    <ClCompile Include="GateBlue.cpp" />
-    <ClCompile Include="Graphics.cpp" />
-    <ClCompile Include="IceBeam.cpp" />
-    <ClCompile Include="IndexManager.cpp" />
-    <ClCompile Include="Input.cpp" />
-    <ClCompile Include="LongBeam.cpp" />
-    <ClCompile Include="Map.cpp" />
-    <ClCompile Include="MapInfo.cpp" />
-    <ClCompile Include="MaruMari.cpp" />
-    <ClCompile Include="Metroid.cpp" />
-    <ClCompile Include="BulletPool.cpp" />
-    <ClCompile Include="MissileRocket.cpp" />
-    <ClCompile Include="ObjectManager.cpp" />
-    <ClCompile Include="Port.cpp" />
-    <ClCompile Include="Quadtree.cpp" />
-    <ClCompile Include="Rio.cpp" />
-    <ClCompile Include="Ripper.cpp" />
-    <ClCompile Include="Samus.cpp" />
-    <ClCompile Include="SamusStateAcrobat.cpp" />
-    <ClCompile Include="SamusStateFallRolling.cpp" />
-    <ClCompile Include="SamusStateJumping.cpp" />
-    <ClCompile Include="SamusStateManager.cpp" />
-    <ClCompile Include="SamusStateRolling.cpp" />
-    <ClCompile Include="SamusStateRunning.cpp" />
-    <ClCompile Include="SamusStateStanding.cpp" />
-    <ClCompile Include="SamusStateStart.cpp" />
-    <ClCompile Include="Skree.cpp" />
-    <ClCompile Include="SkreeEffectDeath.cpp" />
-    <ClCompile Include="SkreeEffectDeathPart.cpp" />
-    <ClCompile Include="Sound.cpp" />
-    <ClCompile Include="Sprite.cpp" />
-    <ClCompile Include="SpriteManager.cpp" />
-    <ClCompile Include="Text.cpp" />
-    <ClCompile Include="TextureManager.cpp" />
-    <ClCompile Include="Varia.cpp" />
-    <ClCompile Include="Waver.cpp" />
-    <ClCompile Include="WinMain.cpp" />
-    <ClCompile Include="Zeb.cpp" />
-    <ClCompile Include="Zommer.cpp" />
-    <ClCompile Include="IFreezable.cpp" />
-    <ClCompile Include="SamusStateInjuring.cpp" />
-    <ClCompile Include="MotherBrain.cpp" />
-    <ClCompile Include="BoomBomb.cpp" />
-    <ClCompile Include="BoomBombPool.cpp" />
-    <ClCompile Include="GateRed.cpp" />
-    <ClCompile Include="MotherBrainBullet.cpp" />
-    <ClCompile Include="MBulletPool.cpp" />
-    <ClCompile Include="Rocket.cpp" />
-    <ClCompile Include="RocketPool.cpp" />
-    <ClCompile Include="IExplosible.cpp" />
-    <ClCompile Include="ScenceManager.cpp" />
-    <ClCompile Include="Scence.cpp" />
-    <ClCompile Include="OptionScence.cpp" />
-    <ClCompile Include="IBonusable.cpp" />
-    <ClCompile Include="PlayScence.cpp" />
-    <ClCompile Include="EndScence.cpp" />
-    <ClCompile Include="SamusStateBoom.cpp" />
-    <ClCompile Include="BossKraidRocket.cpp" />
-    <ClCompile Include="BossRocketPool.cpp" />
-    <ClCompile Include="CanonBullet.cpp" />
-    <ClCompile Include="MachineCanon.cpp" />
-    <ClCompile Include="Buble.cpp" />
-<<<<<<< HEAD
-    <ClCompile Include="dsutil.cpp" />
-=======
-    <ClCompile Include="DefendBoss.cpp" />
->>>>>>> 6f57295600ea0666345544da52d26046f5f79e2a
+    <ClCompile Include="AlienBig.cpp">
+      <Filter>Objects\Enemies</Filter>
+    </ClCompile>
+    <ClCompile Include="AlienSmall.cpp">
+      <Filter>Objects\Enemies</Filter>
+    </ClCompile>
+    <ClCompile Include="Animation.cpp">
+      <Filter>Framework</Filter>
+    </ClCompile>
+    <ClCompile Include="BaseObject.cpp">
+      <Filter>Objects</Filter>
+    </ClCompile>
+    <ClCompile Include="BaseState.cpp">
+      <Filter>Objects\Player</Filter>
+    </ClCompile>
+    <ClCompile Include="Bomb.cpp">
+      <Filter>Objects\Items</Filter>
+    </ClCompile>
+    <ClCompile Include="BoomBomb.cpp">
+      <Filter>Objects\Items</Filter>
+    </ClCompile>
+    <ClCompile Include="BoomBombPool.cpp">
+      <Filter>Objects\Items</Filter>
+    </ClCompile>
+    <ClCompile Include="BossDragon.cpp">
+      <Filter>Objects\Enemies</Filter>
+    </ClCompile>
+    <ClCompile Include="BossKraid.cpp">
+      <Filter>Objects\Enemies</Filter>
+    </ClCompile>
+    <ClCompile Include="BossKraidRocket.cpp">
+      <Filter>Objects\Enemies</Filter>
+    </ClCompile>
+    <ClCompile Include="BossRocketPool.cpp">
+      <Filter>Objects\Enemies</Filter>
+    </ClCompile>
+    <ClCompile Include="Brick.cpp">
+      <Filter>Objects\Others</Filter>
+    </ClCompile>
+    <ClCompile Include="Buble.cpp">
+      <Filter>Objects\Enemies</Filter>
+    </ClCompile>
+    <ClCompile Include="Bullet.cpp">
+      <Filter>Objects\Player</Filter>
+    </ClCompile>
+    <ClCompile Include="BulletPool.cpp">
+      <Filter>Objects\Player</Filter>
+    </ClCompile>
+    <ClCompile Include="Camera.cpp">
+      <Filter>Framework</Filter>
+    </ClCompile>
+    <ClCompile Include="Collision.cpp">
+      <Filter>Framework</Filter>
+    </ClCompile>
+    <ClCompile Include="dsutil.cpp">
+      <Filter>Framework</Filter>
+    </ClCompile>
+    <ClCompile Include="GameDebug.cpp">
+      <Filter>Framework</Filter>
+    </ClCompile>
+    <ClCompile Include="GameLog.cpp">
+      <Filter>Framework</Filter>
+    </ClCompile>
+    <ClCompile Include="GameManager.cpp">
+      <Filter>Framework</Filter>
+    </ClCompile>
+    <ClCompile Include="Graphics.cpp">
+      <Filter>Framework</Filter>
+    </ClCompile>
+    <ClCompile Include="IndexManager.cpp">
+      <Filter>Framework</Filter>
+    </ClCompile>
+    <ClCompile Include="Input.cpp">
+      <Filter>Framework</Filter>
+    </ClCompile>
+    <ClCompile Include="Map.cpp">
+      <Filter>Framework</Filter>
+    </ClCompile>
+    <ClCompile Include="MapInfo.cpp">
+      <Filter>Framework</Filter>
+    </ClCompile>
+    <ClCompile Include="Metroid.cpp">
+      <Filter>Framework</Filter>
+    </ClCompile>
+    <ClCompile Include="Quadtree.cpp">
+      <Filter>Framework</Filter>
+    </ClCompile>
+    <ClCompile Include="Sound.cpp">
+      <Filter>Framework</Filter>
+    </ClCompile>
+    <ClCompile Include="Sprite.cpp">
+      <Filter>Framework</Filter>
+    </ClCompile>
+    <ClCompile Include="SpriteManager.cpp">
+      <Filter>Framework</Filter>
+    </ClCompile>
+    <ClCompile Include="Text.cpp">
+      <Filter>Framework</Filter>
+    </ClCompile>
+    <ClCompile Include="TextureManager.cpp">
+      <Filter>Framework</Filter>
+    </ClCompile>
+    <ClCompile Include="WinMain.cpp">
+      <Filter>Framework</Filter>
+    </ClCompile>
+    <ClCompile Include="CanonBullet.cpp">
+      <Filter>Objects\Enemies</Filter>
+    </ClCompile>
+    <ClCompile Include="DefendBoss.cpp">
+      <Filter>Objects\Enemies</Filter>
+    </ClCompile>
+    <ClCompile Include="MBulletPool.cpp">
+      <Filter>Objects\Enemies</Filter>
+    </ClCompile>
+    <ClCompile Include="MotherBrain.cpp">
+      <Filter>Objects\Enemies</Filter>
+    </ClCompile>
+    <ClCompile Include="MotherBrainBullet.cpp">
+      <Filter>Objects\Enemies</Filter>
+    </ClCompile>
+    <ClCompile Include="Rio.cpp">
+      <Filter>Objects\Enemies</Filter>
+    </ClCompile>
+    <ClCompile Include="Ripper.cpp">
+      <Filter>Objects\Enemies</Filter>
+    </ClCompile>
+    <ClCompile Include="Skree.cpp">
+      <Filter>Objects\Enemies</Filter>
+    </ClCompile>
+    <ClCompile Include="SkreeEffectDeath.cpp">
+      <Filter>Objects\Enemies</Filter>
+    </ClCompile>
+    <ClCompile Include="SkreeEffectDeathPart.cpp">
+      <Filter>Objects\Enemies</Filter>
+    </ClCompile>
+    <ClCompile Include="Waver.cpp">
+      <Filter>Objects\Enemies</Filter>
+    </ClCompile>
+    <ClCompile Include="Zeb.cpp">
+      <Filter>Objects\Enemies</Filter>
+    </ClCompile>
+    <ClCompile Include="Zommer.cpp">
+      <Filter>Objects\Enemies</Filter>
+    </ClCompile>
+    <ClCompile Include="EndScence.cpp">
+      <Filter>Scences</Filter>
+    </ClCompile>
+    <ClCompile Include="OptionScence.cpp">
+      <Filter>Scences</Filter>
+    </ClCompile>
+    <ClCompile Include="PlayScence.cpp">
+      <Filter>Scences</Filter>
+    </ClCompile>
+    <ClCompile Include="Scence.cpp">
+      <Filter>Scences</Filter>
+    </ClCompile>
+    <ClCompile Include="ScenceManager.cpp">
+      <Filter>Scences</Filter>
+    </ClCompile>
+    <ClCompile Include="EnergyTank.cpp">
+      <Filter>Objects\Items</Filter>
+    </ClCompile>
+    <ClCompile Include="IBonusable.cpp">
+      <Filter>Objects\Items</Filter>
+    </ClCompile>
+    <ClCompile Include="IceBeam.cpp">
+      <Filter>Objects\Items</Filter>
+    </ClCompile>
+    <ClCompile Include="IExplosible.cpp">
+      <Filter>Objects\Items</Filter>
+    </ClCompile>
+    <ClCompile Include="IFreezable.cpp">
+      <Filter>Objects\Items</Filter>
+    </ClCompile>
+    <ClCompile Include="LongBeam.cpp">
+      <Filter>Objects\Items</Filter>
+    </ClCompile>
+    <ClCompile Include="MaruMari.cpp">
+      <Filter>Objects\Items</Filter>
+    </ClCompile>
+    <ClCompile Include="MissileRocket.cpp">
+      <Filter>Objects\Items</Filter>
+    </ClCompile>
+    <ClCompile Include="Varia.cpp">
+      <Filter>Objects\Items</Filter>
+    </ClCompile>
+    <ClCompile Include="GateBlue.cpp">
+      <Filter>Objects\Others</Filter>
+    </ClCompile>
+    <ClCompile Include="GateRed.cpp">
+      <Filter>Objects\Others</Filter>
+    </ClCompile>
+    <ClCompile Include="MachineCanon.cpp">
+      <Filter>Objects\Items</Filter>
+    </ClCompile>
+    <ClCompile Include="ObjectManager.cpp">
+      <Filter>Objects</Filter>
+    </ClCompile>
+    <ClCompile Include="Port.cpp">
+      <Filter>Objects\Others</Filter>
+    </ClCompile>
+    <ClCompile Include="Samus.cpp">
+      <Filter>Objects\Player</Filter>
+    </ClCompile>
+    <ClCompile Include="SamusStateAcrobat.cpp">
+      <Filter>Objects\Player</Filter>
+    </ClCompile>
+    <ClCompile Include="SamusStateBoom.cpp">
+      <Filter>Objects\Player</Filter>
+    </ClCompile>
+    <ClCompile Include="SamusStateFallRolling.cpp">
+      <Filter>Objects\Player</Filter>
+    </ClCompile>
+    <ClCompile Include="SamusStateInjuring.cpp">
+      <Filter>Objects\Player</Filter>
+    </ClCompile>
+    <ClCompile Include="SamusStateJumping.cpp">
+      <Filter>Objects\Player</Filter>
+    </ClCompile>
+    <ClCompile Include="SamusStateManager.cpp">
+      <Filter>Objects\Player</Filter>
+    </ClCompile>
+    <ClCompile Include="SamusStateRolling.cpp">
+      <Filter>Objects\Player</Filter>
+    </ClCompile>
+    <ClCompile Include="SamusStateRunning.cpp">
+      <Filter>Objects\Player</Filter>
+    </ClCompile>
+    <ClCompile Include="SamusStateStanding.cpp">
+      <Filter>Objects\Player</Filter>
+    </ClCompile>
+    <ClCompile Include="SamusStateStart.cpp">
+      <Filter>Objects\Player</Filter>
+    </ClCompile>
+    <ClCompile Include="RocketPool.cpp">
+      <Filter>Objects\Player</Filter>
+    </ClCompile>
+    <ClCompile Include="Rocket.cpp">
+      <Filter>Objects\Player</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="AlienBig.h" />
-    <ClInclude Include="AlienSmall.h" />
-    <ClInclude Include="Animation.h" />
-    <ClInclude Include="BaseObject.h" />
-    <ClInclude Include="BaseState.h" />
-    <ClInclude Include="Bomb.h" />
-    <ClInclude Include="BossDragon.h" />
-    <ClInclude Include="BossKraid.h" />
-    <ClInclude Include="Brick.h" />
-    <ClInclude Include="Bullet.h" />
-    <ClInclude Include="Camera.h" />
-    <ClInclude Include="Collision.h" />
-    <ClInclude Include="Constants.h" />
-    <ClInclude Include="EnergyTank.h" />
-    <ClInclude Include="GameDebug.h" />
-    <ClInclude Include="GameError.h" />
-    <ClInclude Include="GameLog.h" />
-    <ClInclude Include="GameManager.h" />
-    <ClInclude Include="GateBlue.h" />
-    <ClInclude Include="Graphics.h" />
-    <ClInclude Include="IceBeam.h" />
-    <ClInclude Include="IndexManager.h" />
-    <ClInclude Include="Input.h" />
-    <ClInclude Include="LongBeam.h" />
-    <ClInclude Include="Map.h" />
-    <ClInclude Include="MapInfo.h" />
-    <ClInclude Include="MaruMari.h" />
-    <ClInclude Include="Metroid.h" />
-    <ClInclude Include="BulletPool.h" />
-    <ClInclude Include="MissileRocket.h" />
-    <ClInclude Include="ObjectManager.h" />
-    <ClInclude Include="Port.h" />
-    <ClInclude Include="Quadtree.h" />
-    <ClInclude Include="resource.h" />
-    <ClInclude Include="Rio.h" />
-    <ClInclude Include="Ripper.h" />
-    <ClInclude Include="Samus.h" />
-    <ClInclude Include="SamusStateAcrobat.h" />
-    <ClInclude Include="SamusStateFallRolling.h" />
-    <ClInclude Include="SamusStateJumping.h" />
-    <ClInclude Include="SamusStateManager.h" />
-    <ClInclude Include="SamusStateRolling.h" />
-    <ClInclude Include="SamusStateRunning.h" />
-    <ClInclude Include="SamusStateStanding.h" />
-    <ClInclude Include="SamusStateStart.h" />
-    <ClInclude Include="Skree.h" />
-    <ClInclude Include="SkreeEffectDeath.h" />
-    <ClInclude Include="SkreeEffectDeathPart.h" />
-    <ClInclude Include="Sound.h" />
-    <ClInclude Include="Sprite.h" />
-    <ClInclude Include="SpriteManager.h" />
-    <ClInclude Include="Text.h" />
-    <ClInclude Include="TextureManager.h" />
-    <ClInclude Include="Varia.h" />
-    <ClInclude Include="Waver.h" />
-    <ClInclude Include="Zeb.h" />
-    <ClInclude Include="Zommer.h" />
-    <ClInclude Include="IFreezable.h" />
-    <ClInclude Include="SamusStateInjuring.h" />
-    <ClInclude Include="MotherBrain.h" />
-    <ClInclude Include="BoomBomb.h" />
-    <ClInclude Include="BoomBombPool.h" />
-    <ClInclude Include="GateRed.h" />
-    <ClInclude Include="MotherBrainBullet.h" />
-    <ClInclude Include="MBulletPool.h" />
-    <ClInclude Include="Rocket.h" />
-    <ClInclude Include="RocketPool.h" />
-    <ClInclude Include="IExplosible.h" />
-    <ClInclude Include="ScenceManager.h" />
-    <ClInclude Include="Scence.h" />
-    <ClInclude Include="OptionScence.h" />
-    <ClInclude Include="IBonusable.h" />
-    <ClInclude Include="PlayScence.h" />
-    <ClInclude Include="EndScence.h" />
-    <ClInclude Include="SamusStateBoom.h" />
-    <ClInclude Include="BossKraidRocket.h" />
-    <ClInclude Include="BossRocketPool.h" />
-    <ClInclude Include="CanonBullet.h" />
-    <ClInclude Include="MachineCanon.h" />
-    <ClInclude Include="Buble.h" />
-<<<<<<< HEAD
-    <ClInclude Include="dsutil.h" />
-    <ClInclude Include="dxutil.h" />
-=======
-    <ClInclude Include="DefendBoss.h" />
->>>>>>> 6f57295600ea0666345544da52d26046f5f79e2a
+    <ClInclude Include="AlienBig.h">
+      <Filter>Objects\Enemies</Filter>
+    </ClInclude>
+    <ClInclude Include="AlienSmall.h">
+      <Filter>Objects\Enemies</Filter>
+    </ClInclude>
+    <ClInclude Include="Animation.h">
+      <Filter>Framework</Filter>
+    </ClInclude>
+    <ClInclude Include="BaseObject.h">
+      <Filter>Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="BaseState.h">
+      <Filter>Objects\Player</Filter>
+    </ClInclude>
+    <ClInclude Include="Bomb.h">
+      <Filter>Objects\Items</Filter>
+    </ClInclude>
+    <ClInclude Include="BoomBomb.h">
+      <Filter>Objects\Items</Filter>
+    </ClInclude>
+    <ClInclude Include="BoomBombPool.h">
+      <Filter>Objects\Items</Filter>
+    </ClInclude>
+    <ClInclude Include="BossDragon.h">
+      <Filter>Objects\Enemies</Filter>
+    </ClInclude>
+    <ClInclude Include="BossKraid.h">
+      <Filter>Objects\Enemies</Filter>
+    </ClInclude>
+    <ClInclude Include="BossKraidRocket.h">
+      <Filter>Objects\Enemies</Filter>
+    </ClInclude>
+    <ClInclude Include="BossRocketPool.h">
+      <Filter>Objects\Enemies</Filter>
+    </ClInclude>
+    <ClInclude Include="Brick.h">
+      <Filter>Objects\Others</Filter>
+    </ClInclude>
+    <ClInclude Include="Buble.h">
+      <Filter>Objects\Enemies</Filter>
+    </ClInclude>
+    <ClInclude Include="Bullet.h">
+      <Filter>Objects\Player</Filter>
+    </ClInclude>
+    <ClInclude Include="BulletPool.h">
+      <Filter>Objects\Player</Filter>
+    </ClInclude>
+    <ClInclude Include="Camera.h">
+      <Filter>Framework</Filter>
+    </ClInclude>
+    <ClInclude Include="Collision.h">
+      <Filter>Framework</Filter>
+    </ClInclude>
+    <ClInclude Include="Constants.h">
+      <Filter>Framework</Filter>
+    </ClInclude>
+    <ClInclude Include="dsutil.h">
+      <Filter>Framework</Filter>
+    </ClInclude>
+    <ClInclude Include="dxutil.h">
+      <Filter>Framework</Filter>
+    </ClInclude>
+    <ClInclude Include="GameDebug.h">
+      <Filter>Framework</Filter>
+    </ClInclude>
+    <ClInclude Include="GameError.h">
+      <Filter>Framework</Filter>
+    </ClInclude>
+    <ClInclude Include="GameLog.h">
+      <Filter>Framework</Filter>
+    </ClInclude>
+    <ClInclude Include="GameManager.h">
+      <Filter>Framework</Filter>
+    </ClInclude>
+    <ClInclude Include="Graphics.h">
+      <Filter>Framework</Filter>
+    </ClInclude>
+    <ClInclude Include="IndexManager.h">
+      <Filter>Framework</Filter>
+    </ClInclude>
+    <ClInclude Include="Input.h">
+      <Filter>Framework</Filter>
+    </ClInclude>
+    <ClInclude Include="Map.h">
+      <Filter>Framework</Filter>
+    </ClInclude>
+    <ClInclude Include="MapInfo.h">
+      <Filter>Framework</Filter>
+    </ClInclude>
+    <ClInclude Include="Metroid.h">
+      <Filter>Framework</Filter>
+    </ClInclude>
+    <ClInclude Include="Quadtree.h">
+      <Filter>Framework</Filter>
+    </ClInclude>
+    <ClInclude Include="resource.h">
+      <Filter>Framework</Filter>
+    </ClInclude>
+    <ClInclude Include="Sound.h">
+      <Filter>Framework</Filter>
+    </ClInclude>
+    <ClInclude Include="Sprite.h">
+      <Filter>Framework</Filter>
+    </ClInclude>
+    <ClInclude Include="SpriteManager.h">
+      <Filter>Framework</Filter>
+    </ClInclude>
+    <ClInclude Include="Text.h">
+      <Filter>Framework</Filter>
+    </ClInclude>
+    <ClInclude Include="TextureManager.h">
+      <Filter>Framework</Filter>
+    </ClInclude>
+    <ClInclude Include="CanonBullet.h">
+      <Filter>Objects\Enemies</Filter>
+    </ClInclude>
+    <ClInclude Include="DefendBoss.h">
+      <Filter>Objects\Enemies</Filter>
+    </ClInclude>
+    <ClInclude Include="MBulletPool.h">
+      <Filter>Objects\Enemies</Filter>
+    </ClInclude>
+    <ClInclude Include="MotherBrain.h">
+      <Filter>Objects\Enemies</Filter>
+    </ClInclude>
+    <ClInclude Include="MotherBrainBullet.h">
+      <Filter>Objects\Enemies</Filter>
+    </ClInclude>
+    <ClInclude Include="Rio.h">
+      <Filter>Objects\Enemies</Filter>
+    </ClInclude>
+    <ClInclude Include="Ripper.h">
+      <Filter>Objects\Enemies</Filter>
+    </ClInclude>
+    <ClInclude Include="Skree.h">
+      <Filter>Objects\Enemies</Filter>
+    </ClInclude>
+    <ClInclude Include="SkreeEffectDeath.h">
+      <Filter>Objects\Enemies</Filter>
+    </ClInclude>
+    <ClInclude Include="SkreeEffectDeathPart.h">
+      <Filter>Objects\Enemies</Filter>
+    </ClInclude>
+    <ClInclude Include="Waver.h">
+      <Filter>Objects\Enemies</Filter>
+    </ClInclude>
+    <ClInclude Include="Zeb.h">
+      <Filter>Objects\Enemies</Filter>
+    </ClInclude>
+    <ClInclude Include="Zommer.h">
+      <Filter>Objects\Enemies</Filter>
+    </ClInclude>
+    <ClInclude Include="EndScence.h">
+      <Filter>Scences</Filter>
+    </ClInclude>
+    <ClInclude Include="OptionScence.h">
+      <Filter>Scences</Filter>
+    </ClInclude>
+    <ClInclude Include="PlayScence.h">
+      <Filter>Scences</Filter>
+    </ClInclude>
+    <ClInclude Include="Scence.h">
+      <Filter>Scences</Filter>
+    </ClInclude>
+    <ClInclude Include="ScenceManager.h">
+      <Filter>Scences</Filter>
+    </ClInclude>
+    <ClInclude Include="EnergyTank.h">
+      <Filter>Objects\Items</Filter>
+    </ClInclude>
+    <ClInclude Include="IBonusable.h">
+      <Filter>Objects\Items</Filter>
+    </ClInclude>
+    <ClInclude Include="IceBeam.h">
+      <Filter>Objects\Items</Filter>
+    </ClInclude>
+    <ClInclude Include="IExplosible.h">
+      <Filter>Objects\Items</Filter>
+    </ClInclude>
+    <ClInclude Include="IFreezable.h">
+      <Filter>Objects\Items</Filter>
+    </ClInclude>
+    <ClInclude Include="LongBeam.h">
+      <Filter>Objects\Items</Filter>
+    </ClInclude>
+    <ClInclude Include="MaruMari.h">
+      <Filter>Objects\Items</Filter>
+    </ClInclude>
+    <ClInclude Include="MissileRocket.h">
+      <Filter>Objects\Items</Filter>
+    </ClInclude>
+    <ClInclude Include="Varia.h">
+      <Filter>Objects\Items</Filter>
+    </ClInclude>
+    <ClInclude Include="GateBlue.h">
+      <Filter>Objects\Others</Filter>
+    </ClInclude>
+    <ClInclude Include="GateRed.h">
+      <Filter>Objects\Others</Filter>
+    </ClInclude>
+    <ClInclude Include="MachineCanon.h">
+      <Filter>Objects\Items</Filter>
+    </ClInclude>
+    <ClInclude Include="ObjectManager.h">
+      <Filter>Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="Port.h">
+      <Filter>Objects\Others</Filter>
+    </ClInclude>
+    <ClInclude Include="Samus.h">
+      <Filter>Objects\Player</Filter>
+    </ClInclude>
+    <ClInclude Include="SamusStateAcrobat.h">
+      <Filter>Objects\Player</Filter>
+    </ClInclude>
+    <ClInclude Include="SamusStateBoom.h">
+      <Filter>Objects\Player</Filter>
+    </ClInclude>
+    <ClInclude Include="SamusStateFallRolling.h">
+      <Filter>Objects\Player</Filter>
+    </ClInclude>
+    <ClInclude Include="SamusStateInjuring.h">
+      <Filter>Objects\Player</Filter>
+    </ClInclude>
+    <ClInclude Include="SamusStateJumping.h">
+      <Filter>Objects\Player</Filter>
+    </ClInclude>
+    <ClInclude Include="SamusStateManager.h">
+      <Filter>Objects\Player</Filter>
+    </ClInclude>
+    <ClInclude Include="SamusStateRolling.h">
+      <Filter>Objects\Player</Filter>
+    </ClInclude>
+    <ClInclude Include="SamusStateRunning.h">
+      <Filter>Objects\Player</Filter>
+    </ClInclude>
+    <ClInclude Include="SamusStateStanding.h">
+      <Filter>Objects\Player</Filter>
+    </ClInclude>
+    <ClInclude Include="SamusStateStart.h">
+      <Filter>Objects\Player</Filter>
+    </ClInclude>
+    <ClInclude Include="RocketPool.h">
+      <Filter>Objects\Player</Filter>
+    </ClInclude>
+    <ClInclude Include="Rocket.h">
+      <Filter>Objects\Player</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ResourceCompile Include="Metroid.rc" />
+    <Filter Include="Framework">
+      <UniqueIdentifier>{8ba6b1c5-b368-4988-9bae-e3ee5a569500}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Objects">
+      <UniqueIdentifier>{04ca9df5-7c08-429e-8bb7-d884debc9a23}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Objects\Player">
+      <UniqueIdentifier>{afc3a924-b714-4a85-903a-dec8149c1995}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Objects\Enemies">
+      <UniqueIdentifier>{0cd1566f-f162-4575-8069-0dba93a31843}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Objects\Others">
+      <UniqueIdentifier>{328c0eba-a64a-4e49-8949-dbc96ab6b6f3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Objects\Items">
+      <UniqueIdentifier>{9e5bae6e-202d-4411-8260-970315664089}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Scences">
+      <UniqueIdentifier>{a32de092-33ad-47e5-9589-0dbc2fdb666b}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <Image Include="Resoures\Icon\Metroid.ico" />
+    <Image Include="Resoures\Icon\Metroid.ico">
+      <Filter>Framework</Filter>
+    </Image>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="Metroid.rc">
+      <Filter>Framework</Filter>
+    </ResourceCompile>
   </ItemGroup>
 </Project>

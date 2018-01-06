@@ -1095,7 +1095,7 @@ void SamusStateJumping::fireRocket()
 	else
 	{
 
-		stP = VECTOR2(this->samus->getPosition().x + this->samus->getDirection()*this->samus->getSprite()->getWidth()*0.2f, this->samus->getPosition().y + 2);
+		stP = VECTOR2(this->samus->getPosition().x + this->samus->getDirection()*this->samus->getSprite()->getWidth()*0.0f, this->samus->getPosition().y + 2);
 		rocket->setVelocity(VECTOR2((float)VELOCITY_ROCKET*this->samus->getDirection(), 0));
 		rocket->getSprite()->setData(IndexManager::getInstance()->rocketPinkR);
 
